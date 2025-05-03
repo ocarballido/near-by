@@ -69,9 +69,8 @@ export async function createLocation(
 			latitude: formData.get('latitude'),
 			longitude: formData.get('longitude'),
 		};
-		console.log('📋 raw form data:', raw);
+
 		const result = LocationSchema.safeParse(raw);
-		console.log('////// Una prueba');
 		if (!result.success) {
 			const fe = result.error.flatten().fieldErrors;
 			return {
@@ -83,7 +82,6 @@ export async function createLocation(
 				},
 			};
 		}
-		console.log('****** Una prueba');
 		const loc = result.data;
 
 		// 5) Procesar imagen, si hay
@@ -123,7 +121,17 @@ export async function createLocation(
 					upsert: false,
 				});
 			if (upErr) {
-				return { errors: { server: ['Error subiendo la imagen'] } };
+				console.error(
+					'Error subiendo imagen a location-images:',
+					upErr
+				);
+				return {
+					errors: {
+						server: [
+							'Error subiendo la imagen al bucket. Por favor revisa la consola del servidor.',
+						],
+					},
+				};
 			}
 			const {
 				data: { publicUrl },

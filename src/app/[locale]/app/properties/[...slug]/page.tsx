@@ -226,7 +226,10 @@ export default async function Property({ params }: PageProps) {
 					/>
 				) : (
 					<LocationsContent
-						locations={locationsList /* cargadas previamente */}
+						locations={locationsList}
+						propertyId={propertyId}
+						categoryId={categoryId}
+						subCategoryId={subcategoryId}
 						emptyUrl={`/app/(modal)/${propertySlug}/${propertyId}/${categoryId}/${subcategoryId}`}
 					/>
 				)}

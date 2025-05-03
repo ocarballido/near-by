@@ -235,11 +235,17 @@
 	"Eliminado": "Deleted",
 	"Propiedad eliminada correctamente": "Property deleted successfully",
 	"Eliminar propiedad": "Delete property",
-	"Estás a punto de eliminar uno de tus sitios": "You are about to delete one of your sites.",
+	"Estás a punto de eliminar uno de tus sitios": "You are about to delete one of your places.",
 	"¿Estás seguro que deseas continuar?": "Are you sure you want to continue?",
 	"Sitio público": "Public web",
 	"Nuevo Sitio": "New Place",
 	"Nombre del sitio *": "Name of the place *",
 	"Sitio nombre ejemplo": "Eg: Go Bears bar",
-	"Sitio dirección ejemplo": "Eg: Go Bears bar, or Manuel Orta Street 5"
+	"Sitio dirección ejemplo": "Eg: Go Bears bar, or Manuel Orta Street 5",
+	"Eliminar sitio": "Delete place",
+	"Estás a punto de eliminar una de tus propiedades": "You are about to delete one of your properties.",
+	"Error eliminando el sitio": "Error deleting place",
+	"Error eliminando la propiedad": "Error deleting property",
+	"Sitio eliminado correctamente": "Place deleted successfully",
+	"Añadir contenido": "Add content"
 }

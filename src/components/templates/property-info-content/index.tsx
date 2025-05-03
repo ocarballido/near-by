@@ -1,5 +1,3 @@
-'use client';
-
 import EmptyContentAction from '@/components/molecules/empty-content-action';
 
 export interface PropertyInfo {

@@ -246,5 +246,11 @@
 	"Nuevo Sitio": "Nuevo Sitio",
 	"Nombre del sitio *": "Nombre del sitio *",
 	"Sitio nombre ejemplo": "Ej: Bar Los Torreznos",
-	"Sitio dirección ejemplo": "Ej: Bar Los Torreznos, o Calle Manuel Orta 5"
+	"Sitio dirección ejemplo": "Ej: Bar Los Torreznos, o Calle Manuel Orta 5",
+	"Eliminar sitio": "Eliminar sitio",
+	"Estás a punto de eliminar una de tus propiedades": "Estás a punto de eliminar una de tus propiedades",
+	"Error eliminando el sitio": "Error eliminando el sitio",
+	"Error eliminando la propiedad": "Error eliminando la propiedad",
+	"Sitio eliminado correctamente": "Sitio eliminado correctamente",
+	"Añadir contenido": "Añadir contenido"
 }

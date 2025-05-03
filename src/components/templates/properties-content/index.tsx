@@ -99,7 +99,9 @@ const PropertiesContent = ({
 			)}
 			<Modal
 				title={t('Eliminar propiedad')}
-				description={t('Estás a punto de eliminar uno de tus sitios')}
+				description={t(
+					'Estás a punto de eliminar una de tus propiedades'
+				)}
 				message={t('¿Estás seguro que deseas continuar?')}
 				open={isOpen}
 				onClose={() => {

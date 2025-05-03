@@ -27,6 +27,11 @@ const House = ({
 }: HouseProps) => {
 	const t = useTranslations();
 
+	const graySvg = `<svg xmlns="http://www.w3.org/2000/svg" width="4" height="4"><rect width="4" height="4" fill="#a3e7d0" /></svg>`;
+	const grayDataUrl = `data:image/svg+xml;base64,${Buffer.from(
+		graySvg
+	).toString('base64')}`;
+
 	return (
 		<div
 			className={`flex items-end rounded-xl overflow-hidden p-2 relative h-[400px] transition-all [&>.content]:p-3 [&>.content]:rounded-lg hover:shadow-2xl hover:p-0 hover:[&>.content]:p-5 hover:[&>.content]:rounded-none ${className}`}
@@ -68,6 +73,8 @@ const House = ({
 						: image
 				}
 				fill={true}
+				placeholder="blur"
+				blurDataURL={grayDataUrl}
 				alt={name}
 			/>
 		</div>

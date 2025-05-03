@@ -27,6 +27,11 @@ const Place = ({
 }: PlaceProps) => {
 	const t = useTranslations();
 
+	const graySvg = `<svg xmlns="http://www.w3.org/2000/svg" width="4" height="4"><rect width="4" height="4" fill="#a3e7d0" /></svg>`;
+	const grayDataUrl = `data:image/svg+xml;base64,${Buffer.from(
+		graySvg
+	).toString('base64')}`;
+
 	return (
 		<div
 			className={`w-full flex flex-col gap-4 rounded-xl p-2 relative transition-all hover:bg-gray-100 ${className}`}
@@ -36,6 +41,8 @@ const Place = ({
 					<Image
 						alt={name}
 						className="object-cover z-0 "
+						placeholder="blur"
+						blurDataURL={grayDataUrl}
 						src={
 							image === null
 								? '/static/img/placeholders/house-placeholder.png'

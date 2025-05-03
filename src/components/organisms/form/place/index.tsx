@@ -9,7 +9,7 @@ import { useState, useEffect } from 'react';
 import { useAddressValidation } from '@/hooks/useAddressValidation';
 import { useLoading } from '@/lib/context/LoadingContext';
 
-import { createLocation } from '@/app/actions/properties/add-location';
+import { createLocation } from '@/app/actions/locations/add-location';
 
 import { MAX_IMAGE_SIZE } from '@/config/config-constants';
 

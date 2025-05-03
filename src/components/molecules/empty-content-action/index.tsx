@@ -29,7 +29,7 @@ const EmptyContentAction = ({
 			</BodyType>
 			<Button
 				onClick={onClick}
-				label="Añadir contenido"
+				label={t('Añadir contenido')}
 				iconLeft={<IconAdd />}
 			/>
 		</div>
