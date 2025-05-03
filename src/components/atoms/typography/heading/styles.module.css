@@ -1,0 +1,69 @@
+.heading__type--xs {
+	font-size: 0.875rem;
+	line-height: 1rem;
+}
+
+.heading__type--sm {
+	font-size: 1rem;
+	line-height: 1.25rem;
+}
+
+.heading__type--md {
+	font-size: 1.25rem;
+	line-height: 1.5rem;
+}
+
+.heading__type--lg {
+	font-size: 1.5rem;
+	line-height: 1.875rem;
+}
+
+.heading__type--xl {
+	font-size: 1.875rem;
+	line-height: 2.25rem;
+}
+
+.heading__type--xxl {
+	font-size: 2.25rem;
+	line-height: 2.5rem;
+}
+
+.heading__type--primary {
+	color: var(--font--color-primary);
+}
+
+.heading__type--secondary {
+	color: var(--font--color-secondary);
+}
+
+.heading__type--success {
+	color: var(--font--color-success);
+}
+
+.heading__type--warning {
+	color: var(--font--color-warning);
+}
+
+.heading__type--info {
+	color: var(--font--color-info);
+}
+
+.heading__type--error {
+	color: var(--font--color-error);
+}
+
+.heading__type--body {
+	color: var(--font--color-body);
+}
+
+.heading__type--light {
+	color: var(--font--color-light);
+}
+
+.heading__type--white {
+	color: var(--font--color-white);
+}
+
+.heading__type--black {
+	color: var(--font--color-black);
+}

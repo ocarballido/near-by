@@ -1,0 +1,7 @@
+.icon svg {
+	fill: var(--font--color-light);
+}
+
+.icon--error svg {
+	fill: var(--font--color-error);
+}

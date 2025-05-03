@@ -1,0 +1,31 @@
+.icon--primary {
+	fill: var(--primary-500);
+}
+
+.icon--success {
+	fill: var(--success-500);
+}
+
+.icon--warning {
+	fill: var(--warning-500);
+}
+
+.icon--info {
+	fill: var(--info-500);
+}
+
+.icon--error {
+	fill: var(--error-500);
+}
+
+.icon--body {
+	fill: var(--font--color-body);
+}
+
+.icon--light {
+	fill: var(--gray-400);
+}
+
+.icon--white {
+	fill: var(--white);
+}

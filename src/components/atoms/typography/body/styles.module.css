@@ -1,0 +1,85 @@
+.body__type {
+	font-weight: var(--font-normal);
+}
+
+.body__type--xs {
+	font-size: 0.75rem;
+	line-height: 0.875rem;
+}
+
+.body__type--sm {
+	font-size: 0.875rem;
+	line-height: 1.25rem;
+}
+
+.body__type--md {
+	font-size: 1rem;
+	line-height: 1.5rem;
+}
+
+.body__type--lg {
+	font-size: 1.25rem;
+	line-height: 1.5rem;
+}
+
+.body__type--xl {
+	font-size: 1.5rem;
+	line-height: 1.875rem;
+}
+
+.body__type--xxl {
+	font-size: 1.875rem;
+	line-height: 1.875rem;
+}
+
+.body__type--primary {
+	color: var(--font--color-primary);
+}
+
+.body__type--secondary {
+	color: var(--font--color-secondary);
+}
+
+.body__type--success {
+	color: var(--font--color-success);
+}
+
+.body__type--warning {
+	color: var(--font--color-warning);
+}
+
+.body__type--info {
+	color: var(--font--color-info);
+}
+
+.body__type--error {
+	color: var(--font--color-error);
+}
+
+.body__type--body {
+	color: var(--font--color-body);
+}
+
+.body__type--light {
+	color: var(--font--color-light);
+}
+
+.body__type--white {
+	color: var(--font--color-white);
+}
+
+.body__type--black {
+	color: var(--font--color-black);
+}
+
+.body__type--regular {
+	font-weight: var(--font--weight-normal);
+}
+
+.body__type--medium {
+	font-weight: var(--font--weight-medium);
+}
+
+.body__type--bold {
+	font-weight: var(--font--weight-bold);
+}

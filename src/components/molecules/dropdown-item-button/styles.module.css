@@ -1,0 +1,7 @@
+.link:hover svg {
+	fill: var(--font--color-primary);
+	transition: all 0.25s;
+}
+.link--primary svg {
+	fill: var(--font--color-primary);
+}

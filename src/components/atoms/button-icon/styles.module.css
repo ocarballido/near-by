@@ -1,0 +1,15 @@
+.icon--white svg {
+	fill: var(--font--color-white);
+}
+
+.icon--primary svg {
+	fill: var(--font--color-primary);
+}
+
+.icon--secondary svg {
+	fill: var(--font--color-secondary);
+}
+
+.icon--error svg {
+	fill: var(--font--color-error);
+}
