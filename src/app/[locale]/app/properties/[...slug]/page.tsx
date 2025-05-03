@@ -5,12 +5,11 @@ import { LODGING_CATEGORY_ID } from '@/config/config-constants';
 // import { useTranslations } from 'next-intl';
 import AppContentTemplate from '@/components/templates/app-content';
 import { createSSRClient } from '@/lib/supabase/server';
-import PropertiesContentEmpty from '@/components/templates/properties-content-empty';
-
-import EmptyContentAction from '@/components/molecules/empty-content-action';
+import { LocationsContent } from '@/components/templates/locations-content';
+import { PropertyInfoContent } from '@/components/templates/property-info-content';
 
 type PageProps = {
-	params: Promise<{ slug: string[] }>; // params es un Promise
+	params: Promise<{ slug: string[] }>;
 };
 
 interface PropertyInfo {
@@ -26,6 +25,7 @@ interface Location {
 	group_id: string;
 	name: string;
 	address: string;
+	image_url: string;
 }
 
 interface SidebarCategory {
@@ -71,37 +71,65 @@ export default async function Property({ params }: PageProps) {
 	if (propErr || !property?.id) notFound();
 	const propertyId = property.id;
 
-	const { data: rawCategories, error: catErr } = await supabase
-		.from('categories')
-		.select('id,name,icon,order_index')
-		.order('order_index', { ascending: true });
-	if (catErr || !rawCategories) notFound();
-	const categories = rawCategories;
+	// const { data: rawCategories, error: catErr } = await supabase
+	// 	.from('categories')
+	// 	.select('id,name,icon,order_index')
+	// 	.order('order_index', { ascending: true });
+	// if (catErr || !rawCategories) notFound();
+	// const categories = rawCategories;
 
-	const [groupsRes, infosRes] = await Promise.all([
+	// const [groupsRes, infosRes] = await Promise.all([
+	// 	supabase
+	// 		.from('location_groups')
+	// 		.select('id,category_id,name,slug,order_index')
+	// 		.eq('property_id', propertyId)
+	// 		.order('order_index'),
+	// 	supabase
+	// 		.from('property_info')
+	// 		.select('id,category_id,title,content,created_at')
+	// 		.eq('property_id', propertyId)
+	// 		.order('created_at'),
+	// ]);
+	// if (groupsRes.error || infosRes.error) notFound();
+	// const allGroups = groupsRes.data;
+	// const allInfos = infosRes.data;
+
+	const [catRes, grpRes, infoRes] = await Promise.all([
+		supabase
+			.from('categories')
+			.select('id,name,icon,order_index')
+			.order('order_index', { ascending: true }),
 		supabase
 			.from('location_groups')
 			.select('id,category_id,name,slug,order_index')
 			.eq('property_id', propertyId)
-			.order('order_index'),
+			.order('order_index', { ascending: true }),
 		supabase
 			.from('property_info')
 			.select('id,category_id,title,content,created_at')
 			.eq('property_id', propertyId)
-			.order('created_at'),
+			.order('created_at', { ascending: true }),
 	]);
-	if (groupsRes.error || infosRes.error) notFound();
-	const allGroups = groupsRes.data;
-	const allInfos = infosRes.data;
+
+	// must have categories
+	if (catRes.error || !catRes.data) notFound();
+	const categories = catRes.data;
+
+	// coerce null → []
+	if (grpRes.error) notFound();
+	const groups = grpRes.data ?? [];
+
+	if (infoRes.error) notFound();
+	const infos = infoRes.data ?? [];
 
 	const firstGroupByCat = new Map<string, string>();
-	allGroups.forEach((g) => {
+	groups.forEach((g) => {
 		if (!firstGroupByCat.has(g.category_id)) {
 			firstGroupByCat.set(g.category_id, g.id);
 		}
 	});
 	const firstInfoByCat = new Map<string, string>();
-	allInfos.forEach((i) => {
+	infos.forEach((i) => {
 		if (!firstInfoByCat.has(i.category_id)) {
 			firstInfoByCat.set(i.category_id, i.id);
 		}
@@ -116,14 +144,14 @@ export default async function Property({ params }: PageProps) {
 	});
 
 	const sidebarSubcategories: SidebarItem[] = isLodging
-		? allInfos
+		? infos
 				.filter((i) => i.category_id === categoryId)
 				.map((i) => ({
 					id: i.id,
 					label: i.title,
 					href: `/app/properties/${propertySlug}/${categoryId}/${i.id}`,
 				}))
-		: allGroups
+		: groups
 				.filter((g) => g.category_id === categoryId)
 				.map((g) => ({
 					id: g.id,
@@ -131,26 +159,52 @@ export default async function Property({ params }: PageProps) {
 					href: `/app/properties/${propertySlug}/${categoryId}/${g.id}`,
 				}));
 
-	let contentItems: Array<PropertyInfo | Location> = [];
-	if (isLodging) {
-		if (subcategoryId) {
-			contentItems = allInfos.filter(
+	// --- determine what to render in content area
+	// let contentItems: Array<PropertyInfo | Location> = [];
+
+	// if (isLodging) {
+	// 	// show exactly the selected info subcategory if any
+	// 	if (subcategoryId) {
+	// 		contentItems = infos.filter(
+	// 			(i) => i.category_id === categoryId && i.id === subcategoryId
+	// 		);
+	// 	}
+	// } else {
+	// 	// for non-lodging, load the locations for the chosen group
+	// 	if (subcategoryId) {
+	// 		const { data: locs, error: locErr } = await supabase
+	// 			.from<'locations', Location>('locations')
+	// 			.select('id,group_id,name,address,image_url')
+	// 			.eq('group_id', subcategoryId)
+	// 			.order('name', { ascending: true });
+	// 		if (locErr) notFound();
+	// 		contentItems = locs;
+	// 	}
+	// }
+
+	// --- determinar las infos filtradas para Lodging
+	const lodgingInfos: PropertyInfo[] = [];
+	if (isLodging && subcategoryId) {
+		lodgingInfos.push(
+			...infos.filter(
 				(i) => i.category_id === categoryId && i.id === subcategoryId
-			);
-		}
-	} else {
-		// Otras categorías: solo si viene subcategoryId cargamos locations
-		if (subcategoryId) {
-			const { data: locs, error: locErr } = await supabase
-				.from<'locations', Location>('locations')
-				.select('id,group_id,name,address')
-				.eq('group_id', subcategoryId)
-				.order('name', { ascending: true });
-			if (locErr) notFound();
-			contentItems = locs;
-		}
+			)
+		);
 	}
-	console.log('/////', categoryId);
+
+	// --- determinar las locations para non-lodging
+	let locationsList: Location[] = [];
+	if (!isLodging && subcategoryId) {
+		const { data: locs, error: locErr } = await supabase
+			.from<'locations', Location>('locations')
+			.select('id,group_id,name,address,image_url')
+			.eq('group_id', subcategoryId)
+			.order('name', { ascending: true });
+		if (locErr) notFound();
+		locationsList = locs;
+	}
+
+	// console.log('/////', contentItems);
 
 	return (
 		<AppContentTemplate
@@ -163,17 +217,18 @@ export default async function Property({ params }: PageProps) {
 		>
 			<div className="p-4 font-roboto flex flex-col grow gap-4 bg-white rounded-lg overflow-hidden">
 				{isLodging ? (
-					(contentItems[0] as PropertyInfo).content !== '' ? (
-						<p>La info</p>
-					) : (
-						<EmptyContentAction className="mt-12" />
-					)
-				) : contentItems.length === 0 ? (
-					<PropertiesContentEmpty
-						url={`/app/(modal)/${propertySlug}/${propertyId}/${categoryId}/${subcategoryId}`}
+					<PropertyInfoContent
+						infos={infos.filter(
+							(i) =>
+								i.category_id === categoryId &&
+								i.id === subcategoryId
+						)}
 					/>
 				) : (
-					<p>Locations</p>
+					<LocationsContent
+						locations={locationsList /* cargadas previamente */}
+						emptyUrl={`/app/(modal)/${propertySlug}/${propertyId}/${categoryId}/${subcategoryId}`}
+					/>
 				)}
 			</div>
 		</AppContentTemplate>

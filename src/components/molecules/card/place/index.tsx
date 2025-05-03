@@ -9,6 +9,7 @@ import ButtonIcon from '@/components/atoms/button-icon';
 type PlaceProps = {
 	address: string;
 	className?: string;
+	editeable?: boolean;
 	handleDelete?: () => void;
 	handleEdit?: () => void;
 	image?: string;
@@ -18,6 +19,7 @@ type PlaceProps = {
 const Place = ({
 	address,
 	className,
+	editeable = false,
 	handleDelete,
 	handleEdit,
 	name,
@@ -34,7 +36,11 @@ const Place = ({
 					<Image
 						alt={name}
 						className="object-cover z-0 "
-						src={image}
+						src={
+							image === null
+								? '/static/img/placeholders/house-placeholder.png'
+								: image
+						}
 						fill
 					/>
 				</div>
@@ -50,11 +56,13 @@ const Place = ({
 						icon={<IconDelete />}
 						color="secondary"
 					/>
-					<ButtonIcon
-						onClick={handleEdit}
-						icon={<IconEdit />}
-						color="secondary"
-					/>
+					{editeable && (
+						<ButtonIcon
+							onClick={handleEdit}
+							icon={<IconEdit />}
+							color="secondary"
+						/>
+					)}
 				</div>
 			</div>
 			<div className="flex gap-2 w-full sm:hidden">
@@ -65,12 +73,14 @@ const Place = ({
 					label={t('Eliminar')}
 					onClick={handleDelete}
 				/>
-				<Button
-					className="w-full"
-					iconLeft={<IconEdit />}
-					label={t('Editar')}
-					onClick={handleEdit}
-				/>
+				{editeable && (
+					<Button
+						className="w-full"
+						iconLeft={<IconEdit />}
+						label={t('Editar')}
+						onClick={handleEdit}
+					/>
+				)}
 			</div>
 		</div>
 	);
