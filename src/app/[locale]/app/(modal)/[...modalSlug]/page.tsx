@@ -7,7 +7,7 @@ type PageProps = {
 
 export default async function ModalPage({ params }: PageProps) {
 	const { modalSlug } = await params;
-	const [, propertyId, categoryId] = modalSlug;
+	const [, propertySlug, propertyId, categoryId, subCategoryId] = modalSlug;
 
 	const isLodging = categoryId === LODGING_CATEGORY_ID;
 
@@ -16,7 +16,12 @@ export default async function ModalPage({ params }: PageProps) {
 			{isLodging ? (
 				<p>Formulario para Property Info</p>
 			) : (
-				<AddPlaceForm propertyId={propertyId} categoryId={categoryId} />
+				<AddPlaceForm
+					propertyId={propertyId}
+					propertySlug={propertySlug}
+					categoryId={categoryId}
+					subCategoryId={subCategoryId}
+				/>
 			)}
 		</>
 	);

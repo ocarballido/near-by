@@ -31,6 +31,7 @@ export type LocationFormState = {
 	};
 	success?: boolean;
 	message?: string;
+	redirectTo?: string;
 };
 
 export async function createLocation(
@@ -61,13 +62,16 @@ export async function createLocation(
 			group_id: formData.get('group_id'),
 			name: formData.get('name'),
 			address: formData.get('address'),
-			description: formData.get('description'),
+			// si no vienen, que sean cadena vacía
+			description: (formData.get('description') as string) ?? '',
+			website: (formData.get('website') as string) ?? '',
+			phone: (formData.get('phone') as string) ?? '',
 			latitude: formData.get('latitude'),
 			longitude: formData.get('longitude'),
-			website: formData.get('website'),
-			phone: formData.get('phone'),
 		};
+		console.log('📋 raw form data:', raw);
 		const result = LocationSchema.safeParse(raw);
+		console.log('////// Una prueba');
 		if (!result.success) {
 			const fe = result.error.flatten().fieldErrors;
 			return {
@@ -79,6 +83,7 @@ export async function createLocation(
 				},
 			};
 		}
+		console.log('****** Una prueba');
 		const loc = result.data;
 
 		// 5) Procesar imagen, si hay
@@ -126,6 +131,7 @@ export async function createLocation(
 			image_url = publicUrl;
 		}
 
+		console.log('📝 Intentando insertar location:', loc);
 		// 6) Insertar el nuevo location
 		const { error: insErr } = await supabase.from('locations').insert({
 			property_id: loc.property_id,
@@ -139,6 +145,7 @@ export async function createLocation(
 			phone: loc.phone || null,
 			image_url,
 		});
+		console.log('🛠 Resultado insert:', insErr);
 		if (insErr) {
 			return { errors: { server: ['Error creando el location'] } };
 		}
@@ -146,7 +153,11 @@ export async function createLocation(
 		// 7) Revalidar la lista de locations de esa propiedad
 		revalidatePath(`/app`);
 
-		return { success: true, message: 'Sitio añadido correctamente' };
+		return {
+			success: true,
+			message: 'Sitio añadido correctamente',
+			redirectTo: `/app/properties`,
+		};
 	} catch (error: unknown) {
 		const errorMessage =
 			error instanceof Error

@@ -35,9 +35,13 @@ type FormValues = {
 const AddPlaceForm = ({
 	propertyId,
 	categoryId,
+	propertySlug,
+	subCategoryId,
 }: {
 	propertyId: string;
+	propertySlug: string;
 	categoryId: string;
+	subCategoryId: string;
 }) => {
 	const t = useTranslations();
 
@@ -62,7 +66,7 @@ const AddPlaceForm = ({
 	} = useForm<FormValues>({
 		defaultValues: {
 			property_id: propertyId,
-			group_id: categoryId,
+			group_id: subCategoryId,
 			name: '',
 			address: '',
 			latitude: '',
@@ -113,8 +117,8 @@ const AddPlaceForm = ({
 		}
 
 		const fd = new FormData();
-		fd.append('property_id', data.property_id);
-		fd.append('group_id', data.group_id);
+		fd.append('property_id', propertyId);
+		fd.append('group_id', subCategoryId);
 		fd.append('name', data.name);
 		fd.append('address', data.address);
 		fd.append('latitude', data.latitude);
@@ -158,11 +162,20 @@ const AddPlaceForm = ({
 			return;
 		}
 
-		setAlert({ type: 'success', message: result.message! });
+		if (result.redirectTo) {
+			router.push(
+				`${result.redirectTo}/${propertySlug}/${categoryId}/${subCategoryId}`
+			);
+			return;
+		}
+
 		reset();
 		clearValidation();
 
-		router.back();
+		// router.back();
+		// router.push(
+		// 	`/app/properties/${propertyId}/${categoryId}/${subCategoryId}`
+		// );
 	};
 
 	useEffect(() => {

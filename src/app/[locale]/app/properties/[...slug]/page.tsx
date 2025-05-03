@@ -170,7 +170,7 @@ export default async function Property({ params }: PageProps) {
 					)
 				) : contentItems.length === 0 ? (
 					<PropertiesContentEmpty
-						url={`/app/(modal)/${propertyId}/${categoryId}/${subcategoryId}`}
+						url={`/app/(modal)/${propertySlug}/${propertyId}/${categoryId}/${subcategoryId}`}
 					/>
 				) : (
 					<p>Locations</p>
