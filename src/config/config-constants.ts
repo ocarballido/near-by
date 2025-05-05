@@ -234,3 +234,6 @@ export const SUBSCRIPTION_FEATURES = {
 export const MAX_IMAGE_SIZE = 500 * 1024; // 500 KB
 
 export const LODGING_CATEGORY_ID = '4581a08a-3e78-4800-b16c-575f5da81cba';
+
+export const GOOGLE_MAPS_DIRECTION_URL =
+	'https://www.google.com/maps/dir/?api=1&destination=';

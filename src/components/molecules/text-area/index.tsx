@@ -4,34 +4,25 @@ import clsx from 'clsx';
 
 import styles from './styles.module.css';
 
-type TextAreaProps = {
+export type TextAreaProps = {
 	className?: string;
-	defaultValue?: string;
-	disabled?: boolean;
-	error?: boolean;
+	label?: string;
 	helperText?: string;
+	error?: boolean;
 	iconLeft?: React.ReactNode;
 	iconRight?: React.ReactNode;
-	id?: string;
-	label: string;
-	onChange?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
-	placeholder?: string;
-	rows?: number;
-};
+} & React.TextareaHTMLAttributes<HTMLTextAreaElement>;
 
 const TextArea = ({
 	className = '',
-	defaultValue = '',
-	disabled = false,
-	error = false,
+	label,
 	helperText = '',
+	error = false,
 	iconLeft,
 	iconRight,
-	id = '',
-	label,
-	onChange,
-	placeholder = '',
+	disabled = false,
 	rows = 4,
+	...rest
 }: TextAreaProps) => {
 	const textAreaStyles = clsx(
 		{
@@ -57,7 +48,7 @@ const TextArea = ({
 		<div className={`flex flex-col gap-2 ${textAreaStyles}`}>
 			{label && (
 				<label
-					htmlFor={id}
+					htmlFor={rest.id}
 					className={`font-bold text-sm ${labelStyles}`}
 				>
 					{label}
@@ -68,12 +59,9 @@ const TextArea = ({
 					<span className="absolute left-2">{iconLeft}</span>
 				)}
 				<textarea
-					rows={rows}
-					id={id}
+					{...rest}
 					disabled={disabled}
-					placeholder={placeholder}
-					defaultValue={defaultValue}
-					onChange={onChange}
+					rows={rows}
 					className={`py-3 px-4 m-0 bg-gray-800/5 rounded-lg w-full placeholder:text-sm text-gray-700 border-2  focus:border-gray-300 focus:outline-0 ${inputStyles}`}
 				/>
 				{iconRight && (

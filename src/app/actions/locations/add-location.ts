@@ -139,7 +139,6 @@ export async function createLocation(
 			image_url = publicUrl;
 		}
 
-		console.log('📝 Intentando insertar location:', loc);
 		// 6) Insertar el nuevo location
 		const { error: insErr } = await supabase.from('locations').insert({
 			property_id: loc.property_id,
@@ -153,7 +152,6 @@ export async function createLocation(
 			phone: loc.phone || null,
 			image_url,
 		});
-		console.log('🛠 Resultado insert:', insErr);
 		if (insErr) {
 			return { errors: { server: ['Error creando el location'] } };
 		}

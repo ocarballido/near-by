@@ -21,6 +21,7 @@ import IconShoppingBag from '@/components/atoms/icon/shopping-bag';
 import CategoryAccordion from '@/components/molecules/category-accordion';
 import ButtonLink from '@/components/molecules/button-link';
 import GroupItem from '@/components/molecules/group-item';
+import { LODGING_CATEGORY_ID } from '@/config/config-constants';
 
 const ICON_COMPONENTS = {
 	IconHealing,
@@ -91,20 +92,44 @@ const PropertySidebar = ({
 						open={category.id === categoryId}
 						name={t(category.name)}
 						href={
-							category.firstEntryId
+							category.id !== LODGING_CATEGORY_ID
 								? `/app/properties/${propertySlug}/${category.id}/${category.firstEntryId}`
 								: `/app/properties/${propertySlug}/${category.id}`
 						}
 						icon={<IconComponent />}
 					>
-						{subCategories.map((subcategory) => (
-							<GroupItem
-								key={subcategory.id}
-								label={t(subcategory.label)}
-								active={subcategory.id === subcategoryGroupId}
-								onClick={() => router.push(subcategory.href)}
-							/>
-						))}
+						{subCategories.map((subcategory, idx) => {
+							let isActive = false;
+
+							if (subcategoryGroupId !== undefined) {
+								isActive =
+									subcategory.id === subcategoryGroupId;
+							} else {
+								isActive = idx === 0 ? true : false;
+							}
+
+							return (
+								<GroupItem
+									key={subcategory.id}
+									label={t(subcategory.label)}
+									active={isActive}
+									editeable={
+										category.id === LODGING_CATEGORY_ID &&
+										isActive &&
+										idx !== 0
+									}
+									onClick={() =>
+										router.push(subcategory.href)
+									}
+									handleEdit={(e) => {
+										e.stopPropagation();
+										router.push(
+											`/app/info/${propertySlug}/${categoryId}/${subcategory.id}`
+										);
+									}}
+								/>
+							);
+						})}
 					</CategoryAccordion>
 				);
 			})}

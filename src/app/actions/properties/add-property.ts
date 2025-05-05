@@ -9,6 +9,7 @@ import { getDefaultGroups } from '@/utils/default-groups';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 import { createSSRClient } from '@/lib/supabase/server';
 import { MAX_IMAGE_SIZE } from '@/config/config-constants';
+import { randomSuffix } from '@/utils/random-suffix';
 import { LODGING_CATEGORY_ID } from '@/config/config-constants';
 import { z } from 'zod';
 
@@ -210,9 +211,8 @@ export async function createProperty(formData: FormData): Promise<FormState> {
 		// }
 
 		// 7. Crear un slug único basado en el nombre
-		const randomSuffix = Math.random().toString(36).slice(2, 8);
 		const baseSlug = generateSlug(validated.name);
-		const slug = `${baseSlug}-${randomSuffix}`;
+		const slug = `${baseSlug}-${randomSuffix()}`;
 
 		// 8. Crear la propiedad en la base de datos
 		const { data: property, error: insertError } = await supabase
@@ -387,37 +387,39 @@ export async function createProperty(formData: FormData): Promise<FormState> {
 		let redirectTo = `/app/properties/${property.slug}`;
 		if (firstCat) {
 			const catId = firstCat.id;
-			if (catId === LODGING_CATEGORY_ID) {
-				// primer property_info de esa category
-				const { data: firstInfo } = await supabase
-					.from('property_info')
-					.select('id')
-					.eq('property_id', propertyId)
-					.eq('category_id', catId)
-					.order('created_at', { ascending: true })
-					.limit(1)
-					.single();
-				if (firstInfo?.id) {
-					redirectTo += `/${catId}/${firstInfo.id}`;
-				} else {
-					redirectTo += `/${catId}`;
-				}
-			} else {
-				// primer location_group de esa category
-				const { data: firstGroup } = await supabase
-					.from('location_groups')
-					.select('id')
-					.eq('property_id', propertyId)
-					.eq('category_id', catId)
-					.order('order_index', { ascending: true })
-					.limit(1)
-					.single();
-				if (firstGroup?.id) {
-					redirectTo += `/${catId}/${firstGroup.id}`;
-				} else {
-					redirectTo += `/${catId}`;
-				}
-			}
+			redirectTo += `/${catId}`;
+			// const catId = firstCat.id;
+			// if (catId === LODGING_CATEGORY_ID) {
+			// 	// primer property_info de esa category
+			// 	const { data: firstInfo } = await supabase
+			// 		.from('property_info')
+			// 		.select('id')
+			// 		.eq('property_id', propertyId)
+			// 		.eq('category_id', catId)
+			// 		.order('created_at', { ascending: true })
+			// 		.limit(1)
+			// 		.single();
+			// 	if (firstInfo?.id) {
+			// 		redirectTo += `/${catId}/${firstInfo.id}`;
+			// 	} else {
+			// 		redirectTo += `/${catId}`;
+			// 	}
+			// } else {
+			// 	// primer location_group de esa category
+			// 	const { data: firstGroup } = await supabase
+			// 		.from('location_groups')
+			// 		.select('id')
+			// 		.eq('property_id', propertyId)
+			// 		.eq('category_id', catId)
+			// 		.order('order_index', { ascending: true })
+			// 		.limit(1)
+			// 		.single();
+			// 	if (firstGroup?.id) {
+			// 		redirectTo += `/${catId}/${firstGroup.id}`;
+			// 	} else {
+			// 		redirectTo += `/${catId}`;
+			// 	}
+			// }
 		}
 
 		// Nunca se llegará aquí debido al redirect, pero TypeScript lo necesita

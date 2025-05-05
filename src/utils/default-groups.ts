@@ -1,7 +1,7 @@
 export const getDefaultGroups = (): Record<string, string[]> => {
 	return {
 		'4581a08a-3e78-4800-b16c-575f5da81cba': [
-			'Información general',
+			// 'Información general',
 			'Manual de alojamiento',
 			'Normas de uso',
 			'Horario',

@@ -17,8 +17,6 @@ interface InfoGeneral {
 }
 
 export default async function Properties() {
-	// const t = useTranslations();
-
 	const ssrClient = await createSSRClient();
 	const {
 		data: { user },

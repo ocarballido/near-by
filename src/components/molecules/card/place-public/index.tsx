@@ -1,25 +1,34 @@
 import { useTranslations } from 'next-intl';
 
+import { GOOGLE_MAPS_DIRECTION_URL } from '@/config/config-constants';
+
 import Image from 'next/image';
 import IconDirections from '@/components/atoms/icon/directions';
 import ButtonLink from '../../button-link';
 
 type PlacePublicProps = {
 	address: string;
+	latitude: number;
+	longitude: number;
 	className?: string;
-	href: string;
 	image?: string;
 	name: string;
 };
 
 const PlacePublic = ({
 	address,
+	latitude,
+	longitude,
 	className,
-	href,
 	name,
 	image = '/static/img/placeholders/house-placeholder.png',
 }: PlacePublicProps) => {
 	const t = useTranslations();
+
+	const graySvg = `<svg xmlns="http://www.w3.org/2000/svg" width="4" height="4"><rect width="4" height="4" fill="#a3e7d0" /></svg>`;
+	const grayDataUrl = `data:image/svg+xml;base64,${Buffer.from(
+		graySvg
+	).toString('base64')}`;
 
 	return (
 		<div
@@ -30,7 +39,13 @@ const PlacePublic = ({
 					<Image
 						alt={name}
 						className="object-cover z-0 "
-						src={image}
+						src={
+							image === null
+								? '/static/img/placeholders/house-placeholder.png'
+								: image
+						}
+						placeholder="blur"
+						blurDataURL={grayDataUrl}
 						fill
 					/>
 				</div>
@@ -41,20 +56,22 @@ const PlacePublic = ({
 					</p>
 				</div>
 				<ButtonLink
-					className="hidden gap-1 sm:flex shrink-0"
+					className="hidden gap-1 lg:flex shrink-0"
 					color="primary"
 					iconLeft={<IconDirections />}
 					label={t('Como llegar')}
-					href={href}
+					href={`${GOOGLE_MAPS_DIRECTION_URL}${latitude},${longitude}`}
+					target="_blank"
 				/>
 			</div>
-			<div className="flex gap-2 w-full sm:hidden">
+			<div className="flex gap-2 w-full lg:hidden">
 				<ButtonLink
 					className="w-full"
 					color="primary"
 					iconLeft={<IconDirections />}
 					label={t('Como llegar')}
-					href={href}
+					href={`${GOOGLE_MAPS_DIRECTION_URL}${latitude},${longitude}`}
+					target="_blank"
 				/>
 			</div>
 		</div>

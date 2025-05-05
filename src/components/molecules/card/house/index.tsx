@@ -12,9 +12,11 @@ type HouseProps = {
 	address: string;
 	className?: string;
 	handleDelete?: () => void;
-	href: string;
+	href?: string;
 	image?: string | null;
 	name: string;
+	deleatable?: boolean;
+	editeable?: boolean;
 };
 
 const House = ({
@@ -23,6 +25,8 @@ const House = ({
 	handleDelete,
 	href,
 	name,
+	deleatable = true,
+	editeable = true,
 	image = '/static/img/placeholders/house-placeholder.png',
 }: HouseProps) => {
 	const t = useTranslations();
@@ -50,19 +54,23 @@ const House = ({
 					</p>
 				</div>
 				<div className="flex gap-2 w-full">
-					<Button
-						className="w-full button__delete"
-						color="secondary"
-						iconLeft={<IconDelete />}
-						label={t('Eliminar')}
-						onClick={handleDelete}
-					/>
-					<ButtonLink
-						className="w-full"
-						iconLeft={<IconEdit />}
-						label={t('Editar')}
-						href={href}
-					/>
+					{deleatable && (
+						<Button
+							className="w-full button__delete"
+							color="secondary"
+							iconLeft={<IconDelete />}
+							label={t('Eliminar')}
+							onClick={handleDelete}
+						/>
+					)}
+					{editeable && href && (
+						<ButtonLink
+							className="w-full"
+							iconLeft={<IconEdit />}
+							label={t('Editar')}
+							href={href}
+						/>
+					)}
 				</div>
 			</div>
 			<Image

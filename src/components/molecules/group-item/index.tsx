@@ -12,6 +12,8 @@ type GroupItemProps = {
 	editeable?: boolean;
 	label: string;
 	onClick?: React.MouseEventHandler<HTMLDivElement>;
+	handleEdit?: React.MouseEventHandler<HTMLButtonElement>;
+	handleDelete?: React.MouseEventHandler<HTMLButtonElement>;
 };
 
 const GroupItem = ({
@@ -20,6 +22,8 @@ const GroupItem = ({
 	editeable = false,
 	label,
 	onClick,
+	handleEdit,
+	handleDelete,
 }: GroupItemProps) => {
 	const buttonStyles = clsx({
 		'bg-secondary-200': active,
@@ -33,10 +37,18 @@ const GroupItem = ({
 			{label}
 			<div className="flex items-center justify-center">
 				{deleatable && (
-					<ButtonIcon color="secondary" icon={<IconDelete />} />
+					<ButtonIcon
+						color="secondary"
+						icon={<IconDelete />}
+						onClick={handleDelete}
+					/>
 				)}
 				{editeable && (
-					<ButtonIcon color="secondary" icon={<IconEdit />} />
+					<ButtonIcon
+						color="secondary"
+						icon={<IconEdit />}
+						onClick={handleEdit}
+					/>
 				)}
 			</div>
 		</div>

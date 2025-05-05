@@ -119,7 +119,8 @@ const PropertiesContent = ({
 					key={property?.id}
 					name={property?.name}
 					image={property?.image_url || null}
-					href={`/app/properties/${property?.slug}/${firstCategory?.id}/${property?.infoGeneral?.id}`}
+					href={`/app/properties/${property?.slug}/${firstCategory?.id}`}
+					// href={`/app/properties/${property?.slug}/${firstCategory?.id}/${property?.infoGeneral?.id}`}
 					address={property?.address}
 					handleDelete={() => {
 						setIsOpen(true);

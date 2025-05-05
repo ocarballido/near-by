@@ -2,7 +2,7 @@ import { notFound, redirect } from 'next/navigation';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 
 import { LODGING_CATEGORY_ID } from '@/config/config-constants';
-// import { useTranslations } from 'next-intl';
+
 import AppContentTemplate from '@/components/templates/app-content';
 import { createSSRClient } from '@/lib/supabase/server';
 import { LocationsContent } from '@/components/templates/locations-content';
@@ -44,8 +44,6 @@ interface SidebarItem {
 }
 
 export default async function Property({ params }: PageProps) {
-	// const t = useTranslations();
-
 	const { slug } = await params;
 	const [propertySlug, categoryId, subcategoryId] = slug;
 
@@ -65,34 +63,11 @@ export default async function Property({ params }: PageProps) {
 
 	const { data: property, error: propErr } = await supabase
 		.from('properties')
-		.select('id,name,slug')
+		.select('id,name,slug,image_url,address')
 		.eq('slug', propertySlug)
 		.single();
 	if (propErr || !property?.id) notFound();
 	const propertyId = property.id;
-
-	// const { data: rawCategories, error: catErr } = await supabase
-	// 	.from('categories')
-	// 	.select('id,name,icon,order_index')
-	// 	.order('order_index', { ascending: true });
-	// if (catErr || !rawCategories) notFound();
-	// const categories = rawCategories;
-
-	// const [groupsRes, infosRes] = await Promise.all([
-	// 	supabase
-	// 		.from('location_groups')
-	// 		.select('id,category_id,name,slug,order_index')
-	// 		.eq('property_id', propertyId)
-	// 		.order('order_index'),
-	// 	supabase
-	// 		.from('property_info')
-	// 		.select('id,category_id,title,content,created_at')
-	// 		.eq('property_id', propertyId)
-	// 		.order('created_at'),
-	// ]);
-	// if (groupsRes.error || infosRes.error) notFound();
-	// const allGroups = groupsRes.data;
-	// const allInfos = infosRes.data;
 
 	const [catRes, grpRes, infoRes] = await Promise.all([
 		supabase
@@ -111,11 +86,9 @@ export default async function Property({ params }: PageProps) {
 			.order('created_at', { ascending: true }),
 	]);
 
-	// must have categories
 	if (catRes.error || !catRes.data) notFound();
 	const categories = catRes.data;
 
-	// coerce null → []
 	if (grpRes.error) notFound();
 	const groups = grpRes.data ?? [];
 
@@ -143,7 +116,7 @@ export default async function Property({ params }: PageProps) {
 		return { ...cat, firstEntryId, propertySlug };
 	});
 
-	const sidebarSubcategories: SidebarItem[] = isLodging
+	const realSubcats: SidebarItem[] = isLodging
 		? infos
 				.filter((i) => i.category_id === categoryId)
 				.map((i) => ({
@@ -159,30 +132,19 @@ export default async function Property({ params }: PageProps) {
 					href: `/app/properties/${propertySlug}/${categoryId}/${g.id}`,
 				}));
 
-	// --- determine what to render in content area
-	// let contentItems: Array<PropertyInfo | Location> = [];
+	let subCategoriesToRender: SidebarItem[];
 
-	// if (isLodging) {
-	// 	// show exactly the selected info subcategory if any
-	// 	if (subcategoryId) {
-	// 		contentItems = infos.filter(
-	// 			(i) => i.category_id === categoryId && i.id === subcategoryId
-	// 		);
-	// 	}
-	// } else {
-	// 	// for non-lodging, load the locations for the chosen group
-	// 	if (subcategoryId) {
-	// 		const { data: locs, error: locErr } = await supabase
-	// 			.from<'locations', Location>('locations')
-	// 			.select('id,group_id,name,address,image_url')
-	// 			.eq('group_id', subcategoryId)
-	// 			.order('name', { ascending: true });
-	// 		if (locErr) notFound();
-	// 		contentItems = locs;
-	// 	}
-	// }
+	if (isLodging) {
+		const overview: SidebarItem = {
+			id: '',
+			label: 'Información general',
+			href: `/app/properties/${propertySlug}/${categoryId}`,
+		};
+		subCategoriesToRender = [overview, ...realSubcats];
+	} else {
+		subCategoriesToRender = realSubcats;
+	}
 
-	// --- determinar las infos filtradas para Lodging
 	const lodgingInfos: PropertyInfo[] = [];
 	if (isLodging && subcategoryId) {
 		lodgingInfos.push(
@@ -192,7 +154,6 @@ export default async function Property({ params }: PageProps) {
 		);
 	}
 
-	// --- determinar las locations para non-lodging
 	let locationsList: Location[] = [];
 	if (!isLodging && subcategoryId) {
 		const { data: locs, error: locErr } = await supabase
@@ -204,25 +165,30 @@ export default async function Property({ params }: PageProps) {
 		locationsList = locs;
 	}
 
-	// console.log('/////', contentItems);
-
 	return (
 		<AppContentTemplate
 			sidebar="PROPERTY"
 			categoryId={categoryId}
 			categories={sidebarCategories}
-			subCategories={sidebarSubcategories}
+			subCategories={subCategoriesToRender}
 			subcategoryGroupId={subcategoryId}
 			propertySlug={propertySlug}
 		>
 			<div className="p-4 font-roboto flex flex-col grow gap-4 bg-white rounded-lg overflow-hidden">
 				{isLodging ? (
 					<PropertyInfoContent
-						infos={infos.filter(
-							(i) =>
-								i.category_id === categoryId &&
-								i.id === subcategoryId
-						)}
+						infos={
+							subcategoryId
+								? infos.filter(
+										(i) =>
+											i.category_id === categoryId &&
+											i.id === subcategoryId
+								  )
+								: null
+						}
+						property={property}
+						subCategoryId={subcategoryId}
+						categoryId={categoryId}
 					/>
 				) : (
 					<LocationsContent
@@ -230,7 +196,7 @@ export default async function Property({ params }: PageProps) {
 						propertyId={propertyId}
 						categoryId={categoryId}
 						subCategoryId={subcategoryId}
-						emptyUrl={`/app/(modal)/${propertySlug}/${propertyId}/${categoryId}/${subcategoryId}`}
+						emptyUrl={`/app/location/${propertySlug}/${propertyId}/${categoryId}/${subcategoryId}`}
 					/>
 				)}
 			</div>

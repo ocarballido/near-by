@@ -157,6 +157,13 @@ const AddPlaceForm = ({
 					type: 'manual',
 					message: result.errors.address[0],
 				});
+			if (result.errors.group_id)
+				setAlert({ type: 'error', message: result.errors.group_id[0] });
+			if (result.errors.property_id)
+				setAlert({
+					type: 'error',
+					message: result.errors.property_id[0],
+				});
 			if (result.errors.server)
 				setAlert({ type: 'error', message: result.errors.server[0] });
 			return;
