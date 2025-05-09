@@ -6,6 +6,10 @@ import { useTranslations } from 'next-intl';
 
 import { deleteLocation } from '@/app/actions/locations/delete-location';
 
+import Image from 'next/image';
+
+import addLocation from '../../../../public/static/img/add-location.webp';
+
 import Place from '@/components/molecules/card/place';
 import PropertiesContentEmpty from '../properties-content-empty';
 import ButtonLink from '@/components/molecules/button-link';
@@ -76,7 +80,19 @@ export function LocationsContent({
 	};
 
 	if (locations.length === 0) {
-		return <PropertiesContentEmpty url={emptyUrl} />;
+		return (
+			<>
+				<div className="block ml-auto mr-auto">
+					<Image
+						alt="Add location"
+						src={addLocation}
+						height={219}
+						width={281}
+					/>
+				</div>
+				<PropertiesContentEmpty url={emptyUrl} />
+			</>
+		);
 	}
 
 	return (

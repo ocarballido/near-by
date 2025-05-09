@@ -26,13 +26,17 @@ const SubscriptionCard = ({
 
 	const cardStyles = clsx(
 		{ 'bg-gray-100 text-gray-600': type === 'FREE' },
-		{ 'bg-primary-600 text-white': type === 'PREMIUM' },
+		// { 'bg-primary-600 text-white': type === 'PREMIUM' },
+		{
+			'bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] text-white':
+				type === 'PREMIUM' && active,
+		},
 		{ 'bg-gray-900 text-white': type === 'PLATINUM' }
 	);
 
 	const cardHeadingStyles = clsx(
 		{ 'bg-gray-200 text-primary-500': type === 'FREE' && active },
-		{ 'bg-primary-500 text-white': type === 'PREMIUM' && active },
+		{ 'bg-white/20 text-white': type === 'PREMIUM' && active },
 		{ 'bg-gray-800': type === 'PLATINUM' && active }
 	);
 

@@ -1,13 +1,39 @@
 import type { Config } from 'tailwindcss';
 
 const config: Config = {
-	darkMode: ['class'],
 	content: [
 		'./src/pages/**/*.{js,ts,jsx,tsx,mdx}',
 		'./src/components/**/*.{js,ts,jsx,tsx,mdx}',
 		'./src/app/**/*.{js,ts,jsx,tsx,mdx}',
 	],
 	theme: {
+		extend: {
+			/* give us a .perspective-500 utility */
+			perspective: { '500': '500px' },
+
+			/* keyframes that keep the disc rotated flat */
+			keyframes: {
+				flatPing: {
+					'0%': {
+						transform: 'perspective(500px) rotateX(90deg) scale(1)',
+						opacity: '1',
+					},
+					'75%': {
+						transform: 'perspective(500px) rotateX(90deg) scale(2)',
+						opacity: '0',
+					},
+					'100%': {
+						transform: 'perspective(500px) rotateX(90deg) scale(2)',
+						opacity: '0',
+					},
+				},
+			},
+
+			/* an .animate-flat-ping class just like built-in animate-ping */
+			animation: {
+				'flat-ping': 'flatPing 1s cubic-bezier(0,0,0.2,1) infinite',
+			},
+		},
 		// extend: {
 		// 	colors: {
 		// 		primary: {

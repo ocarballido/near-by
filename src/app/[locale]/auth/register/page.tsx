@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation';
 
 import { createSPASassClient } from '@/lib/supabase/client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import TextField from '@/components/molecules/text-field';
 import Button from '@/components/molecules/button';
@@ -94,14 +93,6 @@ export default function RegisterPage() {
 				onSubmit={handleSubmit(onSubmit)}
 				className="flex flex-col items-center gap-4 max-w-96 w-full"
 			>
-				<Image
-					width={100}
-					height={100}
-					src="/static/img/placeholders/logo.png"
-					alt="Logo"
-					className="grow-0"
-				/>
-
 				<TextField
 					className="w-full"
 					label={t('Email *')}

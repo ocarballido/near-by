@@ -71,8 +71,7 @@ const AddressField: FC<AddressFieldProps> = ({
 				type="button"
 				label="Validar dirección"
 				onClick={onValidate}
-				color="white"
-				className="shadow-sm"
+				color="primary"
 				disabled={loading}
 			/>
 		</div>

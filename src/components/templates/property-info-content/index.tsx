@@ -2,6 +2,10 @@
 
 import { useRouter } from 'next/navigation';
 
+import Image from 'next/image';
+
+import addLocation from '../../../../public/static/img/add-location.webp';
+
 import EmptyContentAction from '@/components/molecules/empty-content-action';
 import House from '@/components/molecules/card/house';
 
@@ -65,13 +69,23 @@ export function PropertyInfoContent({
 			</div>
 		</>
 	) : (
-		<EmptyContentAction
-			className="mt-12"
-			onClick={() =>
-				router.push(
-					`/app/info/${property.slug}/${categoryId}/${subCategoryId}`
-				)
-			}
-		/>
+		<>
+			<div className="block ml-auto mr-auto">
+				<Image
+					alt="Add location"
+					src={addLocation}
+					height={219}
+					width={281}
+				/>
+			</div>
+			<EmptyContentAction
+				className="mt-12"
+				onClick={() =>
+					router.push(
+						`/app/info/${property.slug}/${categoryId}/${subCategoryId}`
+					)
+				}
+			/>
+		</>
 	);
 }

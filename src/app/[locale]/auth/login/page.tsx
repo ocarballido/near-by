@@ -8,7 +8,6 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import TextField from '@/components/molecules/text-field';
 import Spinner from '@/components/atoms/spinner';
@@ -100,14 +99,6 @@ export default function LoginPage() {
 				onSubmit={handleSubmit(onSubmit)}
 				className="flex flex-col items-center gap-4 max-w-96 w-full"
 			>
-				<Image
-					width={100}
-					height={100}
-					src="/static/img/placeholders/logo.png"
-					alt="Logo"
-					className="grow-0"
-				/>
-
 				<TextField
 					className="w-full"
 					label={t('Email *')}

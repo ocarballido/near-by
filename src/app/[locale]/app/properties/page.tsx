@@ -6,6 +6,10 @@ import {
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 import { createSSRClient } from '@/lib/supabase/server';
 
+import Image from 'next/image';
+
+import addProperty from '../../../../../public/static/img/add-property.webp';
+
 import PropertiesContent from '@/components/templates/properties-content';
 import PropertiesContentEmpty from '@/components/templates/properties-content-empty';
 import AppContentTemplate from '@/components/templates/app-content';
@@ -78,6 +82,14 @@ export default async function Properties() {
 		<AppContentTemplate>
 			{properties.length === 0 ? (
 				<div className="p-4 font-roboto flex flex-col grow gap-4 bg-white rounded-lg overflow-hidden">
+					<div className="block ml-auto mr-auto">
+						<Image
+							alt="Add location"
+							src={addProperty}
+							height={184}
+							width={248}
+						/>
+					</div>
 					<PropertiesContentEmpty url="/app/properties/new" />
 				</div>
 			) : (

@@ -12,10 +12,9 @@ const PropertiesContentEmpty = ({ url }: PropertiesContentEmptyProps) => {
 	const router = useRouter();
 
 	return (
-		<EmptyContentAction
-			onClick={() => router.push(url)}
-			className="mt-12"
-		/>
+		<>
+			<EmptyContentAction onClick={() => router.push(url)} />
+		</>
 	);
 };
 

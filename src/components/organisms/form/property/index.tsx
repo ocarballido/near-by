@@ -172,10 +172,6 @@ const AddPropertyForm = () => {
 				onSubmit={handleSubmit(onSubmit)}
 				className="flex flex-col gap-4 w-full max-w-[360px]"
 			>
-				<h1 className="font-heading font-bold text-lg text-primary-500">
-					{t('Nuevo Alojamiento')}
-				</h1>
-
 				<TextField
 					label={t('Nombre de la propiedad *')}
 					placeholder={t('Nombre ejemplo')}
