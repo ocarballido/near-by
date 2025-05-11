@@ -65,11 +65,11 @@ const Button = ({
 			'bg-error-600': color === 'error' && active,
 		},
 		{
-			'bg-white hover:bg-gray-200 text-primary-500':
+			'bg-white hover:bg-primary-100 text-primary-500':
 				color === 'white' && !active,
 		},
 		{
-			'bg-gray-200 hover:bg-gray-200 text-primary-500':
+			'bg-primary-100 hover:bg-primary-100 text-primary-500':
 				color === 'white' && active,
 		}
 	);

@@ -27,7 +27,7 @@ const House = ({
 	name,
 	deleatable = true,
 	editeable = true,
-	image = '/static/img/default-property.webp',
+	image = '/static/img/default-property-2x.webp',
 }: HouseProps) => {
 	const t = useTranslations();
 
@@ -76,7 +76,9 @@ const House = ({
 			<Image
 				className="object-cover z-0"
 				src={
-					image === null ? '/static/img/default-property.webp' : image
+					image === null
+						? '/static/img/default-property-2x.webp'
+						: image
 				}
 				fill={true}
 				placeholder="blur"

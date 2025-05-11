@@ -237,3 +237,22 @@ export const LODGING_CATEGORY_ID = '4581a08a-3e78-4800-b16c-575f5da81cba';
 
 export const GOOGLE_MAPS_DIRECTION_URL =
 	'https://www.google.com/maps/dir/?api=1&destination=';
+
+export const LANDING_APPBAR_MENU = [
+	{
+		label: 'Cómo funciona',
+		url: '/#how',
+	},
+	{
+		label: 'Funciones',
+		url: '/#functions',
+	},
+	{
+		label: 'Beneficios',
+		url: '/#benefits',
+	},
+	{
+		label: 'Opiniones',
+		url: '/#oppinios',
+	},
+];

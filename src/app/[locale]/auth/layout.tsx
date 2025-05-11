@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import loginRegister from '../../../../public/static/img/login-register.webp';
+import loginRegister from '../../../../public/static/img/login-register-2x.webp';
 import logo from '../../../../public/static/img/logo-color.webp';
 import PlaceTooltip from '@/components/atoms/place-tooltip';
 

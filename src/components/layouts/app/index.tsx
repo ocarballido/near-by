@@ -16,7 +16,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 	const { loading } = useLoading();
 
 	const pathName = usePathname();
-	console.log(pathName);
 
 	const publicLink = useMemo(() => {
 		const pathWithoutLocale = pathName.slice(4, pathName.length);

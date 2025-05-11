@@ -11,7 +11,13 @@ import Button from '../button';
 import IconKeyboardArrowDown from '@/components/atoms/icon/keyboard-arrow-down';
 import DropdownMenu from '@/components/atoms/dropdown-menu';
 
-const LanguageSelector: React.FC = () => {
+type LanguageSelectorProps = {
+	triggerColor?: 'primary' | 'secondary' | 'white' | 'error';
+};
+
+const LanguageSelector = ({
+	triggerColor = 'primary',
+}: LanguageSelectorProps) => {
 	const pathname = usePathname();
 	const locale = useLocale();
 
@@ -21,7 +27,7 @@ const LanguageSelector: React.FC = () => {
 		<div ref={dropdownRef} className="relative">
 			<Button
 				className="shrink-0"
-				color="primary"
+				color={triggerColor}
 				iconRight={<IconKeyboardArrowDown />}
 				label={locale.toUpperCase()}
 				onClick={toggleDropdown}
