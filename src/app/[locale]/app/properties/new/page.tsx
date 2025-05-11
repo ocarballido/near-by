@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import addProperty from '../../../../../../public/static/img/add-property.webp';
+import addProperty from '../../../../../../public/static/img/add-property-2x.webp';
 
 import AddPropertyForm from '@/components/organisms/form/property';
 import AppContentTemplate from '@/components/templates/app-content';

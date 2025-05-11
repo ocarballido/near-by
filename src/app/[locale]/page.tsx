@@ -17,6 +17,7 @@ import LandingAppBar from '@/components/organisms/landing-appbar';
 import ButtonLink from '@/components/molecules/button-link';
 import PlaceTooltip from '@/components/atoms/place-tooltip';
 import IconAccountCircle from '@/components/atoms/icon/account-circle';
+import FilterCategories from '@/components/templates/filter-categories';
 
 export default function Home() {
 	const t = useTranslations();
@@ -307,6 +308,7 @@ export default function Home() {
 							<span className="w-[32px] h-[32px] bg-primary-400 absolute bottom-0 left-0 hidden md:block">
 								<span className="w-[32px] h-[32px] bg-white rounded-bl-xl block"></span>
 							</span>
+							<FilterCategories />
 						</div>
 					</div>
 					<div className="flex flex-col md:flex-row items-stretch">

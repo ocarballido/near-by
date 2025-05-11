@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 
 import Image from 'next/image';
 
-import addLocation from '../../../../public/static/img/add-location.webp';
+import addLocation from '../../../../public/static/img/add-location-2x.webp';
 
 import EmptyContentAction from '@/components/molecules/empty-content-action';
 import House from '@/components/molecules/card/house';

@@ -12,7 +12,7 @@ const LandingAppBar = ({ className = '' }: LandingAppBarProps) => {
 			className={`w-full shadow-xs ml-auto mr-auto max-w-[1400px] flex items-center rounded-lg p-4 bg-white transition-all ${className}`}
 		>
 			<Image
-				src="/static/img/icon.webp"
+				src="/static/img/icon-gradient.webp"
 				width={40}
 				height={40}
 				alt="Icon Logo"

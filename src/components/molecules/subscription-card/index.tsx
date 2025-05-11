@@ -15,6 +15,8 @@ type SubscriptionCardProps = {
 	type: 'FREE' | 'PREMIUM' | 'PLATINUM';
 };
 
+type PlanKey = keyof typeof SUBSCRIPTION_FEATURES;
+
 const SubscriptionCard = ({
 	active = false,
 	className = '',
@@ -24,12 +26,16 @@ const SubscriptionCard = ({
 }: SubscriptionCardProps) => {
 	const t = useTranslations();
 
+	const features =
+		SUBSCRIPTION_FEATURES[type as PlanKey]?.features ??
+		SUBSCRIPTION_FEATURES['FREE'].features;
+
 	const cardStyles = clsx(
 		{ 'bg-gray-100 text-gray-600': type === 'FREE' },
 		// { 'bg-primary-600 text-white': type === 'PREMIUM' },
 		{
 			'bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] text-white':
-				type === 'PREMIUM' && active,
+				type === 'PREMIUM',
 		},
 		{ 'bg-gray-900 text-white': type === 'PLATINUM' }
 	);
@@ -67,18 +73,16 @@ const SubscriptionCard = ({
 				</div>
 				<table>
 					<tbody>
-						{SUBSCRIPTION_FEATURES[type].features.map(
-							(row, index) => (
-								<tr key={index}>
-									<td className="py-4 pl-4 pr-2 font-bold w-full">
-										{t(row.label)}
-									</td>
-									<td className="py-4 pr-4 pl-2 font-medium w-auto text-right">
-										{t(row.value)}
-									</td>
-								</tr>
-							)
-						)}
+						{features.map((row, index) => (
+							<tr key={index}>
+								<td className="py-4 pl-4 pr-2 font-bold w-full">
+									{t(row.label)}
+								</td>
+								<td className="py-4 pr-4 pl-2 font-medium w-auto text-right">
+									{t(row.value)}
+								</td>
+							</tr>
+						))}
 					</tbody>
 				</table>
 				{(type === 'PREMIUM' || type === 'PLATINUM') && !active && (

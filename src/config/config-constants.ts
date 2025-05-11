@@ -185,6 +185,10 @@ export const SUBSCRIPTION_FEATURES = {
 				label: 'Mostrar imágenes',
 				value: 'NO',
 			},
+			// {
+			// 	label: 'Soporte por email',
+			// 	value: 'NO',
+			// },
 		],
 	},
 	PREMIUM: {
@@ -192,11 +196,11 @@ export const SUBSCRIPTION_FEATURES = {
 		features: [
 			{
 				label: 'Cantidad de propiedades',
-				value: '10',
+				value: 'Ilimitadas',
 			},
 			{
 				label: 'Grupos por categoría',
-				value: '20',
+				value: 'Ilimitadas',
 			},
 			{
 				label: 'Mostrar logo',
@@ -206,30 +210,13 @@ export const SUBSCRIPTION_FEATURES = {
 				label: 'Mostrar imágenes',
 				value: 'SI',
 			},
+			// {
+			// 	label: 'Soporte por email',
+			// 	value: 'Prioritario (24 h)',
+			// },
 		],
 	},
-	PLATINUM: {
-		price: 99.99,
-		features: [
-			{
-				label: 'Cantidad de propiedades',
-				value: 'Infinitos',
-			},
-			{
-				label: 'Grupos por categoría',
-				value: 'Infinitos',
-			},
-			{
-				label: 'Mostrar logo',
-				value: 'SI',
-			},
-			{
-				label: 'Mostrar imágenes',
-				value: 'SI',
-			},
-		],
-	},
-};
+} as const;
 
 export const MAX_IMAGE_SIZE = 500 * 1024; // 500 KB
 
