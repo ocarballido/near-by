@@ -1,8 +1,6 @@
 import Image from 'next/image';
 import clsx from 'clsx';
 
-import IconLocationOn from '../icon/location-on';
-
 type SpinnerProps = {
 	position?: 'absolute' | 'fixed';
 };
@@ -26,7 +24,12 @@ const Spinner = ({ position = 'fixed' }: SpinnerProps) => {
 					className="animate-spin"
 				/>
 				<div className="absolute w-full h-full top-0 flex flex-wrap items-center justify-center">
-					<IconLocationOn color="primary" size={30} />
+					<Image
+						src="/static/img/icon-green.webp"
+						alt="Spinner"
+						height={30}
+						width={30}
+					/>
 				</div>
 			</div>
 		</div>

@@ -2,6 +2,7 @@
 'use client';
 
 import { createSPASassClient } from '@/lib/supabase/client';
+// import { AuthChangeEvent, Session } from '@supabase/supabase-js';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
@@ -53,16 +54,19 @@ export default function LoginPage() {
 			const { data: mfaData, error: mfaError } =
 				await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
 
+			console.log('🔐 MFA data:', mfaData);
+			console.log('❌ MFA error:', mfaError);
+
 			if (mfaError) throw mfaError;
 
 			if (
-				mfaData.nextLevel === 'aal2' &&
-				mfaData.nextLevel !== mfaData.currentLevel
+				mfaData?.nextLevel === 'aal2' &&
+				mfaData?.nextLevel !== mfaData?.currentLevel
 			) {
 				setShowMFAPrompt(true);
 			} else {
+				console.log('➡️ Redirigiendo a /app (no se requiere MFA)');
 				router.push('/app');
-				return;
 			}
 		} catch (err) {
 			if (err instanceof Error) {
@@ -80,6 +84,12 @@ export default function LoginPage() {
 			router.push('/auth/2fa');
 		}
 	}, [showMFAPrompt, router]);
+
+	useEffect(() => {
+		if (!loading && !error) {
+			router.push('/app');
+		}
+	}, [loading, error, router]);
 
 	return (
 		<div className="relative max-w-96 w-full">
