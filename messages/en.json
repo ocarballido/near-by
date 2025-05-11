@@ -322,5 +322,9 @@
 	"Soporte por email": "Email support",
 	"Prioritario (24 h)": "Priority (24 h)",
 	"Selecciona": "Select...",
-	"Selecciona una categoría": "Select a category"
+	"Selecciona una categoría": "Select a category",
+	"¡Ups! No hemos encontrado la página que buscas": "Oops! We couldn't find the page you were looking for.",
+	"Puede que hayas escrito mal la dirección o que la página ya no exista": "You may have misspelled the address or the page may no longer exist.",
+	"Volver al inicio": "Return to the home",
+	"Volver atrás": "Go back"
 }
