@@ -1,7 +1,6 @@
 'use client';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
-import Image from 'next/image';
 import TextField from '@/components/molecules/text-field';
 import Button from '@/components/molecules/button';
 import ButtonLink from '@/components/molecules/button-link';
@@ -58,13 +57,6 @@ export default function VerifyEmailForm({
 					/>
 				))}
 
-			<Image
-				width={100}
-				height={100}
-				src="/static/img/placeholders/logo.png"
-				alt="Logo"
-				className="grow-0"
-			/>
 			<h2 className="text-2xl font-bold text-gray-900 mb-2">
 				{t('Verifica tu email')}
 			</h2>

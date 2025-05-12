@@ -330,5 +330,22 @@
 	"¡Ups! No hemos encontrado la página que buscas": "¡Ups! No hemos encontrado la página que buscas.",
 	"Puede que hayas escrito mal la dirección o que la página ya no exista": "Puede que hayas escrito mal la dirección o que la página ya no exista.",
 	"Volver al inicio": "Volver al inicio",
-	"Volver atrás": "Volver atrás"
+	"Volver atrás": "Volver atrás",
+	"Accede sin contraseña": "Accede sin contraseña",
+	"Introduce tu email y te enviaremos un enlace mágico para iniciar sesión": "Introduce tu email y te enviaremos un enlace mágico para iniciar sesión.",
+	"Enviar enlace mágico": "Enviar enlace mágico",
+	"¡Enlace enviado!": "¡Enlace enviado!",
+	"Hemos enviado un enlace mágico a": "Hemos enviado un enlace mágico a:",
+	"Revisa tu bandeja de entrada y haz clic en el enlace para iniciar sesión": "Revisa tu bandeja de entrada y haz clic en el enlace para iniciar sesión.",
+	"El enlace expirará en 24 horas": "El enlace expirará en 24 horas.",
+	"¿No has recibido el enlace?": "¿No has recibido el enlace?",
+	"Verifica tu carpeta de spam o correo no deseado": "Verifica tu carpeta de spam o correo no deseado",
+	"Asegúrate de que la dirección de correo sea correcta": "Asegúrate de que la dirección de correo sea correcta",
+	"Enviar nuevo enlace": "Enviar nuevo enlace",
+	"Verificando tu sesión": "Verificando tu sesión",
+	"Estamos completando tu inicio de sesión": "Estamos completando tu inicio de sesión...",
+	"Obteniendo información de sesión": "Obteniendo información de sesión",
+	"Verificando si es tu primer inicio de sesión": "Verificando si es tu primer inicio de sesión",
+	"Completando inicio de sesión": "Completando inicio de sesión...",
+	"Ocurrió un error inesperado": "Ocurrió un error inesperado"
 }

@@ -2,7 +2,6 @@
 
 import { useForm, SubmitHandler, useWatch } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
-import Image from 'next/image';
 import TextField from '@/components/molecules/text-field';
 import Button from '@/components/molecules/button';
 import ButtonLink from '@/components/molecules/button-link';
@@ -49,14 +48,6 @@ const LoginRegisterForm = ({ formAction, type = 'login' }: FormProps) => {
 			onSubmit={handleSubmit(onSubmit)}
 			className="flex flex-col items-center gap-4 max-w-96 w-full"
 		>
-			<Image
-				width={100}
-				height={100}
-				src="/static/img/placeholders/logo.png"
-				alt="Logo"
-				className="grow-0"
-			/>
-
 			<TextField
 				className="w-full"
 				label={t('Email *')}

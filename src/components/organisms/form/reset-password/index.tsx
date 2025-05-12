@@ -3,8 +3,6 @@
 import { useForm, SubmitHandler, useWatch } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
 
-import Image from 'next/image';
-
 import TextField from '@/components/molecules/text-field';
 import Button from '@/components/molecules/button';
 import Alert from '@/components/molecules/alert';
@@ -55,13 +53,6 @@ export default function ResetPasswordForm({
 				/>
 			)}
 
-			<Image
-				width={100}
-				height={100}
-				src="/static/img/placeholders/logo.png"
-				alt="Logo"
-				className="grow-0"
-			/>
 			<h2 className="text-2xl font-bold text-gray-900 mb-2">
 				{t('Restablecer su contraseña')}
 			</h2>

@@ -326,5 +326,22 @@
 	"¡Ups! No hemos encontrado la página que buscas": "Oops! We couldn't find the page you were looking for.",
 	"Puede que hayas escrito mal la dirección o que la página ya no exista": "You may have misspelled the address or the page may no longer exist.",
 	"Volver al inicio": "Return to the home",
-	"Volver atrás": "Go back"
+	"Volver atrás": "Go back",
+	"Accede sin contraseña": "Access without password",
+	"Introduce tu email y te enviaremos un enlace mágico para iniciar sesión": "Enter your email and we'll send you a magic link to log in.",
+	"Enviar enlace mágico": "Send magic link",
+	"¡Enlace enviado!": "Link sent!",
+	"Hemos enviado un enlace mágico a": "We have sent a magic link to:",
+	"Revisa tu bandeja de entrada y haz clic en el enlace para iniciar sesión": "Check your inbox and click the link to log in.",
+	"El enlace expirará en 24 horas": "The link will expire in 24 hours.",
+	"¿No has recibido el enlace?": "Didn't receive the link?",
+	"Verifica tu carpeta de spam o correo no deseado": "Check your spam or junk folder",
+	"Asegúrate de que la dirección de correo sea correcta": "Make sure the email address is correct",
+	"Enviar nuevo enlace": "Send new link",
+	"Verificando tu sesión": "Verifying your session",
+	"Estamos completando tu inicio de sesión": "We're completing your login...",
+	"Obteniendo información de sesión": "Obtaining session information",
+	"Verificando si es tu primer inicio de sesión": "Checking if this is your first login",
+	"Completando inicio de sesión": "Completing login...",
+	"Ocurrió un error inesperado": "An unexpected error occurred"
 }

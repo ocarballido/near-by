@@ -6,7 +6,6 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 
 import { createSPASassClient } from '@/lib/supabase/client';
 
-import Image from 'next/image';
 import Alert from '@/components/molecules/alert';
 import Spinner from '@/components/atoms/spinner';
 import Button from '@/components/molecules/button';
@@ -94,14 +93,6 @@ export default function ForgotPasswordPage() {
 			{loading && <Spinner position="absolute" />}
 
 			<div className="flex flex-col items-center gap-4 max-w-96 w-full">
-				<Image
-					width={100}
-					height={100}
-					src="/static/img/placeholders/logo.png"
-					alt="Logo"
-					className="grow-0"
-				/>
-
 				<h2 className="text-2xl font-bold text-gray-900 mb-2">
 					{t('Restablecer su contraseña')}
 				</h2>

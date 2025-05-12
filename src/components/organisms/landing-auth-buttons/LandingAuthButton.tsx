@@ -1,7 +1,8 @@
 'use client';
-import { useState, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
+
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import { createSPASassClient } from '@/lib/supabase/client';
 
@@ -13,32 +14,43 @@ import ButtonIcon from '@/components/atoms/button-icon';
 
 export default function LandingAuthButton() {
 	const t = useTranslations();
+	const router = useRouter();
 
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 	const [loading, setLoading] = useState(true);
-
-	const router = useRouter();
+	const [hasMounted, setHasMounted] = useState(false);
 
 	useEffect(() => {
+		setHasMounted(true);
+
 		const checkAuth = async () => {
-			try {
-				const supabase = await createSPASassClient();
-				const {
-					data: { user },
-				} = await supabase.getSupabaseClient().auth.getUser();
-				setIsAuthenticated(!!user);
-			} catch (error) {
-				console.error('Error checking auth status:', error);
-			} finally {
-				setLoading(false);
-			}
+			const supabase = await createSPASassClient();
+			const {
+				data: { session },
+			} = await supabase.getSupabaseClient().auth.getSession();
+			setIsAuthenticated(!!session?.user);
+			setLoading(false);
+
+			const { data: listener } = supabase
+				.getSupabaseClient()
+				.auth.onAuthStateChange((_event, session) => {
+					setIsAuthenticated(!!session?.user);
+				});
+
+			return () => {
+				listener.subscription.unsubscribe();
+			};
 		};
 
 		checkAuth();
 	}, []);
 
-	if (loading) {
-		return null;
+	if (!hasMounted || loading) {
+		return (
+			<div className="flex gap-1 ml-auto">
+				<LanguageSelector triggerColor="white" />
+			</div>
+		);
 	}
 
 	return (
@@ -54,14 +66,14 @@ export default function LandingAuthButton() {
 				<>
 					<ButtonLink
 						label={t('Iniciar sesión')}
-						href="/auth/login"
+						href="/auth/magic-link"
 						iconLeft={<IconAccountCircle color="white" />}
 						className="hidden md:flex"
 					/>
 					<ButtonIcon
 						icon={<IconAccountCircle color="white" />}
 						className="flex md:hidden"
-						onClick={() => router.push('/auth/login')}
+						onClick={() => router.push('/auth/magic-link')}
 					/>
 				</>
 			)}

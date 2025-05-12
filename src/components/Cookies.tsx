@@ -28,7 +28,7 @@ const CookieConsent = () => {
 			),
 			sameSite: 'strict',
 			secure: process.env.NODE_ENV === 'production',
-			path: '/app',
+			path: '/',
 		});
 		setIsVisible(false);
 	};

@@ -48,6 +48,28 @@ export class SassClient {
 		return { data, error: null };
 	}
 
+	// Método para iniciar sesión con Magic Link
+	async signInWithMagicLink(email: string) {
+		// Envía el enlace mágico al email del usuario
+		const { data, error } = await this.client.auth.signInWithOtp({
+			email,
+			options: {
+				emailRedirectTo: `${
+					typeof window !== 'undefined' ? window.location.origin : ''
+				}/auth/callback`,
+			},
+		});
+
+		// Si todo sale bien y estamos en un cliente SPA, podemos manejar
+		// cualquier lógica adicional aquí, similar a lo que haces en registerEmail
+		if (!error && this.clientType === ClientType.SPA && data) {
+			// Aquí podrías añadir lógica adicional si fuera necesario
+			// Similar a cómo lo haces en registerEmail
+		}
+
+		return { data, error };
+	}
+
 	async exchangeCodeForSession(code: string) {
 		return this.client.auth.exchangeCodeForSession(code);
 	}

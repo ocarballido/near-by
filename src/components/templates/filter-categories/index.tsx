@@ -155,7 +155,7 @@ const FilterCategories = () => {
 			/>
 			<div className="flex flex-wrap gap-1">
 				{subcategories[category].map((item) => (
-					<Badge color="success" key={item} label={item} />
+					<Badge color="success" key={item} label={t(item)} />
 				))}
 			</div>
 		</div>
