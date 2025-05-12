@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { createSPASassClient } from '@/lib/supabase/client';
 import Alert from '@/components/molecules/alert';
@@ -10,26 +10,38 @@ export default function AuthCallback() {
 	const t = useTranslations();
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(true);
-	const router = useRouter();
+	const searchParams = useSearchParams();
+
+	const redirectTo = searchParams?.get('redirect') || '/app';
 
 	useEffect(() => {
 		const handleAuthCallback = async () => {
 			try {
+				console.log('Iniciando autenticación de callback');
 				const supabase = await createSPASassClient();
 				const supabaseClient = supabase.getSupabaseClient();
 
+				console.log('Obteniendo sesión');
 				const { data: sessionData, error: sessionError } =
 					await supabaseClient.auth.getSession();
+
+				console.log(
+					'Sesión obtenida:',
+					sessionData ? 'Sí' : 'No',
+					'Error:',
+					sessionError ? 'Sí' : 'No'
+				);
 
 				if (sessionError) throw sessionError;
 				if (!sessionData?.session)
 					throw new Error('No se pudo obtener la sesión');
 
-				// Simplemente redirigimos al usuario a la aplicación
-				// Sin crear suscripción aquí
-				router.push('/app');
+				console.log(`Redirigiendo a ${redirectTo}`);
+
+				window.location.href = redirectTo;
+				return;
 			} catch (err) {
-				console.error('Error en autenticación:', err);
+				console.error('Error completo en autenticación:', err);
 				if (err instanceof Error) {
 					setError(err.message);
 				} else {
@@ -37,7 +49,7 @@ export default function AuthCallback() {
 				}
 
 				setTimeout(() => {
-					router.push('/auth/magic-link');
+					window.location.href = '/auth/magic-link';
 				}, 3000);
 			} finally {
 				setLoading(false);
@@ -45,7 +57,7 @@ export default function AuthCallback() {
 		};
 
 		handleAuthCallback();
-	}, [router, t]);
+	}, [redirectTo]);
 
 	return (
 		<div className="relative max-w-96 w-full mx-auto mt-8">

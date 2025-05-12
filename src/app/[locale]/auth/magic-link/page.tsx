@@ -57,7 +57,6 @@ export default function MagicLinkPage() {
 
 			if (error) throw error;
 
-			// Guardar el email para mostrarlo en el mensaje de éxito
 			setUserEmail(email);
 			setEmailSent(true);
 		} catch (err: Error | unknown) {
