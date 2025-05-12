@@ -43,7 +43,7 @@ export const PRIVATE_MENU_OPTIONS = [
 		icon: 'IconApartment',
 	},
 	{
-		label: 'Nuevo Alojamiento',
+		label: 'Nueva Propiedad',
 		url: PAGES.newProperty,
 		icon: 'IconAdd',
 	},
@@ -66,7 +66,7 @@ export const SIDEBAR_MENU: SidebarMenuItemConfig[] = [
 		icon: 'IconApartment',
 	},
 	{
-		label: 'Nuevo Alojamiento',
+		label: 'Nueva Propiedad',
 		url: PAGES.newProperty,
 		icon: 'IconAdd',
 	},
