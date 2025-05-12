@@ -28,7 +28,13 @@ export default function LandingAuthButton() {
 			const {
 				data: { session },
 			} = await supabase.getSupabaseClient().auth.getSession();
-			setIsAuthenticated(!!session?.user);
+
+			if (session?.user) {
+				setIsAuthenticated(true);
+			} else {
+				setIsAuthenticated(true);
+			}
+
 			setLoading(false);
 
 			const { data: listener } = supabase
