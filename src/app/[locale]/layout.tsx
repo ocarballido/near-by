@@ -2,14 +2,20 @@ import type { Metadata } from 'next';
 import { hasLocale } from 'next-intl';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
+import { getTranslations } from 'next-intl/server';
 
 import { LoadingProvider } from '@/lib/context/LoadingContext';
 import BaseLayout from '@/components/layouts/base';
 
-export const metadata: Metadata = {
-	title: process.env.NEXT_PUBLIC_PRODUCTNAME,
-	description: 'The best way to build your SaaS product.',
-};
+export async function generateMetadata(): Promise<Metadata> {
+	const t = await getTranslations();
+
+	return {
+		title: process.env.NEXT_PUBLIC_PRODUCTNAME,
+		description: t('meta description'),
+		keywords: t('meta keywords'),
+	};
+}
 
 export default async function RootLayout({
 	children,
