@@ -8,7 +8,7 @@ import {
 import Button from '@/components/molecules/button';
 
 type ModalProps = {
-	description: React.ReactNode;
+	description?: React.ReactNode;
 	destructiveButtonLabel?: string;
 	destructiveButtonAction?: () => void;
 	icon?: React.ReactNode;

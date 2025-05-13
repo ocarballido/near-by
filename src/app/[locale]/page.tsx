@@ -18,6 +18,7 @@ import ButtonLink from '@/components/molecules/button-link';
 import PlaceTooltip from '@/components/atoms/place-tooltip';
 import IconAccountCircle from '@/components/atoms/icon/account-circle';
 import FilterCategories from '@/components/templates/filter-categories';
+// import ModalVideo from '@/components/templates/modal-video';
 
 export default function Home() {
 	const t = useTranslations();
@@ -45,9 +46,10 @@ export default function Home() {
 						<ButtonLink
 							label={t('Crea tu primer dashboard gratis')}
 							href="/app"
-							color="white"
+							color="primary"
 							className="w-fit"
 						/>
+						{/* <ModalVideo /> */}
 					</div>
 					<div className="relative w-full">
 						<PlaceTooltip
