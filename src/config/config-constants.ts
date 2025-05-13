@@ -175,12 +175,24 @@ export const SUBSCRIPTION_FEATURES = {
 			},
 			{
 				label: 'Grupos por categoría',
-				value: '5',
+				value: '10',
 			},
 			{
-				label: 'Mostrar logo',
-				value: 'NO',
+				label: 'Categorías predefinidas',
+				value: 'SI',
 			},
+			{
+				label: 'Enlace de navagacion',
+				value: 'SI',
+			},
+			{
+				label: 'Enlace público personalizado',
+				value: 'SI',
+			},
+			// {
+			// 	label: 'Mostrar logo',
+			// 	value: 'NO',
+			// },
 			{
 				label: 'Mostrar imágenes',
 				value: 'NO',
@@ -203,9 +215,21 @@ export const SUBSCRIPTION_FEATURES = {
 				value: 'Ilimitadas',
 			},
 			{
-				label: 'Mostrar logo',
+				label: 'Categorías predefinidas',
 				value: 'SI',
 			},
+			{
+				label: 'Enlace de navagacion',
+				value: 'SI',
+			},
+			{
+				label: 'Enlace público personalizado',
+				value: 'SI',
+			},
+			// {
+			// 	label: 'Mostrar logo',
+			// 	value: 'SI',
+			// },
 			{
 				label: 'Mostrar imágenes',
 				value: 'SI',
@@ -241,5 +265,40 @@ export const LANDING_APPBAR_MENU = [
 	{
 		label: 'Opiniones',
 		url: '/#oppinios',
+	},
+];
+
+export const TIPS = [
+	{
+		id: 1,
+		title: 'Piensa como tu huésped',
+		subtitle: '¿Es su primera vez en la ciudad?',
+	},
+	{
+		id: 2,
+		title: 'Recomienda tus favoritos',
+		subtitle: 'No hagas una lista genérica',
+	},
+	{
+		id: 3,
+		title: 'Piensa en lo práctico también',
+		subtitle: 'No todo es turismo',
+	},
+	{
+		id: 4,
+		title: 'Prioriza calidad sobre cantidad',
+		subtitle:
+			'Mejor 5 recomendaciones bien explicadas, que 20 lugares que no aportan valor',
+	},
+	{
+		id: 5,
+		title: 'Agrega fotos si puedes',
+		subtitle:
+			'Una imagen del lugar o del plato estrella puede marcar la diferencia',
+	},
+	{
+		id: 6,
+		title: 'Actualiza cada tanto',
+		subtitle: 'Los locales cambian',
 	},
 ];

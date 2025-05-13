@@ -184,7 +184,7 @@ export default function Home() {
 				<div className="flex flex-col md:flex-row gap-4 items-center max-w-[1000px]">
 					<div className="flex flex-1 flex-col gap-4 p-4 items-center text-center">
 						<div className="flex justify-center items-center w-18 h-18 rounded-full bg-primary-100">
-							<span className="flex justify-center items-center w-12 h-12 rounded-full bg-primary-400 font-bold text-white text-xl">
+							<span className="flex justify-center items-center w-12 h-12 rounded-full bg-linear-270 from-primary-400 to-teal-600 font-bold text-white text-xl">
 								1
 							</span>
 						</div>
@@ -199,7 +199,7 @@ export default function Home() {
 					</div>
 					<div className="flex flex-1 flex-col gap-4 p-4 items-center text-center">
 						<div className="flex justify-center items-center w-18 h-18 rounded-full bg-primary-100">
-							<span className="flex justify-center items-center w-12 h-12 rounded-full bg-primary-400 font-bold text-white text-xl">
+							<span className="flex justify-center items-center w-12 h-12 rounded-full bg-linear-270 from-primary-400 to-teal-600 font-bold text-white text-xl">
 								2
 							</span>
 						</div>
@@ -214,7 +214,7 @@ export default function Home() {
 					</div>
 					<div className="flex flex-1 flex-col gap-4 p-4 items-center text-center">
 						<div className="flex justify-center items-center w-18 h-18 rounded-full bg-primary-100">
-							<span className="flex justify-center items-center w-12 h-12 rounded-full bg-primary-400 font-bold text-white text-xl">
+							<span className="flex justify-center items-center w-12 h-12 rounded-full bg-linear-270 from-primary-400 to-teal-600 font-bold text-white text-xl">
 								3
 							</span>
 						</div>
