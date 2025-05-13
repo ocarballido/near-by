@@ -63,7 +63,6 @@ export function PropertyInfoContent({
 
 	return info && info.content ? (
 		<>
-			<h2 className="font-heading text-lg font-bold">{info.title}</h2>
 			<div className="font-medium whitespace-pre-wrap">
 				{info.content}
 			</div>

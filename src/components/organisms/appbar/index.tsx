@@ -28,6 +28,7 @@ const AppBar = ({
 					iconRight={<IconOpenInNew />}
 					label={accommodationName}
 					href={accommodationHref}
+					target="_blank"
 				/>
 			)}
 			{isLogged && <AppBarUser />}

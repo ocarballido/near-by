@@ -23,7 +23,7 @@ const Place = ({
 	handleDelete,
 	handleEdit,
 	name,
-	image = '/static/img/placeholders/house-placeholder.png',
+	image = '/static/img/default-location-2x.webp',
 }: PlaceProps) => {
 	const t = useTranslations();
 
@@ -45,7 +45,7 @@ const Place = ({
 						blurDataURL={grayDataUrl}
 						src={
 							image === null
-								? '/static/img/placeholders/house-placeholder.png'
+								? '/static/img/default-location-2x.webp'
 								: image
 						}
 						fill

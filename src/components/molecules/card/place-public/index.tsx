@@ -21,7 +21,7 @@ const PlacePublic = ({
 	longitude,
 	className,
 	name,
-	image = '/static/img/placeholders/house-placeholder.png',
+	image = '/static/img/default-location-2x.webp',
 }: PlacePublicProps) => {
 	const t = useTranslations();
 
@@ -41,7 +41,7 @@ const PlacePublic = ({
 						className="object-cover z-0 "
 						src={
 							image === null
-								? '/static/img/placeholders/house-placeholder.png'
+								? '/static/img/default-location-2x.webp'
 								: image
 						}
 						placeholder="blur"

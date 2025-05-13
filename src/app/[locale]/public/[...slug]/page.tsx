@@ -56,6 +56,8 @@ export default async function Property({ params }: PageProps) {
 	const [propertySlug, categoryId, subcategoryId] = slug;
 	const isLodging = categoryId === LODGING_CATEGORY_ID;
 
+	console.log(propertySlug, categoryId, subcategoryId);
+
 	const supabase = await createServerAdminClient();
 
 	// 1) Propiedad
@@ -71,6 +73,7 @@ export default async function Property({ params }: PageProps) {
 	const { data: infosData, error: infosErr } = await supabase
 		.from('property_info')
 		.select('id,category_id,title,content')
+		.eq('property_id', property.id)
 		.neq('content', '');
 	if (infosErr) notFound();
 	const infos = infosData!; // ahora no es null
@@ -78,6 +81,8 @@ export default async function Property({ params }: PageProps) {
 	// 3) Locations para saber qué grupos tienen ≥1
 	const { data: locsData, error: locsErr } = await supabase
 		.from('locations')
+		// .select('id,category_id,title,content')
+		// .eq('property_id', property.id)
 		.select('id,group_id');
 	if (locsErr) notFound();
 	const locs = locsData!;

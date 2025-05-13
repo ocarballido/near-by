@@ -77,7 +77,7 @@ const PropertySidebar = ({
 	return (
 		<>
 			<ButtonLink
-				label={t('Mis Alojamientos')}
+				label={t('Mis Propiedades')}
 				href="/app/properties"
 				iconLeft={<IconHome />}
 				className="hidden md:flex w-full"

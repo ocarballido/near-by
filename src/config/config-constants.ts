@@ -38,7 +38,7 @@ export const PRIVATE_MENU_OPTIONS = [
 		icon: 'IconHome',
 	},
 	{
-		label: 'Mis Alojamientos',
+		label: 'Mis Propiedades',
 		url: PAGES.properties,
 		icon: 'IconApartment',
 	},
@@ -61,7 +61,7 @@ export const SIDEBAR_MENU: SidebarMenuItemConfig[] = [
 		icon: 'IconHome',
 	},
 	{
-		label: 'Mis Alojamientos',
+		label: 'Mis Propiedades',
 		url: PAGES.properties,
 		icon: 'IconApartment',
 	},
@@ -70,11 +70,11 @@ export const SIDEBAR_MENU: SidebarMenuItemConfig[] = [
 		url: PAGES.newProperty,
 		icon: 'IconAdd',
 	},
-	{
-		label: 'Mi perfil',
-		url: PAGES.profile,
-		icon: 'IconAccountCircle',
-	},
+	// {
+	// 	label: 'Mi perfil',
+	// 	url: PAGES.profile,
+	// 	icon: 'IconAccountCircle',
+	// },
 	{
 		label: 'Mi suscripción',
 		url: PAGES.subscription,

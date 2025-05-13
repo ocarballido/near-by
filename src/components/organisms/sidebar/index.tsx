@@ -58,7 +58,7 @@ const Sidebar = ({
 			<div className="flex gap-2 items-center md:hidden">
 				{sidebar === 'PROPERTY' && (
 					<ButtonLink
-						label={t('Mis Alojamientos')}
+						label={t('Mis Propiedades')}
 						href="/app/properties"
 						iconLeft={<IconHome />}
 						className="w-max"

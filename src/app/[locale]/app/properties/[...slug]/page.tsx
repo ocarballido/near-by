@@ -175,6 +175,9 @@ export default async function Property({ params }: PageProps) {
 			propertySlug={propertySlug}
 		>
 			<div className="p-4 font-roboto flex flex-col grow gap-4 bg-white rounded-lg overflow-hidden">
+				<h3 className="font-heading font-bold text-2xl">
+					{property.name}
+				</h3>
 				{isLodging ? (
 					<PropertyInfoContent
 						infos={

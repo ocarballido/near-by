@@ -21,7 +21,7 @@ const PublicHeader = ({
 	latitude,
 	longitude,
 	name,
-	image = '/static/img/placeholders/house-placeholder.png',
+	image = '/static/img/default-property-2x.webp',
 }: PublicHeaderProps) => {
 	const graySvg = `<svg xmlns="http://www.w3.org/2000/svg" width="4" height="4"><rect width="4" height="4" fill="#a3e7d0" /></svg>`;
 	const grayDataUrl = `data:image/svg+xml;base64,${Buffer.from(
@@ -42,7 +42,7 @@ const PublicHeader = ({
 							className="object-cover z-0"
 							src={
 								image === null
-									? '/static/img/placeholders/house-placeholder.png'
+									? '/static/img/default-property-2x.webp'
 									: image
 							}
 							fill={true}
@@ -70,7 +70,7 @@ const PublicHeader = ({
 					className="object-cover z-0"
 					src={
 						image === null
-							? '/static/img/placeholders/house-placeholder.png'
+							? '/static/img/default-property-2x.webp'
 							: image
 					}
 					fill={true}
