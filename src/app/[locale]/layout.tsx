@@ -41,7 +41,7 @@ export async function generateMetadata({
 				{
 					url: '/static/img/default-property-2x.webp',
 					width: 1200,
-					height: 630,
+					height: 1200,
 					alt: 'BNBexplorer',
 				},
 			],

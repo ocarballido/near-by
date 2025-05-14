@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 
-import IconMap from '@/components/atoms/icon/map';
 import IconLocationOn from '@/components/atoms/icon/location-on';
 import PlacePublic from '@/components/molecules/card/place-public';
+import IconList from '@/components/atoms/icon/list';
 import Map from '@/components/organisms/map';
 
 interface Location {
@@ -38,7 +38,7 @@ const PublicLocationContent = ({
 					}`}
 					onClick={() => setActiveView('list')}
 				>
-					<IconLocationOn
+					<IconList
 						color={activeView === 'list' ? 'white' : 'primary'}
 					/>
 				</button>
@@ -53,7 +53,7 @@ const PublicLocationContent = ({
 					}`}
 					onClick={() => setActiveView('map')}
 				>
-					<IconMap
+					<IconLocationOn
 						color={activeView === 'map' ? 'white' : 'primary'}
 					/>
 				</button>

@@ -8,8 +8,6 @@ export default async function LocationPage({ params }: PageProps) {
 	const { locationSlug } = await params;
 	const [propertySlug, propertyId, categoryId, subCategoryId] = locationSlug;
 
-	console.log(propertySlug, propertyId, categoryId, subCategoryId);
-
 	return (
 		<>
 			<AddPlaceForm

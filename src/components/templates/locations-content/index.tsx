@@ -41,20 +41,16 @@ interface LocationsProps {
 export function LocationsContent({
 	locations,
 	emptyUrl,
-	propertyId,
-	categoryId,
-	subCategoryId,
-}: LocationsProps) {
+}: // propertyId,
+// categoryId,
+// subCategoryId,
+LocationsProps) {
 	const t = useTranslations();
 
 	const [isOpen, setIsOpen] = useState(false);
 	const [alert, setAlert] = useState<AlertState | null>(null);
 	const [selectedLocation, setSelectedLocation] = useState<string>('');
 	const { loading, openLoading, closeLoading } = useLoading();
-	console.log(propertyId);
-	console.log(categoryId);
-	console.log(subCategoryId);
-	console.log(locations);
 
 	const handleDelete = async (locationId: string) => {
 		if (loading) return;

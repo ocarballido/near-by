@@ -189,6 +189,10 @@ export const SUBSCRIPTION_FEATURES = {
 				label: 'Enlace público personalizado',
 				value: 'SI',
 			},
+			{
+				label: 'Visualización en mapa',
+				value: 'SI',
+			},
 			// {
 			// 	label: 'Mostrar logo',
 			// 	value: 'NO',
@@ -224,6 +228,10 @@ export const SUBSCRIPTION_FEATURES = {
 			},
 			{
 				label: 'Enlace público personalizado',
+				value: 'SI',
+			},
+			{
+				label: 'Visualización en mapa',
 				value: 'SI',
 			},
 			// {

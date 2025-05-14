@@ -84,7 +84,6 @@ const PublicSidebar = ({
 	);
 
 	const router = useRouter();
-	console.log(subCategories);
 
 	return (
 		<>

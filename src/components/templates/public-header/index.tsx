@@ -67,7 +67,7 @@ const PublicHeader = ({
 				</div>
 				<div className="absolute left-0 top-0 bottom-0 right-0 bg-black/40 z-5"></div>
 				<Image
-					className="object-cover z-0"
+					className="object-cover z-0 blur-lg"
 					src={
 						image === null
 							? '/static/img/default-property-2x.webp'
