@@ -267,6 +267,12 @@ const AddPlaceForm = ({
 					})}
 				/>
 
+				<div className="p-4 bg-sky-100 rounded-md">
+					<p className="text-xs text-sky-900">
+						{t('Disclaimer de imagen')}
+					</p>
+				</div>
+
 				<div className="flex flex-col sm:flex-row gap-2">
 					<Button
 						label={t('Cancelar')}
