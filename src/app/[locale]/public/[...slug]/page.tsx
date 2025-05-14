@@ -1,8 +1,8 @@
 import { notFound } from 'next/navigation';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
-import PlacePublic from '@/components/molecules/card/place-public';
 import { LODGING_CATEGORY_ID } from '@/config/config-constants';
 import PublicContentTemplate from '@/components/templates/public-content';
+import PublicLocationContent from '@/components/templates/public-location-content';
 
 type PageProps = { params: Promise<{ slug: string[] }> };
 interface PropertyInfo {
@@ -50,8 +50,6 @@ function groupBy<T, K extends string>(
 }
 
 export default async function Property({ params }: PageProps) {
-	// const t = useTranslations();
-
 	const { slug } = await params;
 	const [propertySlug, categoryId, subcategoryId] = slug;
 	const isLodging = categoryId === LODGING_CATEGORY_ID;
@@ -60,7 +58,6 @@ export default async function Property({ params }: PageProps) {
 
 	const supabase = await createServerAdminClient();
 
-	// 1) Propiedad
 	const { data: property, error: propErr } = await supabase
 		.from('properties')
 		.select('id,address,name,image_url,latitude,longitude')
@@ -69,16 +66,14 @@ export default async function Property({ params }: PageProps) {
 	if (propErr || !property) notFound();
 	const propertyId = property.id;
 
-	// 2) Infos con contenido → array non-null
 	const { data: infosData, error: infosErr } = await supabase
 		.from('property_info')
 		.select('id,category_id,title,content')
 		.eq('property_id', property.id)
 		.neq('content', '');
 	if (infosErr) notFound();
-	const infos = infosData!; // ahora no es null
+	const infos = infosData!;
 
-	// 3) Locations para saber qué grupos tienen ≥1
 	const { data: locsData, error: locsErr } = await supabase
 		.from('locations')
 		// .select('id,category_id,title,content')
@@ -87,7 +82,6 @@ export default async function Property({ params }: PageProps) {
 	if (locsErr) notFound();
 	const locs = locsData!;
 
-	// 4) Todos los grupos de la propiedad
 	const { data: grpData, error: grpErr } = await supabase
 		.from('location_groups')
 		.select('id,category_id,name,slug,order_index')
@@ -95,7 +89,6 @@ export default async function Property({ params }: PageProps) {
 	if (grpErr) notFound();
 	const allGroups = grpData!;
 
-	// 5) Todas las categorías
 	const { data: catData, error: catErr } = await supabase
 		.from('categories')
 		.select('id,name,icon,order_index')
@@ -103,7 +96,6 @@ export default async function Property({ params }: PageProps) {
 	if (catErr) notFound();
 	const categories = catData!;
 
-	// — construir mapas filtrados solo con contenido —
 	const groupIdsWithLocs = new Set(locs.map((l) => l.group_id));
 	const groupsByCat = groupBy(
 		allGroups.filter((g) => groupIdsWithLocs.has(g.id)),
@@ -111,7 +103,6 @@ export default async function Property({ params }: PageProps) {
 	);
 	const infosByCat = groupBy(infos, (i) => i.category_id);
 
-	// — sidebarCategories solo si tienen algo dentro —
 	const sidebarCategories: SidebarCategory[] = categories
 		.filter((cat) =>
 			cat.id === LODGING_CATEGORY_ID
@@ -127,7 +118,6 @@ export default async function Property({ params }: PageProps) {
 			propertySlug,
 		}));
 
-	// — sidebarSubcategories depende de isLodging —
 	const sidebarSubcategories: SidebarItem[] = isLodging
 		? (infosByCat.get(categoryId) || []).map((i) => ({
 				id: i.id,
@@ -140,7 +130,6 @@ export default async function Property({ params }: PageProps) {
 				href: `/app/properties/${propertySlug}/${categoryId}/${g.id}`,
 		  }));
 
-	// — elegir un subcategory “activo” incluso si no viene en URL —
 	const firstInfoId = infosByCat.get(categoryId)?.[0]?.id;
 	const firstGroupId = groupsByCat.get(categoryId)?.[0]?.id;
 
@@ -150,12 +139,10 @@ export default async function Property({ params }: PageProps) {
 		? firstInfoId
 		: firstGroupId;
 
-	// 2) Cargar los arrays por separado
 	let infosToShow: PropertyInfo[] = [];
 	let locsToShow: Location[] = [];
 
 	if (isLodging) {
-		// filtramos en memoria, nunca null
 		infosToShow = (infosByCat.get(categoryId) || []).filter(
 			(i) => i.id === activeSubcatId
 		);
@@ -188,16 +175,7 @@ export default async function Property({ params }: PageProps) {
 						{infosToShow[0].content}
 					</div>
 				) : (
-					locsToShow.map((loc) => (
-						<PlacePublic
-							key={loc.id}
-							name={loc.name}
-							latitude={loc.latitude}
-							longitude={loc.longitude}
-							address={loc.address}
-							image={loc.image_url}
-						/>
-					))
+					<PublicLocationContent locations={locsToShow} />
 				)}
 			</div>
 		</PublicContentTemplate>
