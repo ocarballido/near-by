@@ -153,11 +153,6 @@ export const PROPERTY_SIDEBAR_MENU = [
 		url: null,
 		icon: 'IconPets',
 	},
-	{
-		label: 'Otros',
-		url: null,
-		icon: 'IconInterests',
-	},
 ];
 
 export const SIDEBAR_MENUS = {

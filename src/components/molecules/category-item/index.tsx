@@ -21,8 +21,7 @@ export type CategoryNames =
 	| 'Atracciones y Turismo'
 	| 'Seguridad y Emergencias'
 	| 'Familia y Niños'
-	| 'Mascotas'
-	| 'Otros';
+	| 'Mascotas';
 
 type GroupItem = {
 	name: string;

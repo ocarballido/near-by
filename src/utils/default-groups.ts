@@ -110,6 +110,5 @@ export const getDefaultGroups = (): Record<string, string[]> => {
 			'Veterinarios',
 			'Peluquerías',
 		],
-		'e888bfc5-9cae-4bd8-bbb3-b8ea66fa42ee': [],
 	};
 };
