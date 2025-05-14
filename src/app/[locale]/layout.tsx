@@ -7,7 +7,6 @@ import { getTranslations } from 'next-intl/server';
 import { LoadingProvider } from '@/lib/context/LoadingContext';
 import BaseLayout from '@/components/layouts/base';
 
-// Define el tipo para los parámetros
 interface GenerateMetadataProps {
 	params: {
 		locale: string;
@@ -19,16 +18,13 @@ export async function generateMetadata({
 }: GenerateMetadataProps): Promise<Metadata> {
 	const t = await getTranslations();
 
-	const locale = params.locale;
+	const { locale } = await params;
 
-	// Mapeo de locales a formatos Open Graph
 	const localeMap: Record<string, string> = {
 		es: 'es_ES',
 		en: 'en_US',
-		// Añade más locales según necesites
 	};
 
-	// Obtén el formato adecuado para Open Graph
 	const ogLocale = localeMap[locale] || `${locale}_${locale.toUpperCase()}`;
 
 	return {
@@ -38,7 +34,7 @@ export async function generateMetadata({
 		openGraph: {
 			title: process.env.NEXT_PUBLIC_PRODUCTNAME,
 			description: t('meta description'),
-			url: `https://bnbexplorer.com/${locale}`, // Añade el locale a la URL
+			url: `https://bnbexplorer.com/${locale}`,
 			siteName: 'BNBexplorer',
 			images: [
 				{
@@ -48,7 +44,7 @@ export async function generateMetadata({
 					alt: 'BNBexplorer',
 				},
 			],
-			locale: ogLocale, // Usa el locale dinámico
+			locale: ogLocale,
 			type: 'article',
 		},
 	};
@@ -59,10 +55,9 @@ export default async function RootLayout({
 	params,
 }: Readonly<{
 	children: React.ReactNode;
-	params: { locale: string }; // Corrige también este tipo
+	params: { locale: string };
 }>) {
-	// Como params ya no es una Promise, no necesitas await
-	const { locale } = params;
+	const { locale } = await params;
 
 	if (!hasLocale(routing.locales, locale)) {
 		notFound();
