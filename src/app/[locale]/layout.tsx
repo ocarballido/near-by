@@ -31,10 +31,11 @@ export async function generateMetadata({
 		title: process.env.NEXT_PUBLIC_PRODUCTNAME,
 		description: t('meta description'),
 		keywords: t('meta keywords'),
+		metadataBase: new URL('https://bnbexplorer.com'),
 		openGraph: {
 			title: process.env.NEXT_PUBLIC_PRODUCTNAME,
 			description: t('meta description'),
-			url: `https://bnbexplorer.com/${locale}`,
+			url: `/${locale}`,
 			siteName: 'BNBexplorer',
 			images: [
 				{
@@ -46,6 +47,12 @@ export async function generateMetadata({
 			],
 			locale: ogLocale,
 			type: 'article',
+		},
+		twitter: {
+			card: 'summary_large_image',
+			title: process.env.NEXT_PUBLIC_PRODUCTNAME,
+			description: t('meta description'),
+			images: ['/static/img/default-property-2x.webp'],
 		},
 	};
 }
