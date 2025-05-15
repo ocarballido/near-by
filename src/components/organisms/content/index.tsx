@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { useSidebar } from '@/lib/context/SidebarContext';
 import { usePathname } from 'next/navigation';
@@ -21,7 +22,25 @@ const Content = ({
 	const t = useTranslations();
 
 	const pathname = usePathname();
-	console.log(pathname);
+
+	const publicLink = useMemo(() => {
+		const pathWithoutLocale = pathname.slice(4, pathname.length);
+		const isPathProperties = pathWithoutLocale.includes('properties');
+		const pathSplitted = pathWithoutLocale.split('/');
+		const pathLength = pathSplitted.length;
+
+		if (isPathProperties && pathLength > 3) {
+			return {
+				showPublicLink: true,
+				url: `/public/${pathSplitted[2]}/${LODGING_CATEGORY_ID}`,
+			};
+		}
+
+		return {
+			showPublicLink: false,
+			url: '',
+		};
+	}, [pathname]);
 
 	const { openSidebar } = useSidebar();
 
@@ -35,7 +54,7 @@ const Content = ({
 					iconLeft={<IconMenu />}
 					className="md:hidden shadow-sm w-full"
 				/>
-				{!pathname.includes('/public') ? (
+				{publicLink.showPublicLink ? (
 					<ButtonLink
 						label={t('Sitio público')}
 						color="primary"
