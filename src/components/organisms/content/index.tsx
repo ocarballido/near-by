@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { useSidebar } from '@/lib/context/SidebarContext';
+import { usePathname } from 'next/navigation';
 
 import { LODGING_CATEGORY_ID } from '@/config/config-constants';
 
@@ -19,6 +20,9 @@ const Content = ({
 }) => {
 	const t = useTranslations();
 
+	const pathname = usePathname();
+	console.log(pathname);
+
 	const { openSidebar } = useSidebar();
 
 	return (
@@ -31,14 +35,16 @@ const Content = ({
 					iconLeft={<IconMenu />}
 					className="md:hidden shadow-sm w-full"
 				/>
-				<ButtonLink
-					label={t('Sitio público')}
-					color="primary"
-					iconLeft={<IconOpenInNew />}
-					className="md:hidden shadow-sm w-full"
-					href={`/public/${propertySlug}/${LODGING_CATEGORY_ID}`}
-					target="_blank"
-				/>
+				{!pathname.includes('/public') ? (
+					<ButtonLink
+						label={t('Sitio público')}
+						color="primary"
+						iconLeft={<IconOpenInNew />}
+						className="md:hidden shadow-sm w-full"
+						href={`/public/${propertySlug}/${LODGING_CATEGORY_ID}`}
+						target="_blank"
+					/>
+				) : null}
 			</div>
 			{children}
 		</main>
