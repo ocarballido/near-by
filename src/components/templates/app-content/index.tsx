@@ -49,7 +49,7 @@ const AppContentTemplate = ({
 						subcategoryGroupId={subcategoryGroupId}
 						propertySlug={propertySlug}
 					/>
-					<Content>{children}</Content>
+					<Content propertySlug={propertySlug}>{children}</Content>
 				</div>
 			</div>
 		</SidebarProvider>

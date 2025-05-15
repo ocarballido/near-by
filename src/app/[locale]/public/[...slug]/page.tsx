@@ -54,8 +54,6 @@ export default async function Property({ params }: PageProps) {
 	const [propertySlug, categoryId, subcategoryId] = slug;
 	const isLodging = categoryId === LODGING_CATEGORY_ID;
 
-	console.log(propertySlug, categoryId, subcategoryId);
-
 	const supabase = await createServerAdminClient();
 
 	const { data: property, error: propErr } = await supabase

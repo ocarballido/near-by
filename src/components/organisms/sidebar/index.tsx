@@ -53,7 +53,7 @@ const Sidebar = ({
 
 	return (
 		<aside
-			className={`absolute z-10 md:relative w-full md:max-w-80 grow flex gap-2 flex-col h-full bg-gray-100 transition-all duration-300 md:translate-x-0 ${sidebarContentStyles}`}
+			className={`fixed bottom-0 left-0 right-0 top-0 p-4 z-10 overflow-y-scroll md:top-0 md:p-0 md:overflow-y-auto md:relative md:w-full md:max-w-80 grow flex gap-2 flex-col md:h-fit bg-gray-100 transition-all duration-300 md:translate-x-0 ${sidebarContentStyles}`}
 		>
 			<div className="flex gap-2 items-center md:hidden">
 				{sidebar === 'PROPERTY' && (
