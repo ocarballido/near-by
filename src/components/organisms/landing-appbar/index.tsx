@@ -18,7 +18,7 @@ const LandingAppBar = ({ className = '' }: LandingAppBarProps) => {
 				alt="Icon Logo"
 				style={{ marginRight: '1rem' }}
 			/>
-			<h1 className="font-heading font-medium text-primary-500 text-md">
+			<h1 className="hidden md:block font-heading font-medium text-primary-500 text-md">
 				BNBexplorer
 			</h1>
 			<LandingAuthButton />

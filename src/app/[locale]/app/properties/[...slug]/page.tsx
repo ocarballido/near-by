@@ -7,6 +7,7 @@ import AppContentTemplate from '@/components/templates/app-content';
 import { createSSRClient } from '@/lib/supabase/server';
 import { LocationsContent } from '@/components/templates/locations-content';
 import { PropertyInfoContent } from '@/components/templates/property-info-content';
+import PropertyNameTitle from '@/components/atoms/property-name-title';
 
 type PageProps = {
 	params: Promise<{ slug: string[] }>;
@@ -175,14 +176,11 @@ export default async function Property({ params }: PageProps) {
 			propertySlug={propertySlug}
 		>
 			<div className="p-4 font-roboto flex flex-col grow gap-4 bg-white rounded-lg overflow-hidden">
-				<h3 className="font-heading font-bold text-lg md:text-2xl">
-					{property.name}:{' '}
-					{
-						subCategoriesToRender.find(
-							(subcat) => subcat.id === subcategoryId
-						)!.label
-					}
-				</h3>
+				<PropertyNameTitle
+					subcategories={subCategoriesToRender}
+					subcategoryId={subcategoryId}
+					propertyName={property.name}
+				/>
 				{isLodging ? (
 					<PropertyInfoContent
 						infos={
