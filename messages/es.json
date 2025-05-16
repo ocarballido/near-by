@@ -369,5 +369,11 @@
 	"Los locales cambian": "Los locales cambian. Revisa tus recomendaciones cada 2-3 meses para asegurarte que sigan siendo válidas.",
 	"Ver vídeotutorial": "Ver vídeotutorial",
 	"Visualización en mapa": "Visualización en mapa",
-	"Disclaimer de imagen": "La imagen que subas será gestionada y mostrada públicamente en tu página de alojamiento. Eres el único responsable de asegurarte de que cuentas con los derechos necesarios para utilizarla. La plataforma no revisa ni controla el contenido subido por los usuarios."
+	"Disclaimer de imagen": "La imagen que subas será gestionada y mostrada públicamente en tu página de alojamiento. Eres el único responsable de asegurarte de que cuentas con los derechos necesarios para utilizarla. La plataforma no revisa ni controla el contenido subido por los usuarios.",
+	"Cookie banner": "Utilizamos cookies para mejorar tu experiencia de navegación, ofrecerte contenido personalizado y analizar nuestro tráfico. Al hacer clic en 'Aceptar', consientes el uso de cookies.",
+	"Lee nuestra": "Lee nuestra <privacyPolicy>Política de privacidad</privacyPolicy>, <conditions>Términos y condiciones</conditions> y <content>Contenido</content> para más información.",
+	"Política de privacidad": "Política de privacidad",
+	"Condiciones": "Condiciones",
+	"Aceptar": "Aceptar",
+	"Rechazar": "Rechazar"
 }

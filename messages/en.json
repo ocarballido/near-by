@@ -365,5 +365,11 @@
 	"Los locales cambian": "Venues change. Review your recommendations every 2-3 months to make sure they're still valid.",
 	"Ver vídeotutorial": "Play videotutorial",
 	"Visualización en mapa": "Map display",
-	"Disclaimer de imagen": "The image you upload will be displayed publicly on your accommodation page. You are solely responsible for ensuring you have the necessary rights to use it. The platform does not review or control content uploaded by users."
+	"Disclaimer de imagen": "The image you upload will be displayed publicly on your accommodation page. You are solely responsible for ensuring you have the necessary rights to use it. The platform does not review or control content uploaded by users.",
+	"Cookie banner": "We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic. By clicking 'Accept', you consent to our use of cookies.",
+	"Lee nuestra": "Please read our <privacyPolicy>Privacy policy</privacyPolicy>, <conditions>Terms and conditions</conditions> and <content>Content</content> for more information.",
+	"Política de privacidad": "Privacy policy",
+	"Condiciones": "Conditions",
+	"Aceptar": "Accept",
+	"Rechazar": "Decline"
 }

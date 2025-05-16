@@ -14,6 +14,7 @@ import testimony03 from '../../../public/static/img/testimony-03.webp';
 import logo from '../../../public/static/img/logo-color-2x.webp';
 
 import LandingAppBar from '@/components/organisms/landing-appbar';
+import Link from 'next/link';
 import ButtonLink from '@/components/molecules/button-link';
 import PlaceTooltip from '@/components/atoms/place-tooltip';
 import IconAccountCircle from '@/components/atoms/icon/account-circle';
@@ -564,14 +565,20 @@ export default function Home() {
 						</div>
 					</div>
 				</div>
-				<div className="text-center pt-32 pb-4 px-4">
+				<div className="text-center pt-32 pb-4 px-4 flex flex-col gap-4 items-center">
 					<Image
 						src={logo}
 						width={200}
 						height={64}
 						alt="BNBexplorer logo"
+						className="mb-4"
 					/>
-					<p className="font-medium font-body text-sm mt-2 opacity-50">
+					<div className="px-4 flex flex-col md:flex-row gap-4 font-body text-sm underline opacity-50">
+						<Link href="/legal/conditions">Condiciones</Link>
+						<Link href="/legal/privacy">Privacidad</Link>
+						<Link href="/legal/content">Contenido</Link>
+					</div>
+					<p className="font-medium font-body text-sm opacity-50">
 						BNBexplorer &#169; {new Date().getFullYear()}
 					</p>
 				</div>

@@ -18,18 +18,18 @@ const BaseLayout: React.FC<BaseProps> = async ({ children, locale }) => {
 	const gaID = process.env.NEXT_PUBLIC_GOOGLE_TAG;
 
 	return (
-		<html lang={locale}>
-			<body
-				className={`${OUTFIT.className} ${ROBOTO.className} antialiased`}
-			>
-				<NextIntlClientProvider messages={messages} locale={locale}>
+		<NextIntlClientProvider messages={messages} locale={locale}>
+			<html lang={locale}>
+				<body
+					className={`${OUTFIT.className} ${ROBOTO.className} antialiased`}
+				>
 					{children}
-				</NextIntlClientProvider>
-				<Analytics />
-				<CookieConsent />
-				{gaID && <GoogleAnalytics gaId={gaID} />}
-			</body>
-		</html>
+					<Analytics />
+					<CookieConsent />
+					{gaID && <GoogleAnalytics gaId={gaID} />}
+				</body>
+			</html>
+		</NextIntlClientProvider>
 	);
 };
 

@@ -1,14 +1,20 @@
 'use client';
+
+import { useTranslations } from 'next-intl';
 import React, { useEffect, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Shield, X } from 'lucide-react';
+
+import Button from './molecules/button';
+import ButtonIcon from './atoms/button-icon';
 import { setCookie, getCookie } from 'cookies-next/client';
 import Link from 'next/link';
+import IconClose from './atoms/icon/close';
 
 const COOKIE_CONSENT_KEY = 'cookie-accept';
 const COOKIE_EXPIRY_DAYS = 365;
 
 const CookieConsent = () => {
+	const t = useTranslations();
+
 	const [isVisible, setIsVisible] = useState(false);
 
 	useEffect(() => {
@@ -48,61 +54,59 @@ const CookieConsent = () => {
 	if (!isVisible) return null;
 
 	return (
-		<div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg z-50 transform transition-transform duration-500 ease-in-out">
+		<div className="font-body fixed bottom-3 left-3 right-3 bg-white rounded-md shadow-md z-50 transform transition-transform duration-500 ease-in-out">
 			<div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
 				<div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-					<div className="flex items-center gap-3 flex-shrink-0">
-						<Shield className="h-5 w-5 text-blue-600" />
-						<div className="space-y-1">
-							<p className="text-sm text-gray-600">
-								We use cookies to enhance your browsing
-								experience, serve personalized content, and
-								analyze our traffic. By clicking
-								&quot;Accept&quot;, you consent to our use of
-								cookies.
-							</p>
-							<p className="text-sm text-gray-500">
-								Read our{' '}
-								<Link
-									href={`/legal/privacy`}
-									className="text-blue-600 hover:text-blue-700 underline"
-								>
-									Privacy Policy
-								</Link>{' '}
-								and{' '}
-								<Link
-									href={`/legal/terms`}
-									className="text-blue-600 hover:text-blue-700 underline"
-								>
-									Terms of Service
-								</Link>{' '}
-								for more information.
+					<div className="flex items-center gap-1 flex-shrink-0">
+						<div className="space-y-1 text-sm text-gray-500 font-medium">
+							<p className="">{t('Cookie banner')}</p>
+							<p>
+								{t.rich('Lee nuestra', {
+									privacyPolicy: (chunks) => (
+										<Link
+											className="underline text-primary-500"
+											href="/legal/privacy"
+										>
+											{chunks}
+										</Link>
+									),
+									conditions: (chunks) => (
+										<Link
+											className="underline text-primary-500"
+											href="/legal/conditions"
+										>
+											{chunks}
+										</Link>
+									),
+									content: (chunks) => (
+										<Link
+											className="underline text-primary-500"
+											href="/legal/content"
+										>
+											{chunks}
+										</Link>
+									),
+								})}
 							</p>
 						</div>
 					</div>
-					<div className="flex items-center gap-3 flex-shrink-0">
+					<div className="flex items-center gap-1 flex-shrink-0">
 						<Button
-							variant="outline"
-							size="sm"
+							color="secondary"
+							label={t('Rechazar')}
 							onClick={handleDecline}
 							className="text-gray-600 hover:text-gray-700"
-						>
-							Decline
-						</Button>
+						/>
 						<Button
-							size="sm"
+							label={t('Aceptar')}
 							onClick={handleAccept}
 							className="bg-blue-600 text-white hover:bg-blue-700"
-						>
-							Accept
-						</Button>
-						<button
+						/>
+						<ButtonIcon
+							icon={<IconClose />}
 							onClick={handleDecline}
-							className="p-1 hover:bg-gray-100 rounded-full transition-colors"
 							aria-label="Close"
-						>
-							<X className="h-4 w-4 text-gray-500" />
-						</button>
+						/>
 					</div>
 				</div>
 			</div>
