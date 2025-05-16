@@ -23,7 +23,7 @@ const AppBar = ({
 			<AppbarTitle />
 			{accommodationHref && (
 				<ButtonLink
-					className="hidden gap-1 sm:flex shrink-0"
+					className="hidden gap-1 md:flex shrink-0"
 					color="primary"
 					iconRight={<IconOpenInNew />}
 					label={accommodationName}
