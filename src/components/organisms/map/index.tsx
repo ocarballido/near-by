@@ -71,7 +71,7 @@ const Map: React.FC<MapProps> = ({ locations }) => {
 	return (
 		<div
 			ref={mapRef}
-			className="w-full h-full max-h-[800px] rounded-md overflow-hidden"
+			className="w-full h-full min-h-[400px] max-h-[800px] rounded-md overflow-hidden"
 		/>
 	);
 };
