@@ -369,7 +369,19 @@
 	"Cookie banner": "We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic. By clicking 'Accept', you consent to our use of cookies.",
 	"Lee nuestra": "Please read our <privacyPolicy>Privacy policy</privacyPolicy>, <conditions>Terms and conditions</conditions> and <content>Content</content> for more information.",
 	"Política de privacidad": "Privacy policy",
-	"Condiciones": "Conditions",
+	"Términos y Condiciones": "Terms and Conditions",
 	"Aceptar": "Accept",
-	"Rechazar": "Decline"
+	"Rechazar": "Decline",
+	"Términos y Condiciones de Uso": "Terms and Conditions of Use",
+	"Al registrarte en esta plataforma, aceptas utilizarla de forma responsable y respetuosa": "By registering on this platform, you agree to use it responsibly and respectfully. You are prohibited from using the app for illegal purposes, to distribute offensive content, or to infringe the rights of third parties.",
+	"El uso de esta herramienta es gratuito y personal": "Use of this tool is free and personal. The platform creator reserves the right to modify, suspend, or eliminate the service at any time without prior notice.",
+	"Estos términos podrán actualizarse si el proyecto evoluciona a un servicio comercial": "These terms may be updated if the project evolves into a commercial service.",
+	"Aviso sobre Contenidos Subidos por el Usuario": "Notice Regarding User-Uploaded Content",
+	"Los usuarios son los únicos responsables de los textos e imágenes que suben a la plataforma": "Users are solely responsible for the text and images they upload to the platform. They must ensure they have the necessary rights to publish such content.",
+	"La aplicación no revisa ni valida los contenidos, por lo que cualquier uso indebido será responsabilidad directa del usuario": "The application does not review or validate the content, so any misuse will be the direct responsibility of the user.",
+	"Si detectas algún contenido inapropiado o que vulnera derechos, puedes reportarlo al correo indicado en la plataforma para que sea revisado": "If you detect any inappropriate content or content that violates rights, you can report it to the email address provided on the platform for review.",
+	"Actualmente, esta aplicación es un proyecto personal y sin fines comerciales": "Currently, this application is a personal, non-commercial project. However, should it evolve into a paid service or one with commercial features in the future, users will be informed accordingly, and the applicable terms and policies will be updated.",
+	"Los datos introducidos por los usuarios se utilizan exclusivamente para el funcionamiento de la aplicación": "The data entered by users is used exclusively for the operation of the application. Under no circumstances will it be shared with third parties.",
+	"El responsable del tratamiento de los datos es el creador de la aplicación, que actúa a título personal": "The data controller is the creator of the application, acting in a personal capacity. You can request the deletion of your data by writing to the email address provided on the platform.",
+	"Esta política podrá actualizarse en el futuro si el proyecto evoluciona a una versión comercial": "This policy may be updated in the future if the project evolves to a commercial version."
 }

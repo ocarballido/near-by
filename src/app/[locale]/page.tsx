@@ -574,9 +574,13 @@ export default function Home() {
 						className="mb-4"
 					/>
 					<div className="px-4 flex flex-col md:flex-row gap-4 font-body text-sm underline opacity-50">
-						<Link href="/legal/conditions">Condiciones</Link>
-						<Link href="/legal/privacy">Privacidad</Link>
-						<Link href="/legal/content">Contenido</Link>
+						<Link href="/legal/conditions">
+							{t('Términos y Condiciones')}
+						</Link>
+						<Link href="/legal/privacy">
+							{t('Política de privacidad')}
+						</Link>
+						<Link href="/legal/content">{t('Contenido')}</Link>
 					</div>
 					<p className="font-medium font-body text-sm opacity-50">
 						BNBexplorer &#169; {new Date().getFullYear()}
