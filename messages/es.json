@@ -389,5 +389,22 @@
 	"El responsable del tratamiento de los datos es el creador de la aplicación, que actúa a título personal": "El responsable del tratamiento de los datos es el creador de la aplicación, que actúa a título personal. Puedes solicitar la eliminación de tus datos escribiendo al correo indicado en la plataforma.",
 	"Esta política podrá actualizarse en el futuro si el proyecto evoluciona a una versión comercial": "Esta política podrá actualizarse en el futuro si el proyecto evoluciona a una versión comercial.",
 	"¡Uy! Página no encontrada": "¡Uy! Página no encontrada",
-	"Lo sentimos, la página que buscas no existe o ha sido movida": "Lo sentimos, la página que buscas no existe o ha sido movida."
+	"Lo sentimos, la página que buscas no existe o ha sido movida": "Lo sentimos, la página que buscas no existe o ha sido movida.",
+	"Buscador mágico": "Buscador mágico",
+	"Nuevo sitio": "Nuevo sitio",
+	"Añadir": "Añadir",
+	"Descubre lo mejor cerca de tu propiedad": "Descubre lo mejor cerca de tu propiedad",
+	"Con un solo clic, añade automáticamente los lugares más valorados en la zona: restaurantes, farmacias, parques, museos y mucho más": "Con un solo clic, añade automáticamente los lugares más valorados en la zona: restaurantes, farmacias, parques, museos y mucho más. Magic Search te ahorra tiempo y mejora la información de tu propiedad con datos reales del entorno.",
+	"El tipo de lugar es obligatorio": "El tipo de lugar es obligatorio",
+	"Selecciona un tipo de lugar": "Selecciona un tipo de lugar",
+	"La cantidad es obligatoria": "La cantidad es obligatoria",
+	"Debe ser mayor que 0": "Debe ser mayor que 0",
+	"Cantidad": "Cantidad",
+	"Selecciona cantidad": "Selecciona cantidad",
+	"No se pudieron insertar los lugares": "No se pudieron insertar los lugares.",
+	"Respuesta inválida de Google Places": "Respuesta inválida de Google Places",
+	"Debe ser un número válido": "Debe ser un número válido",
+	"Lugares descubiertos correctamente": "Lugares descubiertos correctamente.",
+	"Lugares añadidos correctamente": "Lugares añadidos correctamente",
+	"Categoría": "Categoría"
 }

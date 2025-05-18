@@ -1,7 +1,7 @@
 import AddPlaceForm from '@/components/organisms/form/place';
 
 type PageProps = {
-	params: Promise<{ locationSlug: string[] }>; // params es un Promise
+	params: Promise<{ locationSlug: string[] }>;
 };
 
 export default async function LocationPage({ params }: PageProps) {
