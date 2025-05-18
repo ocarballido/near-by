@@ -13,9 +13,12 @@ import addLocation from '../../../../public/static/img/add-location.webp';
 import Place from '@/components/molecules/card/place';
 import PropertiesContentEmpty from '../properties-content-empty';
 import ButtonLink from '@/components/molecules/button-link';
+import Button from '@/components/molecules/button';
 import Modal from '@/components/organisms/modal';
 import Alert from '@/components/molecules/alert';
 import IconDelete from '@/components/atoms/icon/delete';
+import IconAdd from '@/components/atoms/icon/add';
+import IconMap from '@/components/atoms/icon/map';
 
 export interface Location {
 	id: string;
@@ -118,6 +121,21 @@ LocationsProps) {
 				primaryButtonLabel="Cancel"
 				icon={<IconDelete color="error" />}
 			/>
+			<div className="flex flex-col lg:flex-row gap-2">
+				<Button
+					className="w-full"
+					label={t('Buscador mágico')}
+					color="secondary"
+					iconLeft={<IconMap />}
+				/>
+				<ButtonLink
+					label={t('Nuevo sitio')}
+					color="primary"
+					href={emptyUrl}
+					iconLeft={<IconAdd />}
+					className="w-full"
+				/>
+			</div>
 			{locations.map((location) => (
 				<Place
 					key={location.id}
@@ -130,7 +148,6 @@ LocationsProps) {
 					}}
 				/>
 			))}
-			<ButtonLink label="Nuevo sitio" color="secondary" href={emptyUrl} />
 		</>
 	);
 }

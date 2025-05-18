@@ -135,7 +135,6 @@ const AddPlaceForm = ({
 			fd.append('phone', data.phone);
 		}
 
-		// Imagen (si existe)
 		if (file) {
 			fd.append('image', file);
 		}
@@ -178,11 +177,6 @@ const AddPlaceForm = ({
 
 		reset();
 		clearValidation();
-
-		// router.back();
-		// router.push(
-		// 	`/app/properties/${propertyId}/${categoryId}/${subCategoryId}`
-		// );
 	};
 
 	useEffect(() => {
@@ -282,7 +276,7 @@ const AddPlaceForm = ({
 					/>
 					<Button
 						type="submit"
-						label={t('Añadir propiedad')}
+						label={t('Añadir')}
 						className="w-full"
 						disabled={isSubmitting}
 					/>
