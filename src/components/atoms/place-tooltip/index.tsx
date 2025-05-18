@@ -1,5 +1,5 @@
 type PlaceTooltipProps = {
-	className: string;
+	className?: string;
 	label: string;
 };
 

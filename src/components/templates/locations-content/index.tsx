@@ -13,7 +13,6 @@ import addLocation from '../../../../public/static/img/add-location.webp';
 import Place from '@/components/molecules/card/place';
 import PropertiesContentEmpty from '../properties-content-empty';
 import ButtonLink from '@/components/molecules/button-link';
-import Button from '@/components/molecules/button';
 import Modal from '@/components/organisms/modal';
 import Alert from '@/components/molecules/alert';
 import IconDelete from '@/components/atoms/icon/delete';
@@ -35,19 +34,23 @@ type AlertState = {
 
 interface LocationsProps {
 	locations: Location[];
-	emptyUrl: string;
 	propertyId: string;
 	categoryId: string;
 	subCategoryId: string;
+	propertySlug: string;
+	lat?: number;
+	lng?: number;
 }
 
 export function LocationsContent({
 	locations,
-	emptyUrl,
-}: // propertyId,
-// categoryId,
-// subCategoryId,
-LocationsProps) {
+	propertyId,
+	categoryId,
+	subCategoryId,
+	propertySlug,
+	lat,
+	lng,
+}: LocationsProps) {
 	const t = useTranslations();
 
 	const [isOpen, setIsOpen] = useState(false);
@@ -89,7 +92,19 @@ LocationsProps) {
 						width={281}
 					/>
 				</div>
-				<PropertiesContentEmpty url={emptyUrl} />
+				<PropertiesContentEmpty
+					url={`/app/location/${propertySlug}/${propertyId}/${categoryId}/${subCategoryId}`}
+				/>
+				<div className="relative w-fit ml-auto mr-auto">
+					<span className="absolute top-[-2px] left-[-2px] w-[calc(100%+4px)] h-[calc(100%+4px)] bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] rounded-full shadow-xl opacity-60"></span>
+					<ButtonLink
+						className="w-fit ml-auto mr-auto relative bg-white hover:bg-white/70 focus:bg-white/70"
+						label={t('Buscador mágico')}
+						color="secondary"
+						iconLeft={<IconMap />}
+						href={`/app/magic-finder/${propertySlug}/${propertyId}/${lat}/${lng}/${categoryId}/${subCategoryId}`}
+					/>
+				</div>
 			</>
 		);
 	}
@@ -122,16 +137,20 @@ LocationsProps) {
 				icon={<IconDelete color="error" />}
 			/>
 			<div className="flex flex-col lg:flex-row gap-2">
-				<Button
-					className="w-full"
-					label={t('Buscador mágico')}
-					color="secondary"
-					iconLeft={<IconMap />}
-				/>
+				<div className="relative w-full ml-auto mr-auto">
+					<span className="absolute top-[-2px] left-[-2px] w-[calc(100%+4px)] h-[calc(100%+4px)] bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] rounded-full shadow-xl opacity-60"></span>
+					<ButtonLink
+						className="w-full relative bg-white hover:bg-white/70 focus:bg-white/70"
+						label={t('Buscador mágico')}
+						color="secondary"
+						iconLeft={<IconMap />}
+						href={`/app/magic-finder/${propertySlug}/${propertyId}/${lat}/${lng}/${categoryId}/${subCategoryId}`}
+					/>
+				</div>
 				<ButtonLink
 					label={t('Nuevo sitio')}
 					color="primary"
-					href={emptyUrl}
+					href={`/app/location/${propertySlug}/${propertyId}/${categoryId}/${subCategoryId}`}
 					iconLeft={<IconAdd />}
 					className="w-full"
 				/>

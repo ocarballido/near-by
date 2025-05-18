@@ -388,5 +388,19 @@
 	"Lo sentimos, la página que buscas no existe o ha sido movida": "Sorry, the page you're looking for doesn't exist or has been moved.",
 	"Buscador mágico": "Magic finder",
 	"Nuevo sitio": "New location",
-	"Añadir": "Add"
+	"Añadir": "Add",
+	"Descubre lo mejor cerca de tu propiedad": "Discover the best near your property",
+	"Con un solo clic, añade automáticamente los lugares más valorados en la zona: restaurantes, farmacias, parques, museos y mucho más": "With a single click, automatically add the most highly rated places in the area: restaurants, pharmacies, parks, museums, and much more. Magic Search saves you time and enhances your property information with real-world data.",
+	"El tipo de lugar es obligatorio": "The type of place is mandatory",
+	"Selecciona un tipo de lugar": "Select a place type",
+	"La cantidad es obligatoria": "The amount is mandatory",
+	"Debe ser mayor que 0": "Must be greater than 0",
+	"Cantidad": "Quantity",
+	"Selecciona cantidad": "Select quantity",
+	"No se pudieron insertar los lugares": "The locations could not be inserted.",
+	"Respuesta inválida de Google Places": "Invalid response from Google Places",
+	"Debe ser un número válido": "Must be a valid number",
+	"Lugares descubiertos correctamente": "Places discovered correctly.",
+	"Lugares añadidos correctamente": "Places added successfully",
+	"Categoría": "Category"
 }

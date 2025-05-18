@@ -64,7 +64,7 @@ export default async function Property({ params }: PageProps) {
 
 	const { data: property, error: propErr } = await supabase
 		.from('properties')
-		.select('id,name,slug,image_url,address')
+		.select('id,name,slug,image_url,address,latitude,longitude')
 		.eq('slug', propertySlug)
 		.single();
 	if (propErr || !property?.id) notFound();
@@ -202,7 +202,9 @@ export default async function Property({ params }: PageProps) {
 						propertyId={propertyId}
 						categoryId={categoryId}
 						subCategoryId={subcategoryId}
-						emptyUrl={`/app/location/${propertySlug}/${propertyId}/${categoryId}/${subcategoryId}`}
+						propertySlug={propertySlug}
+						lat={property.latitude}
+						lng={property.longitude}
 					/>
 				)}
 			</div>
