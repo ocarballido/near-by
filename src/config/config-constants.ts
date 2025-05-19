@@ -353,3 +353,11 @@ export const MAGIC_FINDER_SELECT = [
 ];
 
 export const MAX_MAGIC_FINDER_LOCATIONS = 10;
+
+export const RADIUS_OPTIONS = [
+	{ value: '1000', label: '1 km' },
+	{ value: '2000', label: '2 km' },
+	{ value: '3000', label: '3 km' },
+	{ value: '4000', label: '4 km' },
+	{ value: '5000', label: '5 km' },
+];

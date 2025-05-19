@@ -406,5 +406,8 @@
 	"Debe ser un número válido": "Debe ser un número válido",
 	"Lugares descubiertos correctamente": "Lugares descubiertos correctamente.",
 	"Lugares añadidos correctamente": "Lugares añadidos correctamente",
-	"Categoría": "Categoría"
+	"Categoría": "Categoría",
+	"El radio es obligatorio": "El radio es obligatorio",
+	"Selecciona el radio (metros)": "Selecciona el radio (Km)",
+	"Radio de búsqueda": "Radio de búsqueda"
 }

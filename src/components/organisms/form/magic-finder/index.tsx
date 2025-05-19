@@ -11,6 +11,7 @@ import { discoverNearbyPlaces } from '@/app/actions/magic-search/magic-search';
 import {
 	MAGIC_FINDER_SELECT,
 	MAX_MAGIC_FINDER_LOCATIONS,
+	RADIUS_OPTIONS,
 } from '@/config/config-constants';
 
 import Alert from '@/components/molecules/alert';
@@ -20,6 +21,7 @@ import Button from '@/components/molecules/button';
 type FormValues = {
 	type: string;
 	quantity: string;
+	radius: string;
 };
 
 const quantityOptions: SelectOption[] = Array.from(
@@ -74,9 +76,14 @@ const MagicFinderForm = ({
 		defaultValues: {
 			type: '',
 			quantity: '',
+			radius: '',
 		},
 	});
-	const onSubmit: SubmitHandler<FormValues> = async ({ type, quantity }) => {
+	const onSubmit: SubmitHandler<FormValues> = async ({
+		type,
+		quantity,
+		radius,
+	}) => {
 		const fd = new FormData();
 		fd.append('property_id', propertyId);
 		fd.append('group_id', subCategoryId);
@@ -84,6 +91,7 @@ const MagicFinderForm = ({
 		fd.append('lng', lng);
 		fd.append('type', type);
 		fd.append('max', quantity);
+		fd.append('radius', radius);
 
 		openLoading();
 		const result = await discoverNearbyPlaces(fd);
@@ -102,6 +110,13 @@ const MagicFinderForm = ({
 					setError('quantity', {
 						type: 'manual',
 						message: result.errors.max[0],
+					});
+				}
+
+				if (result.errors.radius) {
+					setError('radius', {
+						type: 'manual',
+						message: result.errors.radius[0],
 					});
 				}
 
@@ -177,6 +192,24 @@ const MagicFinderForm = ({
 							error={!!errors.type}
 							helperText={errors.type?.message}
 							placeholder={t('Selecciona un tipo de lugar')}
+						/>
+					)}
+				/>
+
+				<Controller
+					name="radius"
+					control={control}
+					rules={{ required: 'El radio es obligatorio' }}
+					render={({ field }) => (
+						<Select
+							label={t('Radio de búsqueda')}
+							options={RADIUS_OPTIONS}
+							value={field.value}
+							onChange={field.onChange}
+							name="radius"
+							error={!!errors.radius}
+							helperText={errors.radius?.message}
+							placeholder={t('Selecciona el radio (metros)')}
 						/>
 					)}
 				/>

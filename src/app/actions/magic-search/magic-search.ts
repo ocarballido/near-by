@@ -23,6 +23,7 @@ const DiscoverNearbySchema = z.object({
 	lng: z.string(),
 	type: z.string().min(1),
 	max: z.string().regex(/^\d+$/, 'Debe ser un número válido'),
+	radius: z.string().regex(/^\d+$/),
 });
 
 export type DiscoverNearbyState = {
@@ -34,6 +35,7 @@ export type DiscoverNearbyState = {
 		group_id?: string[];
 		property_id?: string[];
 		server?: string[];
+		radius?: string[];
 	};
 	success?: boolean;
 	message?: string;
@@ -51,6 +53,7 @@ export async function discoverNearbyPlaces(
 			lng: formData.get('lng'),
 			type: formData.get('type'),
 			max: formData.get('max'),
+			radius: formData.get('radius'),
 		};
 
 		const parsed = DiscoverNearbySchema.safeParse(raw);
@@ -59,7 +62,8 @@ export async function discoverNearbyPlaces(
 			return { errors };
 		}
 
-		const { property_id, group_id, lat, lng, type, max } = parsed.data;
+		const { property_id, group_id, lat, lng, type, max, radius } =
+			parsed.data;
 		const maxResults = parseInt(max, 10);
 
 		const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
@@ -73,7 +77,7 @@ export async function discoverNearbyPlaces(
 			};
 		}
 
-		const placesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=2000&type=${type}&rankby=prominence&key=${apiKey}`;
+		const placesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&type=${type}&rankby=prominence&key=${apiKey}`;
 
 		const response = await fetch(placesUrl);
 		const data = await response.json();
