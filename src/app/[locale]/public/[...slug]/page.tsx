@@ -168,7 +168,7 @@ export default async function Property({ params }: PageProps) {
 			propertySlug={propertySlug}
 		>
 			<div className="p-4 font-roboto flex flex-col grow gap-4 bg-white rounded-lg overflow-hidden">
-				{isLodging ? (
+				{isLodging && infosToShow.length > 0 ? (
 					<div className="whitespace-pre-wrap">
 						{infosToShow[0].content}
 					</div>
