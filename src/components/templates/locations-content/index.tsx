@@ -5,6 +5,7 @@ import { useLoading } from '@/lib/context/LoadingContext';
 import { useTranslations } from 'next-intl';
 
 import { deleteLocation } from '@/app/actions/locations/delete-location';
+import { deleteAllLocations } from '@/app/actions/locations/delete-all-locations';
 
 import Image from 'next/image';
 
@@ -19,6 +20,7 @@ import Alert from '@/components/molecules/alert';
 import IconDelete from '@/components/atoms/icon/delete';
 import IconAdd from '@/components/atoms/icon/add';
 import IconStarShine from '@/components/atoms/icon/star-shine';
+import Button from '@/components/molecules/button';
 
 export interface Location {
 	id: string;
@@ -43,6 +45,8 @@ interface LocationsProps {
 	lng?: number;
 }
 
+type DeleteTarget = 'LOCATION' | 'ALL_LOCATIONS' | null;
+
 export function LocationsContent({
 	locations,
 	propertyId,
@@ -57,28 +61,67 @@ export function LocationsContent({
 	const [isOpen, setIsOpen] = useState(false);
 	const [alert, setAlert] = useState<AlertState | null>(null);
 	const [selectedLocation, setSelectedLocation] = useState<string>('');
+	const [deleteTarget, setDeleteTarget] = useState<DeleteTarget>(null);
 	const { loading, openLoading, closeLoading } = useLoading();
 
 	const handleDelete = async (locationId: string) => {
 		if (loading) return;
-		if (!selectedLocation) return;
+
 		setIsOpen(false);
 		openLoading();
 		setAlert(null);
-		try {
-			await deleteLocation(locationId);
-			setAlert({
-				type: 'success',
-				message: 'Sitio eliminado correctamente',
-			});
-		} catch (err: unknown) {
-			const msg =
-				err instanceof Error
-					? err.message
-					: 'Error eliminando el sitio';
-			setAlert({ type: 'error', message: msg });
-		} finally {
-			closeLoading();
+
+		if (deleteTarget === 'LOCATION' && locationId) {
+			try {
+				await deleteLocation(locationId);
+				setAlert({
+					type: 'success',
+					message: 'Sitio eliminado correctamente',
+				});
+			} catch (err: unknown) {
+				const msg =
+					err instanceof Error
+						? err.message
+						: 'Error eliminando el sitio';
+				setAlert({ type: 'error', message: msg });
+			} finally {
+				closeLoading();
+			}
+		}
+
+		if (deleteTarget === 'ALL_LOCATIONS') {
+			try {
+				const fd = new FormData();
+				fd.append('property_id', propertyId);
+				fd.append('group_id', subCategoryId);
+
+				const result = await deleteAllLocations(fd);
+
+				if (result.errors) {
+					setAlert({
+						type: 'error',
+						message:
+							result.errors.server?.[0] ??
+							'Error inesperado al eliminar las localizaciones',
+					});
+					return;
+				}
+
+				setAlert({
+					type: 'success',
+					message:
+						result.message ??
+						'Todas las localizaciones han sido eliminadas',
+				});
+			} catch (err: unknown) {
+				const msg =
+					err instanceof Error
+						? err.message
+						: 'Error inesperado al eliminar las localizaciones';
+				setAlert({ type: 'error', message: msg });
+			} finally {
+				closeLoading();
+			}
 		}
 	};
 
@@ -125,17 +168,30 @@ export function LocationsContent({
 				/>
 			)}
 			<Modal
-				title={t('Eliminar propiedad')}
-				description={t('Estás a punto de eliminar uno de tus sitios')}
+				title={
+					deleteTarget === 'LOCATION'
+						? t('Eliminar propiedad')
+						: t('Eliminar todas las localizaciones')
+				}
+				description={
+					deleteTarget === 'LOCATION'
+						? t('Estás a punto de eliminar uno de tus sitios')
+						: t(
+								'Estás a punto de eliminar todas tus localizaciones'
+						  )
+				}
 				message={t('¿Estás seguro que deseas continuar?')}
 				open={isOpen}
 				onClose={() => {
 					setIsOpen(false);
 					setSelectedLocation('');
+					setDeleteTarget(null);
 				}}
 				destructiveButtonAction={() => handleDelete(selectedLocation)}
 				destructiveButtonLabel="Eliminar"
-				primaryButtonAction={() => setIsOpen(false)}
+				primaryButtonAction={() => {
+					setIsOpen(false);
+				}}
 				primaryButtonLabel="Cancel"
 				icon={<IconDelete color="error" />}
 			/>
@@ -168,10 +224,23 @@ export function LocationsContent({
 					image={location.image_url}
 					handleDelete={() => {
 						setIsOpen(true);
+						setDeleteTarget('LOCATION');
 						setSelectedLocation(location?.id);
 					}}
 				/>
 			))}
+			{locations.length > 1 && (
+				<Button
+					className="w-full lg:w-max ml-auto"
+					label="Eliminar todos"
+					color="error"
+					iconLeft={<IconDelete color="error" />}
+					onClick={() => {
+						setIsOpen(true);
+						setDeleteTarget('ALL_LOCATIONS');
+					}}
+				/>
+			)}
 		</>
 	);
 }

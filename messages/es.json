@@ -409,5 +409,11 @@
 	"Categoría": "Categoría",
 	"El radio es obligatorio": "El radio es obligatorio",
 	"Selecciona el radio (metros)": "Selecciona el radio (Km)",
-	"Radio de búsqueda": "Radio de búsqueda"
+	"Radio de búsqueda": "Radio de búsqueda",
+	"Eliminar todas las localizaciones": "Eliminar todas las localizaciones",
+	"Estás a punto de eliminar todas tus localizaciones": "Estás a punto de eliminar todas tus localizaciones.",
+	"No se pudieron obtener las localizaciones a eliminar": "No se pudieron obtener las localizaciones a eliminar",
+	"No se pudieron eliminar las localizaciones": "No se pudieron eliminar las localizaciones",
+	"Todas las localizaciones han sido eliminadas": "Todas las localizaciones han sido eliminadas",
+	"Error inesperado al eliminar las localizaciones": "Error inesperado al eliminar las localizaciones"
 }

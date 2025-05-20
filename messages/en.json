@@ -405,5 +405,11 @@
 	"Categoría": "Category",
 	"El radio es obligatorio": "The radius is mandatory",
 	"Selecciona el radio (metros)": "Select the radius (Km)",
-	"Radio de búsqueda": "Search radius"
+	"Radio de búsqueda": "Search radius",
+	"Eliminar todas las localizaciones": "Delete all locations",
+	"Estás a punto de eliminar todas tus localizaciones": "You are about to delete all your locations.",
+	"No se pudieron obtener las localizaciones a eliminar": "The locations to be removed could not be obtained",
+	"No se pudieron eliminar las localizaciones": "The locations could not be deleted",
+	"Todas las localizaciones han sido eliminadas": "All locations have been removed",
+	"Error inesperado al eliminar las localizaciones": "Unexpected error when deleting locations"
 }
