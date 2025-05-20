@@ -73,4 +73,4 @@ This project includes:
 
 ## 🙌 Author
 
-Developed by [Oscar Carballido Perdomo] as a personal learning project.
+Developed by Oscar Carballido Perdomo as a personal learning project.
