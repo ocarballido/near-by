@@ -71,6 +71,10 @@ This project includes:
 
 [https://github.com/Razikus/supabase-nextjs-template](https://github.com/Razikus/supabase-nextjs-template)
 
+## Project:
+
+[https://www.bnbexplorer.com/es](https://www.bnbexplorer.com/es)
+
 ## 🙌 Author
 
 Developed by Oscar Carballido Perdomo as a personal learning project.
