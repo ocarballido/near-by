@@ -166,6 +166,14 @@ export default async function Property({ params }: PageProps) {
 		locationsList = locs;
 	}
 
+	if (!propertySlug || !categoryId || !subcategoryId || !slug) {
+		return notFound();
+	}
+
+	if (slug.length > 3) {
+		return notFound();
+	}
+
 	return (
 		<AppContentTemplate
 			sidebar="PROPERTY"

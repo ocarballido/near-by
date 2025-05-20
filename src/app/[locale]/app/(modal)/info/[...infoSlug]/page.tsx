@@ -21,6 +21,14 @@ export default async function InfoPage({ params }: PageProps) {
 
 	if (error) notFound();
 
+	if (!propertySlug || !categoryId || !subCategoryId || !infoSlug) {
+		return notFound();
+	}
+
+	if (infoSlug.length > 3) {
+		return notFound();
+	}
+
 	return (
 		<>
 			<UpdateInfoForm
