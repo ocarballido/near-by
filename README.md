@@ -1,36 +1,76 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌍 BNBexplorer – Personalized Guide for Tourist Accommodations
+
+**BNBexplorer** is a web platform that allows property owners (Airbnb, rural homes, etc.) to create a personalized public page for each property, offering useful information to guests such as house rules, accommodation manuals, schedules, nearby points of interest, and more.
+
+> This project is under development – created for learning purposes with potential for future monetization.
+
+---
+
+## ✨ Features
+
+-   🔐 User authentication via [Supabase](https://supabase.com/)
+-   🏠 Manage multiple properties per user
+-   📍 Google Maps integration for address validation and location
+-   📁 Customizable categories and subcategories of content
+-   🌍 Multilingual support (English 🇬🇧 / Spanish 🇪🇸) using [`next-intl`](https://next-intl.js.org/)
+-   🧾 Legal section: privacy policy, terms of use, content disclaimer
+-   🎨 Modern UI with TailwindCSS and accessible components
+
+---
+
+## 📦 Tech Stack
+
+-   **Framework:** [Next.js 15](https://nextjs.org/) (App Router)
+-   **Database & Auth:** [Supabase](https://supabase.com/)
+-   **Styling:** [Tailwind CSS 4](https://tailwindcss.com/)
+-   **Internationalization:** [`next-intl`](https://next-intl.js.org/)
+-   **Maps & Location:** [@react-google-maps/api](https://www.npmjs.com/package/@react-google-maps/api)
+-   **Cookie Management:** `cookies-next`
+-   **Forms:** `react-hook-form`
+-   **UI/UX:** `@radix-ui/react-*`, `lucide-react`
+
+---
 
 ## Getting Started
 
 First, run the development server:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run dev        # Start development server
+npm run build      # Build for production
+npm run start      # Start the built app
+npm run lint       # Run linter
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
+## 🛡️ Legal Status
 
-To learn more about Next.js, take a look at the following resources:
+This project includes:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+-   ✅ Privacy policy: explains processing of personal data required for access
+-   ✅ Terms of use: clarifies that this is a non-commercial project (subject to change)
+-   ✅ Cookie consent banner
+-   ✅ Disclaimer under image uploads: users are responsible for the content they upload
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+> ⚠️ This app is not yet monetized but is legally prepared for a future commercial model.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📸 Roadmap
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+-   [ ] Integrate payment system (Stripe or Paddle)
+-   [ ] Owner dashboard with metrics
+-   [ ] Shareable QR code or public URL
+-   [ ] Team access or collaborative editing
+-   [ ] Commercial plan setup
+
+## Special thanks to:
+
+[https://github.com/Razikus/supabase-nextjs-template](https://github.com/Razikus/supabase-nextjs-template)
+
+## 🙌 Author
+
+Developed by [Oscar Carballido Perdomo] as a personal learning project.
