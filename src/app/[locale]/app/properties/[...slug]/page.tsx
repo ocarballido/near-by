@@ -166,7 +166,7 @@ export default async function Property({ params }: PageProps) {
 		locationsList = locs;
 	}
 
-	if (!propertySlug || !categoryId || !subcategoryId || !slug) {
+	if (!propertySlug || !categoryId || !slug) {
 		return notFound();
 	}
 
