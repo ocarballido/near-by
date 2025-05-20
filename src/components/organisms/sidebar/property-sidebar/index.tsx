@@ -3,7 +3,6 @@
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 
-import IconHome from '@/components/atoms/icon/home';
 import IconApartment from '@/components/atoms/icon/apartment';
 import IconHealing from '@/components/atoms/icon/healing';
 import IconForkSpoon from '@/components/atoms/icon/fork-spoon';
@@ -79,7 +78,7 @@ const PropertySidebar = ({
 			<ButtonLink
 				label={t('Mis Propiedades')}
 				href="/app/properties"
-				iconLeft={<IconHome />}
+				iconLeft={<IconApartment />}
 				className="hidden md:flex w-full"
 			/>
 			{categories.map((category) => {

@@ -8,7 +8,7 @@ import { useSidebar } from '@/lib/context/SidebarContext';
 import Button from '@/components/molecules/button';
 import ButtonLink from '@/components/molecules/button-link';
 import IconClose from '@/components/atoms/icon/close';
-import IconHome from '@/components/atoms/icon/home';
+import IconApartment from '@/components/atoms/icon/apartment';
 import PropertySidebar from './property-sidebar';
 import AppSidebar from './app-sidebar';
 
@@ -60,7 +60,7 @@ const Sidebar = ({
 					<ButtonLink
 						label={t('Mis Propiedades')}
 						href="/app/properties"
-						iconLeft={<IconHome />}
+						iconLeft={<IconApartment />}
 						className="w-max"
 					/>
 				)}

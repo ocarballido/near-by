@@ -5,8 +5,8 @@ import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
 import { useSidebar } from '@/lib/context/SidebarContext';
 
-import IconHome from '@/components/atoms/icon/home';
 import IconClose from '@/components/atoms/icon/close';
+import IconApartment from '@/components/atoms/icon/apartment';
 import ButtonLink from '@/components/molecules/button-link';
 import Button from '@/components/molecules/button';
 import PropertySidebar from '@/components/organisms/sidebar/property-sidebar';
@@ -29,7 +29,7 @@ const PropertyContent = () => {
 				<ButtonLink
 					label={t('Mis Propiedades')}
 					href="/app/properties"
-					iconLeft={<IconHome />}
+					iconLeft={<IconApartment />}
 					className="w-max"
 				/>
 				<Button
