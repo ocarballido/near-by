@@ -11,6 +11,7 @@ import Button from '@/components/molecules/button';
 import ButtonLink from '@/components/molecules/button-link';
 import IconMenu from '@/components/atoms/icon/menu';
 import IconOpenInNew from '@/components/atoms/icon/open-in-new';
+import ButtonQr from '@/components/molecules/button-qr';
 
 const Content = ({
 	children,
@@ -55,14 +56,19 @@ const Content = ({
 					className="shadow-sm w-full"
 				/>
 				{publicLink.showPublicLink ? (
-					<ButtonLink
-						label={t('Sitio público')}
-						color="primary"
-						iconLeft={<IconOpenInNew />}
-						className="shadow-sm w-full"
-						href={`/public/${propertySlug}/${LODGING_CATEGORY_ID}`}
-						target="_blank"
-					/>
+					<>
+						<ButtonLink
+							label={t('Sitio público')}
+							color="primary"
+							iconLeft={<IconOpenInNew />}
+							className="shadow-sm w-full"
+							href={`/public/${propertySlug}/${LODGING_CATEGORY_ID}`}
+							target="_blank"
+						/>
+						<ButtonQr
+							url={`https://www.bnbexplorer.com/public/${propertySlug}/${LODGING_CATEGORY_ID}`}
+						/>
+					</>
 				) : null}
 			</div>
 			{children}

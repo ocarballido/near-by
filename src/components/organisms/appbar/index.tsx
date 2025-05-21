@@ -2,6 +2,7 @@ import IconOpenInNew from '@/components/atoms/icon/open-in-new';
 import ButtonLink from '@/components/molecules/button-link';
 import AppBarUser from '../appbar-user';
 import AppbarTitle from '@/components/atoms/appbar-title';
+import ButtonQr from '@/components/molecules/button-qr';
 
 type AppBarProps = {
 	className?: string;
@@ -22,14 +23,19 @@ const AppBar = ({
 		>
 			<AppbarTitle />
 			{accommodationHref && (
-				<ButtonLink
-					className="hidden gap-1 md:flex shrink-0"
-					color="primary"
-					iconRight={<IconOpenInNew />}
-					label={accommodationName}
-					href={accommodationHref}
-					target="_blank"
-				/>
+				<div className="hidden md:flex gap-1">
+					<ButtonLink
+						className="gap-1 shrink-0"
+						color="primary"
+						iconRight={<IconOpenInNew />}
+						label={accommodationName}
+						href={accommodationHref}
+						target="_blank"
+					/>
+					<ButtonQr
+						url={`https://www.bnbexplorer.com${accommodationHref}`}
+					/>
+				</div>
 			)}
 			{isLogged && <AppBarUser />}
 		</div>
