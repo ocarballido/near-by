@@ -14,6 +14,9 @@ import testimony03 from '../../../public/static/img/testimony-03.webp';
 import logo from '../../../public/static/img/logo-color-2x.webp';
 
 import LandingAppBar from '@/components/organisms/landing-appbar';
+import IconAcute from '@/components/atoms/icon/acute';
+import IconHeartPlus from '@/components/atoms/icon/heart-plus';
+import IconStarShine from '@/components/atoms/icon/star-shine';
 import Link from 'next/link';
 import ButtonLink from '@/components/molecules/button-link';
 import PlaceTooltip from '@/components/atoms/place-tooltip';
@@ -109,71 +112,61 @@ export default function Home() {
 					)}
 				</h3>
 				<div className="flex flex-col md:flex-row gap-4 justify-center max-w-[1000px]">
-					<div className="flex flex-1 flex-col p-2 rounded-lg bg-white shadow-lg">
-						<div className="flex flex-col gap-2 p-4 rounded-md bg-linear-to-r from-teal-600 to-primary-500">
-							<div className="flex justify-center items-center w-[62px] h-[62px] rounded-full bg-white">
-								<Image
-									alt={t('Ahorra tiempo')}
-									src="/static/img/save-time.svg"
-									width={30}
-									height={30}
-								/>
-							</div>
-							<h4 className="text-white font-bold text-xl">
-								{t('Ahorra tiempo')}
-							</h4>
+					<div className="flex flex-1 flex-col gap-4 p-6 rounded-xl items-center text-center">
+						<div className="flex justify-center items-center w-18 h-18 rounded-full bg-gradient-to-tr from-[#FF6B06]/10 to-[#31C48D]/10">
+							<span className="flex justify-center items-center w-12 h-12 rounded-full bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] font-bold text-xl">
+								<IconAcute color="white" />
+							</span>
 						</div>
-						<h5 className="font-body py-3 opacity-70 font-medium">
+						<h3 className="text-2xl font-bold">
+							{t('Ahorra tiempo')}
+						</h3>
+						<p className="font-body font-medium opacity-70">
 							{t(
 								'Centraliza todas las consultas de “¿dónde como?”, “¿qué visito?” en un panel intuitivo'
 							)}
-						</h5>
+						</p>
 					</div>
-					<div className="flex flex-1 flex-col p-2 rounded-lg bg-white shadow-lg">
-						<div className="flex flex-col gap-2 p-4 rounded-md bg-linear-to-r from-teal-600 to-primary-500">
-							<div className="flex justify-center items-center w-[62px] h-[62px] rounded-full bg-white">
-								<Image
-									alt={t('Mejora tu reputación')}
-									src="/static/img/favorite.svg"
-									width={30}
-									height={30}
-								/>
-							</div>
-							<h4 className="text-white font-bold text-xl">
-								{t('Mejora tu reputación')}
-							</h4>
+					<div className="flex flex-1 flex-col gap-4 p-6 rounded-xl items-center text-center">
+						<div className="flex justify-center items-center w-18 h-18 rounded-full bg-gradient-to-tr from-[#FF6B06]/10 to-[#31C48D]/10">
+							<span className="flex justify-center items-center w-12 h-12 rounded-full bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] font-bold text-xl">
+								<IconHeartPlus color="white" />
+							</span>
 						</div>
-						<h5 className="font-body py-3 opacity-70 font-medium">
+						<h3 className="text-2xl font-bold">
+							{t('Mejora tu reputación')}
+						</h3>
+						<p className="font-body font-medium opacity-70">
 							{t(
 								'Ofrecer una experiencia local personalizada se traduce en valoraciones de 5 estrellas'
 							)}
-						</h5>
+						</p>
 					</div>
-					<div className="flex flex-1 flex-col p-2 rounded-lg bg-white shadow-lg">
-						<div className="flex flex-col gap-2 p-4 rounded-md bg-linear-to-r from-teal-600 to-primary-500">
-							<div className="flex justify-center items-center w-[62px] h-[62px] rounded-full bg-white">
-								<Image
-									alt={t('Comunicación cero esfuerzo')}
-									src="/static/img/star_shine.svg"
-									width={30}
-									height={30}
-								/>
-							</div>
-							<h4 className="text-white font-bold text-xl">
-								{t('Comunicación cero esfuerzo')}
-							</h4>
+					<div className="flex flex-1 flex-col gap-4 p-6 rounded-xl items-center text-center">
+						<div className="flex justify-center items-center w-18 h-18 rounded-full bg-gradient-to-tr from-[#FF6B06]/10 to-[#31C48D]/10">
+							<span className="flex justify-center items-center w-12 h-12 rounded-full bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] font-bold text-xl">
+								<IconStarShine color="white" />
+							</span>
 						</div>
-						<h5 className="font-body py-3 opacity-70 font-medium">
+						<h3 className="text-2xl font-bold">
+							{t('Comunicación cero esfuerzo')}
+						</h3>
+						<p className="font-body font-medium opacity-70">
 							{t(
 								'Olvídate de largos mensajes; envía tu link y deja que la app responda por ti'
 							)}
-						</h5>
+						</p>
 					</div>
 				</div>
+				<ButtonLink
+					label={t('Comienza gratis!')}
+					href="/app"
+					iconLeft={<IconAccountCircle />}
+				/>
 			</section>
 			<section
 				aria-labelledby="how"
-				className="flex flex-col gap-8 rounded-lg mt-2 px-0 py-12 text-center items-center max-w-[1400px] ml-auto mr-auto bg-gray-50 border-2 border-white"
+				className="flex flex-col gap-8 rounded-lg mt-2 px-0 py-12 text-center items-center max-w-[1400px] ml-auto mr-auto bg-gray-50"
 			>
 				<h2
 					id="how"
