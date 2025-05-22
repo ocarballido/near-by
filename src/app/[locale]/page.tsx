@@ -415,16 +415,17 @@ export default function Home() {
 						id="artificial-inteligence"
 						className="font-heading text-6xl font-bold max-w-[800px] ml-auto mr-auto px-"
 					>
-						Inteligencia artificial
+						{t('Inteligencia artificial')}
 					</h2>
 					<h3 className="font-heading font-medium text-xl md:text-2xl max-w-[800px] ml-auto mr-auto px-4 text-center">
-						Puedes usar nuestra inteligencia artificial para generar
-						contenido automáticamente.
+						{t(
+							'Puedes usar nuestra inteligencia artificial para generar contenido automáticamente'
+						)}
 					</h3>
 					<p className="opacity-60">
-						Escribe una idea o frase por ejemplo: Instrucciones para
-						el uso del aire acondicionado y te ayudaremos a
-						redactarlo.
+						{t(
+							'Escribe una idea o frase por ejemplo: Instrucciones para el uso del aire acondicionado y te ayudaremos a redactarlo'
+						)}
 					</p>
 					<ButtonLink
 						label={t('Comienza gratis!')}
