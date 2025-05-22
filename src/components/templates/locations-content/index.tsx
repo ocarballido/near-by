@@ -11,7 +11,6 @@ import Image from 'next/image';
 
 import addLocation from '../../../../public/static/img/add-location.webp';
 
-import Link from 'next/link';
 import Place from '@/components/molecules/card/place';
 import PropertiesContentEmpty from '../properties-content-empty';
 import ButtonLink from '@/components/molecules/button-link';
@@ -19,8 +18,8 @@ import Modal from '@/components/organisms/modal';
 import Alert from '@/components/molecules/alert';
 import IconDelete from '@/components/atoms/icon/delete';
 import IconAdd from '@/components/atoms/icon/add';
-import IconStarShine from '@/components/atoms/icon/star-shine';
 import Button from '@/components/molecules/button';
+import ButtonLinkMagic from '@/components/molecules/button-link-magic';
 
 export interface Location {
 	id: string;
@@ -139,18 +138,11 @@ export function LocationsContent({
 				<PropertiesContentEmpty
 					url={`/app/location/${propertySlug}/${propertyId}/${categoryId}/${subCategoryId}`}
 				/>
-				<div className="relative w-fit ml-auto mr-auto">
-					<span className="absolute top-[-2px] left-[-2px] w-[calc(100%+4px)] h-[calc(100%+4px)] bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] rounded-full shadow-xl opacity-60"></span>
-					<Link
-						className="w-fit pl-0.5 pr-4 py-0.5 rounded-full flex justify-center items-center ml-auto mr-auto relative bg-white  gap-2 font-medium *:bg-gradient-to-tr *:from-[#FF6B06] *:to-[#31C48D] hover:*:animate-spin"
-						href={`/app/magic-finder/${propertySlug}/${propertyId}/${lat}/${lng}/${categoryId}/${subCategoryId}`}
-					>
-						<div className="p-2 rounded-full">
-							<IconStarShine color="white" size={20} />
-						</div>
-						{t('Buscador mágico')}
-					</Link>
-				</div>
+				<ButtonLinkMagic
+					label={t('Buscador mágico')}
+					url={`/app/magic-finder/${propertySlug}/${propertyId}/${lat}/${lng}/${categoryId}/${subCategoryId}`}
+					className="w-fit ml-auto mr-auto"
+				/>
 			</>
 		);
 	}
@@ -196,18 +188,11 @@ export function LocationsContent({
 				icon={<IconDelete color="error" />}
 			/>
 			<div className="flex flex-col lg:flex-row gap-2">
-				<div className="relative w-full lg:w-auto ml-auto mr-auto">
-					<span className="absolute top-[-2px] left-[-2px] w-[calc(100%+4px)] h-[calc(100%+4px)] bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] rounded-full shadow-xl opacity-60"></span>
-					<Link
-						className="w-full lg:w-max pl-0.5 pr-4 py-0.5 rounded-full flex justify-start items-center ml-auto mr-auto relative bg-white  gap-2 font-medium *:bg-gradient-to-tr *:from-[#FF6B06] *:to-[#31C48D] hover:*:animate-spin"
-						href={`/app/magic-finder/${propertySlug}/${propertyId}/${lat}/${lng}/${categoryId}/${subCategoryId}`}
-					>
-						<div className="p-2 rounded-full">
-							<IconStarShine color="white" size={20} />
-						</div>
-						{t('Buscador mágico')}
-					</Link>
-				</div>
+				<ButtonLinkMagic
+					label={t('Buscador mágico')}
+					url={`/app/magic-finder/${propertySlug}/${propertyId}/${lat}/${lng}/${categoryId}/${subCategoryId}`}
+					className="w-full lg:w-full ml-auto mr-auto"
+				/>
 				<ButtonLink
 					label={t('Nuevo sitio')}
 					color="primary"
