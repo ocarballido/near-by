@@ -411,5 +411,17 @@
 	"No se pudieron obtener las localizaciones a eliminar": "The locations to be removed could not be obtained",
 	"No se pudieron eliminar las localizaciones": "The locations could not be deleted",
 	"Todas las localizaciones han sido eliminadas": "All locations have been removed",
-	"Error inesperado al eliminar las localizaciones": "Unexpected error when deleting locations"
+	"Error inesperado al eliminar las localizaciones": "Unexpected error when deleting locations",
+	"Generar con IA": "Generate with AI",
+	"Generando": "Generating...",
+	"Describe lo que quieres que la IA escriba": "Describe what you want the AI to write",
+	"Redacta las normas de uso del alojamiento": "E.g.: Write the rules for using the accommodation.",
+	"Usos restantes de la AI por hor": "Remaining AI usage",
+	"Has alcanzado el límite diario de IA": "You have reached the daily AI limit.",
+	"Puedes usar nuestra inteligencia artificial para generar contenido automáticamente": "You can use our artificial intelligence to automatically generate content",
+	"Instrucciones para el uso del aire acondicionado y te ayudaremos a redactarlo": "Write an idea or phrase, for example: Instructions for using the air conditioner, and we'll help you write it.",
+	"Añade el contenido que desees": "Add whatever content you want, or...",
+	"Utiliza nuestra Inteligenta Artificial para generar contenidos": "Use our Artificial Intelligence to generate content:",
+	"Inteligencia artificial": "Artificial intelligence",
+	"Escribe una idea o frase por ejemplo: Instrucciones para el uso del aire acondicionado y te ayudaremos a redactarlo": "Write an idea or phrase, for example: Instructions for using the air conditioner, and we will help you write it."
 }

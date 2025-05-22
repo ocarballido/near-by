@@ -415,5 +415,17 @@
 	"No se pudieron obtener las localizaciones a eliminar": "No se pudieron obtener las localizaciones a eliminar",
 	"No se pudieron eliminar las localizaciones": "No se pudieron eliminar las localizaciones",
 	"Todas las localizaciones han sido eliminadas": "Todas las localizaciones han sido eliminadas",
-	"Error inesperado al eliminar las localizaciones": "Error inesperado al eliminar las localizaciones"
+	"Error inesperado al eliminar las localizaciones": "Error inesperado al eliminar las localizaciones",
+	"Generar con IA": "Generar con AI",
+	"Generando": "Generando...",
+	"Describe lo que quieres que la IA escriba": "Describe lo que quieres que la IA escriba",
+	"Redacta las normas de uso del alojamiento": "Ej: Redacta las normas de uso del alojamiento",
+	"Usos restantes de la AI por hor": "Usos restantes de la AI",
+	"Has alcanzado el límite diario de IA": "Has alcanzado el límite diario de IA.",
+	"Puedes usar nuestra inteligencia artificial para generar contenido automáticamente": "Puedes usar nuestra inteligencia artificial para generar contenido automáticamente",
+	"Instrucciones para el uso del aire acondicionado y te ayudaremos a redactarlo": "Escribe una idea o frase, por ejemplo: Instrucciones para el uso del aire acondicionado y te ayudaremos a redactarlo.",
+	"Añade el contenido que desees": "Añade el contenido que desees, O...",
+	"Utiliza nuestra Inteligenta Artificial para generar contenidos": "Utiliza nuestra Inteligenta Artificial para generar contenidos:",
+	"Inteligencia artificial": "Inteligencia artificial",
+	"Escribe una idea o frase por ejemplo: Instrucciones para el uso del aire acondicionado y te ayudaremos a redactarlo": "Escribe una idea o frase por ejemplo: Instrucciones para el uso del aire acondicionado y te ayudaremos a redactarlo."
 }

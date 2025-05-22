@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 
 import headerImage from '../../../public/static/img/header-trimed-2x.webp';
+import aiImage from '../../../public/static/img/ai-01.webp';
 import multyProperty from '../../../public/static/img/multy-property-2x.webp';
 import categories from '../../../public/static/img/categories-2x.webp';
 import uiEdit from '../../../public/static/img/ui-edit-2x.webp';
@@ -382,6 +383,56 @@ export default function Home() {
 							</span>
 						</div>
 					</div>
+				</div>
+			</section>
+			<section
+				aria-labelledby="artificial-inteligence"
+				className="flex flex-col md:flex-row justify-end items-center gap-8 rounded-lg mt-2 px-4 pt-0 pb-6 max-w-[1400px] ml-auto mr-auto relative"
+			>
+				{/* <div className="absolute inset-0 overflow-hidden">
+					<Image
+						alt={t('Enlace público')}
+						src={aiImage}
+						sizes="100vw"
+						style={{
+							width: '120%',
+							height: 'auto',
+						}}
+					/>
+				</div> */}
+				<Image
+					alt={t('Enlace público')}
+					src={aiImage}
+					sizes="100vw"
+					style={{
+						width: '120%',
+						height: 'auto',
+					}}
+				/>
+
+				<div className="flex flex-col gap-8 max-w-[400px] md:max-w-md items-center text-center relative w-full mr-0 lg:mr-[100px] py-8">
+					<h2
+						id="artificial-inteligence"
+						className="font-heading text-6xl font-bold max-w-[800px] ml-auto mr-auto px-"
+					>
+						{t('Inteligencia artificial')}
+					</h2>
+					<h3 className="font-heading font-medium text-xl md:text-2xl max-w-[800px] ml-auto mr-auto px-4 text-center">
+						{t(
+							'Puedes usar nuestra inteligencia artificial para generar contenido automáticamente'
+						)}
+					</h3>
+					<p className="opacity-60">
+						{t(
+							'Escribe una idea o frase por ejemplo: Instrucciones para el uso del aire acondicionado y te ayudaremos a redactarlo'
+						)}
+					</p>
+					<ButtonLink
+						label={t('Comienza gratis!')}
+						href="/app"
+						iconLeft={<IconAccountCircle />}
+						color="primary"
+					/>
 				</div>
 			</section>
 			<section
