@@ -188,6 +188,10 @@ export const SUBSCRIPTION_FEATURES = {
 				label: 'Visualización en mapa',
 				value: 'SI',
 			},
+			{
+				label: 'Inteligencia artificial',
+				value: 'NO',
+			},
 			// {
 			// 	label: 'Mostrar logo',
 			// 	value: 'NO',
@@ -227,6 +231,10 @@ export const SUBSCRIPTION_FEATURES = {
 			},
 			{
 				label: 'Visualización en mapa',
+				value: 'SI',
+			},
+			{
+				label: 'Inteligencia artificial',
 				value: 'SI',
 			},
 			// {

@@ -1,0 +1,48 @@
+.bubble {
+	border-radius: 50%;
+	opacity: 0.8;
+	animation-name: rise;
+	animation-timing-function: linear;
+	animation-fill-mode: forwards;
+	transform: translateX(-50%);
+	box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15); /* 🌟 nuevo efecto */
+}
+
+.bubbleImage {
+	opacity: 0.9;
+	animation-name: rise;
+	animation-timing-function: linear;
+	animation-fill-mode: forwards;
+	transform: translateX(-50%);
+	pointer-events: none;
+}
+
+@keyframes rise {
+	0% {
+		transform: translateX(-50%) translateY(0) scale(var(--sStart, 0.3))
+			rotate(var(--r, 0deg));
+		opacity: 0.9;
+	}
+	15% {
+		transform: translateX(calc(var(--x) * -0.4 - 50%)) translateY(-30px)
+			scale(calc(var(--sStart) + 0.3)) rotate(calc(var(--r) * 0.6));
+	}
+	35% {
+		transform: translateX(calc(var(--x) * 0.5 - 50%)) translateY(-80px)
+			scale(calc(var(--sStart) + 0.6)) rotate(calc(var(--r) * -0.7));
+	}
+	55% {
+		transform: translateX(calc(var(--x) * -0.6 - 50%)) translateY(-130px)
+			scale(calc(var(--sStart) + 0.9)) rotate(calc(var(--r) * 1.1));
+	}
+	75% {
+		transform: translateX(calc(var(--x) * 0.9 - 50%)) translateY(-170px)
+			scale(calc(var(--sStart) + 1.2)) rotate(calc(var(--r) * -1.3));
+	}
+	100% {
+		transform: translateX(calc(var(--x) - 50%)) translateY(-350px)
+			/* antes -200px o -220px */ scale(var(--s))
+			rotate(calc(var(--r) * 1.5));
+		opacity: 0;
+	}
+}

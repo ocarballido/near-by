@@ -1,0 +1,13 @@
+.ai_section {
+	background-image: url('/static/img/blured-bubbles.png');
+	background-position: right 40px;
+	background-repeat: no-repeat;
+	background-size: 40% auto;
+}
+
+@media (min-width: 768px) {
+	.ai_section {
+		background-position: top center;
+		background-size: 25% auto;
+	}
+}

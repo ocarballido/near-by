@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 
 import headerImage from '../../../public/static/img/header-trimed-2x.webp';
-import aiImage from '../../../public/static/img/ai-01.webp';
+import rooftopCentered from '../../../public/static/img/rooftop-centered.png';
 import multyProperty from '../../../public/static/img/multy-property-2x.webp';
 import categories from '../../../public/static/img/categories-2x.webp';
 import uiEdit from '../../../public/static/img/ui-edit-2x.webp';
@@ -13,6 +13,8 @@ import testimony01 from '../../../public/static/img/testimony-01.webp';
 import testimony02 from '../../../public/static/img/testimony-02.webp';
 import testimony03 from '../../../public/static/img/testimony-03.webp';
 import logo from '../../../public/static/img/logo-color-2x.webp';
+
+import styles from './page.module.css';
 
 import LandingAppBar from '@/components/organisms/landing-appbar';
 import IconAcute from '@/components/atoms/icon/acute';
@@ -23,6 +25,7 @@ import ButtonLink from '@/components/molecules/button-link';
 import PlaceTooltip from '@/components/atoms/place-tooltip';
 import IconAccountCircle from '@/components/atoms/icon/account-circle';
 import FilterCategories from '@/components/templates/filter-categories';
+import ChimneyEffect from '@/components/atoms/chimney';
 // import ModalVideo from '@/components/templates/modal-video';
 
 export default function Home() {
@@ -387,33 +390,31 @@ export default function Home() {
 			</section>
 			<section
 				aria-labelledby="artificial-inteligence"
-				className="flex flex-col md:flex-row justify-end items-center gap-8 rounded-lg mt-2 px-4 pt-0 pb-6 max-w-[1400px] ml-auto mr-auto relative"
+				className={`flex flex-col md:flex-row justify-start items-center rounded-lg mt-2 px-4 max-w-[1400px] ml-auto mr-auto relative overflow-hidden py-8 ${styles.ai_section}`}
 			>
-				{/* <div className="absolute inset-0 overflow-hidden">
+				<div className="w-full flex justify-center items-center relative max-w-[800px]">
+					<ChimneyEffect
+						mode="bubble"
+						size={120}
+						frequency={250}
+						duration={4000}
+						className="absolute top-[56%] left-[50%]"
+					/>
 					<Image
 						alt={t('Enlace público')}
-						src={aiImage}
+						src={rooftopCentered}
 						sizes="100vw"
 						style={{
-							width: '120%',
 							height: 'auto',
 						}}
 					/>
-				</div> */}
-				<Image
-					alt={t('Enlace público')}
-					src={aiImage}
-					sizes="100vw"
-					style={{
-						width: '120%',
-						height: 'auto',
-					}}
-				/>
+				</div>
 
-				<div className="flex flex-col gap-8 max-w-[400px] md:max-w-md items-center text-center relative w-full mr-0 lg:mr-[100px] py-8">
+				<div className="flex flex-col gap-8 max-w-[400px] md:max-w-sm items-center text-center relative w-full mr-0 p-8 bg-white rounded-lg">
+					<div className="absolute -inset-1 z-[-1] rounded-md bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] blur-xl opacity-30"></div>
 					<h2
 						id="artificial-inteligence"
-						className="font-heading text-6xl font-bold max-w-[800px] ml-auto mr-auto px-"
+						className="font-heading text-6xl font-bold max-w-[800px] ml-auto mr-auto bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] bg-clip-text text-transparent"
 					>
 						{t('Inteligencia artificial')}
 					</h2>
