@@ -370,4 +370,4 @@ export const RADIUS_OPTIONS = [
 	{ value: '5000', label: '5 km' },
 ];
 
-export const DAILY_AI_USAGE_LIMMIT = 100;
+export const DAILY_AI_USAGE_LIMMIT = 50;

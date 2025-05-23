@@ -4,7 +4,7 @@
 import { useTranslations } from 'next-intl';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useLoading } from '@/lib/context/LoadingContext';
 import { useAIUsage } from '@/lib/context/AIUsageContext';
 
@@ -113,6 +113,20 @@ const UpdateInfoForm = ({
 		setGenerating(false);
 	};
 
+	const remainingColor = useMemo(() => {
+		if (remaining) {
+			if (remaining >= 20) {
+				return 'text-primary-500 bg-primary-100';
+			} else if (remaining > 10 && remaining < 20) {
+				return 'text-warning-500 bg-warning-100';
+			}
+
+			return 'text-error-500 bg-error-100';
+		}
+
+		return;
+	}, [remaining]);
+
 	return (
 		<>
 			{alert && (
@@ -182,14 +196,28 @@ const UpdateInfoForm = ({
 							onClick={generateAI}
 						/>
 
-						{remaining !== null && (
-							<p className="text-xs text-primary-500 font-medium py-1 px-3 w-full text-center uppercase">
-								{remaining > 0
-									? t('Usos restantes de la AI por hor') +
-									  `: ${remaining}`
-									: t('Has alcanzado el límite diario de IA')}
-							</p>
-						)}
+						{remaining !== null &&
+							(remaining === 0 ? (
+								<p className="text-xs text-error-500 font-medium py-1 px-3 w-full text-center uppercase">
+									{t('Has alcanzado el límite diario de IA')}
+								</p>
+							) : (
+								<p className="text-xs flex justify-center items-center text-gray-600 font-medium py-1 px-3 w-full text-center uppercase">
+									<span>
+										{t(
+											'Número de consultas restantes de la AI'
+										)}
+									</span>
+									<span
+										className={`font-bold w-6 h-6 inline-flex items-center justify-center rounded-full ml-1 ${remainingColor}`}
+									>{` ${remaining}`}</span>
+									{/* {remaining > 0
+									? t(
+											'Número de consultas restantes de la AI'
+									  ) + ` ${remaining}`
+									: t('Has alcanzado el límite diario de IA')} */}
+								</p>
+							))}
 					</div>
 				</div>
 

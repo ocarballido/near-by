@@ -414,7 +414,7 @@ export default function Home() {
 					<div className="absolute -inset-1 z-[-1] rounded-md bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] blur-xl opacity-30"></div>
 					<h2
 						id="artificial-inteligence"
-						className="font-heading text-6xl font-bold max-w-[800px] ml-auto mr-auto bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] bg-clip-text text-transparent"
+						className="font-heading text-2xl md:text-6xl font-bold max-w-[800px] ml-auto mr-auto bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] bg-clip-text text-transparent"
 					>
 						{t('Inteligencia artificial')}
 					</h2>

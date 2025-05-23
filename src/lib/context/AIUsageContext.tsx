@@ -1,16 +1,13 @@
 'use client';
 
 import {
-	useCallback,
 	createContext,
 	useContext,
 	useEffect,
 	useState,
+	useTransition,
 } from 'react';
-import { createSPASassClient } from '@/lib/supabase/client';
-import { useGlobal } from './GlobalContext';
-
-import { DAILY_AI_USAGE_LIMMIT } from '@/config/config-constants';
+import { getRemainingAIUsage } from '@/app/actions/ai-usage/get-remaining-ai-usage';
 
 type AIUsageContextType = {
 	remaining: number | null;
@@ -29,50 +26,34 @@ export const AIUsageProvider = ({
 }: {
 	children: React.ReactNode;
 }) => {
-	const { user, loading: userLoading } = useGlobal();
 	const [remaining, setRemaining] = useState<number | null>(null);
 	const [loading, setLoading] = useState(true);
+	const [isPending, startTransition] = useTransition();
 
-	const fetchUsage = useCallback(async () => {
-		if (!user) return;
-
+	const fetchUsage = async () => {
 		setLoading(true);
-		const supabase = await createSPASassClient();
-		const client = supabase.getSupabaseClient();
-
-		const today = new Date().toISOString().split('T')[0];
-
-		const { data, error } = await client
-			.from('ai_usage')
-			.select('count')
-			.eq('user_id', user.id)
-			.eq('date', today)
-			.single();
-
-		if (error || !data) {
-			setRemaining(DAILY_AI_USAGE_LIMMIT);
-		} else {
-			setRemaining(Math.max(0, DAILY_AI_USAGE_LIMMIT - data.count));
-		}
-
+		const result = await getRemainingAIUsage();
+		setRemaining(result.remaining);
 		setLoading(false);
-	}, [user]);
+	};
 
 	useEffect(() => {
-		if (!userLoading && user) {
+		startTransition(() => {
 			fetchUsage();
-		}
-	}, [userLoading, user, fetchUsage]);
+		});
+	}, []);
 
 	return (
 		<AIUsageContext.Provider
-			value={{ remaining, reloadUsage: fetchUsage, loading }}
+			value={{
+				remaining,
+				reloadUsage: fetchUsage,
+				loading: loading || isPending,
+			}}
 		>
 			{children}
 		</AIUsageContext.Provider>
 	);
 };
 
-export const useAIUsage = () => {
-	return useContext(AIUsageContext);
-};
+export const useAIUsage = () => useContext(AIUsageContext);
