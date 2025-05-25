@@ -10,6 +10,7 @@ import House from '@/components/molecules/card/house';
 import Modal from '@/components/organisms/modal';
 import IconDelete from '@/components/atoms/icon/delete';
 import Alert from '@/components/molecules/alert';
+import NewPropertyCard from '@/components/molecules/new-property-card';
 
 type Category = {
 	icon: string;
@@ -127,6 +128,7 @@ const PropertiesContent = ({
 					}}
 				/>
 			))}
+			<NewPropertyCard />
 		</>
 	);
 };

@@ -212,7 +212,7 @@ const AddPlaceForm = ({
 				onSubmit={handleSubmit(onSubmit)}
 				className="flex flex-col gap-4 w-full max-w-[360px]"
 			>
-				<h1 className="font-heading font-bold text-lg text-primary-500">
+				<h1 className="font-heading font-bold text-lg">
 					{t('Nuevo Sitio')}
 				</h1>
 

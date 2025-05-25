@@ -178,9 +178,12 @@ export default function Home() {
 				>
 					{t('Cómo funciona')}
 				</h2>
-				<div className="px-8 py-4 bg-primary-50 rounded-full w-fit border-2 border-primary-200 text-2xl text-primary-500">
+				<h2
+					id="how"
+					className="font-heading font-medium text-xl md:text-2xl max-w-[800px] ml-auto mr-auto px-4 text-center"
+				>
 					{t('en 3 sencillos pasos')}
-				</div>
+				</h2>
 				<div className="flex flex-col md:flex-row gap-4 items-center max-w-[1000px]">
 					<div className="flex flex-1 flex-col gap-4 p-4 items-center text-center">
 						<div className="flex justify-center items-center w-18 h-18 rounded-full bg-primary-100">

@@ -148,15 +148,14 @@ const MagicFinderForm = ({
 
 	return (
 		<div className="w-full max-w-[400px] flex flex-col gap-4">
-			<h1 className="font-heading font-bold w-full">
-				<span className="text-3xl text-primary-500">
+			<h1 className="font-heading w-full">
+				<span className="text-lg font-bold">
 					{t('Buscador mágico')}:
 				</span>
-				<br />
-				<span className="text-lg">
-					{t('Descubre lo mejor cerca de tu propiedad')}
-				</span>
 			</h1>
+			<p className="w-full font-medium -mb-2">
+				{t('Descubre lo mejor cerca de tu propiedad')}
+			</p>
 			<p className="w-full font-medium text-gray-500">
 				{t(
 					'Con un solo clic, añade automáticamente los lugares más valorados en la zona: restaurantes, farmacias, parques, museos y mucho más'
