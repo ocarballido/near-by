@@ -13,7 +13,7 @@ type PageProps = {
 
 export default async function Property({ params }: PageProps) {
 	const { slug } = await params;
-	const [propertyId, categoryId, subcategoryId] = slug;
+	const [propertyId, categoryId, subCategoryId] = slug;
 
 	const ssrClient = await createSSRClient();
 	const {
@@ -34,17 +34,39 @@ export default async function Property({ params }: PageProps) {
 		.single();
 	if (propErr || !property?.id) notFound();
 
+	const { data: propertyData, error: errorPropertyData } = await supabase
+		.from('property_data')
+		.select(
+			'id,name,description,image_url,type,name,latitude,longitude,featured,address'
+		)
+		.eq('property_id', propertyId)
+		.eq('sub_category_id', subCategoryId);
+
+	const { data: categoryType, error: errorCategoryType } = await supabase
+		.from('categories')
+		.select('type')
+		.eq('id', categoryId)
+		.single();
+
+	if (errorCategoryType) notFound();
+	if (errorPropertyData) notFound();
+
 	return (
 		<AppContentTemplate
 			sidebar="PROPERTY"
 			categoryId={categoryId}
-			subcategoryGroupId={subcategoryId}
+			subCategoryId={subCategoryId}
+			subcategoryGroupId={subCategoryId}
 			propertyId={propertyId}
 		>
 			<div className="p-4 font-roboto flex flex-col grow gap-4 bg-white rounded-lg overflow-hidden">
 				<PropertyNameTitle propertyName={property.name} />
 				<PropertyDataBySubCategory
 					propertyId={propertyId}
+					subCategoryId={subCategoryId}
+					categoryId={categoryId}
+					type={categoryType?.type}
+					propertyData={propertyData ?? []}
 					lat={property.latitude}
 					lng={property.longitude}
 				/>

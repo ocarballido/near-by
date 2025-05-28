@@ -1,7 +1,6 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSidebarData } from '@/lib/context/EditMenuContext';
 
@@ -22,7 +21,6 @@ import IconShoppingBag from '@/components/atoms/icon/shopping-bag';
 import CategoryAccordion from '@/components/molecules/category-accordion';
 import ButtonLink from '@/components/molecules/button-link';
 import GroupItem from '@/components/molecules/group-item';
-// import { LODGING_CATEGORY_ID } from '@/config/config-constants';
 
 const ICON_COMPONENTS = {
 	IconHealing,
@@ -45,57 +43,20 @@ type IconName = keyof typeof ICON_COMPONENTS;
 
 type PropertySidebarProps = {
 	propertyId?: string;
+	categoryId?: string;
+	subCategoryId?: string;
 };
 
-const PropertySidebar = ({ propertyId }: PropertySidebarProps) => {
+const PropertySidebar = ({
+	propertyId,
+	categoryId,
+	subCategoryId,
+}: PropertySidebarProps) => {
 	const t = useTranslations();
 
-	const {
-		sidebarData,
-		activeCategoryId,
-		activeSubCategoryType,
-		setActiveCategoryId,
-		activeSubCategoryId,
-		setActiveSubCategoryId,
-		setActiveSubCategoryType,
-		activeSubCategoryName,
-		setActiveSubCategoryName,
-	} = useSidebarData();
+	const { sidebarData, setActiveSubCategoryType } = useSidebarData();
 
 	const router = useRouter();
-
-	useEffect(() => {
-		if (sidebarData) {
-			setActiveCategoryId(
-				activeCategoryId ? activeCategoryId : sidebarData[0].id
-			);
-			setActiveSubCategoryId(
-				activeSubCategoryId
-					? activeSubCategoryId
-					: sidebarData[0].sub_categories[0].id
-			);
-			setActiveSubCategoryType(
-				activeSubCategoryType
-					? activeSubCategoryType
-					: sidebarData[0].sub_categories[0].type
-			);
-			setActiveSubCategoryName(
-				activeSubCategoryName
-					? activeSubCategoryName
-					: sidebarData[0].sub_categories[0].type
-			);
-		}
-	}, [
-		activeCategoryId,
-		activeSubCategoryId,
-		activeSubCategoryName,
-		activeSubCategoryType,
-		setActiveCategoryId,
-		setActiveSubCategoryId,
-		setActiveSubCategoryName,
-		setActiveSubCategoryType,
-		sidebarData,
-	]);
 
 	return (
 		<>
@@ -113,9 +74,14 @@ const PropertySidebar = ({ propertyId }: PropertySidebarProps) => {
 					return (
 						<CategoryAccordion
 							key={category.name}
-							open={category.id === activeCategoryId}
+							open={category.id === categoryId}
 							name={t(category.name)}
-							onClick={() => setActiveCategoryId(category.id)}
+							onClick={() => {
+								setActiveSubCategoryType(category.type);
+								router.push(
+									`/app/properties/${propertyId}/${category.id}/${category.sub_categories[0].id}`
+								);
+							}}
 							icon={<IconComponent />}
 						>
 							{category.sub_categories.map((subcategory) => {
@@ -124,24 +90,18 @@ const PropertySidebar = ({ propertyId }: PropertySidebarProps) => {
 										key={subcategory.id}
 										label={t(subcategory.name)}
 										active={
-											subcategory.id ===
-											activeSubCategoryId
+											subcategory.id === subCategoryId
 										}
 										editeable={
 											subcategory.type === 'info' &&
-											subcategory.id ===
-												activeSubCategoryId
+											subcategory.id === subCategoryId
 										}
 										onClick={() => {
-											setActiveSubCategoryId(
-												subcategory.id
-											);
 											setActiveSubCategoryType(
 												subcategory.type
 											);
-											setActiveCategoryId(category.id);
-											setActiveSubCategoryName(
-												subcategory.name
+											router.push(
+												`/app/properties/${propertyId}/${category.id}/${subcategory.id}`
 											);
 										}}
 										handleEdit={(e) => {

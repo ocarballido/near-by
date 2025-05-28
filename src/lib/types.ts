@@ -397,6 +397,7 @@ export type CategoryWithSubCategories = {
 	name: string;
 	icon: string | null;
 	order_index: number;
+	type: 'info' | 'location';
 	sub_categories: SubCategory[];
 };
 

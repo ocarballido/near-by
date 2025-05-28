@@ -14,10 +14,17 @@ import AppSidebar from './app-sidebar';
 
 type SidebarProps = {
 	propertyId?: string;
+	categoryId?: string;
+	subCategoryId?: string;
 	sidebar: 'APP' | 'PROPERTY';
 };
 
-const Sidebar = ({ sidebar = 'APP', propertyId }: SidebarProps) => {
+const Sidebar = ({
+	sidebar = 'APP',
+	propertyId,
+	categoryId,
+	subCategoryId,
+}: SidebarProps) => {
 	const t = useTranslations();
 
 	const { isOpen, closeSidebar } = useSidebar();
@@ -49,7 +56,11 @@ const Sidebar = ({ sidebar = 'APP', propertyId }: SidebarProps) => {
 				/>
 			</div>
 			{sidebar === 'PROPERTY' ? (
-				<PropertySidebar propertyId={propertyId} />
+				<PropertySidebar
+					propertyId={propertyId}
+					categoryId={categoryId}
+					subCategoryId={subCategoryId}
+				/>
 			) : (
 				<AppSidebar />
 			)}

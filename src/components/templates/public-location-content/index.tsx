@@ -14,7 +14,6 @@ const PublicLocationContent = ({
 	locations: PropertyLocation[];
 }) => {
 	const [activeView, setActiveView] = useState('list');
-	console.log(locations);
 
 	return (
 		<>

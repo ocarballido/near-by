@@ -6,6 +6,11 @@ import { useTranslations } from 'use-intl';
 
 import { deleteProperty } from '@/app/actions/properties/delete-property';
 
+import {
+	FIRST_CATEGORY_ID,
+	FIRST_CATEGORY_SUBCATEGORY_ID,
+} from '@/config/config-constants';
+
 import House from '@/components/molecules/card/house';
 import Modal from '@/components/organisms/modal';
 import IconDelete from '@/components/atoms/icon/delete';
@@ -112,7 +117,7 @@ const PropertiesContent = ({ properties }: PropertiesContentProps) => {
 					key={property?.id}
 					name={property?.name}
 					image={property?.image_url || null}
-					href={`/app/properties/${property?.id}`}
+					href={`/app/properties/${property?.id}/${FIRST_CATEGORY_ID}/${FIRST_CATEGORY_SUBCATEGORY_ID}`}
 					address={property?.address}
 					handleDelete={() => {
 						setIsOpen(true);

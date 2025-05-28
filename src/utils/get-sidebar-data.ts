@@ -7,6 +7,7 @@ import { CategoryWithSubCategories } from '@/lib/types';
 export type SubCategory = {
 	id: string;
 	name: string;
+	type: 'info' | 'location';
 };
 
 export async function getSidebarData(): Promise<CategoryWithSubCategories[]> {
@@ -19,6 +20,7 @@ export async function getSidebarData(): Promise<CategoryWithSubCategories[]> {
 			id,
 			name,
 			icon,
+			type,
 			order_index,
 			sub_categories (
 				id,

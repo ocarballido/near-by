@@ -41,7 +41,6 @@ interface LocationsProps {
 	subCategoryId: string;
 	lat?: number;
 	lng?: number;
-	setLocations: (items: Location[]) => void;
 }
 
 type DeleteTarget = 'LOCATION' | 'ALL_LOCATIONS' | null;
@@ -53,7 +52,6 @@ export function LocationsContent({
 	subCategoryId,
 	lat,
 	lng,
-	setLocations,
 }: LocationsProps) {
 	const t = useTranslations();
 
@@ -73,11 +71,6 @@ export function LocationsContent({
 		if (deleteTarget === 'LOCATION' && locationId) {
 			try {
 				await deleteLocation(locationId);
-				const updatedLocations = locations.filter(
-					(loc) => loc.id !== locationId
-				);
-				setLocations(updatedLocations);
-
 				setAlert({
 					type: 'success',
 					message: 'Sitio eliminado correctamente',
@@ -111,7 +104,6 @@ export function LocationsContent({
 					return;
 				}
 
-				setLocations([]);
 				setAlert({
 					type: 'success',
 					message:
@@ -142,12 +134,6 @@ export function LocationsContent({
 		const result = await toggleFeatured(locationId, newValue);
 
 		if (result.success) {
-			// Optimistic update
-			const updated = locations.map((loc) =>
-				loc.id === locationId ? { ...loc, featured: newValue } : loc
-			);
-			setLocations(updated);
-
 			setAlert({
 				type: 'success',
 				message: newValue

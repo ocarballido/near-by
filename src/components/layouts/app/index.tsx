@@ -21,10 +21,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 		const pathSplitted = pathWithoutLocale.split('/');
 		const pathLength = pathSplitted.length;
 
-		if (isPathProperties && pathLength > 2) {
+		if (isPathProperties && pathLength === 5) {
 			return {
 				showPublicLink: true,
-				url: `/public/${pathSplitted[2]}/`,
+				url: `/public/${pathSplitted[2]}/welcome/highlights`,
 			};
 		}
 

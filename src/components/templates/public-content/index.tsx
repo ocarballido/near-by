@@ -4,19 +4,6 @@ import PublicSidebar from '@/components/organisms/sidebar/public-sidebar';
 import Content from '@/components/organisms/content';
 import PublicHeader from '../public-header';
 
-type Category = {
-	id: string;
-	name: string;
-	icon: string;
-	firstEntryId: string;
-};
-
-type Subcategory = {
-	id: string;
-	label: string;
-	href: string;
-};
-
 type PublicContentTemplateProps = {
 	address: string;
 	name: string;
@@ -26,10 +13,8 @@ type PublicContentTemplateProps = {
 	children: React.ReactNode;
 	sidebar?: 'APP' | 'PROPERTY';
 	categoryId?: string;
-	categories?: Category[];
-	subCategories?: Subcategory[];
-	subcategoryGroupId?: string;
-	propertySlug?: string;
+	subCategoryId?: string;
+	propertyId?: string;
 };
 
 const PublicContentTemplate = ({
@@ -40,10 +25,8 @@ const PublicContentTemplate = ({
 	image,
 	children,
 	categoryId,
-	categories,
-	subCategories,
-	subcategoryGroupId,
-	propertySlug,
+	subCategoryId,
+	propertyId,
 }: PublicContentTemplateProps) => {
 	return (
 		<SidebarProvider>
@@ -60,10 +43,8 @@ const PublicContentTemplate = ({
 				>
 					<PublicSidebar
 						categoryId={categoryId}
-						categories={categories}
-						subCategories={subCategories}
-						subcategoryGroupId={subcategoryGroupId}
-						propertySlug={propertySlug}
+						subCategoryId={subCategoryId}
+						propertyId={propertyId}
 					/>
 					<Content>{children}</Content>
 				</div>

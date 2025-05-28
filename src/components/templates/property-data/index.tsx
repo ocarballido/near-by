@@ -1,8 +1,6 @@
 'use client';
 
-import { useSidebarData } from '@/lib/context/EditMenuContext';
 import { useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import addProperty from '../../../../public/static/img/add-property.webp';
@@ -28,61 +26,29 @@ type PropertyDataItem = {
 
 export function PropertyDataBySubCategory({
 	propertyId,
+	categoryId,
+	subCategoryId,
+	propertyData,
+	type,
 	lat,
 	lng,
 }: {
 	propertyId: string;
+	categoryId: string;
+	subCategoryId: string;
+	type: string;
+	propertyData: PropertyDataItem[];
 	lat: number;
 	lng: number;
 }) {
 	const t = useTranslations();
 
-	const { activeSubCategoryId, activeCategoryId, activeSubCategoryType } =
-		useSidebarData();
-	const [data, setData] = useState<PropertyDataItem[]>([]);
-	const [loading, setLoading] = useState(false);
-
 	const router = useRouter();
 
-	useEffect(() => {
-		if (!activeSubCategoryId) return;
-
-		const fetchData = async () => {
-			setLoading(true);
-
-			const res = await fetch('/api/property-data', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({
-					propertyId,
-					subCategoryId: activeSubCategoryId,
-				}),
-			});
-
-			const { data } = await res.json();
-			setData(data);
-			setLoading(false);
-		};
-
-		fetchData();
-	}, [activeSubCategoryId, propertyId]);
-
-	if (loading || !activeSubCategoryId)
+	if (propertyData.length === 0)
 		return (
 			<>
-				{[1, 2, 3].map((item) => (
-					<div
-						key={item}
-						className="w-full py-12 px-2 rounded-md bg-gray-200 animate-pulse"
-					></div>
-				))}
-			</>
-		);
-
-	if (data.length === 0)
-		return (
-			<>
-				{activeSubCategoryType === 'info' ? (
+				{type === 'info' ? (
 					<div className="block ml-auto mr-auto">
 						<Image
 							alt="Add location"
@@ -94,7 +60,7 @@ export function PropertyDataBySubCategory({
 							className="mt-12"
 							onClick={() =>
 								router.push(
-									`/app/info/${propertyId}/${activeCategoryId}/${activeSubCategoryId}`
+									`/app/info/${propertyId}/${categoryId}/${subCategoryId}`
 								)
 							}
 						/>
@@ -111,13 +77,13 @@ export function PropertyDataBySubCategory({
 							className="mt-12"
 							onClick={() =>
 								router.push(
-									`/app/location/${propertyId}/${activeCategoryId}/${activeSubCategoryId}`
+									`/app/location/${propertyId}/${categoryId}/${subCategoryId}`
 								)
 							}
 						/>
 						<ButtonLinkMagic
 							label={t('Buscador mágico')}
-							url={`/app/magic-finder/${propertyId}/${lat}/${lng}/${activeCategoryId}/${activeSubCategoryId}`}
+							url={`/app/magic-finder/${propertyId}/${lat}/${lng}/${categoryId}/${subCategoryId}`}
 							className="w-fit ml-auto mr-auto mt-2"
 						/>
 					</div>
@@ -127,17 +93,16 @@ export function PropertyDataBySubCategory({
 
 	return (
 		<>
-			{activeSubCategoryType === 'info' ? (
-				<PropertyInfoContent infos={data} />
+			{type === 'info' ? (
+				<PropertyInfoContent infos={propertyData} />
 			) : (
 				<LocationsContent
-					locations={data}
+					locations={propertyData}
 					propertyId={propertyId}
-					categoryId={activeCategoryId}
-					subCategoryId={activeSubCategoryId}
+					categoryId={categoryId}
+					subCategoryId={subCategoryId}
 					lat={lat}
 					lng={lng}
-					setLocations={setData}
 				/>
 			)}
 		</>

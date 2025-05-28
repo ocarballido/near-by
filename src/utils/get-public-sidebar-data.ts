@@ -14,6 +14,7 @@ export type PublicCategory = {
 	name: string;
 	icon: string | null;
 	order_index: number;
+	type: 'info' | 'location';
 	sub_categories: PublicSubCategory[];
 };
 

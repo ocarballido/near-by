@@ -14,6 +14,7 @@ type AppContentTemplateProps = {
 	children: React.ReactNode;
 	sidebar?: 'APP' | 'PROPERTY';
 	categoryId?: string;
+	subCategoryId?: string;
 	categories?: Category[];
 	subcategoryGroupId?: string;
 	propertySlug?: string;
@@ -23,8 +24,9 @@ type AppContentTemplateProps = {
 const AppContentTemplate = ({
 	children,
 	sidebar = 'APP',
-	propertySlug,
 	propertyId,
+	categoryId,
+	subCategoryId,
 }: AppContentTemplateProps) => {
 	return (
 		<SidebarProvider>
@@ -32,8 +34,19 @@ const AppContentTemplate = ({
 				<div
 					className={`flex flex-auto gap-4 md:gap-4 min-h-full relative w-full`}
 				>
-					<Sidebar sidebar={sidebar} propertyId={propertyId} />
-					<Content propertySlug={propertySlug}>{children}</Content>
+					<Sidebar
+						sidebar={sidebar}
+						propertyId={propertyId}
+						categoryId={categoryId}
+						subCategoryId={subCategoryId}
+					/>
+					<Content
+						propertyId={propertyId}
+						categoryId={categoryId}
+						subCategoryId={subCategoryId}
+					>
+						{children}
+					</Content>
 				</div>
 			</div>
 		</SidebarProvider>
