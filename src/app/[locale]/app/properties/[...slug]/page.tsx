@@ -40,7 +40,9 @@ export default async function Property({ params }: PageProps) {
 			'id,name,description,image_url,type,name,latitude,longitude,featured,address'
 		)
 		.eq('property_id', propertyId)
-		.eq('sub_category_id', subCategoryId);
+		.eq('sub_category_id', subCategoryId)
+		.order('featured', { ascending: false })
+		.order('name', { ascending: true });
 
 	const { data: categoryType, error: errorCategoryType } = await supabase
 		.from('categories')

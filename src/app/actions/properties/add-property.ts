@@ -5,6 +5,10 @@ import { revalidatePath } from 'next/cache';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 import { createSSRClient } from '@/lib/supabase/server';
 import { MAX_IMAGE_SIZE } from '@/config/config-constants';
+import {
+	FIRST_CATEGORY_ID,
+	FIRST_CATEGORY_SUBCATEGORY_ID,
+} from '@/config/config-constants';
 import { z } from 'zod';
 
 // Esquema de validación con Zod
@@ -185,7 +189,7 @@ export async function createProperty(formData: FormData): Promise<FormState> {
 
 		// 11. Redirigir a la página de edición de la propiedad
 		// const firstCat = categories?.[0];
-		const redirectTo = `/app/properties/${property.id}`;
+		const redirectTo = `/app/properties/${property.id}/${FIRST_CATEGORY_ID}/${FIRST_CATEGORY_SUBCATEGORY_ID}`;
 
 		// if (firstCat) {
 		// 	const catId = firstCat.id;

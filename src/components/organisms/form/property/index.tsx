@@ -131,6 +131,11 @@ const AddPropertyForm = () => {
 
 		closeLoading();
 
+		setAlert({
+			type: 'success',
+			message: 'Propiedad creada correctamente',
+		});
+
 		if (result.redirectTo) {
 			router.push(result.redirectTo);
 		}

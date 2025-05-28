@@ -53,6 +53,8 @@ export default async function Property({ params }: PageProps) {
 	if (categoryId !== 'welcome' && errorCategoryType) notFound();
 	if (categoryId === 'welcome' && errorHighlights) notFound();
 
+	console.log(highlightsData);
+
 	return (
 		<EditPublicMenuProvider initialData={sidebarData}>
 			<PublicContentTemplate
@@ -83,7 +85,7 @@ export default async function Property({ params }: PageProps) {
 									'Nuestro espacio está preparado para que descanses, te relajes y vivas una experiencia cómoda y sin complicaciones'
 								)}
 							</h1>
-							{highlightsData && (
+							{highlightsData && highlightsData.length > 0 && (
 								<>
 									<div className="flex items-center mt-6 py-2 px-3 bg-warning-100 rounded-full w-fit">
 										<IconStarShine color="warning" />
