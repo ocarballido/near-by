@@ -196,7 +196,7 @@
 	"Oficinas de correos": "Post Offices",
 	"Tintorerías": "Dry Cleaners",
 	"Lavanderías": "Laundries",
-	"Peluqquerías y Barberías": "Hair Salons and Barbers",
+	"Peluquerías y Barberías": "Hair Salons and Barbers",
 	"Centros de impresión y copiado": "Print and Copy Centers",
 	"Paradas de autobús": "Bus Stops",
 	"Estaciones de metro": "Subway Stations",
@@ -424,5 +424,13 @@
 	"Utiliza nuestra Inteligenta Artificial para generar contenidos": "Use our Artificial Intelligence to generate content:",
 	"Inteligencia artificial": "Artificial intelligence",
 	"Escribe una idea o frase por ejemplo: Instrucciones para el uso del aire acondicionado y te ayudaremos a redactarlo": "Write an idea or phrase, for example: Instructions for using the air conditioner, and we will help you write it.",
-	"Número de consultas restantes de la AI": "Number of remaining AI queries:"
+	"Número de consultas restantes de la AI": "Number of remaining AI queries:",
+	"Marcar como destacado": "Mark as featured",
+	"Destacado eliminado correctamente": "Featured removed successfully",
+	"Error al actualizar destacado": "Error updating highlighted",
+	"Marcado como destacado correctamente": "Marked as highlighted correctly",
+	"¡Te damos la bienvenida con los brazos abiertos!": "We’re thrilled to welcome you!",
+	"Nos alegra que hayas elegido nuestro alojamiento para tu estancia": "Thank you for choosing our place for your stay. We want you to feel not just at home — but like this space was made just for you. Take your time to explore the neighborhood, soak in the local vibes, and let the city guide your steps. There’s plenty to see, taste, and enjoy, and we’re sure each day will bring something special your way.",
+	"Nuestro espacio está preparado para que descanses, te relajes y vivas una experiencia cómoda y sin complicaciones": "Our space is set up for comfort, rest, and a worry-free experience. And if one day you choose to return, we’ll be more than happy to host you again. This isn’t just another stay — it’s the start of a story we hope you’ll look back on with a smile. Welcome to your new favorite place!",
+	"Destacados": "Highlights"
 }

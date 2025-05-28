@@ -5,8 +5,6 @@ import { useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 import { usePathname } from 'next/navigation';
 
-import { LODGING_CATEGORY_ID } from '@/config/config-constants';
-
 import Spinner from '@/components/atoms/spinner';
 import AppBar from '@/components/organisms/appbar';
 
@@ -23,10 +21,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 		const pathSplitted = pathWithoutLocale.split('/');
 		const pathLength = pathSplitted.length;
 
-		if (isPathProperties && pathLength > 3) {
+		if (isPathProperties && pathLength === 5) {
 			return {
 				showPublicLink: true,
-				url: `/public/${pathSplitted[2]}/${LODGING_CATEGORY_ID}`,
+				url: `/public/${pathSplitted[2]}/welcome/highlights`,
 			};
 		}
 

@@ -2,11 +2,11 @@
 
 import { useTranslations } from 'next-intl';
 import { useSidebar } from '@/lib/context/SidebarContext';
+import { usePublicSidebarData } from '@/lib/context/EditPublicMenuContext';
 import { useRouter } from 'next/navigation';
 
 import clsx from 'clsx';
 
-// import IconHome from '@/components/atoms/icon/home';
 import IconApartment from '@/components/atoms/icon/apartment';
 import IconHealing from '@/components/atoms/icon/healing';
 import IconForkSpoon from '@/components/atoms/icon/fork-spoon';
@@ -25,7 +25,7 @@ import IconClose from '@/components/atoms/icon/close';
 import CategoryAccordion from '@/components/molecules/category-accordion';
 import Button from '@/components/molecules/button';
 import GroupItem from '@/components/molecules/group-item';
-import { LODGING_CATEGORY_ID } from '@/config/config-constants';
+import IconHome from '@/components/atoms/icon/home';
 
 const ICON_COMPONENTS = {
 	IconHealing,
@@ -46,35 +46,20 @@ const ICON_COMPONENTS = {
 
 type IconName = keyof typeof ICON_COMPONENTS;
 
-type Subcategory = {
-	id: string;
-	label: string;
-	href: string;
-};
-
-type Category = {
-	id: string;
-	name: string;
-	icon: string;
-	firstEntryId: string;
-};
-
 type PublicSidebarProps = {
-	propertySlug?: string;
+	propertyId?: string;
 	categoryId?: string;
-	categories?: Category[];
-	subCategories?: Subcategory[];
-	subcategoryGroupId?: string;
+	subCategoryId?: string;
 };
 
 const PublicSidebar = ({
+	propertyId,
 	categoryId,
-	categories = [],
-	subCategories = [],
-	subcategoryGroupId,
-	propertySlug,
+	subCategoryId,
 }: PublicSidebarProps) => {
 	const t = useTranslations();
+
+	const router = useRouter();
 
 	const { isOpen, closeSidebar } = useSidebar();
 
@@ -83,7 +68,7 @@ const PublicSidebar = ({
 		{ '-translate-x-full': !isOpen }
 	);
 
-	const router = useRouter();
+	const { sidebarData, setActiveSubCategoryType } = usePublicSidebarData();
 
 	return (
 		<>
@@ -99,48 +84,68 @@ const PublicSidebar = ({
 						className="shadow-sm grow"
 					/>
 				</div>
-				{categories.map((category) => {
-					const iconName = category.icon as IconName;
-					const IconComponent = ICON_COMPONENTS[iconName];
 
-					return (
-						<CategoryAccordion
-							key={category.name}
-							open={category.id === categoryId}
-							name={t(category.name)}
-							href={
-								category.id !== LODGING_CATEGORY_ID
-									? `/public/${propertySlug}/${category.id}/${category.firstEntryId}`
-									: `/public/${propertySlug}/${category.id}`
-							}
-							icon={<IconComponent />}
-						>
-							{subCategories.map((subcategory, idx) => {
-								let isActive = false;
+				<CategoryAccordion
+					open={categoryId === 'welcome'}
+					name="Welcome"
+					onClick={() => {
+						setActiveSubCategoryType('info');
+						router.push(`/public/${propertyId}/welcome/highlights`);
+					}}
+					icon={<IconHome />}
+				>
+					<GroupItem
+						label="Highlights"
+						active={subCategoryId === 'highlights'}
+						onClick={() => {
+							setActiveSubCategoryType('highlights');
+							router.push(
+								`/public/${propertyId}/welcome/highlights`
+							);
+						}}
+					/>
+				</CategoryAccordion>
 
-								if (subcategoryGroupId !== undefined) {
-									isActive =
-										subcategory.id === subcategoryGroupId;
-								} else {
-									isActive = idx === 0 ? true : false;
-								}
+				{sidebarData &&
+					sidebarData.map((category) => {
+						const iconName = category.icon as IconName;
+						const IconComponent = ICON_COMPONENTS[iconName];
 
-								return (
-									<GroupItem
-										key={subcategory.id}
-										label={t(subcategory.label)}
-										active={isActive}
-										onClick={() =>
-											router.push(
-												`/public/${propertySlug}/${category.id}/${subcategory.id}`
-											)
-										}
-									/>
-								);
-							})}
-						</CategoryAccordion>
-					);
-				})}
+						return (
+							<CategoryAccordion
+								key={category.name}
+								open={categoryId === category.id}
+								name={t(category.name)}
+								onClick={() => {
+									setActiveSubCategoryType(category.type);
+									router.push(
+										`/public/${propertyId}/${category.id}/${category.sub_categories[0].id}`
+									);
+								}}
+								icon={<IconComponent />}
+							>
+								{category.sub_categories.map((subcategory) => {
+									return (
+										<GroupItem
+											key={subcategory.id}
+											label={t(subcategory.name)}
+											active={
+												subcategory.id === subCategoryId
+											}
+											onClick={() => {
+												setActiveSubCategoryType(
+													subcategory.type
+												);
+												router.push(
+													`/public/${propertyId}/${category.id}/${subcategory.id}`
+												);
+											}}
+										/>
+									);
+								})}
+							</CategoryAccordion>
+						);
+					})}
 			</aside>
 		</>
 	);

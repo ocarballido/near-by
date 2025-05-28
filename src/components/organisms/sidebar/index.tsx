@@ -12,35 +12,18 @@ import IconApartment from '@/components/atoms/icon/apartment';
 import PropertySidebar from './property-sidebar';
 import AppSidebar from './app-sidebar';
 
-type Category = {
-	id: string;
-	name: string;
-	icon: string;
-	firstEntryId: string;
-};
-
-type Subcategory = {
-	id: string;
-	label: string;
-	href: string;
-};
-
 type SidebarProps = {
-	sidebar: 'APP' | 'PROPERTY';
-	propertySlug?: string;
+	propertyId?: string;
 	categoryId?: string;
-	categories?: Category[];
-	subCategories?: Subcategory[];
-	subcategoryGroupId?: string;
+	subCategoryId?: string;
+	sidebar: 'APP' | 'PROPERTY';
 };
 
 const Sidebar = ({
 	sidebar = 'APP',
+	propertyId,
 	categoryId,
-	categories,
-	subCategories,
-	subcategoryGroupId,
-	propertySlug,
+	subCategoryId,
 }: SidebarProps) => {
 	const t = useTranslations();
 
@@ -74,11 +57,9 @@ const Sidebar = ({
 			</div>
 			{sidebar === 'PROPERTY' ? (
 				<PropertySidebar
+					propertyId={propertyId}
 					categoryId={categoryId}
-					categories={categories}
-					subCategories={subCategories}
-					subcategoryGroupId={subcategoryGroupId}
-					propertySlug={propertySlug}
+					subCategoryId={subCategoryId}
 				/>
 			) : (
 				<AppSidebar />

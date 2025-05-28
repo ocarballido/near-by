@@ -10,33 +10,37 @@ type PageProps = {
 
 export default async function InfoPage({ params }: PageProps) {
 	const { infoSlug } = await params;
-	const [propertySlug, categoryId, subCategoryId] = infoSlug;
+	const [propertyId, categoryId, subCategoryId] = infoSlug;
 
 	const supabase = await createServerAdminClient();
-	const { data: info, error } = await supabase
-		.from('property_info')
-		.select('title,content')
+	const { data: info } = await supabase
+		.from('property_data')
+		.select('name,description')
+		.eq('sub_category_id', subCategoryId)
+		.single();
+
+	const { data: subcategoryName } = await supabase
+		.from('sub_categories')
+		.select('name')
 		.eq('id', subCategoryId)
 		.single();
 
-	if (error) notFound();
-
-	if (!propertySlug || !categoryId || !subCategoryId || !infoSlug) {
+	if (!propertyId || !categoryId || !subCategoryId || !infoSlug) {
 		return notFound();
 	}
 
-	if (infoSlug.length > 3) {
+	if (infoSlug.length > 4) {
 		return notFound();
 	}
 
 	return (
 		<>
 			<UpdateInfoForm
-				propertySlug={propertySlug}
+				propertyId={propertyId}
 				categoryId={categoryId}
 				subCategoryId={subCategoryId}
-				title={info?.title}
-				initialContent={info?.content ?? ''}
+				name={subcategoryName?.name ?? null}
+				initialContent={info?.description ?? ''}
 			/>
 		</>
 	);

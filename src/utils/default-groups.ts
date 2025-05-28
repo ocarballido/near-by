@@ -62,7 +62,7 @@ export const getDefaultGroups = (): Record<string, string[]> => {
 			'Oficinas de correos',
 			'Tintorerías',
 			'Lavanderías',
-			'Peluqquerías y Barberías',
+			'Peluquerías y Barberías',
 			'Centros de impresión y copiado',
 		],
 		'5922cd0e-8c11-448f-83c0-e785f83c31f5': [

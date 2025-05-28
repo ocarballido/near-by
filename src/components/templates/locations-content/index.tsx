@@ -6,13 +6,9 @@ import { useTranslations } from 'next-intl';
 
 import { deleteLocation } from '@/app/actions/locations/delete-location';
 import { deleteAllLocations } from '@/app/actions/locations/delete-all-locations';
-
-import Image from 'next/image';
-
-import addLocation from '../../../../public/static/img/add-location.webp';
+import { toggleFeatured } from '@/app/actions/properties/toggle-featured';
 
 import Place from '@/components/molecules/card/place';
-import PropertiesContentEmpty from '../properties-content-empty';
 import ButtonLink from '@/components/molecules/button-link';
 import Modal from '@/components/organisms/modal';
 import Alert from '@/components/molecules/alert';
@@ -23,10 +19,14 @@ import ButtonLinkMagic from '@/components/molecules/button-link-magic';
 
 export interface Location {
 	id: string;
-	group_id: string;
 	name: string;
 	address: string;
+	description?: string;
 	image_url: string;
+	latitude?: number;
+	longitude?: number;
+	type?: 'info' | 'location';
+	featured?: boolean;
 }
 
 type AlertState = {
@@ -37,9 +37,8 @@ type AlertState = {
 interface LocationsProps {
 	locations: Location[];
 	propertyId: string;
-	categoryId: string;
+	categoryId: string | null;
 	subCategoryId: string;
-	propertySlug: string;
 	lat?: number;
 	lng?: number;
 }
@@ -51,7 +50,6 @@ export function LocationsContent({
 	propertyId,
 	categoryId,
 	subCategoryId,
-	propertySlug,
 	lat,
 	lng,
 }: LocationsProps) {
@@ -92,7 +90,7 @@ export function LocationsContent({
 			try {
 				const fd = new FormData();
 				fd.append('property_id', propertyId);
-				fd.append('group_id', subCategoryId);
+				fd.append('sub_category_id', subCategoryId);
 
 				const result = await deleteAllLocations(fd);
 
@@ -124,28 +122,33 @@ export function LocationsContent({
 		}
 	};
 
-	if (locations.length === 0) {
-		return (
-			<>
-				<div className="block ml-auto mr-auto">
-					<Image
-						alt="Add location"
-						src={addLocation}
-						height={219}
-						width={281}
-					/>
-				</div>
-				<PropertiesContentEmpty
-					url={`/app/location/${propertySlug}/${propertyId}/${categoryId}/${subCategoryId}`}
-				/>
-				<ButtonLinkMagic
-					label={t('Buscador mágico')}
-					url={`/app/magic-finder/${propertySlug}/${propertyId}/${lat}/${lng}/${categoryId}/${subCategoryId}`}
-					className="w-fit ml-auto mr-auto"
-				/>
-			</>
-		);
-	}
+	const handleFeatured = async (
+		locationId: string,
+		currentFeatured: boolean
+	) => {
+		if (loading) return;
+		openLoading();
+		setAlert(null);
+
+		const newValue = !currentFeatured;
+		const result = await toggleFeatured(locationId, newValue);
+
+		if (result.success) {
+			setAlert({
+				type: 'success',
+				message: newValue
+					? 'Marcado como destacado correctamente'
+					: 'Destacado eliminado correctamente',
+			});
+		} else {
+			setAlert({
+				type: 'error',
+				message: 'Error al actualizar destacado',
+			});
+		}
+
+		closeLoading();
+	};
 
 	return (
 		<>
@@ -190,13 +193,13 @@ export function LocationsContent({
 			<div className="flex flex-col lg:flex-row gap-2">
 				<ButtonLinkMagic
 					label={t('Buscador mágico')}
-					url={`/app/magic-finder/${propertySlug}/${propertyId}/${lat}/${lng}/${categoryId}/${subCategoryId}`}
+					url={`/app/magic-finder/${propertyId}/${lat}/${lng}/${categoryId}/${subCategoryId}`}
 					className="w-full lg:w-full ml-auto mr-auto"
 				/>
 				<ButtonLink
 					label={t('Nuevo sitio')}
 					color="primary"
-					href={`/app/location/${propertySlug}/${propertyId}/${categoryId}/${subCategoryId}`}
+					href={`/app/location/${propertyId}/${categoryId}/${subCategoryId}`}
 					iconLeft={<IconAdd />}
 					className="w-full"
 				/>
@@ -207,11 +210,15 @@ export function LocationsContent({
 					name={location.name}
 					address={location.address}
 					image={location.image_url}
+					featured={location.featured}
 					handleDelete={() => {
 						setIsOpen(true);
 						setDeleteTarget('LOCATION');
 						setSelectedLocation(location?.id);
 					}}
+					handleFeatured={() =>
+						handleFeatured(location.id, location.featured ?? false)
+					}
 				/>
 			))}
 			{locations.length > 1 && (

@@ -1,18 +1,10 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-
-type Location = {
-	latitude: number;
-	longitude: number;
-	name: string;
-	address: string;
-	image_url: string;
-	group_id: string;
-};
+import { PropertyLocation } from '@/lib/types';
 
 type MapProps = {
-	locations: Location[];
+	locations: PropertyLocation[];
 };
 
 const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
@@ -34,8 +26,8 @@ const Map: React.FC<MapProps> = ({ locations }) => {
 
 			const map = new window.google.maps.Map(mapRef.current, {
 				center: {
-					lat: locations[0].latitude,
-					lng: locations[0].longitude,
+					lat: locations[0].latitude!,
+					lng: locations[0].longitude!,
 				},
 				zoom: 12,
 				mapId: MAP_ID!,
@@ -44,7 +36,7 @@ const Map: React.FC<MapProps> = ({ locations }) => {
 			locations.forEach(({ latitude, longitude, name }) => {
 				new window.google.maps.marker.AdvancedMarkerElement({
 					map,
-					position: new google.maps.LatLng(latitude, longitude),
+					position: new google.maps.LatLng(latitude!, longitude),
 					title: name,
 				});
 			});

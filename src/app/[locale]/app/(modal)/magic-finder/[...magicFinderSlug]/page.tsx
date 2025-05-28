@@ -8,11 +8,9 @@ type PageProps = {
 
 export default async function LocationPage({ params }: PageProps) {
 	const { magicFinderSlug } = await params;
-	const [propertySlug, propertyId, lat, lng, categoryId, subCategoryId] =
-		magicFinderSlug;
+	const [propertyId, lat, lng, categoryId, subCategoryId] = magicFinderSlug;
 
 	if (
-		!propertySlug ||
 		!propertyId ||
 		!lat ||
 		!lng ||
@@ -31,7 +29,6 @@ export default async function LocationPage({ params }: PageProps) {
 		<>
 			<MagicFinderForm
 				propertyId={propertyId}
-				propertySlug={propertySlug}
 				categoryId={categoryId}
 				subCategoryId={subCategoryId}
 				lat={lat}

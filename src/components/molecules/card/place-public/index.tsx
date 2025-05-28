@@ -5,12 +5,14 @@ import { GOOGLE_MAPS_DIRECTION_URL } from '@/config/config-constants';
 import Image from 'next/image';
 import IconDirections from '@/components/atoms/icon/directions';
 import ButtonLink from '../../button-link';
+import IconStarShine from '@/components/atoms/icon/star-shine';
 
 type PlacePublicProps = {
 	address: string;
-	latitude: number;
-	longitude: number;
+	latitude?: number;
+	longitude?: number;
 	className?: string;
+	featured?: boolean;
 	image?: string;
 	name: string;
 };
@@ -20,6 +22,7 @@ const PlacePublic = ({
 	latitude,
 	longitude,
 	className,
+	featured,
 	name,
 	image = '/static/img/default-location-2x.webp',
 }: PlacePublicProps) => {
@@ -37,7 +40,7 @@ const PlacePublic = ({
 			<div className={`w-full flex gap-4 sm:items-center relative`}>
 				<div className="w-18 h-18 rounded-md overflow-hidden relative shrink-0">
 					<Image
-						alt={name}
+						alt={name ?? 'Place image'}
 						className="object-cover z-0 "
 						src={
 							image === null
@@ -55,6 +58,11 @@ const PlacePublic = ({
 						{address}
 					</p>
 				</div>
+				{featured && (
+					<div className="p-1.5 bg-warning-100 rounded-full w-fit h-fit">
+						<IconStarShine color="warning" />
+					</div>
+				)}
 				<ButtonLink
 					className="hidden gap-1 lg:flex shrink-0"
 					color="primary"

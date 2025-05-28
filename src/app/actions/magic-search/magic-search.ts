@@ -2,6 +2,7 @@
 
 import { z } from 'zod';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
+import { createSSRClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 
 type GooglePlaceResult = {
@@ -18,7 +19,8 @@ type GooglePlaceResult = {
 
 const DiscoverNearbySchema = z.object({
 	property_id: z.string().uuid(),
-	group_id: z.string().uuid(),
+	sub_category_id: z.string().uuid(),
+	category_id: z.string().uuid(),
 	lat: z.string(),
 	lng: z.string(),
 	type: z.string().min(1),
@@ -32,7 +34,7 @@ export type DiscoverNearbyState = {
 		lng?: string[];
 		type?: string[];
 		max?: string[];
-		group_id?: string[];
+		sub_category_id?: string[];
 		property_id?: string[];
 		server?: string[];
 		radius?: string[];
@@ -48,7 +50,8 @@ export async function discoverNearbyPlaces(
 	try {
 		const raw = {
 			property_id: formData.get('property_id'),
-			group_id: formData.get('group_id'),
+			sub_category_id: formData.get('sub_category_id'),
+			category_id: formData.get('category_id'),
 			lat: formData.get('lat'),
 			lng: formData.get('lng'),
 			type: formData.get('type'),
@@ -57,16 +60,23 @@ export async function discoverNearbyPlaces(
 		};
 
 		const parsed = DiscoverNearbySchema.safeParse(raw);
-		if (!parsed.success) {
-			const errors = parsed.error.flatten().fieldErrors;
-			return { errors };
-		}
+		if (!parsed.success)
+			return { errors: parsed.error.flatten().fieldErrors };
 
-		const { property_id, group_id, lat, lng, type, max, radius } =
-			parsed.data;
+		const {
+			property_id,
+			category_id,
+			sub_category_id,
+			lat,
+			lng,
+			type,
+			max,
+			radius,
+		} = parsed.data;
+
 		const maxResults = parseInt(max, 10);
-
 		const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+
 		if (!apiKey) {
 			return {
 				errors: {
@@ -77,88 +87,106 @@ export async function discoverNearbyPlaces(
 			};
 		}
 
-		const placesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&type=${type}&rankby=prominence&key=${apiKey}`;
+		const response = await fetch(
+			`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&type=${type}&rankby=prominence&key=${apiKey}`
+		);
 
-		const response = await fetch(placesUrl);
 		const data = await response.json();
 
 		if (!data.results || !Array.isArray(data.results)) {
 			return {
-				errors: {
-					server: ['Respuesta inválida de Google Places'],
-				},
+				errors: { server: ['Respuesta inválida de Google Places'] },
 			};
+		}
+
+		const ssrClient = await createSSRClient();
+		const {
+			data: { user },
+			error: authError,
+		} = await ssrClient.auth.getUser();
+
+		if (authError || !user) {
+			console.error('Usuario no autenticado:', authError);
+			return { errors: { server: ['Usuario no autenticado'] } };
 		}
 
 		const supabase = await createServerAdminClient();
 		const now = new Date().toISOString();
-		const nuevos: {
-			name: string;
-			address: string;
-			latitude: number;
-			longitude: number;
-			created_at: string;
-			updated_at: string;
-			property_id: string;
-			group_id: string;
-		}[] = [];
 
-		const results: GooglePlaceResult[] = data.results;
+		const insertables = [];
 
-		for (const place of results
-			.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))
-			.slice(0, maxResults)) {
+		const sortedResults: GooglePlaceResult[] = data.results
+			.sort(
+				(a: GooglePlaceResult, b: GooglePlaceResult) =>
+					(b.rating ?? 0) - (a.rating ?? 0)
+			)
+
+			.slice(0, maxResults);
+
+		for (const place of sortedResults) {
 			const latitude = place.geometry?.location?.lat;
 			const longitude = place.geometry?.location?.lng;
+			const name = place.name;
+			const address = place.vicinity;
 
-			if (!latitude || !longitude || !place.name || !place.vicinity)
-				continue;
+			if (!latitude || !longitude || !name || !address) continue;
 
-			const { data: existentes, error: checkError } = await supabase
-				.from('locations')
+			const { data: existing, error: checkError } = await supabase
+				.from('property_data')
 				.select('id')
+				.eq('property_id', property_id)
+				.eq('name', name)
 				.eq('latitude', latitude)
 				.eq('longitude', longitude)
-				.eq('property_id', property_id)
-				.limit(1);
+				.maybeSingle();
 
 			if (checkError) {
-				console.error(
-					'Error consultando existencia previa:',
-					checkError
-				);
+				console.error('Error verificando existencia:', checkError);
 				continue;
 			}
 
-			if (!existentes || existentes.length === 0) {
-				nuevos.push({
-					name: place.name,
-					address: place.vicinity,
+			if (existing) {
+				const { error: updateError } = await supabase
+					.from('property_data')
+					.update({ updated_at: now })
+					.eq('id', existing.id);
+
+				if (updateError) {
+					console.error('Error actualizando entry:', updateError);
+				}
+			} else {
+				insertables.push({
+					user_id: user.id,
+					property_id,
+					category_id,
+					sub_category_id,
+					type: 'location',
+					name,
+					address,
+					description: '',
 					latitude,
 					longitude,
+					image_url: null,
+					featured: false,
 					created_at: now,
 					updated_at: now,
-					property_id,
-					group_id,
 				});
-			} else {
-				await supabase
-					.from('locations')
-					.update({ updated_at: now })
-					.eq('id', existentes[0].id);
 			}
 		}
 
-		if (nuevos.length > 0) {
+		if (insertables.length > 0) {
 			const { error: insertError } = await supabase
-				.from('locations')
-				.insert(nuevos);
+				.from('property_data')
+				.insert(insertables);
 
 			if (insertError) {
-				console.error('Error al insertar:', insertError);
+				console.error(
+					'🛑 Error insertando lugares en Supabase:',
+					insertError
+				);
 				return {
 					errors: {
-						server: ['No se pudieron insertar los lugares'],
+						server: ['No se pudieron guardar las localizaciones'],
 					},
 				};
 			}

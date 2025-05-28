@@ -8,19 +8,13 @@ type PageProps = {
 
 export default async function LocationPage({ params }: PageProps) {
 	const { locationSlug } = await params;
-	const [propertySlug, propertyId, categoryId, subCategoryId] = locationSlug;
+	const [propertyId, categoryId, subCategoryId] = locationSlug;
 
-	if (
-		!propertySlug ||
-		!propertyId ||
-		!categoryId ||
-		!subCategoryId ||
-		!locationSlug
-	) {
+	if (!propertyId || !categoryId || !subCategoryId || !locationSlug) {
 		return notFound();
 	}
 
-	if (locationSlug.length > 4) {
+	if (locationSlug.length > 3) {
 		return notFound();
 	}
 
@@ -28,7 +22,6 @@ export default async function LocationPage({ params }: PageProps) {
 		<>
 			<AddPlaceForm
 				propertyId={propertyId}
-				propertySlug={propertySlug}
 				categoryId={categoryId}
 				subCategoryId={subCategoryId}
 			/>

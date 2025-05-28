@@ -33,7 +33,6 @@ const quantityOptions: SelectOption[] = Array.from(
 );
 
 const MagicFinderForm = ({
-	propertySlug,
 	propertyId,
 	lat,
 	lng,
@@ -41,7 +40,6 @@ const MagicFinderForm = ({
 	subCategoryId,
 }: {
 	propertyId: string;
-	propertySlug: string;
 	categoryId: string;
 	subCategoryId: string;
 	lat: string;
@@ -86,7 +84,8 @@ const MagicFinderForm = ({
 	}) => {
 		const fd = new FormData();
 		fd.append('property_id', propertyId);
-		fd.append('group_id', subCategoryId);
+		fd.append('sub_category_id', subCategoryId);
+		fd.append('category_id', categoryId);
 		fd.append('lat', lat);
 		fd.append('lng', lng);
 		fd.append('type', type);
@@ -140,7 +139,7 @@ const MagicFinderForm = ({
 
 		if (result.redirectTo) {
 			router.push(
-				`${result.redirectTo}/${propertySlug}/${categoryId}/${subCategoryId}`
+				`${result.redirectTo}/${propertyId}/${categoryId}/${subCategoryId}`
 			);
 			return;
 		}

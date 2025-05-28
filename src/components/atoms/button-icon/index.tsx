@@ -7,7 +7,7 @@ import styles from './styles.module.css';
 type ButtonIconProps = {
 	active?: boolean;
 	className?: string;
-	color?: 'primary' | 'secondary' | 'error' | 'white';
+	color?: 'primary' | 'secondary' | 'error' | 'white' | 'warning';
 	disabled?: boolean;
 	icon: React.ReactNode;
 	onClick?: React.MouseEventHandler<HTMLButtonElement>;
@@ -31,6 +31,7 @@ const ButtonIcon = ({
 			[styles['icon--secondary']]: color === 'secondary',
 			[styles['icon--error']]: color === 'error',
 			[styles['icon--white']]: color === 'white',
+			[styles['icon--warning']]: color === 'warning',
 		},
 		{
 			'p-2': size === 'medium',
@@ -43,6 +44,12 @@ const ButtonIcon = ({
 		},
 		{
 			'bg-primary-100': color === 'primary' && active,
+		},
+		{
+			'hover:bg-warning-100 focus:bg-warning-100': color === 'warning',
+		},
+		{
+			'bg-warning-100': color === 'warning' && active,
 		},
 		{
 			'hover:bg-black/10 focus:bg-black/10': color === 'secondary',

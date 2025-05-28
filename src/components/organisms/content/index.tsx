@@ -5,8 +5,6 @@ import { useTranslations } from 'next-intl';
 import { useSidebar } from '@/lib/context/SidebarContext';
 import { usePathname } from 'next/navigation';
 
-import { LODGING_CATEGORY_ID } from '@/config/config-constants';
-
 import Button from '@/components/molecules/button';
 import ButtonLink from '@/components/molecules/button-link';
 import IconMenu from '@/components/atoms/icon/menu';
@@ -15,10 +13,14 @@ import ButtonQr from '@/components/molecules/button-qr';
 
 const Content = ({
 	children,
-	propertySlug,
+	propertyId,
+	categoryId,
+	subCategoryId,
 }: {
 	children: React.ReactNode;
-	propertySlug?: string;
+	propertyId?: string;
+	categoryId?: string;
+	subCategoryId?: string;
 }) => {
 	const t = useTranslations();
 
@@ -30,10 +32,10 @@ const Content = ({
 		const pathSplitted = pathWithoutLocale.split('/');
 		const pathLength = pathSplitted.length;
 
-		if (isPathProperties && pathLength > 3) {
+		if (isPathProperties && pathLength === 5) {
 			return {
 				showPublicLink: true,
-				url: `/public/${pathSplitted[2]}/${LODGING_CATEGORY_ID}`,
+				url: `/public/${propertyId}/${categoryId}/${subCategoryId}`,
 			};
 		}
 
@@ -41,7 +43,7 @@ const Content = ({
 			showPublicLink: false,
 			url: '',
 		};
-	}, [pathname]);
+	}, [categoryId, pathname, propertyId, subCategoryId]);
 
 	const { openSidebar } = useSidebar();
 
@@ -62,11 +64,11 @@ const Content = ({
 							color="primary"
 							iconLeft={<IconOpenInNew />}
 							className="shadow-sm w-full"
-							href={`/public/${propertySlug}/${LODGING_CATEGORY_ID}`}
+							href={`/public/${propertyId}/welcome/highlights`}
 							target="_blank"
 						/>
 						<ButtonQr
-							url={`https://www.bnbexplorer.com/public/${propertySlug}/${LODGING_CATEGORY_ID}`}
+							url={`https://www.bnbexplorer.com/public/${propertyId}/welcome/highlights`}
 						/>
 					</>
 				) : null}

@@ -256,6 +256,9 @@ export const SUBSCRIPTION_FEATURES = {
 export const MAX_IMAGE_SIZE = 500 * 1024; // 500 KB
 
 export const LODGING_CATEGORY_ID = '4581a08a-3e78-4800-b16c-575f5da81cba';
+export const FIRST_CATEGORY_ID = '4581a08a-3e78-4800-b16c-575f5da81cba';
+export const FIRST_CATEGORY_SUBCATEGORY_ID =
+	'4fc3c0a8-3bb5-4b3b-8de3-6230a07df8a7';
 
 export const GOOGLE_MAPS_DIRECTION_URL =
 	'https://www.google.com/maps/dir/?api=1&destination=';
@@ -338,7 +341,7 @@ export const MAGIC_FINDER_SELECT = [
 	{ label: 'Bancos', value: 'bank' },
 	{ label: 'Oficinas de correos', value: 'post_office' },
 	{ label: 'Lavanderías', value: 'laundry' },
-	{ label: 'Peluqquerías y Barberías', value: 'hair_care' },
+	{ label: 'Peluquerías y Barberías', value: 'hair_care' },
 	{ label: 'Paradas de autobús', value: 'bus_station' },
 	{ label: 'Estaciones de metro', value: 'subway_station' },
 	{ label: 'Estaciones de tren', value: 'train_station' },

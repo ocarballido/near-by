@@ -68,7 +68,7 @@ const subcategories = {
 		'Oficinas de correos',
 		'Tintorerías',
 		'Lavanderías',
-		'Peluqquerías y Barberías',
+		'Peluquerías y Barberías',
 		'Centros de impresión y copiado',
 	],
 	transporte: [

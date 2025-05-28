@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
+import { useSidebarData } from '@/lib/context/EditMenuContext';
 
 import IconApartment from '@/components/atoms/icon/apartment';
 import IconHealing from '@/components/atoms/icon/healing';
@@ -20,7 +21,6 @@ import IconShoppingBag from '@/components/atoms/icon/shopping-bag';
 import CategoryAccordion from '@/components/molecules/category-accordion';
 import ButtonLink from '@/components/molecules/button-link';
 import GroupItem from '@/components/molecules/group-item';
-import { LODGING_CATEGORY_ID } from '@/config/config-constants';
 
 const ICON_COMPONENTS = {
 	IconHealing,
@@ -41,35 +41,20 @@ const ICON_COMPONENTS = {
 
 type IconName = keyof typeof ICON_COMPONENTS;
 
-type Subcategory = {
-	id: string;
-	label: string;
-	href: string;
-};
-
-type Category = {
-	id: string;
-	name: string;
-	icon: string;
-	firstEntryId: string;
-};
-
 type PropertySidebarProps = {
-	propertySlug?: string;
+	propertyId?: string;
 	categoryId?: string;
-	categories?: Category[];
-	subCategories?: Subcategory[];
-	subcategoryGroupId?: string;
+	subCategoryId?: string;
 };
 
 const PropertySidebar = ({
+	propertyId,
 	categoryId,
-	categories = [],
-	subCategories = [],
-	subcategoryGroupId,
-	propertySlug,
+	subCategoryId,
 }: PropertySidebarProps) => {
 	const t = useTranslations();
+
+	const { sidebarData, setActiveSubCategoryType } = useSidebarData();
 
 	const router = useRouter();
 
@@ -81,57 +66,56 @@ const PropertySidebar = ({
 				iconLeft={<IconApartment />}
 				className="hidden md:flex w-full"
 			/>
-			{categories.map((category) => {
-				const iconName = category.icon as IconName;
-				const IconComponent = ICON_COMPONENTS[iconName];
+			{sidebarData &&
+				sidebarData.map((category) => {
+					const iconName = category.icon as IconName;
+					const IconComponent = ICON_COMPONENTS[iconName];
 
-				return (
-					<CategoryAccordion
-						key={category.name}
-						open={category.id === categoryId}
-						name={t(category.name)}
-						href={
-							category.id !== LODGING_CATEGORY_ID
-								? `/app/properties/${propertySlug}/${category.id}/${category.firstEntryId}`
-								: `/app/properties/${propertySlug}/${category.id}`
-						}
-						icon={<IconComponent />}
-					>
-						{subCategories.map((subcategory, idx) => {
-							let isActive = false;
-
-							if (subcategoryGroupId !== undefined) {
-								isActive =
-									subcategory.id === subcategoryGroupId;
-							} else {
-								isActive = idx === 0 ? true : false;
-							}
-
-							return (
-								<GroupItem
-									key={subcategory.id}
-									label={t(subcategory.label)}
-									active={isActive}
-									editeable={
-										category.id === LODGING_CATEGORY_ID &&
-										isActive &&
-										idx !== 0
-									}
-									onClick={() =>
-										router.push(subcategory.href)
-									}
-									handleEdit={(e) => {
-										e.stopPropagation();
-										router.push(
-											`/app/info/${propertySlug}/${categoryId}/${subcategory.id}`
-										);
-									}}
-								/>
-							);
-						})}
-					</CategoryAccordion>
-				);
-			})}
+					return (
+						<CategoryAccordion
+							key={category.name}
+							open={category.id === categoryId}
+							name={t(category.name)}
+							onClick={() => {
+								setActiveSubCategoryType(category.type);
+								router.push(
+									`/app/properties/${propertyId}/${category.id}/${category.sub_categories[0].id}`
+								);
+							}}
+							icon={<IconComponent />}
+						>
+							{category.sub_categories.map((subcategory) => {
+								return (
+									<GroupItem
+										key={subcategory.id}
+										label={t(subcategory.name)}
+										active={
+											subcategory.id === subCategoryId
+										}
+										editeable={
+											subcategory.type === 'info' &&
+											subcategory.id === subCategoryId
+										}
+										onClick={() => {
+											setActiveSubCategoryType(
+												subcategory.type
+											);
+											router.push(
+												`/app/properties/${propertyId}/${category.id}/${subcategory.id}`
+											);
+										}}
+										handleEdit={(e) => {
+											e.stopPropagation();
+											router.push(
+												`/app/info/${propertyId}/${category.id}/${subcategory.id}`
+											);
+										}}
+									/>
+								);
+							})}
+						</CategoryAccordion>
+					);
+				})}
 		</>
 	);
 };

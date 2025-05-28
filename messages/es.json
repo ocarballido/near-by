@@ -201,7 +201,7 @@
 	"Oficinas de correos": "Oficinas de correos",
 	"Tintorerías": "Tintorerías",
 	"Lavanderías": "Lavanderías",
-	"Peluqquerías y Barberías": "Peluqquerías y Barberías",
+	"Peluquerías y Barberías": "Peluquerías y Barberías",
 	"Centros de impresión y copiado": "Centros de impresión y copiado",
 	"Paradas de autobús": "Paradas de autobús",
 	"Estaciones de metro": "Estaciones de metro",
@@ -428,5 +428,13 @@
 	"Utiliza nuestra Inteligenta Artificial para generar contenidos": "Utiliza nuestra Inteligenta Artificial para generar contenidos:",
 	"Inteligencia artificial": "Inteligencia artificial",
 	"Escribe una idea o frase por ejemplo: Instrucciones para el uso del aire acondicionado y te ayudaremos a redactarlo": "Escribe una idea o frase por ejemplo: Instrucciones para el uso del aire acondicionado y te ayudaremos a redactarlo.",
-	"Número de consultas restantes de la AI": "Número de consultas restantes de la AI:"
+	"Número de consultas restantes de la AI": "Número de consultas restantes de la AI:",
+	"Marcar como destacado": "Marcar como destacado",
+	"Destacado eliminado correctamente": "Destacado eliminado correctamente",
+	"Error al actualizar destacado": "Error al actualizar destacado",
+	"Marcado como destacado correctamente": "Marcado como destacado correctamente",
+	"¡Te damos la bienvenida con los brazos abiertos!": "¡Te damos la bienvenida con los brazos abiertos!",
+	"Nos alegra que hayas elegido nuestro alojamiento para tu estancia": "Nos alegra que hayas elegido nuestro alojamiento para tu estancia. Queremos que te sientas como en casa —o mejor aún, como en un lugar pensado especialmente para ti. Tómate tu tiempo para descubrir cada rincón del barrio, disfrutar del ambiente local y dejarte llevar por el ritmo de la ciudad. Hay mucho por ver, probar y experimentar, y estamos seguros de que cada día te traerá algo nuevo.",
+	"Nuestro espacio está preparado para que descanses, te relajes y vivas una experiencia cómoda y sin complicaciones": "Nuestro espacio está preparado para que descanses, te relajes y vivas una experiencia cómoda y sin complicaciones. Y si decides volver algún día, aquí estaremos encantados de recibirte otra vez. Esta no es solo una estancia más: es el comienzo de una historia que esperamos que recuerdes con una sonrisa. ¡Bienvenido a tu nuevo lugar favorito!",
+	"Destacados": "Destacados"
 }

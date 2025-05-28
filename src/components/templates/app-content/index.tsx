@@ -10,30 +10,23 @@ type Category = {
 	firstEntryId: string;
 };
 
-type Subcategory = {
-	id: string;
-	label: string;
-	href: string;
-};
-
 type AppContentTemplateProps = {
 	children: React.ReactNode;
 	sidebar?: 'APP' | 'PROPERTY';
 	categoryId?: string;
+	subCategoryId?: string;
 	categories?: Category[];
-	subCategories?: Subcategory[];
 	subcategoryGroupId?: string;
 	propertySlug?: string;
+	propertyId?: string;
 };
 
 const AppContentTemplate = ({
 	children,
 	sidebar = 'APP',
+	propertyId,
 	categoryId,
-	categories,
-	subCategories,
-	subcategoryGroupId,
-	propertySlug,
+	subCategoryId,
 }: AppContentTemplateProps) => {
 	return (
 		<SidebarProvider>
@@ -43,13 +36,17 @@ const AppContentTemplate = ({
 				>
 					<Sidebar
 						sidebar={sidebar}
+						propertyId={propertyId}
 						categoryId={categoryId}
-						categories={categories}
-						subCategories={subCategories}
-						subcategoryGroupId={subcategoryGroupId}
-						propertySlug={propertySlug}
+						subCategoryId={subCategoryId}
 					/>
-					<Content propertySlug={propertySlug}>{children}</Content>
+					<Content
+						propertyId={propertyId}
+						categoryId={categoryId}
+						subCategoryId={subCategoryId}
+					>
+						{children}
+					</Content>
 				</div>
 			</div>
 		</SidebarProvider>
