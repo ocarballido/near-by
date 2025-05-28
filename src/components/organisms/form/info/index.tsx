@@ -96,7 +96,9 @@ const UpdateInfoForm = ({
 		setAlert({ type: 'success', message: result.message! });
 
 		if (result.redirectTo) {
-			router.push(`${result.redirectTo}/${propertyId}`);
+			router.push(
+				`${result.redirectTo}/${propertyId}/${categoryId}/${subCategoryId}`
+			);
 			return;
 		}
 

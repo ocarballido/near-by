@@ -6,6 +6,7 @@ import PublicContentTemplate from '@/components/templates/public-content';
 import { getPublicSidebarData } from '@/utils/get-public-sidebar-data';
 import { EditPublicMenuProvider } from '@/lib/context/EditPublicMenuContext';
 import { PropertyDataPublicBySubCategory } from '@/components/templates/property-data-public';
+import IconStarShine from '@/components/atoms/icon/star-shine';
 
 type PageProps = { params: Promise<{ slug: string[] }> };
 
@@ -84,9 +85,12 @@ export default async function Property({ params }: PageProps) {
 							</h1>
 							{highlightsData && (
 								<>
-									<h2 className="font-heading text-xl font-bold mt-6">
-										Highlights
-									</h2>
+									<div className="flex items-center mt-6 py-2 px-3 bg-warning-100 rounded-full w-fit">
+										<IconStarShine color="warning" />
+										<h2 className="font-heading ml-2 text-md font-medium flex text-warning-500">
+											{t('Destacados')}
+										</h2>
+									</div>
 									<PropertyDataPublicBySubCategory
 										propertyData={highlightsData || []}
 										lat={property.latitude}

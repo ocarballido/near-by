@@ -176,7 +176,9 @@ const AddPlaceForm = ({
 		}
 
 		if (result.redirectTo) {
-			router.push(`${result.redirectTo}/${propertyId}`);
+			router.push(
+				`${result.redirectTo}/${propertyId}/${categoryId}/${subCategoryId}`
+			);
 			return;
 		}
 
