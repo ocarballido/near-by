@@ -196,7 +196,7 @@
 	"Oficinas de correos": "Post Offices",
 	"Tintorerías": "Dry Cleaners",
 	"Lavanderías": "Laundries",
-	"Peluqquerías y Barberías": "Hair Salons and Barbers",
+	"Peluquerías y Barberías": "Hair Salons and Barbers",
 	"Centros de impresión y copiado": "Print and Copy Centers",
 	"Paradas de autobús": "Bus Stops",
 	"Estaciones de metro": "Subway Stations",
@@ -424,5 +424,9 @@
 	"Utiliza nuestra Inteligenta Artificial para generar contenidos": "Use our Artificial Intelligence to generate content:",
 	"Inteligencia artificial": "Artificial intelligence",
 	"Escribe una idea o frase por ejemplo: Instrucciones para el uso del aire acondicionado y te ayudaremos a redactarlo": "Write an idea or phrase, for example: Instructions for using the air conditioner, and we will help you write it.",
-	"Número de consultas restantes de la AI": "Number of remaining AI queries:"
+	"Número de consultas restantes de la AI": "Number of remaining AI queries:",
+	"Marcar como destacado": "Mark as featured",
+	"Destacado eliminado correctamente": "Featured removed successfully",
+	"Error al actualizar destacado": "Error updating highlighted",
+	"Marcado como destacado correctamente": "Marked as highlighted correctly"
 }
