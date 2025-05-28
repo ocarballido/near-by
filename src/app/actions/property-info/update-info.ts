@@ -1,19 +1,20 @@
-// app/actions/properties/update-info.ts
+// app/actions/properties/create-info.ts
 'use server';
 
-import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
+import { revalidatePath } from 'next/cache';
 import { createSSRClient } from '@/lib/supabase/server';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 
-// 1. Esquema Zod para validar los datos entrantes
-const UpdateInfoSchema = z.object({
-	info_id: z.string().uuid(),
+const CreateInfoSchema = z.object({
+	property_id: z.string().uuid(),
+	category_id: z.string().uuid(),
+	sub_category_id: z.string().uuid(),
+	type: z.enum(['info', 'location']),
 	content: z.string().nonempty('El contenido es obligatorio'),
 });
 
-// 2. Tipo de retorno de la Action
-export type UpdateInfoState = {
+export type CreateInfoState = {
 	errors?: {
 		content?: string[];
 		server?: string[];
@@ -23,10 +24,7 @@ export type UpdateInfoState = {
 	redirectTo?: string;
 };
 
-/**
- * Action para actualizar el campo `content` de un registro en `property_info`
- */
-export async function updateInfo(formData: FormData): Promise<UpdateInfoState> {
+export async function updateInfo(formData: FormData): Promise<CreateInfoState> {
 	try {
 		const ssrClient = await createSSRClient();
 		const {
@@ -45,34 +43,85 @@ export async function updateInfo(formData: FormData): Promise<UpdateInfoState> {
 		const supabase = await createServerAdminClient();
 
 		const raw = {
-			info_id: formData.get('info_id'),
+			property_id: formData.get('property_id'),
+			category_id: formData.get('category_id'),
+			sub_category_id: formData.get('sub_category_id'),
+			type: formData.get('type'),
 			content: formData.get('content'),
 		};
 
-		const parsed = UpdateInfoSchema.safeParse(raw);
+		const parsed = CreateInfoSchema.safeParse(raw);
 		if (!parsed.success) {
-			const errs = parsed.error.flatten().fieldErrors;
-			return { errors: { content: errs.content } };
+			const fe = parsed.error.flatten().fieldErrors;
+			return {
+				errors: {
+					content: fe.content,
+					server: ['Datos inválidos.'],
+				},
+			};
 		}
-		const { info_id, content } = parsed.data;
 
-		const { error: updErr } = await supabase
-			.from('property_info')
-			.update({ content })
-			.eq('id', info_id);
+		const { property_id, category_id, sub_category_id, type, content } =
+			parsed.data;
 
-		if (updErr) {
-			console.error('Error actualizando property_info:', updErr);
+		const { data: existing, error: findError } = await supabase
+			.from('property_data')
+			.select('id')
+			.eq('user_id', user.id)
+			.eq('property_id', property_id)
+			.eq('sub_category_id', sub_category_id)
+			.eq('type', type)
+			.single();
+
+		if (findError && findError.code !== 'PGRST116') {
+			// 'PGRST116' = no rows found
+			console.error('Error buscando info existente:', findError);
 			return {
 				errors: {
 					server: [
-						'Error actualizando la información. Por favor, inténtalo de nuevo.',
+						'No se pudo comprobar si ya existe la información.',
 					],
 				},
 			};
 		}
 
-		// 7. Revalidar la ruta de la vista de la propiedad para que el cliente refresque
+		let dbError = null;
+
+		if (existing) {
+			// Actualizar
+			const { error } = await supabase
+				.from('property_data')
+				.update({
+					description: content,
+					updated_at: new Date().toISOString(),
+				})
+				.eq('id', existing.id);
+
+			dbError = error;
+		} else {
+			// Insertar nuevo
+			const { error } = await supabase.from('property_data').insert({
+				user_id: user.id,
+				property_id,
+				category_id,
+				sub_category_id,
+				type,
+				description: content,
+				name: null,
+			});
+
+			dbError = error;
+		}
+
+		if (dbError) {
+			console.error('Error al guardar en property_data:', dbError);
+			return {
+				errors: {
+					server: ['Error al guardar la información.'],
+				},
+			};
+		}
+
 		revalidatePath(`/app`);
 
 		return {
@@ -80,16 +129,11 @@ export async function updateInfo(formData: FormData): Promise<UpdateInfoState> {
 			message: 'Información actualizada correctamente',
 			redirectTo: `/app/properties`,
 		};
-	} catch (error: unknown) {
-		console.error('Error inesperado en updateInfo:', error);
-		const errorMessage =
-			error instanceof Error
-				? error.message
-				: 'Error interno del servidor';
-
+	} catch (err) {
+		console.error('Error inesperado en createInfo:', err);
 		return {
 			errors: {
-				server: [errorMessage],
+				server: ['Error interno del servidor'],
 			},
 		};
 	}

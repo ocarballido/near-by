@@ -9,21 +9,24 @@ import { MAX_IMAGE_SIZE } from '@/config/config-constants';
 // 1) Definimos un esquema Zod para validar el formulario
 const LocationSchema = z.object({
 	property_id: z.string().uuid(),
-	group_id: z.string().uuid(),
+	sub_category_id: z.string().uuid(),
+	category_id: z.string().uuid(),
 	name: z.string().nonempty('El nombre es obligatorio'),
 	address: z.string().nonempty('La dirección es obligatoria'),
 	description: z.string().optional().default(''),
 	latitude: z.preprocess((v) => (v ? Number(v) : NaN), z.number().finite()),
 	longitude: z.preprocess((v) => (v ? Number(v) : NaN), z.number().finite()),
-	website: z.string().url().optional().or(z.literal('')),
-	phone: z.string().optional().or(z.literal('')),
+	featured: z
+		.preprocess((v) => v === 'true' || v === true, z.boolean())
+		.optional()
+		.default(false),
 });
 
 // 2) Tipo para el estado de la acción
 export type LocationFormState = {
 	errors?: {
 		property_id?: string[];
-		group_id?: string[];
+		sub_category_id?: string[];
 		name?: string[];
 		address?: string[];
 		image?: string[];
@@ -52,22 +55,20 @@ export async function createLocation(
 				},
 			};
 		}
-		// const userId = user.id;
 
 		const supabase = await createServerAdminClient();
 
 		// 4) Recolectar datos y validarlos con Zod
 		const raw = {
 			property_id: formData.get('property_id'),
-			group_id: formData.get('group_id'),
+			sub_category_id: formData.get('sub_category_id'),
+			category_id: formData.get('category_id'),
 			name: formData.get('name'),
 			address: formData.get('address'),
-			// si no vienen, que sean cadena vacía
 			description: (formData.get('description') as string) ?? '',
-			website: (formData.get('website') as string) ?? '',
-			phone: (formData.get('phone') as string) ?? '',
 			latitude: formData.get('latitude'),
 			longitude: formData.get('longitude'),
+			featured: formData.get('featured'),
 		};
 
 		const result = LocationSchema.safeParse(raw);
@@ -76,7 +77,7 @@ export async function createLocation(
 			return {
 				errors: {
 					property_id: fe.property_id,
-					group_id: fe.group_id,
+					sub_category_id: fe.sub_category_id,
 					name: fe.name,
 					address: fe.address,
 				},
@@ -139,21 +140,74 @@ export async function createLocation(
 			image_url = publicUrl;
 		}
 
-		// 6) Insertar el nuevo location
-		const { error: insErr } = await supabase.from('locations').insert({
-			property_id: loc.property_id,
-			group_id: loc.group_id,
-			name: loc.name,
-			address: loc.address,
-			description: loc.description,
-			latitude: loc.latitude,
-			longitude: loc.longitude,
-			website: loc.website || null,
-			phone: loc.phone || null,
-			image_url,
-		});
-		if (insErr) {
-			return { errors: { server: ['Error creando el location'] } };
+		// Verificar si ya existe por unique key: property_id + name + lat + lng
+		const { data: existing, error: findErr } = await supabase
+			.from('property_data')
+			.select('id')
+			.eq('property_id', loc.property_id)
+			.eq('name', loc.name)
+			.eq('latitude', loc.latitude)
+			.eq('longitude', loc.longitude)
+			.limit(1)
+			.maybeSingle();
+
+		if (findErr) {
+			console.error('Error comprobando existencia:', findErr);
+			return {
+				errors: {
+					server: ['Error comprobando datos duplicados.'],
+				},
+			};
+		}
+
+		if (existing) {
+			// Actualizar si ya existe
+			const { error: updateErr } = await supabase
+				.from('property_data')
+				.update({
+					address: loc.address,
+					description: loc.description,
+					image_url,
+					featured: loc.featured,
+					updated_at: new Date().toISOString(),
+				})
+				.eq('id', existing.id);
+
+			if (updateErr) {
+				console.error('Error actualizando location:', updateErr);
+				return {
+					errors: {
+						server: ['Error actualizando el sitio.'],
+					},
+				};
+			}
+		} else {
+			// Insertar si no existe
+			const { error: insertErr } = await supabase
+				.from('property_data')
+				.insert({
+					user_id: user.id,
+					property_id: loc.property_id,
+					category_id: loc.category_id,
+					sub_category_id: loc.sub_category_id,
+					type: 'location',
+					name: loc.name,
+					address: loc.address,
+					description: loc.description,
+					latitude: loc.latitude,
+					longitude: loc.longitude,
+					image_url,
+					featured: loc.featured,
+				});
+
+			if (insertErr) {
+				console.error('Error insertando location:', insertErr);
+				return {
+					errors: {
+						server: ['Error creando el sitio.'],
+					},
+				};
+			}
 		}
 
 		// 7) Revalidar la lista de locations de esa propiedad

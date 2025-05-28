@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 
 import CategoryButton from '../caterory-button';
+// import CategoryButtonLink from '../category-button-link';
 import CategoryBody from '../category-body';
 
 type CategoryAccordionProps = {
@@ -8,8 +9,8 @@ type CategoryAccordionProps = {
 	icon: React.ReactNode;
 	name: string;
 	open: boolean;
-	href: string;
-	// onClick?: () => void;
+	href?: string;
+	onClick?: () => void;
 };
 
 const CategoryAccordion = ({
@@ -17,9 +18,8 @@ const CategoryAccordion = ({
 	icon,
 	name,
 	open,
-	href,
-}: // onClick,
-CategoryAccordionProps) => {
+	onClick,
+}: CategoryAccordionProps) => {
 	const buttonStyles = clsx(
 		{
 			'bg-gray-50 shadow-sm': open,
@@ -35,8 +35,7 @@ CategoryAccordionProps) => {
 				name={name}
 				icon={icon}
 				open={open}
-				// onClick={onClick}
-				href={href}
+				onClick={onClick}
 			/>
 			<CategoryBody open={open}>{children}</CategoryBody>
 		</div>

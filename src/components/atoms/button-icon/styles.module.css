@@ -13,3 +13,7 @@
 .icon--error svg {
 	fill: var(--font--color-error);
 }
+
+.icon--warning svg {
+	fill: var(--font--color-warning);
+}

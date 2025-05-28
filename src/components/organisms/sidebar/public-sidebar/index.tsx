@@ -2,7 +2,8 @@
 
 import { useTranslations } from 'next-intl';
 import { useSidebar } from '@/lib/context/SidebarContext';
-import { useRouter } from 'next/navigation';
+import { usePublicSidebarData } from '@/lib/context/EditPublicMenuContext';
+import { useEffect } from 'react';
 
 import clsx from 'clsx';
 
@@ -25,7 +26,6 @@ import IconClose from '@/components/atoms/icon/close';
 import CategoryAccordion from '@/components/molecules/category-accordion';
 import Button from '@/components/molecules/button';
 import GroupItem from '@/components/molecules/group-item';
-import { LODGING_CATEGORY_ID } from '@/config/config-constants';
 
 const ICON_COMPONENTS = {
 	IconHealing,
@@ -67,13 +67,7 @@ type PublicSidebarProps = {
 	subcategoryGroupId?: string;
 };
 
-const PublicSidebar = ({
-	categoryId,
-	categories = [],
-	subCategories = [],
-	subcategoryGroupId,
-	propertySlug,
-}: PublicSidebarProps) => {
+const PublicSidebar = ({}: PublicSidebarProps) => {
 	const t = useTranslations();
 
 	const { isOpen, closeSidebar } = useSidebar();
@@ -83,7 +77,50 @@ const PublicSidebar = ({
 		{ '-translate-x-full': !isOpen }
 	);
 
-	const router = useRouter();
+	const {
+		sidebarData,
+		activeCategoryId,
+		activeSubCategoryType,
+		setActiveCategoryId,
+		activeSubCategoryId,
+		setActiveSubCategoryId,
+		setActiveSubCategoryType,
+		activeSubCategoryName,
+		setActiveSubCategoryName,
+	} = usePublicSidebarData();
+
+	useEffect(() => {
+		if (sidebarData) {
+			setActiveCategoryId(
+				activeCategoryId ? activeCategoryId : sidebarData[0].id
+			);
+			setActiveSubCategoryId(
+				activeSubCategoryId
+					? activeSubCategoryId
+					: sidebarData[0].sub_categories[0].id
+			);
+			setActiveSubCategoryType(
+				activeSubCategoryType
+					? activeSubCategoryType
+					: sidebarData[0].sub_categories[0].type
+			);
+			setActiveSubCategoryName(
+				activeSubCategoryName
+					? activeSubCategoryName
+					: sidebarData[0].sub_categories[0].type
+			);
+		}
+	}, [
+		activeCategoryId,
+		activeSubCategoryId,
+		activeSubCategoryName,
+		activeSubCategoryType,
+		setActiveCategoryId,
+		setActiveSubCategoryId,
+		setActiveSubCategoryName,
+		setActiveSubCategoryType,
+		sidebarData,
+	]);
 
 	return (
 		<>
@@ -99,48 +136,49 @@ const PublicSidebar = ({
 						className="shadow-sm grow"
 					/>
 				</div>
-				{categories.map((category) => {
-					const iconName = category.icon as IconName;
-					const IconComponent = ICON_COMPONENTS[iconName];
 
-					return (
-						<CategoryAccordion
-							key={category.name}
-							open={category.id === categoryId}
-							name={t(category.name)}
-							href={
-								category.id !== LODGING_CATEGORY_ID
-									? `/public/${propertySlug}/${category.id}/${category.firstEntryId}`
-									: `/public/${propertySlug}/${category.id}`
-							}
-							icon={<IconComponent />}
-						>
-							{subCategories.map((subcategory, idx) => {
-								let isActive = false;
+				{sidebarData &&
+					sidebarData.map((category) => {
+						const iconName = category.icon as IconName;
+						const IconComponent = ICON_COMPONENTS[iconName];
 
-								if (subcategoryGroupId !== undefined) {
-									isActive =
-										subcategory.id === subcategoryGroupId;
-								} else {
-									isActive = idx === 0 ? true : false;
-								}
-
-								return (
-									<GroupItem
-										key={subcategory.id}
-										label={t(subcategory.label)}
-										active={isActive}
-										onClick={() =>
-											router.push(
-												`/public/${propertySlug}/${category.id}/${subcategory.id}`
-											)
-										}
-									/>
-								);
-							})}
-						</CategoryAccordion>
-					);
-				})}
+						return (
+							<CategoryAccordion
+								key={category.name}
+								open={category.id === activeCategoryId}
+								name={t(category.name)}
+								onClick={() => setActiveCategoryId(category.id)}
+								icon={<IconComponent />}
+							>
+								{category.sub_categories.map((subcategory) => {
+									return (
+										<GroupItem
+											key={subcategory.id}
+											label={t(subcategory.name)}
+											active={
+												subcategory.id ===
+												activeSubCategoryId
+											}
+											onClick={() => {
+												setActiveSubCategoryId(
+													subcategory.id
+												);
+												setActiveSubCategoryType(
+													subcategory.type
+												);
+												setActiveCategoryId(
+													category.id
+												);
+												setActiveSubCategoryName(
+													subcategory.name
+												);
+											}}
+										/>
+									);
+								})}
+							</CategoryAccordion>
+						);
+					})}
 			</aside>
 		</>
 	);

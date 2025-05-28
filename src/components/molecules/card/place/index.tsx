@@ -5,6 +5,7 @@ import IconDelete from '@/components/atoms/icon/delete';
 import IconEdit from '@/components/atoms/icon/edit';
 import Button from '../../button';
 import ButtonIcon from '@/components/atoms/button-icon';
+import IconStarShine from '@/components/atoms/icon/star-shine';
 
 type PlaceProps = {
 	address: string;
@@ -12,8 +13,10 @@ type PlaceProps = {
 	editeable?: boolean;
 	handleDelete?: () => void;
 	handleEdit?: () => void;
+	handleFeatured?: () => void;
 	image?: string;
 	name: string;
+	featured?: boolean;
 };
 
 const Place = ({
@@ -22,7 +25,9 @@ const Place = ({
 	editeable = false,
 	handleDelete,
 	handleEdit,
+	handleFeatured,
 	name,
+	featured,
 	image = '/static/img/default-location-2x.webp',
 }: PlaceProps) => {
 	const t = useTranslations();
@@ -57,17 +62,25 @@ const Place = ({
 						{address}
 					</p>
 				</div>
-				<div className="hidden gap-1 sm:flex">
+				<div className="gap-1 flex">
+					<ButtonIcon
+						onClick={handleFeatured}
+						icon={<IconStarShine />}
+						className={`${featured ? 'opacity-100' : 'opacity-30'}`}
+						color={`${featured ? 'warning' : 'secondary'}`}
+					/>
 					<ButtonIcon
 						onClick={handleDelete}
 						icon={<IconDelete />}
 						color="secondary"
+						className="hidden sm:flex"
 					/>
 					{editeable && (
 						<ButtonIcon
 							onClick={handleEdit}
 							icon={<IconEdit />}
 							color="secondary"
+							className="hidden sm:flex"
 						/>
 					)}
 				</div>

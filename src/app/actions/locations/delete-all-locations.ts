@@ -6,14 +6,14 @@ import { z } from 'zod';
 
 const DeleteAllSchema = z.object({
 	property_id: z.string().uuid(),
-	group_id: z.string().uuid(),
+	sub_category_id: z.string().uuid(),
 });
 
 export type DeleteAllLocationsState = {
 	success?: boolean;
 	errors?: {
 		property_id?: string[];
-		group_id?: string[];
+		sub_category_id?: string[];
 		server?: string[];
 	};
 	message?: string;
@@ -25,26 +25,25 @@ export async function deleteAllLocations(
 ): Promise<DeleteAllLocationsState> {
 	const raw = {
 		property_id: formData.get('property_id'),
-		group_id: formData.get('group_id'),
+		sub_category_id: formData.get('sub_category_id'),
 	};
 
 	const parsed = DeleteAllSchema.safeParse(raw);
-
 	if (!parsed.success) {
 		const errs = parsed.error.flatten().fieldErrors;
 		return { errors: errs };
 	}
 
-	const { property_id, group_id } = parsed.data;
+	const { property_id, sub_category_id } = parsed.data;
 
 	try {
 		const supabase = await createServerAdminClient();
 
-		const { data: locations, error: fetchError } = await supabase
-			.from('locations')
+		const { data: items, error: fetchError } = await supabase
+			.from('property_data')
 			.select('id, image_url')
 			.eq('property_id', property_id)
-			.eq('group_id', group_id);
+			.eq('sub_category_id', sub_category_id);
 
 		if (fetchError) {
 			return {
@@ -56,10 +55,10 @@ export async function deleteAllLocations(
 			};
 		}
 
-		const imagePaths = locations
-			.map((loc) => {
-				if (!loc.image_url) return null;
-				const [, path] = loc.image_url.split(
+		const imagePaths = items
+			.map((item) => {
+				if (!item.image_url) return null;
+				const [, path] = item.image_url.split(
 					'/storage/v1/object/public/location-images/'
 				);
 				return path || null;
@@ -71,10 +70,10 @@ export async function deleteAllLocations(
 		}
 
 		const { error: deleteError } = await supabase
-			.from('locations')
+			.from('property_data')
 			.delete()
 			.eq('property_id', property_id)
-			.eq('group_id', group_id);
+			.eq('sub_category_id', sub_category_id);
 
 		if (deleteError) {
 			return {

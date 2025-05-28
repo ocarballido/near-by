@@ -33,13 +33,8 @@ type Property = {
 	infoGeneral: InfoGeneral;
 };
 
-// type Group = {
-// 	id: string;
-// };
-
 type PropertiesContentProps = {
 	firstCategory: Category | null;
-	// firstGroup: Group | null;
 	properties: Property[];
 };
 
@@ -48,10 +43,7 @@ type AlertState = {
 	message: string;
 };
 
-const PropertiesContent = ({
-	firstCategory,
-	properties,
-}: PropertiesContentProps) => {
+const PropertiesContent = ({ properties }: PropertiesContentProps) => {
 	const t = useTranslations();
 
 	const [isOpen, setIsOpen] = useState(false);
@@ -120,7 +112,7 @@ const PropertiesContent = ({
 					key={property?.id}
 					name={property?.name}
 					image={property?.image_url || null}
-					href={`/app/properties/${property?.slug}/${firstCategory?.id}`}
+					href={`/app/properties/${property?.id}`}
 					address={property?.address}
 					handleDelete={() => {
 						setIsOpen(true);

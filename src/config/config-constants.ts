@@ -338,7 +338,7 @@ export const MAGIC_FINDER_SELECT = [
 	{ label: 'Bancos', value: 'bank' },
 	{ label: 'Oficinas de correos', value: 'post_office' },
 	{ label: 'Lavanderías', value: 'laundry' },
-	{ label: 'Peluqquerías y Barberías', value: 'hair_care' },
+	{ label: 'Peluquerías y Barberías', value: 'hair_care' },
 	{ label: 'Paradas de autobús', value: 'bus_station' },
 	{ label: 'Estaciones de metro', value: 'subway_station' },
 	{ label: 'Estaciones de tren', value: 'train_station' },

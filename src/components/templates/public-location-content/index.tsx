@@ -6,23 +6,15 @@ import IconLocationOn from '@/components/atoms/icon/location-on';
 import PlacePublic from '@/components/molecules/card/place-public';
 import IconList from '@/components/atoms/icon/list';
 import Map from '@/components/organisms/map';
-
-interface Location {
-	id: string;
-	group_id: string;
-	name: string;
-	address: string;
-	latitude: number;
-	longitude: number;
-	image_url: string;
-}
+import { PropertyLocation } from '@/lib/types';
 
 const PublicLocationContent = ({
 	locations = [],
 }: {
-	locations: Location[];
+	locations: PropertyLocation[];
 }) => {
 	const [activeView, setActiveView] = useState('list');
+	console.log(locations);
 
 	return (
 		<>
@@ -67,6 +59,7 @@ const PublicLocationContent = ({
 						latitude={loc.latitude}
 						longitude={loc.longitude}
 						address={loc.address}
+						featured={loc.featured}
 						image={loc.image_url}
 					/>
 				))

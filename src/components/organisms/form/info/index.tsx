@@ -8,10 +8,7 @@ import { useMemo, useState } from 'react';
 import { useLoading } from '@/lib/context/LoadingContext';
 import { useAIUsage } from '@/lib/context/AIUsageContext';
 
-import {
-	updateInfo,
-	UpdateInfoState,
-} from '@/app/actions/property-info/update-info';
+import { updateInfo } from '@/app/actions/property-info/update-info';
 import { generateAIContent } from '@/app/actions/generate-ai-content/generate-info';
 
 import TextArea from '@/components/molecules/text-area';
@@ -20,10 +17,10 @@ import Alert from '@/components/molecules/alert';
 import ButtonMagic from '@/components/molecules/button-magic';
 
 type AddInfoFormProps = {
-	propertySlug: string;
+	propertyId: string;
 	categoryId: string;
 	subCategoryId: string;
-	title: string;
+	name: string | null;
 	initialContent?: string;
 };
 
@@ -32,11 +29,21 @@ type FormValues = {
 	content: string;
 };
 
+type CreateInfoState = {
+	errors?: {
+		content?: string[];
+		server?: string[];
+	};
+	success?: boolean;
+	message?: string;
+	redirectTo?: string;
+};
+
 const UpdateInfoForm = ({
-	propertySlug,
+	propertyId,
 	categoryId,
 	subCategoryId,
-	title,
+	name,
 	initialContent = '',
 }: AddInfoFormProps) => {
 	const t = useTranslations();
@@ -69,10 +76,13 @@ const UpdateInfoForm = ({
 		setAlert(null);
 
 		const fd = new FormData();
-		fd.append('info_id', subCategoryId);
+		fd.append('property_id', propertyId);
+		fd.append('category_id', categoryId);
+		fd.append('sub_category_id', subCategoryId);
+		fd.append('type', 'info'); // o dinámico si corresponde
 		fd.append('content', content);
 
-		const result: UpdateInfoState = await updateInfo(fd);
+		const result: CreateInfoState = await updateInfo(fd);
 
 		closeLoading();
 
@@ -86,9 +96,7 @@ const UpdateInfoForm = ({
 		setAlert({ type: 'success', message: result.message! });
 
 		if (result.redirectTo) {
-			router.push(
-				`${result.redirectTo}/${propertySlug}/${categoryId}/${subCategoryId}`
-			);
+			router.push(`${result.redirectTo}/${propertyId}`);
 			return;
 		}
 
@@ -144,7 +152,11 @@ const UpdateInfoForm = ({
 				onSubmit={handleSubmit(onSubmit)}
 				className="flex flex-col gap-4 w-full max-w-[600px]"
 			>
-				<h1 className="font-heading font-bold text-lg">{t(title)}</h1>
+				{name && (
+					<h1 className="font-heading font-bold text-lg">
+						{t(name)}
+					</h1>
+				)}
 
 				{/* Text content */}
 				<TextArea

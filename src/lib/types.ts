@@ -383,3 +383,34 @@ export interface SidebarMenuItemConfig {
 	url: string;
 	icon: IconKey;
 }
+
+// types/sidebar.ts
+
+export type SubCategory = {
+	id: string;
+	name: string;
+	type: string;
+};
+
+export type CategoryWithSubCategories = {
+	id: string;
+	name: string;
+	icon: string | null;
+	order_index: number;
+	sub_categories: SubCategory[];
+};
+
+// src/lib/types.ts
+
+// lib/types.ts
+export interface PropertyLocation {
+	id: string;
+	name: string;
+	address: string;
+	latitude?: number;
+	longitude?: number;
+	image_url?: string;
+	description?: string;
+	featured?: boolean;
+	type?: 'info' | 'location';
+}

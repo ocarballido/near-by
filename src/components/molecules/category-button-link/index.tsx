@@ -1,21 +1,23 @@
 import clsx from 'clsx';
 
+import Link from 'next/link';
+
 import ButtonIcon from '@/components/atoms/button-icon';
 import IconKeyboardArrowDown from '@/components/atoms/icon/keyboard-arrow-down';
 
-type CategoryButtonProps = {
+type CategoryButtonLinkProps = {
 	open?: boolean;
 	icon: React.ReactNode;
 	name: string;
-	onClick?: React.MouseEventHandler<HTMLDivElement>;
+	href: string;
 };
 
-const CategoryButton = ({
+const CategoryButtonLink = ({
 	open = false,
 	icon,
 	name,
-	onClick,
-}: CategoryButtonProps) => {
+	href,
+}: CategoryButtonLinkProps) => {
 	const buttonStyles = clsx({
 		'font-bold': open,
 	});
@@ -25,8 +27,8 @@ const CategoryButton = ({
 	});
 
 	return (
-		<div
-			onClick={onClick}
+		<Link
+			href={href}
 			className={`flex w-full items-center ${buttonStyles}`}
 		>
 			<div className="flex items-center justify-center gap-2 mr-auto py-2">
@@ -41,8 +43,8 @@ const CategoryButton = ({
 			<div className={`transition-all ${arrowStyles}`}>
 				<IconKeyboardArrowDown />
 			</div>
-		</div>
+		</Link>
 	);
 };
 
-export default CategoryButton;
+export default CategoryButtonLink;

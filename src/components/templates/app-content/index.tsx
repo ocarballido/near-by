@@ -10,30 +10,21 @@ type Category = {
 	firstEntryId: string;
 };
 
-type Subcategory = {
-	id: string;
-	label: string;
-	href: string;
-};
-
 type AppContentTemplateProps = {
 	children: React.ReactNode;
 	sidebar?: 'APP' | 'PROPERTY';
 	categoryId?: string;
 	categories?: Category[];
-	subCategories?: Subcategory[];
 	subcategoryGroupId?: string;
 	propertySlug?: string;
+	propertyId?: string;
 };
 
 const AppContentTemplate = ({
 	children,
 	sidebar = 'APP',
-	categoryId,
-	categories,
-	subCategories,
-	subcategoryGroupId,
 	propertySlug,
+	propertyId,
 }: AppContentTemplateProps) => {
 	return (
 		<SidebarProvider>
@@ -41,14 +32,7 @@ const AppContentTemplate = ({
 				<div
 					className={`flex flex-auto gap-4 md:gap-4 min-h-full relative w-full`}
 				>
-					<Sidebar
-						sidebar={sidebar}
-						categoryId={categoryId}
-						categories={categories}
-						subCategories={subCategories}
-						subcategoryGroupId={subcategoryGroupId}
-						propertySlug={propertySlug}
-					/>
+					<Sidebar sidebar={sidebar} propertyId={propertyId} />
 					<Content propertySlug={propertySlug}>{children}</Content>
 				</div>
 			</div>

@@ -9,7 +9,7 @@ export async function deleteLocation(locationId: string) {
 
 	// 1) Borrar la imagen del bucket (si existe)
 	const { data: loc, error: fetchErr } = await supabase
-		.from('locations')
+		.from('property_data')
 		.select('image_url')
 		.eq('id', locationId)
 		.single();
@@ -24,7 +24,7 @@ export async function deleteLocation(locationId: string) {
 
 	// 2) Borrar el registro
 	const { error: delErr } = await supabase
-		.from('locations')
+		.from('property_data')
 		.delete()
 		.eq('id', locationId);
 	if (delErr) throw new Error('No se pudo eliminar el sitio');

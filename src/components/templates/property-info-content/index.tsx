@@ -1,90 +1,35 @@
-'use client';
-
-import { useRouter } from 'next/navigation';
-
-import Image from 'next/image';
-
-import addLocation from '../../../../public/static/img/add-location-2x.webp';
-
-import EmptyContentAction from '@/components/molecules/empty-content-action';
-import House from '@/components/molecules/card/house';
+import { PropertyLocation } from '@/lib/types';
 
 export interface PropertyInfo {
 	id: string;
-	category_id: string;
-	title: string;
-	content: string;
-	created_at: string;
-}
-
-type Property = {
-	id: string;
 	name: string;
-	slug: string;
-	image_url: string | null;
 	address: string;
-};
+	description?: string;
+	image_url: string;
+	latitude?: number;
+	longitude?: number;
+	type?: string;
+	featured?: boolean;
+}
 
 interface PropertyInfoProps {
-	infos: PropertyInfo[] | null;
-	property: Property;
-	categoryId: string;
-	subCategoryId: string;
+	infos: PropertyLocation[];
 }
 
-export function PropertyInfoContent({
-	property,
-	categoryId,
-	subCategoryId,
-	infos,
-}: PropertyInfoProps) {
-	const router = useRouter();
-
+export function PropertyInfoContent({ infos }: PropertyInfoProps) {
 	let info;
 
 	if (infos) {
 		info = infos[0];
 	}
 
-	if (!info) {
-		return (
-			<>
-				<House
-					key={property?.id}
-					name={property?.name}
-					image={property?.image_url || null}
-					address={property?.address}
-					deleatable={false}
-					editeable={false}
-				/>
-			</>
-		);
-	}
-
-	return info && info.content ? (
+	return (
 		<>
-			<div className="font-medium whitespace-pre-wrap">
-				{info.content}
-			</div>
-		</>
-	) : (
-		<>
-			<div className="block ml-auto mr-auto">
-				<Image
-					alt="Add location"
-					src={addLocation}
-					height={219}
-					width={281}
-				/>
-			</div>
-			<EmptyContentAction
-				className="mt-12"
-				onClick={() =>
-					router.push(
-						`/app/info/${property.slug}/${categoryId}/${subCategoryId}`
-					)
-				}
-			/>
+			{info?.description && (
+				<div className="font-medium whitespace-pre-wrap">
+					{info?.description}
+				</div>
+			)}
 		</>
 	);
 }

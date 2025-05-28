@@ -21,7 +21,8 @@ import AddressField from '@/components/molecules/google-text-field';
 
 type FormValues = {
 	property_id: string;
-	group_id: string;
+	sub_category_id: string;
+	category_id: string;
 	name: string;
 	address: string;
 	latitude: string;
@@ -30,18 +31,17 @@ type FormValues = {
 	website?: string;
 	phone?: string;
 	image?: FileList;
+	featured: boolean;
 };
 
 const AddPlaceForm = ({
 	propertyId,
-	categoryId,
-	propertySlug,
 	subCategoryId,
+	categoryId,
 }: {
 	propertyId: string;
-	propertySlug: string;
-	categoryId: string;
 	subCategoryId: string;
+	categoryId: string;
 }) => {
 	const t = useTranslations();
 
@@ -66,7 +66,7 @@ const AddPlaceForm = ({
 	} = useForm<FormValues>({
 		defaultValues: {
 			property_id: propertyId,
-			group_id: subCategoryId,
+			sub_category_id: subCategoryId,
 			name: '',
 			address: '',
 			latitude: '',
@@ -74,6 +74,7 @@ const AddPlaceForm = ({
 			description: '',
 			website: '',
 			phone: '',
+			featured: false,
 		},
 	});
 
@@ -118,11 +119,14 @@ const AddPlaceForm = ({
 
 		const fd = new FormData();
 		fd.append('property_id', propertyId);
-		fd.append('group_id', subCategoryId);
+		fd.append('category_id', categoryId);
+		fd.append('sub_category_id', subCategoryId);
 		fd.append('name', data.name);
 		fd.append('address', data.address);
 		fd.append('latitude', data.latitude);
 		fd.append('longitude', data.longitude);
+		fd.append('featured', String(data.featured));
+		fd.append('type', 'location');
 
 		// Campos opcionales
 		if (data.description) {
@@ -156,8 +160,11 @@ const AddPlaceForm = ({
 					type: 'manual',
 					message: result.errors.address[0],
 				});
-			if (result.errors.group_id)
-				setAlert({ type: 'error', message: result.errors.group_id[0] });
+			if (result.errors.sub_category_id)
+				setAlert({
+					type: 'error',
+					message: result.errors.sub_category_id[0],
+				});
 			if (result.errors.property_id)
 				setAlert({
 					type: 'error',
@@ -169,9 +176,7 @@ const AddPlaceForm = ({
 		}
 
 		if (result.redirectTo) {
-			router.push(
-				`${result.redirectTo}/${propertySlug}/${categoryId}/${subCategoryId}`
-			);
+			router.push(`${result.redirectTo}/${propertyId}`);
 			return;
 		}
 
@@ -242,6 +247,17 @@ const AddPlaceForm = ({
 
 				<input type="hidden" {...register('latitude')} />
 				<input type="hidden" {...register('longitude')} />
+
+				<div>
+					<label className="flex items-center gap-2">
+						<input
+							type="checkbox"
+							{...register('featured')}
+							className="accent-primary"
+						/>
+						<span>{t('Marcar como destacado')}</span>
+					</label>
+				</div>
 
 				<InputFile
 					label={t('Imagen')}
