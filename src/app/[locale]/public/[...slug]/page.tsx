@@ -9,7 +9,9 @@ import { PropertyDataPublicBySubCategory } from '@/components/templates/property
 import IconStarShine from '@/components/atoms/icon/star-shine';
 import ItineraryForm from '@/components/organisms/form/custom-plan';
 
-type PageProps = { params: { locale: string; slug: string[] } };
+interface PageProps {
+	params: Promise<{ locale: string; slug: string[] }>;
+}
 
 export default async function Property({ params }: PageProps) {
 	const t = await getTranslations();
