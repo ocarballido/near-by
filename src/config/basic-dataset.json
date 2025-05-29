@@ -1,0 +1,51 @@
+[
+	{
+		"nombre": "Nomad Coffee",
+		"tipo": "café",
+		"lat": 41.3851,
+		"lng": 2.1734,
+		"descripcion": "Café de especialidad con ambiente moderno",
+		"duracion_aprox": 30
+	},
+	{
+		"nombre": "Museo Picasso",
+		"tipo": "museo",
+		"lat": 41.3859,
+		"lng": 2.1801,
+		"descripcion": "Obras de juventud del famoso pintor",
+		"duracion_aprox": 60
+	},
+	{
+		"nombre": "Parque de la Ciutadella",
+		"tipo": "parque",
+		"lat": 41.3881,
+		"lng": 2.1903,
+		"descripcion": "Parque urbano con estanque y esculturas",
+		"duracion_aprox": 45
+	},
+	{
+		"nombre": "Can Solé",
+		"tipo": "restaurante",
+		"lat": 41.3782,
+		"lng": 2.1912,
+		"descripcion": "Restaurante histórico de paella",
+		"duracion_aprox": 90
+	},
+	{
+		"nombre": "Free Walking Tour - Barrio Gótico",
+		"tipo": "tour",
+		"lat": 41.3839,
+		"lng": 2.1761,
+		"descripcion": "Tour gratuito por el corazón medieval de la ciudad",
+		"duracion_aprox": 120,
+		"hora_inicio": "16:00"
+	},
+	{
+		"nombre": "Bunkers del Carmel",
+		"tipo": "mirador",
+		"lat": 41.4181,
+		"lng": 2.1576,
+		"descripcion": "Mirador con vistas panorámicas de Barcelona",
+		"duracion_aprox": 60
+	}
+]

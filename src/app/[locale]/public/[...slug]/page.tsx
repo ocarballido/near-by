@@ -7,14 +7,16 @@ import { getPublicSidebarData } from '@/utils/get-public-sidebar-data';
 import { EditPublicMenuProvider } from '@/lib/context/EditPublicMenuContext';
 import { PropertyDataPublicBySubCategory } from '@/components/templates/property-data-public';
 import IconStarShine from '@/components/atoms/icon/star-shine';
+import ItineraryForm from '@/components/organisms/form/custom-plan';
 
-type PageProps = { params: Promise<{ slug: string[] }> };
+type PageProps = { params: { locale: string; slug: string[] } };
 
 export default async function Property({ params }: PageProps) {
 	const t = await getTranslations();
 
-	const { slug } = await params;
+	const { slug, locale } = await params;
 	const [propertyId, categoryId, subCategoryId] = slug;
+	console.log(locale);
 
 	const sidebarData = await getPublicSidebarData(propertyId);
 
@@ -27,35 +29,48 @@ export default async function Property({ params }: PageProps) {
 		.single();
 	if (propErr || !property?.id) notFound();
 
-	const { data: propertyData, error: errorPropertyData } = await supabase
-		.from('property_data')
-		.select(
-			'id,name,description,image_url,type,name,latitude,longitude,featured,address'
-		)
-		.eq('property_id', propertyId)
-		.eq('sub_category_id', subCategoryId)
-		.order('featured', { ascending: false })
-		.order('name', { ascending: true });
+	let categoryType;
+	let propertyData;
+	let highlightsData;
+	console.log(categoryId);
 
-	const { data: categoryType, error: errorCategoryType } = await supabase
-		.from('categories')
-		.select('type')
-		.eq('id', categoryId)
-		.single();
+	if (categoryId !== 'welcome' && categoryId !== 'custom-plans') {
+		const { data, error: errorPropertyData } = await supabase
+			.from('property_data')
+			.select(
+				'id,name,description,image_url,type,name,latitude,longitude,featured,address'
+			)
+			.eq('property_id', propertyId)
+			.eq('sub_category_id', subCategoryId)
+			.order('featured', { ascending: false })
+			.order('name', { ascending: true });
 
-	const { data: highlightsData, error: errorHighlights } = await supabase
-		.from('property_data')
-		.select(
-			'id, name, description, image_url, type, latitude, longitude, featured, address'
-		)
-		.eq('property_id', propertyId)
-		.eq('featured', true);
+		const { data: type, error: errorCategoryType } = await supabase
+			.from('categories')
+			.select('type')
+			.eq('id', categoryId)
+			.single();
 
-	if (categoryId !== 'welcome' && errorPropertyData) notFound();
-	if (categoryId !== 'welcome' && errorCategoryType) notFound();
-	if (categoryId === 'welcome' && errorHighlights) notFound();
+		propertyData = data;
+		categoryType = type;
 
-	console.log(highlightsData);
+		if (errorPropertyData) notFound();
+		if (errorCategoryType) notFound();
+	}
+
+	if (categoryId === 'welcome') {
+		const { data, error: errorHighlights } = await supabase
+			.from('property_data')
+			.select(
+				'id, name, description, image_url, type, latitude, longitude, featured, address'
+			)
+			.eq('property_id', propertyId)
+			.eq('featured', true);
+
+		highlightsData = data;
+
+		if (errorHighlights) notFound();
+	}
 
 	return (
 		<EditPublicMenuProvider initialData={sidebarData}>
@@ -70,7 +85,7 @@ export default async function Property({ params }: PageProps) {
 				image={property.image_url}
 			>
 				<div className="p-4 font-roboto flex flex-col grow gap-4 bg-white rounded-lg overflow-hidden">
-					{categoryId === 'welcome' ? (
+					{categoryId === 'welcome' && (
 						<>
 							<h1 className="font-heading text-3xl font-bold">
 								{t(
@@ -104,14 +119,25 @@ export default async function Property({ params }: PageProps) {
 								</>
 							)}
 						</>
-					) : (
-						<PropertyDataPublicBySubCategory
-							propertyData={propertyData || []}
-							type={categoryType?.type}
+					)}
+
+					{categoryId === 'custom-plans' && (
+						<ItineraryForm
+							locale={locale}
 							lat={property.latitude}
 							lng={property.longitude}
 						/>
 					)}
+
+					{categoryId !== 'welcome' &&
+						categoryId !== 'custom-plans' && (
+							<PropertyDataPublicBySubCategory
+								propertyData={propertyData || []}
+								type={categoryType?.type}
+								lat={property.latitude}
+								lng={property.longitude}
+							/>
+						)}
 				</div>
 			</PublicContentTemplate>
 		</EditPublicMenuProvider>
