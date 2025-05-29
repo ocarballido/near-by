@@ -26,6 +26,7 @@ import CategoryAccordion from '@/components/molecules/category-accordion';
 import Button from '@/components/molecules/button';
 import GroupItem from '@/components/molecules/group-item';
 import IconHome from '@/components/atoms/icon/home';
+import IconMap from '@/components/atoms/icon/map';
 
 const ICON_COMPONENTS = {
 	IconHealing,
@@ -101,6 +102,29 @@ const PublicSidebar = ({
 							closeSidebar();
 							router.push(
 								`/public/${propertyId}/welcome/highlights`
+							);
+						}}
+					/>
+				</CategoryAccordion>
+
+				<CategoryAccordion
+					open={categoryId === 'custom-plans'}
+					name={t('Planes personalizados')}
+					onClick={() => {
+						closeSidebar();
+						router.push(
+							`/public/${propertyId}/custom-plans/create-plan`
+						);
+					}}
+					icon={<IconMap />}
+				>
+					<GroupItem
+						label={t('Crear plan')}
+						active={subCategoryId === 'create-plan'}
+						onClick={() => {
+							closeSidebar();
+							router.push(
+								`/public/${propertyId}/custom-plans/create-plan`
 							);
 						}}
 					/>
