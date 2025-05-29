@@ -25,10 +25,10 @@ const Spinner = ({ position = 'fixed' }: SpinnerProps) => {
 				/>
 				<div className="absolute w-full h-full top-0 flex flex-wrap items-center justify-center">
 					<Image
-						src="/static/img/icon-green.webp"
+						src="/static/img/icon-gradient.webp"
 						alt="Spinner"
-						height={30}
-						width={30}
+						height={28}
+						width={28}
 					/>
 				</div>
 			</div>

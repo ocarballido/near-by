@@ -59,7 +59,7 @@ const PlacePublic = ({
 					</p>
 				</div>
 				{featured && (
-					<div className="p-1.5 bg-warning-100 rounded-full w-fit h-fit">
+					<div className="p-1.5 rounded-full w-fit h-fit">
 						<IconStarShine color="warning" />
 					</div>
 				)}

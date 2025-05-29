@@ -33,7 +33,9 @@ export default async function Property({ params }: PageProps) {
 			'id,name,description,image_url,type,name,latitude,longitude,featured,address'
 		)
 		.eq('property_id', propertyId)
-		.eq('sub_category_id', subCategoryId);
+		.eq('sub_category_id', subCategoryId)
+		.order('featured', { ascending: false })
+		.order('name', { ascending: true });
 
 	const { data: categoryType, error: errorCategoryType } = await supabase
 		.from('categories')
@@ -75,16 +77,16 @@ export default async function Property({ params }: PageProps) {
 									'¡Te damos la bienvenida con los brazos abiertos!'
 								)}
 							</h1>
-							<h1 className="font-body">
+							<p className="font-body">
 								{t(
 									'Nos alegra que hayas elegido nuestro alojamiento para tu estancia'
 								)}
-							</h1>
-							<h1 className="font-body">
+							</p>
+							<p className="font-body">
 								{t(
 									'Nuestro espacio está preparado para que descanses, te relajes y vivas una experiencia cómoda y sin complicaciones'
 								)}
-							</h1>
+							</p>
 							{highlightsData && highlightsData.length > 0 && (
 								<>
 									<div className="flex items-center mt-6 py-2 px-3 bg-warning-100 rounded-full w-fit">

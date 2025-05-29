@@ -1,7 +1,6 @@
 import clsx from 'clsx';
 
 import CategoryButton from '../caterory-button';
-// import CategoryButtonLink from '../category-button-link';
 import CategoryBody from '../category-body';
 
 type CategoryAccordionProps = {

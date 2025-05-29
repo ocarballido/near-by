@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { useSidebarData } from '@/lib/context/EditMenuContext';
+import { useSidebar } from '@/lib/context/SidebarContext';
 
 import IconApartment from '@/components/atoms/icon/apartment';
 import IconHealing from '@/components/atoms/icon/healing';
@@ -54,7 +55,8 @@ const PropertySidebar = ({
 }: PropertySidebarProps) => {
 	const t = useTranslations();
 
-	const { sidebarData, setActiveSubCategoryType } = useSidebarData();
+	const { sidebarData } = useSidebarData();
+	const { closeSidebar } = useSidebar();
 
 	const router = useRouter();
 
@@ -77,7 +79,7 @@ const PropertySidebar = ({
 							open={category.id === categoryId}
 							name={t(category.name)}
 							onClick={() => {
-								setActiveSubCategoryType(category.type);
+								closeSidebar();
 								router.push(
 									`/app/properties/${propertyId}/${category.id}/${category.sub_categories[0].id}`
 								);
@@ -97,9 +99,7 @@ const PropertySidebar = ({
 											subcategory.id === subCategoryId
 										}
 										onClick={() => {
-											setActiveSubCategoryType(
-												subcategory.type
-											);
+											closeSidebar();
 											router.push(
 												`/app/properties/${propertyId}/${category.id}/${subcategory.id}`
 											);

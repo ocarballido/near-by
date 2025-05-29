@@ -89,7 +89,7 @@ const PublicSidebar = ({
 					open={categoryId === 'welcome'}
 					name="Welcome"
 					onClick={() => {
-						setActiveSubCategoryType('info');
+						closeSidebar();
 						router.push(`/public/${propertyId}/welcome/highlights`);
 					}}
 					icon={<IconHome />}
@@ -98,7 +98,7 @@ const PublicSidebar = ({
 						label="Highlights"
 						active={subCategoryId === 'highlights'}
 						onClick={() => {
-							setActiveSubCategoryType('highlights');
+							closeSidebar();
 							router.push(
 								`/public/${propertyId}/welcome/highlights`
 							);
