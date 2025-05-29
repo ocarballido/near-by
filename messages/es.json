@@ -465,5 +465,6 @@
 	"Selecciona transporte": "Selecciona transporte",
 	"Generar itinerario": "Generar itinerario",
 	"Tu plan personalizado": "Tu plan personalizado",
-	"El contenido que se generará a continuación ha sido creado automáticamente mediante inteligencia artificial": "El contenido que se generará a continuación ha sido creado automáticamente mediante inteligencia artificial, en base a tu ubicación y preferencias. Algunos datos pueden contener imprecisiones o no estar completamente actualizados. Por favor, revisa siempre la información con los lugares o servicios correspondientes antes de tomar decisiones."
+	"El contenido que se generará a continuación ha sido creado automáticamente mediante inteligencia artificial": "El contenido que se generará a continuación ha sido creado automáticamente mediante inteligencia artificial, en base a tu ubicación y preferencias. Algunos datos pueden contener imprecisiones o no estar completamente actualizados. Por favor, revisa siempre la información con los lugares o servicios correspondientes antes de tomar decisiones.",
+	"Tus inquilinos podrán crear planes sugeridos por nuestra AI, asociados sus preferencias, tiempo y mobilidad": "Tus inquilinos podrán crear planes sugeridos por nuestra AI, asociados a sus preferencias, tiempo y mobilidad."
 }

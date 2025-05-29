@@ -26,6 +26,7 @@ import PlaceTooltip from '@/components/atoms/place-tooltip';
 import IconAccountCircle from '@/components/atoms/icon/account-circle';
 import FilterCategories from '@/components/templates/filter-categories';
 import ChimneyEffect from '@/components/atoms/chimney';
+import IconCheckCircle from '@/components/atoms/icon/check-circle';
 // import ModalVideo from '@/components/templates/modal-video';
 
 export default function Home() {
@@ -413,30 +414,55 @@ export default function Home() {
 					/>
 				</div>
 
-				<div className="flex flex-col gap-8 max-w-[400px] md:max-w-sm items-center text-center relative w-full mr-0 p-8 bg-white rounded-lg">
+				<div className="flex flex-col gap-8 max-w-[400px] md:max-w-sm items-center text-center relative w-full mr-0">
 					<div className="absolute -inset-1 z-[-1] rounded-md bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] blur-xl opacity-30"></div>
-					<h2
-						id="artificial-inteligence"
-						className="font-heading text-2xl md:text-6xl font-bold max-w-[800px] ml-auto mr-auto bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] bg-clip-text text-transparent"
-					>
-						{t('Inteligencia artificial')}
-					</h2>
-					<h3 className="font-heading font-medium text-xl md:text-2xl max-w-[800px] ml-auto mr-auto px-4 text-center">
-						{t(
-							'Puedes usar nuestra inteligencia artificial para generar contenido automáticamente'
-						)}
-					</h3>
-					<p className="opacity-60">
-						{t(
-							'Escribe una idea o frase por ejemplo: Instrucciones para el uso del aire acondicionado y te ayudaremos a redactarlo'
-						)}
-					</p>
-					<ButtonLink
-						label={t('Comienza gratis!')}
-						href="/app"
-						iconLeft={<IconAccountCircle />}
-						color="primary"
-					/>
+					<div className="bg-white rounded-lg p-6 flex flex-col gap-4">
+						<h2
+							id="artificial-inteligence"
+							className="font-heading text-2xl md:text-4xl font-bold bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] bg-clip-text text-transparent"
+						>
+							{t('Inteligencia artificial')}
+						</h2>
+						<h3 className="font-heading font-medium text-xl md:text-xl px-4 text-center">
+							{t(
+								'Puedes usar nuestra inteligencia artificial para generar contenido automáticamente'
+							)}
+						</h3>
+						<ButtonLink
+							label={t('Comienza gratis!')}
+							href="/app"
+							iconLeft={<IconAccountCircle />}
+							color="primary"
+						/>
+					</div>
+					<div className="bg-white rounded-lg p-6 flex flex-col gap-4 relative ml-8 mt-4 md:ml-0">
+						<div className="flex absolute top-[-36px] left-[-36px] justify-center items-center w-18 h-18 rounded-full bg-gradient-to-tr from-[#FF6B06]/10 to-[#31C48D]/10">
+							<span className="flex justify-center items-center w-12 h-12 rounded-full bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] font-bold text-xl">
+								<IconCheckCircle color="white" />
+							</span>
+						</div>
+						<div className="flex flex-col gap-4 justify-start">
+							<p className="text-left text-md font-medium">
+								{t(
+									'Escribe una idea o frase por ejemplo: Instrucciones para el uso del aire acondicionado y te ayudaremos a redactarlo'
+								)}
+							</p>
+						</div>
+					</div>
+					<div className="bg-white rounded-lg p-6 flex flex-col gap-4 relative ml-8 mt-4 md:ml-0">
+						<div className="flex absolute top-[-36px] left-[-36px] justify-center items-center w-18 h-18 rounded-full bg-gradient-to-tr from-[#FF6B06]/10 to-[#31C48D]/10">
+							<span className="flex justify-center items-center w-12 h-12 rounded-full bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] font-bold text-xl">
+								<IconCheckCircle color="white" />
+							</span>
+						</div>
+						<div className="flex flex-col gap-4 justify-start">
+							<p className="text-left text-md font-medium">
+								{t(
+									'Tus inquilinos podrán crear planes sugeridos por nuestra AI, asociados sus preferencias, tiempo y mobilidad'
+								)}
+							</p>
+						</div>
+					</div>
 				</div>
 			</section>
 			<section
