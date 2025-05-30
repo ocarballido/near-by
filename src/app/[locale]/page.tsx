@@ -51,14 +51,23 @@ export default function Home() {
 							'Gestiona y comparte toda la información local de tus alojamientos Airbnb en segundos, sin complicaciones técnicas'
 						)}
 					</h3>
-					<div className="px-4">
+					<div className="px-4 flex flex-col gap-2">
 						<ButtonLink
 							label={t('Crea tu primer dashboard gratis')}
 							href="/app"
 							color="primary"
 							className="w-fit"
 						/>
-						{/* <ModalVideo /> */}
+						<div className="flex gap-1">
+							<ButtonLink
+								label={t('Ver casa piloto')}
+								href="https://www.bnbexplorer.com/es/public/37a03a95-cd39-4d40-a22b-7628cbb50245/welcome/highlights"
+								color="white"
+								className="w-full"
+								target="_blank"
+							/>
+							{/* <ModalVideo /> */}
+						</div>
 					</div>
 					<div className="relative w-full">
 						<PlaceTooltip
@@ -187,8 +196,8 @@ export default function Home() {
 				</h2>
 				<div className="flex flex-col md:flex-row gap-4 items-center max-w-[1000px]">
 					<div className="flex flex-1 flex-col gap-4 p-4 items-center text-center">
-						<div className="flex justify-center items-center w-18 h-18 rounded-full bg-primary-100">
-							<span className="flex justify-center items-center w-12 h-12 rounded-full bg-linear-270 from-primary-400 to-teal-600 font-bold text-white text-xl">
+						<div className="flex justify-center items-center w-18 h-18 rounded-full bg-gradient-to-tr from-[#FF6B06]/10 to-[#31C48D]/10">
+							<span className="flex justify-center items-center w-12 h-12 rounded-full bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] font-bold text-white text-xl">
 								1
 							</span>
 						</div>
@@ -202,8 +211,8 @@ export default function Home() {
 						</p>
 					</div>
 					<div className="flex flex-1 flex-col gap-4 p-4 items-center text-center">
-						<div className="flex justify-center items-center w-18 h-18 rounded-full bg-primary-100">
-							<span className="flex justify-center items-center w-12 h-12 rounded-full bg-linear-270 from-primary-400 to-teal-600 font-bold text-white text-xl">
+						<div className="flex justify-center items-center w-18 h-18 rounded-full bg-gradient-to-tr from-[#FF6B06]/10 to-[#31C48D]/10">
+							<span className="flex justify-center items-center w-12 h-12 rounded-full bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] font-bold text-white text-xl">
 								2
 							</span>
 						</div>
@@ -217,8 +226,8 @@ export default function Home() {
 						</p>
 					</div>
 					<div className="flex flex-1 flex-col gap-4 p-4 items-center text-center">
-						<div className="flex justify-center items-center w-18 h-18 rounded-full bg-primary-100">
-							<span className="flex justify-center items-center w-12 h-12 rounded-full bg-linear-270 from-primary-400 to-teal-600 font-bold text-white text-xl">
+						<div className="flex justify-center items-center w-18 h-18 rounded-full bg-gradient-to-tr from-[#FF6B06]/10 to-[#31C48D]/10">
+							<span className="flex justify-center items-center w-12 h-12 rounded-full bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] font-bold text-white text-xl">
 								3
 							</span>
 						</div>

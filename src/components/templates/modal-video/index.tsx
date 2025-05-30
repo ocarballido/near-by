@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useTranslations } from 'next-intl';
 
 import { default as _ReactPlayer } from 'react-player';
 import { ReactPlayerProps } from 'react-player/types/lib';
@@ -9,23 +8,19 @@ const ReactPlayer = _ReactPlayer as unknown as React.FC<ReactPlayerProps>;
 import { Dialog, DialogPanel, DialogBackdrop } from '@headlessui/react';
 
 import ButtonIcon from '@/components/atoms/button-icon';
-import Button from '@/components/molecules/button';
 import IconCancel from '@/components/atoms/icon/cancel';
 import IconPlayArrow from '@/components/atoms/icon/play-arrow';
 
 const ModalVideo = () => {
-	const t = useTranslations();
-
 	const [isOpen, setIsOpen] = useState(false);
 
 	return (
 		<>
-			<Button
-				className="w-full mt-2"
-				label={t('Ver vídeotutorial')}
+			<ButtonIcon
 				onClick={() => setIsOpen(true)}
-				iconLeft={<IconPlayArrow />}
-				color="white"
+				icon={<IconPlayArrow />}
+				color="primary"
+				className="bg-white"
 			/>
 			<Dialog
 				open={isOpen}

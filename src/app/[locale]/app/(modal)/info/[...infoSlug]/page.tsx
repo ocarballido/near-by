@@ -16,7 +16,10 @@ export default async function InfoPage({ params }: PageProps) {
 	const { data: info } = await supabase
 		.from('property_data')
 		.select('name,description')
+		.eq('property_id', propertyId)
+		.eq('category_id', categoryId)
 		.eq('sub_category_id', subCategoryId)
+		.eq('type', 'info')
 		.single();
 
 	const { data: subcategoryName } = await supabase
