@@ -2,8 +2,6 @@
 import { useTranslations } from 'next-intl';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useState } from 'react';
-// Eliminamos useRouter si no lo vamos a usar
-// import { useRouter } from 'next/navigation';
 
 import { createSPASassClient } from '@/lib/supabase/client';
 
@@ -27,8 +25,6 @@ export default function MagicLinkPage() {
 	const [loading, setLoading] = useState(false);
 	const [emailSent, setEmailSent] = useState(false);
 	const [userEmail, setUserEmail] = useState('');
-	// Eliminamos la declaración del router si no lo vamos a usar
-	// const router = useRouter();
 
 	const {
 		register,
@@ -45,25 +41,52 @@ export default function MagicLinkPage() {
 		setError('');
 
 		if (!acceptedTerms) {
-			setError('You must accept the Terms of Service and Privacy Policy');
+			setError('Debes aceptar los términos');
 			return;
 		}
 
 		setLoading(true);
 
 		try {
+			// Esperar a que grecaptcha esté listo
+			await new Promise((resolve) => {
+				if (window.grecaptcha?.ready) {
+					window.grecaptcha.ready(resolve);
+				} else {
+					setTimeout(resolve, 500);
+				}
+			});
+
+			const token = await window.grecaptcha.execute(
+				process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!,
+				{ action: 'submit' }
+			);
+
+			// Validar en backend
+			const response = await fetch('/api/verify-recaptcha', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ token, action: 'submit' }),
+			});
+
+			const result = await response.json();
+
+			if (!result.success) {
+				throw new Error('Validación reCAPTCHA fallida');
+			}
+
+			// Enviar magic link
 			const supabase = await createSPASassClient();
 			const { error } = await supabase.signInWithMagicLink(email);
-
 			if (error) throw error;
 
 			setUserEmail(email);
 			setEmailSent(true);
-		} catch (err: Error | unknown) {
+		} catch (err) {
 			if (err instanceof Error) {
 				setError(err.message);
 			} else {
-				setError('An unknown error occurred');
+				setError('Error inesperado');
 			}
 		} finally {
 			setLoading(false);
@@ -73,64 +96,68 @@ export default function MagicLinkPage() {
 	// Contenido cuando el email ha sido enviado
 	if (emailSent) {
 		return (
-			<div className="relative max-w-96 w-full text-center font-body">
-				<div className="rounded-lg p-6 mb-6">
-					<p className="flex  justify-center">
-						<IconCheckCircle color="success" size={48} />
-					</p>
-
-					<h2 className="text-xl font-heading font-bold text-green-700 mb-4">
-						{t('¡Enlace enviado!')}
-					</h2>
-
-					<p className="mb-1">
-						{t('Hemos enviado un enlace mágico a')}
-					</p>
-
-					<p className="text-sm text-gray-600 mb-6">{userEmail}</p>
-
-					<div className="mb-6">
-						<p>
-							{t(
-								'Revisa tu bandeja de entrada y haz clic en el enlace para iniciar sesión'
-							)}
+			<>
+				<div className="relative max-w-96 w-full text-center font-body">
+					<div className="rounded-lg p-6 mb-6">
+						<p className="flex  justify-center">
+							<IconCheckCircle color="success" size={48} />
 						</p>
-						<p className="mt-2 font-medium">
-							{t('El enlace expirará en 24 horas')}
+
+						<h2 className="text-xl font-heading font-bold text-green-700 mb-4">
+							{t('¡Enlace enviado!')}
+						</h2>
+
+						<p className="mb-1">
+							{t('Hemos enviado un enlace mágico a')}
 						</p>
+
+						<p className="text-sm text-gray-600 mb-6">
+							{userEmail}
+						</p>
+
+						<div className="mb-6">
+							<p>
+								{t(
+									'Revisa tu bandeja de entrada y haz clic en el enlace para iniciar sesión'
+								)}
+							</p>
+							<p className="mt-2 font-medium">
+								{t('El enlace expirará en 24 horas')}
+							</p>
+						</div>
+
+						<div className="mb-6">
+							<h3 className="font-medium text-gray-700 mb-2">
+								{t('¿No has recibido el enlace?')}
+							</h3>
+							<p className="text-sm text-gray-600">
+								{t(
+									'Verifica tu carpeta de spam o correo no deseado'
+								)}
+							</p>
+							<p className="text-sm text-gray-600">
+								{t(
+									'Asegúrate de que la dirección de correo sea correcta'
+								)}
+							</p>
+						</div>
+
+						<Button
+							label={t('Enviar nuevo enlace')}
+							color="secondary"
+							className="w-full mb-2"
+							onClick={() => setEmailSent(false)}
+						/>
+
+						<ButtonLink
+							label={t('Volver al inicio')}
+							href="/"
+							color="primary"
+							className="w-full"
+						/>
 					</div>
-
-					<div className="mb-6">
-						<h3 className="font-medium text-gray-700 mb-2">
-							{t('¿No has recibido el enlace?')}
-						</h3>
-						<p className="text-sm text-gray-600">
-							{t(
-								'Verifica tu carpeta de spam o correo no deseado'
-							)}
-						</p>
-						<p className="text-sm text-gray-600">
-							{t(
-								'Asegúrate de que la dirección de correo sea correcta'
-							)}
-						</p>
-					</div>
-
-					<Button
-						label={t('Enviar nuevo enlace')}
-						color="secondary"
-						className="w-full mb-2"
-						onClick={() => setEmailSent(false)}
-					/>
-
-					<ButtonLink
-						label={t('Volver al inicio')}
-						href="/"
-						color="primary"
-						className="w-full"
-					/>
 				</div>
-			</div>
+			</>
 		);
 	}
 
