@@ -5,7 +5,7 @@ type SpinnerProps = {
 	position?: 'absolute' | 'fixed';
 };
 
-const Spinner = ({ position = 'absolute' }: SpinnerProps) => {
+const Spinner = ({ position = 'fixed' }: SpinnerProps) => {
 	const spinnerStyles = clsx(
 		{ fixed: position === 'fixed' },
 		{ 'absolute top-0 bottom-0 left-0 right-0': position === 'absolute' }
