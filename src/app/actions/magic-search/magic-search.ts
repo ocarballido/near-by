@@ -113,49 +113,21 @@ export async function discoverNearbyPlaces(
 		const supabase = await createServerAdminClient();
 		const now = new Date().toISOString();
 
-		const insertables = [];
-
-		const sortedResults: GooglePlaceResult[] = data.results
+		const insertables = data.results
 			.sort(
 				(a: GooglePlaceResult, b: GooglePlaceResult) =>
 					(b.rating ?? 0) - (a.rating ?? 0)
 			)
+			.slice(0, maxResults)
+			.map((place: GooglePlaceResult) => {
+				const latitude = place.geometry?.location?.lat;
+				const longitude = place.geometry?.location?.lng;
+				const name = place.name?.trim();
+				const address = place.vicinity;
 
-			.slice(0, maxResults);
+				if (!latitude || !longitude || !name || !address) return null;
 
-		for (const place of sortedResults) {
-			const latitude = place.geometry?.location?.lat;
-			const longitude = place.geometry?.location?.lng;
-			const name = place.name;
-			const address = place.vicinity;
-
-			if (!latitude || !longitude || !name || !address) continue;
-
-			const { data: existing, error: checkError } = await supabase
-				.from('property_data')
-				.select('id')
-				.eq('property_id', property_id)
-				.eq('name', name)
-				.eq('latitude', latitude)
-				.eq('longitude', longitude)
-				.maybeSingle();
-
-			if (checkError) {
-				console.error('Error verificando existencia:', checkError);
-				continue;
-			}
-
-			if (existing) {
-				const { error: updateError } = await supabase
-					.from('property_data')
-					.update({ updated_at: now })
-					.eq('id', existing.id);
-
-				if (updateError) {
-					console.error('Error actualizando entry:', updateError);
-				}
-			} else {
-				insertables.push({
+				return {
 					user_id: user.id,
 					property_id,
 					category_id,
@@ -170,14 +142,16 @@ export async function discoverNearbyPlaces(
 					featured: false,
 					created_at: now,
 					updated_at: now,
-				});
-			}
-		}
+				};
+			})
+			.filter(Boolean);
 
 		if (insertables.length > 0) {
 			const { error: insertError } = await supabase
 				.from('property_data')
-				.insert(insertables);
+				.upsert(insertables, {
+					onConflict: 'name,latitude,longitude,sub_category_id',
+				});
 
 			if (insertError) {
 				console.error(
