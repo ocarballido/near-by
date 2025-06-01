@@ -33,8 +33,8 @@ export default async function Property({ params }: PageProps) {
 
 	let categoryType;
 	let propertyData;
+	let subCategoryName;
 	let highlightsData;
-	console.log(categoryId);
 
 	if (categoryId !== 'welcome' && categoryId !== 'custom-plans') {
 		const { data, error: errorPropertyData } = await supabase
@@ -53,25 +53,54 @@ export default async function Property({ params }: PageProps) {
 			.eq('id', categoryId)
 			.single();
 
+		const { data: subCategory, error: errorSubcats } = await supabase
+			.from('sub_categories')
+			.select('id, name')
+			.eq('id', subCategoryId)
+			.single();
+
 		propertyData = data;
 		categoryType = type;
+		subCategoryName = subCategory;
 
 		if (errorPropertyData) notFound();
 		if (errorCategoryType) notFound();
+		if (errorSubcats) notFound();
 	}
 
 	if (categoryId === 'welcome') {
 		const { data, error: errorHighlights } = await supabase
 			.from('property_data')
 			.select(
-				'id, name, description, image_url, type, latitude, longitude, featured, address'
+				'id, name, description, image_url, type, latitude, longitude, featured, address, sub_category_id'
 			)
 			.eq('property_id', propertyId)
 			.eq('featured', true);
 
-		highlightsData = data;
-
 		if (errorHighlights) notFound();
+
+		const subCategoryIds = [
+			...new Set(data.map((item) => item.sub_category_id)),
+		];
+
+		const { data: subCategories, error: errorSubcats } = await supabase
+			.from('sub_categories')
+			.select('id, name')
+			.in('id', subCategoryIds);
+
+		if (errorSubcats || !subCategories) notFound();
+
+		const subCategoryMap = Object.fromEntries(
+			subCategories.map((sub) => [sub.id, sub.name])
+		);
+
+		const grouped = subCategoryIds.map((id) => ({
+			sub_category_id: id,
+			sub_category_name: subCategoryMap[id] || 'Sin nombre',
+			items: data.filter((item) => item.sub_category_id === id),
+		}));
+
+		highlightsData = grouped;
 	}
 
 	return (
@@ -112,12 +141,19 @@ export default async function Property({ params }: PageProps) {
 											{t('Destacados')}
 										</h2>
 									</div>
-									<PropertyDataPublicBySubCategory
-										propertyData={highlightsData || []}
-										lat={property.latitude}
-										lng={property.longitude}
-										type="location"
-									/>
+									{highlightsData.map((group) => (
+										<>
+											<PropertyDataPublicBySubCategory
+												propertyData={group.items || []}
+												lat={property.latitude}
+												lng={property.longitude}
+												type="location"
+												sub_category_name={
+													group.sub_category_name
+												}
+											/>
+										</>
+									))}
 								</>
 							)}
 						</>
@@ -138,6 +174,7 @@ export default async function Property({ params }: PageProps) {
 								type={categoryType?.type}
 								lat={property.latitude}
 								lng={property.longitude}
+								sub_category_name={subCategoryName?.name}
 							/>
 						)}
 				</div>

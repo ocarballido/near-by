@@ -9,15 +9,22 @@ import Map from '@/components/organisms/map';
 import { PropertyLocation } from '@/lib/types';
 
 const PublicLocationContent = ({
+	sub_category_name,
 	locations = [],
 }: {
 	locations: PropertyLocation[];
+	sub_category_name?: string;
 }) => {
 	const [activeView, setActiveView] = useState('list');
 
 	return (
 		<>
-			<div className="bg-white flex gap-1 rounded-lg p-1 justify-end top-2 right-2">
+			<div className="bg-white flex gap-1 rounded-lg p-1 justify-end items-center top-2 right-2">
+				{sub_category_name && (
+					<h3 className="font-heading font-bold mr-auto">
+						{sub_category_name}
+					</h3>
+				)}
 				<button
 					type="button"
 					className={`w-[36px] h-[36px] hover:cursor-pointer hover:${

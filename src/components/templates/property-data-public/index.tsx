@@ -18,18 +18,26 @@ type PropertyDataItem = {
 export function PropertyDataPublicBySubCategory({
 	propertyData,
 	type,
+	sub_category_name,
 }: {
 	propertyData: PropertyDataItem[];
 	type: string;
+	sub_category_name?: string;
 	lat: number;
 	lng: number;
 }) {
 	return (
 		<>
 			{type === 'info' ? (
-				<PropertyInfoContent infos={propertyData} />
+				<PropertyInfoContent
+					infos={propertyData}
+					sub_category_name={sub_category_name}
+				/>
 			) : (
-				<PublicLocationContent locations={propertyData} />
+				<PublicLocationContent
+					locations={propertyData}
+					sub_category_name={sub_category_name}
+				/>
 			)}
 		</>
 	);

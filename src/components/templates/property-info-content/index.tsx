@@ -14,9 +14,13 @@ export interface PropertyInfo {
 
 interface PropertyInfoProps {
 	infos: PropertyLocation[];
+	sub_category_name?: string;
 }
 
-export function PropertyInfoContent({ infos }: PropertyInfoProps) {
+export function PropertyInfoContent({
+	infos,
+	sub_category_name,
+}: PropertyInfoProps) {
 	let info;
 
 	if (infos) {
@@ -26,9 +30,16 @@ export function PropertyInfoContent({ infos }: PropertyInfoProps) {
 	return (
 		<>
 			{info?.description && (
-				<div className="font-medium whitespace-pre-wrap">
-					{info?.description}
-				</div>
+				<>
+					{sub_category_name && (
+						<h3 className="font-heading font-bold mr-auto">
+							{sub_category_name}
+						</h3>
+					)}
+					<div className="font-medium whitespace-pre-wrap">
+						{info?.description}
+					</div>
+				</>
 			)}
 		</>
 	);

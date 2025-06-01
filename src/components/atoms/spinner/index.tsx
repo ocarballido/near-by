@@ -5,7 +5,7 @@ type SpinnerProps = {
 	position?: 'absolute' | 'fixed';
 };
 
-const Spinner = ({ position = 'fixed' }: SpinnerProps) => {
+const Spinner = ({ position = 'absolute' }: SpinnerProps) => {
 	const spinnerStyles = clsx(
 		{ fixed: position === 'fixed' },
 		{ 'absolute top-0 bottom-0 left-0 right-0': position === 'absolute' }
@@ -13,7 +13,7 @@ const Spinner = ({ position = 'fixed' }: SpinnerProps) => {
 
 	return (
 		<div
-			className={`flex flex-wrap z-50 items-center justify-center w-full h-full bg-gray-100/80 ${spinnerStyles}`}
+			className={`flex flex-wrap z-50 items-center justify-center w-full h-full bg-gray-100/80 overflow-hidden inset-0 ${spinnerStyles}`}
 		>
 			<div className="relative">
 				<Image

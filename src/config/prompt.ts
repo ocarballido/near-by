@@ -44,6 +44,8 @@ Instructions:
 - Only mention transport if you can specify the line, stop, or station.
 - Otherwise, just indicate approximate walking time or distance from the accommodation.
 - End with a polite and neutral closing sentence.
+- Do not use Markdown notation such as **bold** or _italic_. Use plain text only.
+
 
 Write the itinerary in English.
 `,
@@ -69,6 +71,7 @@ Instrucciones:
 - Solo menciona transporte si puedes especificar línea, parada o estación.
 - Si no puedes, indica simplemente la distancia o el tiempo estimado desde el alojamiento.
 - Termina con una frase amable y neutral, sin exageraciones.
+- No uses notación Markdown como **negritas** o _cursivas_ en el texto. Usa solo texto plano.
 
 Escribe el itinerario en español.
 `,
