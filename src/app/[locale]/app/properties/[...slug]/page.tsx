@@ -63,8 +63,6 @@ export default async function Property({ params }: PageProps) {
 	if (errorPropertyData) notFound();
 	if (errorsubCategoryName) notFound();
 
-	console.log('*/*/*/*/*', subCategoryName);
-
 	return (
 		<AppContentTemplate
 			sidebar="PROPERTY"
