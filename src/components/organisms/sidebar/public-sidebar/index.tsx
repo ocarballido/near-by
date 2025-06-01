@@ -142,6 +142,7 @@ const PublicSidebar = ({
 								name={t(category.name)}
 								onClick={() => {
 									setActiveSubCategoryType(category.type);
+									closeSidebar();
 									router.push(
 										`/public/${propertyId}/${category.id}/${category.sub_categories[0].id}`
 									);
@@ -160,6 +161,7 @@ const PublicSidebar = ({
 												setActiveSubCategoryType(
 													subcategory.type
 												);
+												closeSidebar();
 												router.push(
 													`/public/${propertyId}/${category.id}/${subcategory.id}`
 												);

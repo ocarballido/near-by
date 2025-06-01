@@ -48,12 +48,22 @@ export default async function Property({ params }: PageProps) {
 
 	const { data: categoryType, error: errorCategoryType } = await supabase
 		.from('categories')
-		.select('type')
+		.select('type,name')
 		.eq('id', categoryId)
 		.single();
 
+	const { data: subCategoryName, error: errorsubCategoryName } =
+		await supabase
+			.from('sub_categories')
+			.select('name')
+			.eq('id', subCategoryId)
+			.single();
+
 	if (errorCategoryType) notFound();
 	if (errorPropertyData) notFound();
+	if (errorsubCategoryName) notFound();
+
+	console.log('*/*/*/*/*', subCategoryName);
 
 	return (
 		<AppContentTemplate
@@ -64,7 +74,10 @@ export default async function Property({ params }: PageProps) {
 			propertyId={propertyId}
 		>
 			<div className="p-4 font-roboto flex flex-col grow gap-4 bg-white rounded-lg overflow-hidden">
-				<PropertyNameTitle propertyName={property.name} />
+				<PropertyNameTitle
+					propertyName={property.name}
+					subCategoryName={subCategoryName?.name}
+				/>
 				<PropertyDataBySubCategory
 					propertyId={propertyId}
 					subCategoryId={subCategoryId}
