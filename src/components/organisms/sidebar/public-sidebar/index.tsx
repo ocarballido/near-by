@@ -107,29 +107,6 @@ const PublicSidebar = ({
 					/>
 				</CategoryAccordion>
 
-				<CategoryAccordion
-					open={categoryId === 'custom-plans'}
-					name={t('Planes personalizados')}
-					onClick={() => {
-						closeSidebar();
-						router.push(
-							`/public/${propertyId}/custom-plans/create-plan`
-						);
-					}}
-					icon={<IconMap />}
-				>
-					<GroupItem
-						label={t('Crear plan')}
-						active={subCategoryId === 'create-plan'}
-						onClick={() => {
-							closeSidebar();
-							router.push(
-								`/public/${propertyId}/custom-plans/create-plan`
-							);
-						}}
-					/>
-				</CategoryAccordion>
-
 				{sidebarData &&
 					sidebarData.map((category) => {
 						const iconName = category.icon as IconName;
@@ -172,6 +149,29 @@ const PublicSidebar = ({
 							</CategoryAccordion>
 						);
 					})}
+
+				<CategoryAccordion
+					open={categoryId === 'custom-plans'}
+					name={t('Planes personalizados')}
+					onClick={() => {
+						closeSidebar();
+						router.push(
+							`/public/${propertyId}/custom-plans/create-plan`
+						);
+					}}
+					icon={<IconMap />}
+				>
+					<GroupItem
+						label={t('Crear plan')}
+						active={subCategoryId === 'create-plan'}
+						onClick={() => {
+							closeSidebar();
+							router.push(
+								`/public/${propertyId}/custom-plans/create-plan`
+							);
+						}}
+					/>
+				</CategoryAccordion>
 			</aside>
 		</>
 	);
