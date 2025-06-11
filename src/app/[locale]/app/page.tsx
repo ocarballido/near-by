@@ -39,8 +39,8 @@ export default function DashboardContent() {
 							key={tip.id}
 							className="flex flex-col w-full md:w-full lg:w-1/2 xl:w-1/3 gap-4 p-4 items-center text-center"
 						>
-							<div className="flex justify-center items-center w-18 h-18 rounded-full bg-primary-100">
-								<span className="flex justify-center items-center w-12 h-12 rounded-full bg-linear-270 from-primary-400 to-teal-600 font-bold text-white text-xl">
+							<div className="flex justify-center items-center w-18 h-18 rounded-full bg-gradient-to-tr from-[#FF6B06]/10 to-[#31C48D]/10">
+								<span className="flex justify-center items-center w-12 h-12 rounded-full bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] font-bold text-white text-xl">
 									{tip.id}
 								</span>
 							</div>

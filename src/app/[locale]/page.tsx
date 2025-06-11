@@ -388,11 +388,23 @@ export default function Home() {
 									'Sin contraseñas ni logins: tu huésped abre el enlace y descubre lo mejor del barrio'
 								)}
 							</p>
+							<p className="font-body font-medium pr-4 pl-6">
+								{t(
+									'Puedes compartir este enlace de manera fácil'
+								)}
+							</p>
 							<ButtonLink
 								label={t('Comienza gratis!')}
 								href="/app"
 								iconLeft={<IconAccountCircle />}
+								className="w-fit ml-6 -mb-3"
+							/>
+							<ButtonLink
+								label={t('Ver casa piloto')}
+								href="https://www.bnbexplorer.com/es/public/37a03a95-cd39-4d40-a22b-7628cbb50245/welcome/highlights"
+								color="secondary"
 								className="w-fit ml-6"
+								target="_blank"
 							/>
 							<span className="w-[32px] h-[32px] bg-primary-400 absolute top-0 left-0 hidden md:block">
 								<span className="w-[32px] h-[32px] bg-white rounded-tl-xl block"></span>
