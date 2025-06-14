@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
 			language = 'es',
 		} = body;
 
-		const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+		const apiKey = process.env.GOOGLE_MAPS_BACKEND_KEY;
 		const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&language=${language}&key=${apiKey}`;
 
 		const results = [];

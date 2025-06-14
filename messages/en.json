@@ -92,7 +92,7 @@
 	"El nombre es obligatorio": "The name is required",
 	"Dirección *": "Address *",
 	"La dirección es obligatoria": "The address is required",
-	"Imagen": "Image",
+	"Imagen": "Image (Max: 500KB. Not required)",
 	"Cancelar": "Cancel",
 	"Añadir propiedad": "Add property",
 	"Nombre ejemplo": "Eg: House in Madrid",

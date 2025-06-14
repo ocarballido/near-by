@@ -17,9 +17,9 @@ export async function GET(request: Request) {
 		);
 	}
 
-	const key = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+	const key = process.env.GOOGLE_MAPS_BACKEND_KEY;
 	if (!key) {
-		console.error('Missing NEXT_PUBLIC_GOOGLE_MAPS_API_KEY');
+		console.error('Missing GOOGLE_MAPS_BACKEND_KEY');
 		return NextResponse.json(
 			{ error: 'server misconfigured' },
 			{ status: 500 }

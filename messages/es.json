@@ -97,7 +97,7 @@
 	"El nombre es obligatorio": "El nombre es obligatorio",
 	"Dirección *": "Dirección *",
 	"La dirección es obligatoria": "La dirección es obligatoria",
-	"Imagen": "Imagen",
+	"Imagen": "Imagen (Max: 500KB. No es obligatorio)",
 	"Cancelar": "Cancelar",
 	"Añadir propiedad": "Añadir propiedad",
 	"Nombre ejemplo": "Ej: Casa en Madrid",

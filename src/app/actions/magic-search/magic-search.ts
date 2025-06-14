@@ -75,7 +75,7 @@ export async function discoverNearbyPlaces(
 		} = parsed.data;
 
 		const maxResults = parseInt(max, 10);
-		const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+		const apiKey = process.env.GOOGLE_MAPS_BACKEND_KEY;
 
 		if (!apiKey) {
 			return {
