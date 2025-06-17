@@ -119,6 +119,7 @@ const PropertiesContent = ({ properties }: PropertiesContentProps) => {
 					image={property?.image_url || null}
 					href={`/app/properties/${property?.id}/${FIRST_CATEGORY_ID}/${FIRST_CATEGORY_SUBCATEGORY_ID}`}
 					address={property?.address}
+					propertyId={property?.id}
 					handleDelete={() => {
 						setIsOpen(true);
 						setSelectedProperty(property?.id);

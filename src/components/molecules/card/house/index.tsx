@@ -7,12 +7,14 @@ import IconDelete from '@/components/atoms/icon/delete';
 import IconEdit from '@/components/atoms/icon/edit';
 import Button from '../../button';
 import ButtonLink from '../../button-link';
+import IconOpenInNew from '@/components/atoms/icon/open-in-new';
 
 type HouseProps = {
 	address: string;
 	className?: string;
 	handleDelete?: () => void;
 	href?: string;
+	propertyId?: string;
 	image?: string | null;
 	name: string;
 	deleatable?: boolean;
@@ -24,6 +26,7 @@ const House = ({
 	className,
 	handleDelete,
 	href,
+	propertyId,
 	name,
 	deleatable = true,
 	editeable = true,
@@ -40,6 +43,14 @@ const House = ({
 		<div
 			className={`flex items-end rounded-xl overflow-hidden p-2 relative h-[400px] transition-all [&>.content]:p-3 [&>.content]:rounded-lg hover:shadow-2xl hover:p-0 hover:[&>.content]:p-5 hover:[&>.content]:rounded-none ${className}`}
 		>
+			<ButtonLink
+				className="w-fit absolute z-6 top-2 right-2 rounded-full !pr-2 pl-2"
+				iconRight={<IconOpenInNew />}
+				label=""
+				color="white"
+				href={`/public/${propertyId}/welcome/highlights`}
+				target="_blank"
+			/>
 			<div className="content transition-all flex justify-end gap-2 flex-col relative w-full bg-white z-5">
 				<div className="flex gap-2">
 					<IconApartment />
