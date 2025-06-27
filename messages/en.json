@@ -344,8 +344,8 @@
 	"Verificando si es tu primer inicio de sesión": "Checking if this is your first login",
 	"Completando inicio de sesión": "Completing login...",
 	"Ocurrió un error inesperado": "An unexpected error occurred",
-	"meta description": "Find Local Gems Instantly - BnBExplorer helps you instantly find the most authentic spots near your stay: from hidden cafes and bars to walks and activities only locals know about.",
-	"meta keywords": "BnBExplorer, Airbnb local guide, discover neighborhood, explore neighborhood, local gems, nearby Airbnb places, personalized recommendations, interactive maps, authentic experiences, local travel guide, hidden gems, neighborhood explorer, local guide, travel companion",
+	"meta description": "Find Local Gems Instantly - BNBExplorer, your Airbnb local guide to discover hidden gems, explore neighborhoods, and create personalized recommendations with Gen AI and interactive maps.",
+	"meta keywords": "BNBExplorer, Airbnb local guide, discover neighborhood, explore neighborhood, local gems, nearby Airbnb places, personalized recommendations, interactive maps, authentic experiences, local travel guide, hidden gems, neighborhood explorer, local guide, travel companion, Gen AI",
 	"Nueva Propiedad": "New Property",
 	"Mis Propiedades": "My Properties",
 	"Enlace de navagacion": "Navigation, Directions",
@@ -464,5 +464,6 @@
 	"El contenido que se generará a continuación ha sido creado automáticamente mediante inteligencia artificial": "The content that will be generated below is automatically created by artificial intelligence, based on your location and preferences. Some information may be inaccurate or outdated. Please verify all details with the relevant venues or services before making decisions.",
 	"Tus inquilinos podrán crear planes sugeridos por nuestra AI, asociados sus preferencias, tiempo y mobilidad": "Your tenants will be able to create plans suggested by our AI, based on their preferences, time, and mobility.",
 	"Ver casa piloto": "See show home",
-	"Puedes compartir este enlace de manera fácil": "You can easily share this link on WhatsApp, Instagram, Facebook, or anywhere else. Your tenants don't need to be logged in to any platform to view it."
+	"Puedes compartir este enlace de manera fácil": "You can easily share this link on WhatsApp, Instagram, Facebook, or anywhere else. Your tenants don't need to be logged in to any platform to view it.",
+	"meta title": "BNBExplorer | Airbnb Local Guide with AI: Find Hidden Gems & Plan Trips"
 }

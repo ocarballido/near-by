@@ -28,12 +28,12 @@ export async function generateMetadata({
 	const ogLocale = localeMap[locale] || `${locale}_${locale.toUpperCase()}`;
 
 	return {
-		title: process.env.NEXT_PUBLIC_PRODUCTNAME,
+		title: t('meta title'),
 		description: t('meta description'),
 		keywords: t('meta keywords'),
 		metadataBase: new URL('https://bnbexplorer.com'),
 		openGraph: {
-			title: process.env.NEXT_PUBLIC_PRODUCTNAME,
+			title: t('meta title'),
 			description: t('meta description'),
 			url: `/${locale}`,
 			siteName: 'BNBexplorer',
@@ -50,7 +50,7 @@ export async function generateMetadata({
 		},
 		twitter: {
 			card: 'summary_large_image',
-			title: process.env.NEXT_PUBLIC_PRODUCTNAME,
+			title: t('meta title'),
 			description: t('meta description'),
 			images: ['/static/img/default-property-2x.webp'],
 		},

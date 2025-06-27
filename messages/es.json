@@ -348,8 +348,8 @@
 	"Verificando si es tu primer inicio de sesión": "Verificando si es tu primer inicio de sesión",
 	"Completando inicio de sesión": "Completando inicio de sesión...",
 	"Ocurrió un error inesperado": "Ocurrió un error inesperado",
-	"meta description": "Find Local Gems Instantly - BnBExplorer te ayuda a encontrar al instante los rincones más auténticos cerca de tu estancia: desde cafeterías y bares ocultos hasta paseos y actividades que solo conocen los locales.",
-	"meta keywords": "BnBExplorer, guía local Airbnb, descubrir barrio, explorar vecindario, gemas locales, lugares cercanos Airbnb, recomendaciones personalizadas, mapas interactivos, experiencias auténticas, guía de viaje local, hidden gems, neighborhood explorer, local guide, travel companion",
+	"meta description": "Encuentra Gemas Locales al Momento - BNBExplorer, tu guía local Airbnb para descubrir gemas locales, explorar el vecindario y crear recomendaciones personalizadas con Gen AI y mapas interactivos.",
+	"meta keywords": "BNBExplorer, guía local Airbnb, descubrir barrio, explorar vecindario, gemas locales, lugares cercanos Airbnb, recomendaciones personalizadas, mapas interactivos, experiencias auténticas, guía de viaje local, hidden gems, neighborhood explorer, local guide, travel companion, Gen AI",
 	"Nueva Propiedad": "Nueva Propiedad",
 	"Mis Propiedades": "Mis Propiedades",
 	"Enlace de navagacion": "Navegación, Como llegar",
@@ -468,5 +468,6 @@
 	"El contenido que se generará a continuación ha sido creado automáticamente mediante inteligencia artificial": "El contenido que se generará a continuación ha sido creado automáticamente mediante inteligencia artificial, en base a tu ubicación y preferencias. Algunos datos pueden contener imprecisiones o no estar completamente actualizados. Por favor, revisa siempre la información con los lugares o servicios correspondientes antes de tomar decisiones.",
 	"Tus inquilinos podrán crear planes sugeridos por nuestra AI, asociados sus preferencias, tiempo y mobilidad": "Tus inquilinos podrán crear planes sugeridos por nuestra AI, asociados a sus preferencias, tiempo y mobilidad.",
 	"Ver casa piloto": "Ver casa piloto",
-	"Puedes compartir este enlace de manera fácil": "Puedes compartir este enlace de manera fácil en WhatsApp, Instagram, Facebook... donde quieras. Tus inquilinos NO necesitan estar logados en ninguna plataforma para verlo."
+	"Puedes compartir este enlace de manera fácil": "Puedes compartir este enlace de manera fácil en WhatsApp, Instagram, Facebook... donde quieras. Tus inquilinos NO necesitan estar logados en ninguna plataforma para verlo.",
+	"meta title": "BNBExplorer | Guía local Airbnb con IA: descubre gemas y crea tus planes"
 }
