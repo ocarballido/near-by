@@ -27,7 +27,7 @@ import IconAccountCircle from '@/components/atoms/icon/account-circle';
 import FilterCategories from '@/components/templates/filter-categories';
 import ChimneyEffect from '@/components/atoms/chimney';
 import IconCheckCircle from '@/components/atoms/icon/check-circle';
-// import ModalVideo from '@/components/templates/modal-video';
+import ModalVideo from '@/components/templates/modal-video';
 
 export default function Home() {
 	const t = useTranslations();
@@ -66,7 +66,7 @@ export default function Home() {
 								className="w-full"
 								target="_blank"
 							/>
-							{/* <ModalVideo /> */}
+							<ModalVideo />
 						</div>
 					</div>
 					<div className="relative w-full">

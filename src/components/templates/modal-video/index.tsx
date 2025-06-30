@@ -34,7 +34,7 @@ const ModalVideo = () => {
 						<div className="relative w-full pb-[56.25%] m-0">
 							<ReactPlayer
 								className="absolute top-0 left-0"
-								url="https://www.youtube.com/watch?v=LXb3EKWsInQ"
+								url="https://www.youtube.com/embed/yPqXtdHK8MM?si=KLjPGqPvtpijmPA2"
 								width="100%"
 								height="100%"
 							/>
