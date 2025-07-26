@@ -61,8 +61,17 @@ export const generateAIContent = async (prompt: string) => {
 					messages: [
 						{
 							role: 'system',
-							content:
-								'Responde como un asistente que ayuda a propietarios a redactar contenido útil, amable y claro para sus alojamientos.',
+							content: `
+									Responde como un asistente que ayuda a propietarios a redactar contenido útil, amable y claro para sus alojamientos.
+
+									Instrucciones:
+									- No uses emojis ni símbolos de banderas.
+									- Evita frases en el encabezado como: Aqui tienes la respuesta..., ve directo al texto generado”.
+									- Usa un lenguaje neutral, sencillo y directo.
+									- Separa cada actividad con un salto de línea.
+									- Termina con una frase amable y neutral, sin exageraciones.
+									- No uses notación Markdown como **negritas** o _cursivas_ en el texto. Usa solo texto plano.
+								`,
 						},
 						{
 							role: 'user',
