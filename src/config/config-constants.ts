@@ -29,6 +29,11 @@ export const USER_MENU_OPTIONS = [
 		url: PAGES.subscription,
 		icon: 'IconNewRelease',
 	},
+	{
+		label: 'Web Pública',
+		url: PAGES.home,
+		icon: 'IconLanguage',
+	},
 ];
 
 export const PRIVATE_MENU_OPTIONS = [
