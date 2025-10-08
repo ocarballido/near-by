@@ -141,18 +141,17 @@ export default async function Property({ params }: PageProps) {
 											{t('Destacados')}
 										</h2>
 									</div>
-									{highlightsData.map((group) => (
-										<>
-											<PropertyDataPublicBySubCategory
-												propertyData={group.items || []}
-												lat={property.latitude}
-												lng={property.longitude}
-												type="location"
-												sub_category_name={
-													group.sub_category_name
-												}
-											/>
-										</>
+									{highlightsData.map((group, index) => (
+										<PropertyDataPublicBySubCategory
+											key={index}
+											propertyData={group.items || []}
+											lat={property.latitude}
+											lng={property.longitude}
+											type="location"
+											sub_category_name={
+												group.sub_category_name
+											}
+										/>
 									))}
 								</>
 							)}
