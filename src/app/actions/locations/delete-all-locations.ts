@@ -4,6 +4,9 @@ import { revalidatePath } from 'next/cache';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 import { z } from 'zod';
 
+import type { Tables } from '@/lib/types';
+type PDThumb = Pick<Tables<'property_data'>, 'id' | 'image_url'>;
+
 const DeleteAllSchema = z.object({
 	property_id: z.string().uuid(),
 	sub_category_id: z.string().uuid(),
@@ -39,11 +42,12 @@ export async function deleteAllLocations(
 	try {
 		const supabase = await createServerAdminClient();
 
-		const { data: items, error: fetchError } = await supabase
+		const { data: itemsRes, error: fetchError } = await supabase
 			.from('property_data')
 			.select('id, image_url')
 			.eq('property_id', property_id)
-			.eq('sub_category_id', sub_category_id);
+			.eq('sub_category_id', sub_category_id)
+			.overrideTypes<PDThumb[], { merge: false }>();
 
 		if (fetchError) {
 			return {
@@ -54,6 +58,8 @@ export async function deleteAllLocations(
 				},
 			};
 		}
+
+		const items: PDThumb[] = itemsRes ?? [];
 
 		const imagePaths = items
 			.map((item) => {

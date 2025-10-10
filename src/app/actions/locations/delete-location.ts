@@ -4,15 +4,20 @@
 import { revalidatePath } from 'next/cache';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 
+import type { Tables } from '@/lib/types';
+
 export async function deleteLocation(locationId: string) {
 	const supabase = await createServerAdminClient();
+
+	type ImgOnly = Pick<Tables<'property_data'>, 'image_url'>;
 
 	// 1) Borrar la imagen del bucket (si existe)
 	const { data: loc, error: fetchErr } = await supabase
 		.from('property_data')
 		.select('image_url')
 		.eq('id', locationId)
-		.single();
+		.single()
+		.overrideTypes<ImgOnly, { merge: false }>();
 	if (!fetchErr && loc?.image_url) {
 		const [, path] = loc.image_url.split(
 			'/storage/v1/object/public/location-images/'

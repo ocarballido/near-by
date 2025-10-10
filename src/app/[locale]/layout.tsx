@@ -8,9 +8,7 @@ import { LoadingProvider } from '@/lib/context/LoadingContext';
 import BaseLayout from '@/components/layouts/base';
 
 interface GenerateMetadataProps {
-	params: {
-		locale: string;
-	};
+	params: Promise<{ locale: string }>;
 }
 
 export async function generateMetadata({
@@ -62,7 +60,7 @@ export default async function RootLayout({
 	params,
 }: Readonly<{
 	children: React.ReactNode;
-	params: { locale: string };
+	params: Promise<{ locale: string }>;
 }>) {
 	const { locale } = await params;
 

@@ -3,11 +3,18 @@
 
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 import { CategoryWithSubCategories } from '@/lib/types';
+import type { Tables } from '@/lib/types';
 
-export type SubCategory = {
-	id: string;
-	name: string;
-	type: 'info' | 'location';
+type SubMini = Pick<
+	Tables<'sub_categories'>,
+	'id' | 'name' | 'type' | 'order_index'
+>;
+
+type CatWithSubs = Pick<
+	Tables<'categories'>,
+	'id' | 'name' | 'icon' | 'type' | 'order_index'
+> & {
+	sub_categories: SubMini[];
 };
 
 export async function getSidebarData(): Promise<CategoryWithSubCategories[]> {
@@ -30,7 +37,13 @@ export async function getSidebarData(): Promise<CategoryWithSubCategories[]> {
 			)
 		`
 		)
-		.order('order_index', { ascending: true });
+		.order('order_index', { ascending: true })
+		.overrideTypes<CatWithSubs[], { merge: false }>();
+
+	if (error || !data) {
+		console.error('Error loading sidebar data:', error.message);
+		return [];
+	}
 
 	if (data) {
 		data.forEach((category) => {
@@ -40,10 +53,5 @@ export async function getSidebarData(): Promise<CategoryWithSubCategories[]> {
 		});
 	}
 
-	if (error) {
-		console.error('Error loading sidebar data:', error.message);
-		return [];
-	}
-
-	return data as CategoryWithSubCategories[];
+	return data as unknown as CategoryWithSubCategories[];
 }

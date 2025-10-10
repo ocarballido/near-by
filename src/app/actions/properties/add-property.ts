@@ -11,6 +11,9 @@ import {
 } from '@/config/config-constants';
 import { z } from 'zod';
 
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { Database, TablesInsert } from '@/lib/types';
+
 // Esquema de validación con Zod
 const PropertySchema = z.object({
 	name: z.string().nonempty('El nombre de la propiedad es obligatorio'),
@@ -18,7 +21,6 @@ const PropertySchema = z.object({
 		(v) => (typeof v === 'string' ? v : ''),
 		z.string()
 	),
-	// description: z.string().optional().default(''),
 	address: z.string().nonempty('La dirección es obligatoria'),
 	latitude: z.preprocess(
 		(v) => (v ? Number(v) : null),
@@ -67,6 +69,7 @@ export async function createProperty(formData: FormData): Promise<FormState> {
 		const userId = user.id;
 
 		const supabase = await createServerAdminClient();
+		const db = supabase as unknown as SupabaseClient<Database>;
 
 		// 3. Extraer y validar los datos del formulario
 		const rawData = {
@@ -132,7 +135,7 @@ export async function createProperty(formData: FormData): Promise<FormState> {
 			const fileExt = imageFile.name.split('.').pop();
 			const fileName = `${userId}/property_${Date.now()}.${fileExt}`;
 
-			const { error: uploadError } = await supabase.storage
+			const { error: uploadError } = await db.storage
 				.from('property-images')
 				.upload(fileName, imageFile, {
 					cacheControl: '3600',
@@ -153,25 +156,30 @@ export async function createProperty(formData: FormData): Promise<FormState> {
 			// Obtener URL pública
 			const {
 				data: { publicUrl },
-			} = supabase.storage.from('property-images').getPublicUrl(fileName);
-
+			} = db.storage.from('property-images').getPublicUrl(fileName);
 			imageUrl = publicUrl;
 		}
 
 		// 8. Crear la propiedad en la base de datos
-		const { data: property, error: insertError } = await supabase
+		type IdSlug = { id: string; slug: string | null };
+
+		const payload: TablesInsert<'properties'> = {
+			user_id: userId,
+			name: validated.name,
+			description: validated.description,
+			address: validated.address,
+			latitude: validated.latitude,
+			longitude: validated.longitude,
+			image_url: imageUrl,
+		};
+
+		const { data, error: insertError } = await db
 			.from('properties')
-			.insert({
-				user_id: userId,
-				name: validated.name,
-				description: validated.description,
-				address: validated.address,
-				latitude: validated.latitude,
-				longitude: validated.longitude,
-				image_url: imageUrl,
-			})
+			.insert(payload)
 			.select('id, slug')
 			.single();
+
+		const property = data as IdSlug | null;
 
 		if (insertError || !property?.id) {
 			console.error('Error al crear propiedad:', insertError);

@@ -9,6 +9,25 @@ import { PropertyDataPublicBySubCategory } from '@/components/templates/property
 import IconStarShine from '@/components/atoms/icon/star-shine';
 import ItineraryForm from '@/components/organisms/form/custom-plan';
 
+import type { Tables } from '@/lib/types';
+
+type FullProperty = Tables<'properties'>;
+type PropertyDataRow = Tables<'property_data'>;
+type CategoryTypeOnly = Pick<Tables<'categories'>, 'type'>;
+type SubcatMini = Pick<Tables<'sub_categories'>, 'id' | 'name'>;
+
+const toPublicItem = (r: PropertyDataRow) => ({
+	id: r.id,
+	name: r.name ?? 'Sin nombre',
+	address: r.address ?? '',
+	description: r.description ?? undefined,
+	image_url: r.image_url ?? undefined, // ← importante: undefined, no '' ni null
+	latitude: r.latitude ?? undefined,
+	longitude: r.longitude ?? undefined,
+	type: (r.type as 'info' | 'location') ?? undefined,
+	featured: r.featured ?? false,
+});
+
 interface PageProps {
 	params: Promise<{ locale: string; slug: string[] }>;
 }
@@ -18,7 +37,6 @@ export default async function Property({ params }: PageProps) {
 
 	const { slug, locale } = await params;
 	const [propertyId, categoryId, subCategoryId] = slug;
-	console.log(locale);
 
 	const sidebarData = await getPublicSidebarData(propertyId);
 
@@ -26,15 +44,25 @@ export default async function Property({ params }: PageProps) {
 
 	const { data: property, error: propErr } = await supabase
 		.from('properties')
-		.select('id,name,slug,image_url,address,latitude,longitude')
+		.select('*')
 		.eq('id', propertyId)
-		.single();
+		.single()
+		.overrideTypes<FullProperty, { merge: false }>();
+
 	if (propErr || !property?.id) notFound();
 
-	let categoryType;
-	let propertyData;
-	let subCategoryName;
-	let highlightsData;
+	let categoryType: CategoryTypeOnly | null = null;
+	let propertyData: PropertyDataRow[] = [];
+	let subCategoryName: SubcatMini | null = null;
+
+	// Para 'welcome'
+	let highlightsData:
+		| {
+				sub_category_id: string;
+				sub_category_name: string;
+				items: PropertyDataRow[];
+		  }[]
+		| undefined;
 
 	if (categoryId !== 'welcome' && categoryId !== 'custom-plans') {
 		const { data, error: errorPropertyData } = await supabase
@@ -45,27 +73,30 @@ export default async function Property({ params }: PageProps) {
 			.eq('property_id', propertyId)
 			.eq('sub_category_id', subCategoryId)
 			.order('featured', { ascending: false })
-			.order('name', { ascending: true });
+			.order('name', { ascending: true })
+			.overrideTypes<PropertyDataRow[], { merge: false }>();
 
-		const { data: type, error: errorCategoryType } = await supabase
+		const { data: typeRow, error: errorCategoryType } = await supabase
 			.from('categories')
 			.select('type')
 			.eq('id', categoryId)
-			.single();
+			.single()
+			.overrideTypes<CategoryTypeOnly, { merge: false }>();
 
-		const { data: subCategory, error: errorSubcats } = await supabase
+		const { data: subcatRow, error: errorSubcats } = await supabase
 			.from('sub_categories')
 			.select('id, name')
 			.eq('id', subCategoryId)
-			.single();
-
-		propertyData = data;
-		categoryType = type;
-		subCategoryName = subCategory;
+			.single()
+			.overrideTypes<SubcatMini, { merge: false }>();
 
 		if (errorPropertyData) notFound();
 		if (errorCategoryType) notFound();
 		if (errorSubcats) notFound();
+
+		propertyData = data ?? [];
+		categoryType = typeRow ?? null;
+		subCategoryName = subcatRow ?? null;
 	}
 
 	if (categoryId === 'welcome') {
@@ -75,33 +106,46 @@ export default async function Property({ params }: PageProps) {
 				'id, name, description, image_url, type, latitude, longitude, featured, address, sub_category_id'
 			)
 			.eq('property_id', propertyId)
-			.eq('featured', true);
+			.eq('featured', true)
+			.overrideTypes<PropertyDataRow[], { merge: false }>();
 
 		if (errorHighlights) notFound();
 
-		const subCategoryIds = [
-			...new Set(data.map((item) => item.sub_category_id)),
-		];
+		const subCategoryIds: string[] = Array.from(
+			new Set(
+				(data ?? [])
+					.map((item) => item.sub_category_id)
+					.filter(
+						(id): id is string =>
+							typeof id === 'string' && id.length > 0
+					)
+			)
+		);
 
 		const { data: subCategories, error: errorSubcats } = await supabase
 			.from('sub_categories')
 			.select('id, name')
-			.in('id', subCategoryIds);
+			.in('id', subCategoryIds)
+			.overrideTypes<SubcatMini[], { merge: false }>();
 
 		if (errorSubcats || !subCategories) notFound();
 
-		const subCategoryMap = Object.fromEntries(
+		const subCategoryMap: Record<string, string> = Object.fromEntries(
 			subCategories.map((sub) => [sub.id, sub.name])
 		);
 
 		const grouped = subCategoryIds.map((id) => ({
 			sub_category_id: id,
-			sub_category_name: subCategoryMap[id] || 'Sin nombre',
-			items: data.filter((item) => item.sub_category_id === id),
+			sub_category_name: subCategoryMap[id] ?? 'Sin nombre',
+			items: (data ?? []).filter((item) => item.sub_category_id === id),
 		}));
 
 		highlightsData = grouped;
 	}
+
+	if (property.latitude == null || property.longitude == null) notFound();
+	const lat = property.latitude as number;
+	const lng = property.longitude as number;
 
 	return (
 		<EditPublicMenuProvider initialData={sidebarData}>
@@ -111,8 +155,8 @@ export default async function Property({ params }: PageProps) {
 				categoryId={categoryId}
 				subCategoryId={subCategoryId}
 				name={property.name}
-				latitude={property.latitude}
-				longitude={property.longitude}
+				latitude={lat}
+				longitude={lng}
 				image={property.image_url}
 			>
 				<div className="p-4 font-roboto flex flex-col grow gap-4 bg-white rounded-lg overflow-hidden">
@@ -141,18 +185,19 @@ export default async function Property({ params }: PageProps) {
 											{t('Destacados')}
 										</h2>
 									</div>
-									{highlightsData.map((group) => (
-										<>
-											<PropertyDataPublicBySubCategory
-												propertyData={group.items || []}
-												lat={property.latitude}
-												lng={property.longitude}
-												type="location"
-												sub_category_name={
-													group.sub_category_name
-												}
-											/>
-										</>
+									{highlightsData.map((group, index) => (
+										<PropertyDataPublicBySubCategory
+											key={index}
+											propertyData={(
+												group.items ?? []
+											).map(toPublicItem)}
+											lat={lat}
+											lng={lng}
+											type="location"
+											sub_category_name={
+												group.sub_category_name
+											}
+										/>
 									))}
 								</>
 							)}
@@ -160,20 +205,18 @@ export default async function Property({ params }: PageProps) {
 					)}
 
 					{categoryId === 'custom-plans' && (
-						<ItineraryForm
-							locale={locale}
-							lat={property.latitude}
-							lng={property.longitude}
-						/>
+						<ItineraryForm locale={locale} lat={lat} lng={lng} />
 					)}
 
 					{categoryId !== 'welcome' &&
 						categoryId !== 'custom-plans' && (
 							<PropertyDataPublicBySubCategory
-								propertyData={propertyData || []}
-								type={categoryType?.type}
-								lat={property.latitude}
-								lng={property.longitude}
+								propertyData={(propertyData ?? []).map(
+									toPublicItem
+								)}
+								type={categoryType?.type ?? 'location'}
+								lat={lat}
+								lng={lng}
 								sub_category_name={subCategoryName?.name}
 							/>
 						)}

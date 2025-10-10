@@ -1,6 +1,7 @@
 'use server';
 
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
+import type { Tables } from '@/lib/types';
 
 export type PublicSubCategory = {
 	id: string;
@@ -18,6 +19,19 @@ export type PublicCategory = {
 	sub_categories: PublicSubCategory[];
 };
 
+type CategoryLite = Pick<
+	Tables<'categories'>,
+	'id' | 'name' | 'icon' | 'order_index' | 'type'
+>;
+type UsedSub = Pick<
+	Tables<'property_data'>,
+	'sub_category_id' | 'name' | 'description' | 'latitude'
+>;
+type SubCatRow = Pick<
+	Tables<'sub_categories'>,
+	'id' | 'name' | 'type' | 'category_id' | 'order_index'
+>;
+
 export async function getPublicSidebarData(
 	propertyId: string
 ): Promise<PublicCategory[]> {
@@ -27,7 +41,8 @@ export async function getPublicSidebarData(
 	const { data: categories, error: catError } = await supabase
 		.from('categories')
 		.select('id, name, icon, order_index')
-		.order('order_index', { ascending: true });
+		.order('order_index', { ascending: true })
+		.overrideTypes<CategoryLite[], { merge: false }>();
 
 	if (catError || !categories) return [];
 
@@ -36,7 +51,8 @@ export async function getPublicSidebarData(
 		.from('property_data')
 		.select('sub_category_id, name, description, latitude')
 		.eq('property_id', propertyId)
-		.or('name.not.is.null,description.not.is.null,latitude.not.is.null');
+		.or('name.not.is.null,description.not.is.null,latitude.not.is.null')
+		.overrideTypes<UsedSub[], { merge: false }>();
 
 	if (dataError || !usedSubCategories || usedSubCategories.length === 0) {
 		console.warn('No se encontraron subcategorías con contenido');
@@ -50,6 +66,10 @@ export async function getPublicSidebarData(
 					(item) => item.name || item.description || item.latitude
 				)
 				.map((item) => item.sub_category_id)
+				.filter(
+					(id): id is string =>
+						typeof id === 'string' && id.length > 0
+				)
 		),
 	];
 
@@ -57,7 +77,8 @@ export async function getPublicSidebarData(
 	const { data: subCats, error: subError } = await supabase
 		.from('sub_categories')
 		.select('id, name, type, category_id, order_index')
-		.in('id', usedIds);
+		.in('id', usedIds)
+		.overrideTypes<SubCatRow[], { merge: false }>();
 
 	if (subError || !subCats) return [];
 
@@ -70,7 +91,7 @@ export async function getPublicSidebarData(
 		subCatsByCategory[sub.category_id].push({
 			id: sub.id,
 			name: sub.name,
-			type: sub.type,
+			type: sub.type as 'info' | 'location',
 			order: sub.order_index,
 		});
 	}

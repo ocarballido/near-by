@@ -4,6 +4,13 @@ import { createSSRClient } from '@/lib/supabase/server';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 import { DAILY_AI_USAGE_LIMMIT } from '@/config/config-constants';
 
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { Database, Tables, TablesInsert, TablesUpdate } from '@/lib/types';
+
+type AIUsageRow = Tables<'ai_usage'>;
+type AIUsageInsert = TablesInsert<'ai_usage'>;
+type AIUsageUpdate = TablesUpdate<'ai_usage'>;
+
 export const generateAIContent = async (prompt: string) => {
 	try {
 		// 1) Autenticación con cookies del usuario
@@ -20,29 +27,41 @@ export const generateAIContent = async (prompt: string) => {
 		// 2) Cliente con permisos para acceder a la base de datos
 		const supabase = await createServerAdminClient();
 
+		const db = supabase as unknown as SupabaseClient<Database>;
+
 		// 3) Verificar uso diario de IA
 		const today = new Date().toISOString().split('T')[0];
-		let { data: usage } = await supabase
+
+		const usageResp = await db
 			.from('ai_usage')
 			.select('*')
 			.eq('user_id', user.id)
 			.eq('date', today)
-			.single();
+			.maybeSingle();
+
+		let usage = usageResp.data as Tables<'ai_usage'> | null;
 
 		if (!usage) {
-			const { data: created } = await supabase
+			const payload: AIUsageInsert = {
+				user_id: user.id,
+				count: 1, // 'date' lo rellena tu trigger/servidor si aplica
+			};
+
+			const { data: created } = await db
 				.from('ai_usage')
-				.insert({ user_id: user.id, count: 1 })
+				.insert(payload)
 				.select()
 				.single();
-			usage = created;
+
+			usage = created as AIUsageRow | null;
 		} else if (usage.count >= DAILY_AI_USAGE_LIMMIT) {
 			return { error: 'Límite diario de IA alcanzado' };
 		} else {
-			await supabase
-				.from('ai_usage')
-				.update({ count: usage.count + 1 })
-				.eq('id', usage.id);
+			const updatePayload: AIUsageUpdate = {
+				count: usage.count + 1,
+			};
+
+			await db.from('ai_usage').update(updatePayload).eq('id', usage.id);
 		}
 
 		// 4) Llamada a OpenAI

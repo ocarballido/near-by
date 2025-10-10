@@ -4,12 +4,19 @@
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 import { revalidatePath } from 'next/cache';
 
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { Database, TablesUpdate } from '@/lib/types';
+
 export async function toggleFeatured(id: string, featured: boolean) {
 	const supabase = await createServerAdminClient();
 
-	const { error } = await supabase
+	const db = supabase as unknown as SupabaseClient<Database>;
+
+	const payload: TablesUpdate<'property_data'> = { featured };
+
+	const { error } = await db
 		.from('property_data')
-		.update({ featured })
+		.update(payload)
 		.eq('id', id);
 
 	if (error) {

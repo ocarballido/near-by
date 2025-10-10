@@ -6,6 +6,9 @@ import { createSSRClient } from '@/lib/supabase/server';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 import { MAX_IMAGE_SIZE } from '@/config/config-constants';
 
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { Database, Tables, TablesInsert, TablesUpdate } from '@/lib/types';
+
 // 1) Definimos un esquema Zod para validar el formulario
 const LocationSchema = z.object({
 	property_id: z.string().uuid(),
@@ -57,6 +60,8 @@ export async function createLocation(
 		}
 
 		const supabase = await createServerAdminClient();
+
+		const db = supabase as unknown as SupabaseClient<Database>;
 
 		// 4) Recolectar datos y validarlos con Zod
 		const raw = {
@@ -141,7 +146,8 @@ export async function createLocation(
 		}
 
 		// Verificar si ya existe por unique key: property_id + name + lat + lng
-		const { data: existing, error: findErr } = await supabase
+		type IdOnly = Pick<Tables<'property_data'>, 'id'>;
+		const { data: existing, error: findErr } = await db
 			.from('property_data')
 			.select('id')
 			.eq('property_id', loc.property_id)
@@ -149,7 +155,8 @@ export async function createLocation(
 			.eq('latitude', loc.latitude)
 			.eq('longitude', loc.longitude)
 			.limit(1)
-			.maybeSingle();
+			.maybeSingle()
+			.overrideTypes<IdOnly, { merge: false }>();
 
 		if (findErr) {
 			console.error('Error comprobando existencia:', findErr);
@@ -161,51 +168,53 @@ export async function createLocation(
 		}
 
 		if (existing) {
-			// Actualizar si ya existe
-			const { error: updateErr } = await supabase
+			// 7) Actualizar si ya existe — mismo shape, sólo tipado y call-site neutralizado
+			type PDUpdate = TablesUpdate<'property_data'>;
+			const updatePayload: PDUpdate = {
+				address: loc.address,
+				description: loc.description,
+				image_url,
+				featured: loc.featured,
+				updated_at: new Date().toISOString(),
+			};
+
+			const { error: updateErr } = await db
 				.from('property_data')
-				.update({
-					address: loc.address,
-					description: loc.description,
-					image_url,
-					featured: loc.featured,
-					updated_at: new Date().toISOString(),
-				})
+				.update(updatePayload)
 				.eq('id', existing.id);
 
 			if (updateErr) {
 				console.error('Error actualizando location:', updateErr);
 				return {
-					errors: {
-						server: ['Error actualizando el sitio.'],
-					},
+					errors: { server: ['Error actualizando el sitio.'] },
 				};
 			}
 		} else {
-			// Insertar si no existe
-			const { error: insertErr } = await supabase
+			// 8) Insertar si no existe — mismo shape, sólo tipado y call-site neutralizado
+			type PDInsert = TablesInsert<'property_data'>;
+			const insertPayload: PDInsert = {
+				user_id: user.id,
+				property_id: loc.property_id,
+				category_id: loc.category_id,
+				sub_category_id: loc.sub_category_id,
+				type: 'location',
+				name: loc.name,
+				address: loc.address,
+				description: loc.description,
+				latitude: loc.latitude,
+				longitude: loc.longitude,
+				image_url,
+				featured: loc.featured,
+			};
+
+			const { error: insertErr } = await db
 				.from('property_data')
-				.insert({
-					user_id: user.id,
-					property_id: loc.property_id,
-					category_id: loc.category_id,
-					sub_category_id: loc.sub_category_id,
-					type: 'location',
-					name: loc.name,
-					address: loc.address,
-					description: loc.description,
-					latitude: loc.latitude,
-					longitude: loc.longitude,
-					image_url,
-					featured: loc.featured,
-				});
+				.insert(insertPayload);
 
 			if (insertErr) {
 				console.error('Error insertando location:', insertErr);
 				return {
-					errors: {
-						server: ['Error creando el sitio.'],
-					},
+					errors: { server: ['Error creando el sitio.'] },
 				};
 			}
 		}
