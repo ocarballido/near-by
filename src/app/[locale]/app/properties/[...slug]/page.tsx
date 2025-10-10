@@ -7,6 +7,12 @@ import AppContentTemplate from '@/components/templates/app-content';
 import { createSSRClient } from '@/lib/supabase/server';
 import PropertyNameTitle from '@/components/atoms/property-name-title';
 
+import type { Tables } from '@/lib/types';
+
+type FullProperty = Tables<'properties'>;
+type FullSubcategories = Tables<'sub_categories'>;
+type CategoryTypeOnly = Pick<Tables<'categories'>, 'type'>;
+
 type PageProps = {
 	params: Promise<{ slug: string[] }>;
 };
@@ -33,7 +39,9 @@ export default async function Property({ params }: PageProps) {
 		.from('properties')
 		.select('id,name,slug,image_url,address,latitude,longitude')
 		.eq('id', propertyId)
-		.single();
+		.single()
+		.overrideTypes<FullProperty, { merge: false }>();
+
 	if (propErr || !property?.id) notFound();
 
 	const { data: propertyData, error: errorPropertyData } = await supabase
@@ -50,18 +58,22 @@ export default async function Property({ params }: PageProps) {
 		.from('categories')
 		.select('type,name')
 		.eq('id', categoryId)
-		.single();
+		.single()
+		.overrideTypes<CategoryTypeOnly, { merge: false }>();
 
 	const { data: subCategoryName, error: errorsubCategoryName } =
 		await supabase
 			.from('sub_categories')
 			.select('name')
 			.eq('id', subCategoryId)
-			.single();
+			.single()
+			.overrideTypes<FullSubcategories, { merge: false }>();
 
 	if (errorCategoryType) notFound();
 	if (errorPropertyData) notFound();
 	if (errorsubCategoryName) notFound();
+
+	if (property.latitude == null || property.longitude == null) notFound();
 
 	return (
 		<AppContentTemplate
@@ -80,7 +92,7 @@ export default async function Property({ params }: PageProps) {
 					propertyId={propertyId}
 					subCategoryId={subCategoryId}
 					categoryId={categoryId}
-					type={categoryType?.type}
+					type={categoryType?.type ?? 'location'}
 					propertyData={propertyData ?? []}
 					lat={property.latitude}
 					lng={property.longitude}

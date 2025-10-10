@@ -14,11 +14,29 @@ import PropertiesContent from '@/components/templates/properties-content';
 import PropertiesContentEmpty from '@/components/templates/properties-content-empty';
 import AppContentTemplate from '@/components/templates/app-content';
 
-interface InfoGeneral {
+import type { Tables } from '@/lib/types';
+
+type PropertyMini = Pick<
+	Tables<'properties'>,
+	'id' | 'name' | 'slug' | 'address' | 'image_url'
+>;
+type InfoGeneralDB = Pick<
+	Tables<'property_info'>,
+	'id' | 'property_id' | 'category_id'
+>;
+type FirstCategoryDB = Pick<Tables<'categories'>, 'id' | 'name' | 'icon'>;
+
+type InfoGeneral = { id: string; property_id: string; category_id: string };
+
+type CategoryUI = { id: string; name: string; icon: string };
+type PropertyUI = {
 	id: string;
-	property_id: string;
-	category_id: string;
-}
+	name: string;
+	slug: string;
+	address: string;
+	image_url: string;
+	infoGeneral: InfoGeneral;
+};
 
 export default async function Properties() {
 	const ssrClient = await createSSRClient();
@@ -33,54 +51,74 @@ export default async function Properties() {
 
 	const supabase = await createServerAdminClient();
 
-	const { data: properties, error: propError } = await supabase
+	const { data: propertiesRes, error: propError } = await supabase
 		.from('properties')
 		.select('id,name,slug,address,image_url')
-		.eq('user_id', user.id);
+		.eq('user_id', user.id)
+		.overrideTypes<PropertyMini[], { merge: false }>();
 
 	if (propError) {
 		throw new Error('Error cargando propiedades: ' + propError.message);
 	}
+	const propertiesDB: PropertyMini[] = propertiesRes ?? [];
 
-	const propertyIds = properties.map((p) => p.id);
+	const propertyIds: string[] = propertiesDB.map((p) => p.id);
 
-	const { data: infos, error: infoError } = await supabase
-		.from<'property_info', InfoGeneral>('property_info')
-		.select('id,property_id,category_id')
-		.in('property_id', propertyIds)
-		.eq('title', 'Información general')
-		.order('created_at', { ascending: true });
-	if (infoError) {
-		throw new Error(
-			'Error cargando información general: ' + infoError.message
-		);
+	let infosDB: InfoGeneralDB[] = [];
+	if (propertyIds.length > 0) {
+		const { data: infosRes, error: infoError } = await supabase
+			.from('property_info')
+			.select('id,property_id,category_id')
+			.in('property_id', propertyIds)
+			.eq('title', 'Información general')
+			.order('created_at', { ascending: true })
+			.overrideTypes<InfoGeneralDB[], { merge: false }>();
+
+		if (infoError) {
+			throw new Error(
+				'Error cargando información general: ' + infoError.message
+			);
+		}
+		infosDB = infosRes ?? [];
 	}
 
-	const firstInfoByProperty: Record<string, InfoGeneral> = {};
-	(infos || []).forEach((info) => {
+	const firstInfoByProperty: Record<string, InfoGeneralDB> = {};
+	for (const info of infosDB) {
 		if (!firstInfoByProperty[info.property_id]) {
 			firstInfoByProperty[info.property_id] = info;
 		}
-	});
+	}
 
-	const items = properties.map((p) => ({
-		...p,
-		infoGeneral: firstInfoByProperty[p.id] || null,
+	const items: PropertyUI[] = propertiesDB.map((p) => ({
+		id: p.id,
+		name: p.name,
+		slug: p.slug ?? '', // <- fallback
+		address: p.address,
+		image_url: p.image_url ?? '', // <- fallback
+		infoGeneral: firstInfoByProperty[p.id] ?? null,
 	}));
 
-	const { data: firstCategory, error: catError } = await supabase
+	const { data: firstCategoryDB, error: catError } = await supabase
 		.from('categories')
 		.select('id,name,icon')
 		.order('order_index', { ascending: true })
 		.limit(1)
-		.single();
+		.single()
+		.overrideTypes<FirstCategoryDB, { merge: false }>();
+
 	if (catError) {
 		throw new Error('Error cargando categorías: ' + catError.message);
 	}
 
+	const firstCategory: CategoryUI = {
+		id: firstCategoryDB.id,
+		name: firstCategoryDB.name,
+		icon: firstCategoryDB.icon ?? '', // <- fallback a string vacío o a tu icono por defecto
+	};
+
 	return (
 		<AppContentTemplate>
-			{properties.length === 0 ? (
+			{items.length === 0 ? (
 				<div className="p-4 font-roboto flex flex-col grow gap-4 bg-white rounded-lg overflow-hidden">
 					<div className="block ml-auto mr-auto">
 						<Image

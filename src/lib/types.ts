@@ -661,3 +661,89 @@ export const Constants = {
 		},
 	},
 } as const;
+
+export type IconKey =
+	| 'IconAccountCircle'
+	| 'IconAdd'
+	| 'IconApartment'
+	| 'IconArrowLeftAlt'
+	| 'IconArrowRightAlt'
+	| 'IconBorderColor'
+	| 'IconCancel'
+	| 'IconChatBubble'
+	| 'IconCheck'
+	| 'IconCheckCircle'
+	| 'IconChevronBackward'
+	| 'IconChevronForward'
+	| 'IconClose'
+	| 'IconComedyMask'
+	| 'IconDelete'
+	| 'IconDeleteForever'
+	| 'IconDirections'
+	| 'IconEmergency'
+	| 'IconEdit'
+	| 'IconError'
+	| 'IconFamilyRestroom'
+	| 'IconForkSpoon'
+	| 'IconHealing'
+	| 'IconHelp'
+	| 'IconHome'
+	| 'IconInfo'
+	| 'IconInterests'
+	| 'IconKeyboardArrowDown'
+	| 'IconKeyboardArrowUp'
+	| 'IconLanguage'
+	| 'IconLocalAtm'
+	| 'IconLocalDining'
+	| 'IconLocationOn'
+	| 'IconLogout'
+	| 'IconMap'
+	| 'IconMenu'
+	| 'IconMuseum'
+	| 'IconNature'
+	| 'IconNewRelease'
+	| 'IconNightLife'
+	| 'IconOpenInNew'
+	| 'IconPersonAdd'
+	| 'IconPets'
+	| 'IconSearch'
+	| 'IconShoppingBag'
+	| 'IconTrain';
+
+export interface SidebarMenuItemConfig {
+	label: string;
+	url: string;
+	icon: IconKey;
+}
+
+// types/sidebar.ts
+
+export type SubCategory = {
+	id: string;
+	name: string;
+	type: string;
+};
+
+export type CategoryWithSubCategories = {
+	id: string;
+	name: string;
+	icon: string | null;
+	order_index: number;
+	type: 'info' | 'location';
+	sub_categories: SubCategory[];
+};
+
+// src/lib/types.ts
+
+// lib/types.ts
+export interface PropertyLocation {
+	id: string;
+	name: string;
+	address: string;
+	latitude?: number;
+	longitude?: number;
+	image_url?: string;
+	description?: string;
+	featured?: boolean;
+	type?: 'info' | 'location';
+}

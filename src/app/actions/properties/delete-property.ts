@@ -3,7 +3,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
-// import type { Database } from '@/lib/types';
+import type { Tables } from '@/lib/types';
 
 // type LocationGroupRow = Database['public']['Tables']['location_groups']['Row'];
 
@@ -11,12 +11,16 @@ export async function deleteProperty(propertyId: string) {
 	// 1️⃣ Cliente con Service Role para ignorar RLS
 	const supabase = await createServerAdminClient();
 
+	type PropImgOnly = Pick<Tables<'properties'>, 'image_url'>;
+
 	// Recuperar la URL de la imagen para borrarla del bucket
 	const { data: propData, error: propFetchErr } = await supabase
 		.from('properties')
 		.select('image_url')
 		.eq('id', propertyId)
-		.single();
+		.single()
+		.overrideTypes<PropImgOnly, { merge: false }>();
+
 	if (propFetchErr) {
 		console.error(
 			'Error obteniendo property para borrar imagen:',
@@ -52,11 +56,14 @@ export async function deleteProperty(propertyId: string) {
 		throw new Error('No se pudieron eliminar los datos informativos');
 	}
 
+	type GroupIdOnly = Pick<Tables<'location_groups'>, 'id'>;
+
 	// Obtener todos los grupos de esa propiedad
 	const { data: groups, error: groupFetchErr } = await supabase
 		.from('location_groups')
 		.select('id')
-		.eq('property_id', propertyId);
+		.eq('property_id', propertyId)
+		.overrideTypes<GroupIdOnly[], { merge: false }>();
 
 	if (groupFetchErr) {
 		console.error('Error fetching groups to delete:', groupFetchErr);

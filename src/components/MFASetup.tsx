@@ -11,7 +11,7 @@ import {
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Key, CheckCircle, XCircle, Loader2 } from 'lucide-react';
 import { Factor } from '@supabase/auth-js';
-import { MFAEnrollTOTPParams } from '@supabase/auth-js/src/lib/internal-types';
+import { MFAEnrollTOTPParams } from '@supabase/supabase-js';
 
 interface MFASetupProps {
 	onStatusChange?: () => void;

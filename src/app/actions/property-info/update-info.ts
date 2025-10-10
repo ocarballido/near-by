@@ -6,6 +6,9 @@ import { revalidatePath } from 'next/cache';
 import { createSSRClient } from '@/lib/supabase/server';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { Database, Tables, TablesUpdate } from '@/lib/types';
+
 const CreateInfoSchema = z.object({
 	property_id: z.string().uuid(),
 	category_id: z.string().uuid(),
@@ -42,6 +45,8 @@ export async function updateInfo(formData: FormData): Promise<CreateInfoState> {
 
 		const supabase = await createServerAdminClient();
 
+		const db = supabase as unknown as SupabaseClient<Database>;
+
 		const raw = {
 			property_id: formData.get('property_id'),
 			category_id: formData.get('category_id'),
@@ -64,14 +69,17 @@ export async function updateInfo(formData: FormData): Promise<CreateInfoState> {
 		const { property_id, category_id, sub_category_id, type, content } =
 			parsed.data;
 
-		const { data: existing, error: findError } = await supabase
+		type IdOnly = Pick<Tables<'property_data'>, 'id'>;
+
+		const { data: existing, error: findError } = await db
 			.from('property_data')
 			.select('id')
 			.eq('user_id', user.id)
 			.eq('property_id', property_id)
 			.eq('sub_category_id', sub_category_id)
 			.eq('type', type)
-			.single();
+			.single()
+			.overrideTypes<IdOnly, { merge: false }>();
 
 		if (findError && findError.code !== 'PGRST116') {
 			// 'PGRST116' = no rows found
@@ -88,19 +96,20 @@ export async function updateInfo(formData: FormData): Promise<CreateInfoState> {
 		let dbError = null;
 
 		if (existing) {
+			const payload: TablesUpdate<'property_data'> = {
+				description: content,
+				updated_at: new Date().toISOString(),
+			};
 			// Actualizar
-			const { error } = await supabase
+			const { error } = await db
 				.from('property_data')
-				.update({
-					description: content,
-					updated_at: new Date().toISOString(),
-				})
+				.update(payload)
 				.eq('id', existing.id);
 
 			dbError = error;
 		} else {
 			// Insertar nuevo
-			const { error } = await supabase.from('property_data').insert({
+			const { error } = await db.from('property_data').insert({
 				user_id: user.id,
 				property_id,
 				category_id,

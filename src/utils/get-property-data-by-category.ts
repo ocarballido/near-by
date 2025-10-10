@@ -3,12 +3,9 @@
 
 // import { createSSRClient } from '@/lib/supabase/server';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
+import type { Tables } from '@/lib/types';
 
-export type SubCategory = {
-	id: string;
-	name: string;
-};
-
+export type SubCategory = { id: string; name: string };
 export type CategoryWithSubCategories = {
 	id: string;
 	name: string;
@@ -16,6 +13,10 @@ export type CategoryWithSubCategories = {
 	order_index: number;
 	sub_categories: SubCategory[];
 };
+
+// 👇 tipos auxiliares sacados de tus generados
+type CategoryIdOnly = Pick<Tables<'categories'>, 'id'>;
+type PropertyDataRow = Tables<'property_data'>;
 
 export async function getPropertyDataByCategory({
 	propertyId,
@@ -39,7 +40,8 @@ export async function getPropertyDataByCategory({
 		.from('categories')
 		.select('id')
 		.eq('slug', categoryId)
-		.single();
+		.single()
+		.overrideTypes<CategoryIdOnly, { merge: false }>();
 
 	if (catError || !category) return [];
 
@@ -50,7 +52,8 @@ export async function getPropertyDataByCategory({
 		.eq('user_id', user.id)
 		.eq('property_id', propertyId)
 		.eq('category_id', category.id)
-		.order('created_at', { ascending: false });
+		.order('created_at', { ascending: false })
+		.overrideTypes<PropertyDataRow[], { merge: false }>();
 
 	if (error) {
 		console.error('Error fetching property data:', error.message);

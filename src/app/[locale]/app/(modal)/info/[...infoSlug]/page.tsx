@@ -6,7 +6,6 @@ import type { Tables } from '@/lib/types';
 import UpdateInfoForm from '@/components/organisms/form/info';
 
 type PD = Tables<'property_data'>;
-type SC = Tables<'sub_categories'>;
 
 type PageProps = {
 	params: Promise<{ infoSlug: string[] }>;

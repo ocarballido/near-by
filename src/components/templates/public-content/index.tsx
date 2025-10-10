@@ -7,7 +7,7 @@ import PublicHeader from '../public-header';
 type PublicContentTemplateProps = {
 	address: string;
 	name: string;
-	image: string;
+	image?: string | null;
 	latitude: number;
 	longitude: number;
 	children: React.ReactNode;

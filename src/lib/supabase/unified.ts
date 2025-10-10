@@ -6,14 +6,38 @@ export enum ClientType {
 	SPA = 'spa',
 }
 
+type SupabaseLike = {
+	auth: SupabaseClient<Database>['auth'];
+	storage: SupabaseClient<Database>['storage'];
+	from: SupabaseClient<Database>['from'];
+};
+
 export class SassClient {
-	private client: SupabaseClient<Database>;
+	private client: SupabaseLike;
 	private clientType: ClientType;
 
-	constructor(client: SupabaseClient, clientType: ClientType) {
+	constructor(client: SupabaseLike, clientType: ClientType) {
 		this.client = client;
 		this.clientType = clientType;
 	}
+	// private client: SupabaseClient<Database, 'public', Database['public']>;
+	// private clientType: ClientType;
+
+	// constructor(
+	// 	client: SupabaseClient<Database, 'public', Database['public']>,
+	// 	clientType: ClientType
+	// ) {
+	// 	this.client = client;
+	// 	this.clientType = clientType;
+	// }
+
+	// private client: SupabaseClientCompat;
+	// private clientType: ClientType;
+
+	// constructor(client: SupabaseClientCompat, clientType: ClientType) {
+	// 	this.client = client;
+	// 	this.clientType = clientType;
+	// }
 
 	async loginEmail(email: string, password: string) {
 		return this.client.auth.signInWithPassword({
@@ -23,10 +47,6 @@ export class SassClient {
 	}
 
 	async registerEmail(email: string, password: string) {
-		// return this.client.auth.signUp({
-		// 	email: email,
-		// 	password: password,
-		// });
 		const { data, error } = await this.client.auth.signUp({
 			email,
 			password,
@@ -34,16 +54,16 @@ export class SassClient {
 		if (error) return { data: null, error };
 
 		// 2. Si salió bien, pedimos creación de la subscripción
-		const userId = data.user?.id;
-		if (userId) {
-			fetch('/api/subscription/create-subscription', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ userId }),
-			}).catch((e) => {
-				console.error('No se pudo crear la suscripción:', e);
-			});
-		}
+		// const userId = data.user?.id;
+		// if (userId) {
+		// 	fetch('/api/subscription/create-subscription', {
+		// 		method: 'POST',
+		// 		headers: { 'Content-Type': 'application/json' },
+		// 		body: JSON.stringify({ userId }),
+		// 	}).catch((e) => {
+		// 		console.error('No se pudo crear la suscripción:', e);
+		// 	});
+		// }
 
 		return { data, error: null };
 	}
@@ -109,38 +129,6 @@ export class SassClient {
 			.createSignedUrl(filename, timeInSec, {
 				download: forDownload,
 			});
-	}
-
-	async getMyTodoList(
-		page: number = 1,
-		pageSize: number = 100,
-		order: string = 'created_at',
-		done: boolean | null = false
-	) {
-		let query = this.client
-			.from('todo_list')
-			.select('*')
-			.range(page * pageSize - pageSize, page * pageSize - 1)
-			.order(order);
-		if (done !== null) {
-			query = query.eq('done', done);
-		}
-		return query;
-	}
-
-	async createTask(row: Database['public']['Tables']['todo_list']['Insert']) {
-		return this.client.from('todo_list').insert(row);
-	}
-
-	async removeTask(id: string) {
-		return this.client.from('todo_list').delete().eq('id', id);
-	}
-
-	async updateAsDone(id: string) {
-		return this.client
-			.from('todo_list')
-			.update({ done: true })
-			.eq('id', id);
 	}
 
 	getSupabaseClient() {

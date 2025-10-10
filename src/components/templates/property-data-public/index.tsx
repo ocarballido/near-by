@@ -8,7 +8,7 @@ type PropertyDataItem = {
 	name: string;
 	address: string;
 	description?: string;
-	image_url: string;
+	image_url?: string;
 	latitude?: number;
 	longitude?: number;
 	type?: 'info' | 'location';
