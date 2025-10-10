@@ -134,12 +134,6 @@ export default async function Property({ params }: PageProps) {
 			subCategories.map((sub) => [sub.id, sub.name])
 		);
 
-		// const grouped = subCategoryIds.map((id) => ({
-		// 	sub_category_id: id,
-		// 	sub_category_name: subCategoryMap[id] || 'Sin nombre',
-		// 	items: data.filter((item) => item.sub_category_id === id),
-		// }));
-
 		const grouped = subCategoryIds.map((id) => ({
 			sub_category_id: id,
 			sub_category_name: subCategoryMap[id] ?? 'Sin nombre',

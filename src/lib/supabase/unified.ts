@@ -20,24 +20,6 @@ export class SassClient {
 		this.client = client;
 		this.clientType = clientType;
 	}
-	// private client: SupabaseClient<Database, 'public', Database['public']>;
-	// private clientType: ClientType;
-
-	// constructor(
-	// 	client: SupabaseClient<Database, 'public', Database['public']>,
-	// 	clientType: ClientType
-	// ) {
-	// 	this.client = client;
-	// 	this.clientType = clientType;
-	// }
-
-	// private client: SupabaseClientCompat;
-	// private clientType: ClientType;
-
-	// constructor(client: SupabaseClientCompat, clientType: ClientType) {
-	// 	this.client = client;
-	// 	this.clientType = clientType;
-	// }
 
 	async loginEmail(email: string, password: string) {
 		return this.client.auth.signInWithPassword({
