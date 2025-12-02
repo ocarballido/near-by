@@ -180,7 +180,7 @@ const UpdateInfoForm = ({
 
 				<p className="text-md">
 					{t(
-						'Puedes usar nuestra inteligencia artificial para generar contenido automáticamente'
+						'Utiliza nuestra IA para generar contenido personalizado automáticamente'
 					)}
 				</p>
 

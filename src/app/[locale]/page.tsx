@@ -48,12 +48,12 @@ export default function Home() {
 					</h2>
 					<h3 className="font-heading font-medium text-xl md:text-2xl max-w-[800px] ml-auto mr-auto px-4 text-white">
 						{t(
-							'Gestiona y comparte toda la información local de tus alojamientos Airbnb en segundos, sin complicaciones técnicas'
+							'Gestiona y comparte toda la información local de tus alojamientos Airbnb en segundos, creando tu propia web con ayuda de la IA'
 						)}
 					</h3>
 					<div className="px-4 flex flex-col gap-2">
 						<ButtonLink
-							label={t('Crea tu primer dashboard gratis')}
+							label={t('Crea tu primera guía gratis')}
 							href="/app"
 							color="primary"
 							className="w-fit"
@@ -118,7 +118,7 @@ export default function Home() {
 					id="why"
 					className="font-heading text-4xl font-bold max-w-[800px] ml-auto mr-auto px-4 text-center"
 				>
-					{t('¿Por qué esta herramienta?')}
+					{t('¿Por qué BNB Explorer?')}
 				</h2>
 				<h3 className="font-heading font-medium text-xl md:text-2xl max-w-[800px] ml-auto mr-auto px-4 text-center">
 					{t(
@@ -133,11 +133,11 @@ export default function Home() {
 							</span>
 						</div>
 						<h3 className="text-2xl font-bold">
-							{t('Ahorra tiempo')}
+							{t('Fácil y rápido')}
 						</h3>
 						<p className="font-body font-medium opacity-70">
 							{t(
-								'Centraliza todas las consultas de “¿dónde como?”, “¿qué visito?” en un panel intuitivo'
+								'Centraliza todas las consultas sobre restaurantes, monumentos o museos en un panel intuitivo'
 							)}
 						</p>
 					</div>
@@ -152,7 +152,7 @@ export default function Home() {
 						</h3>
 						<p className="font-body font-medium opacity-70">
 							{t(
-								'Ofrecer una experiencia local personalizada se traduce en valoraciones de 5 estrellas'
+								'Ofrece una experiencia local personalizada y comienza a obtener más valoraciones de 5 estrellas'
 							)}
 						</p>
 					</div>
@@ -167,7 +167,7 @@ export default function Home() {
 						</h3>
 						<p className="font-body font-medium opacity-70">
 							{t(
-								'Olvídate de largos mensajes; envía tu link y deja que la app responda por ti'
+								'Toda la información que necesitan tus huéspedes'
 							)}
 						</p>
 					</div>
@@ -221,7 +221,7 @@ export default function Home() {
 						</h3>
 						<p className="font-body font-medium opacity-70">
 							{t(
-								'Ya vienen cargadas tus 17 categorías esenciales: Salud y Bienestar, Comida y Bebida, Arte y Cultura'
+								'Selecciona entre 17 categorías diferentes: Salud y Bienestar, Comida y Bebida, Arte y Cultura…'
 							)}
 						</p>
 					</div>
@@ -232,11 +232,11 @@ export default function Home() {
 							</span>
 						</div>
 						<h3 className="text-xl font-bold">
-							{t('Comparte tu URL pública')}
+							{t('Comparte tu Enlace')}
 						</h3>
 						<p className="font-body font-medium opacity-70">
 							{t(
-								'Generamos automáticamente un link único por propiedad'
+								'Obtendrás automáticamente un link único por propiedad'
 							)}
 						</p>
 					</div>
@@ -255,7 +255,7 @@ export default function Home() {
 					id="features"
 					className="font-heading text-4xl font-bold max-w-[800px] ml-auto mr-auto px-4 text-center"
 				>
-					{t('Características destacadas')}
+					{t('Conviértete en un anfitrión de 5 estrellas')}
 				</h2>
 				<div className="flex flex-col gap-4 md:gap-0 max-w-[960px] px-4">
 					<div className="flex flex-col md:flex-row items-stretch">
@@ -303,17 +303,16 @@ export default function Home() {
 						<div className="flex-1 flex flex-col justify-center gap-4 py-8 relative">
 							<h3 className="text-3xl pr-4 pl-6">
 								{t(
-									'Categorías & Subcategorías pre-configuradas'
+									'Elige entre distintas Categorías y Subcategorías '
 								)}
 							</h3>
 							<p className="font-body font-medium opacity-70 pr-4 pl-6">
-								{t('Olvídate de empezar de cero')}
+								{t(
+									'Te ayudamos a crear tu guía mediante categorías estándar y subgrupos listos para editar'
+								)}
 							</p>
 							<p className="font-body font-medium opacity-70 pr-4 pl-6">
-								{t('Categorías generales estándar')}
-							</p>
-							<p className="font-body font-medium opacity-70 pr-4 pl-6">
-								{t('Subgrupos listos para editar')}
+								{t('Hospitales, Gimnasios, Restaurantes')}
 							</p>
 							<span className="w-[32px] h-[32px] bg-primary-400 absolute top-0 left-0 hidden md:block">
 								<span className="w-[32px] h-[32px] bg-white rounded-tl-xl block"></span>
@@ -331,12 +330,12 @@ export default function Home() {
 							</h3>
 							<p className="font-body font-medium opacity-70 pr-6 pl-4">
 								{t(
-									'Editar, eliminar o añadir ubicaciones en un par de clics'
+									'Edita, elimina o añade ubicaciones con un par de clics'
 								)}
 							</p>
 							<p className="font-body font-medium opacity-70 pr-6 pl-4">
 								{t(
-									'Interfaz limpia pensada para ser intuitiva, sin curva de aprendizaje'
+									'La app te va guiando paso a paso para que puedas crear la web de tu alojamiento fácilmente en cuestión de segundos'
 								)}
 							</p>
 							<ButtonLink
@@ -378,19 +377,19 @@ export default function Home() {
 						</div>
 						<div className="flex-1 flex flex-col justify-center gap-4 py-8 relative">
 							<h3 className="text-3xl pr-4 pl-6">
-								{t('Links públicos al instante')}
+								{t('Comparte tu link al momento')}
 							</h3>
 							<p className="font-body font-medium opacity-70 pr-4 pl-6">
 								{t('Cada alojamiento recibe su propia URL')}
 							</p>
 							<p className="font-body font-medium opacity-70 pr-4 pl-6">
 								{t(
-									'Sin contraseñas ni logins: tu huésped abre el enlace y descubre lo mejor del barrio'
+									'Sin contraseñas ni logins: tu huésped abre el enlace y descubre lo mejor de la casa y el barrio'
 								)}
 							</p>
 							<p className="font-body font-medium pr-4 pl-6">
 								{t(
-									'Puedes compartir este enlace de manera fácil'
+									'Compártelo por WhatsApp, Instagram, Facebook'
 								)}
 							</p>
 							<ButtonLink
@@ -446,7 +445,7 @@ export default function Home() {
 						</h2>
 						<h3 className="font-heading font-medium text-xl md:text-xl px-4 text-center">
 							{t(
-								'Puedes usar nuestra inteligencia artificial para generar contenido automáticamente'
+								'Utiliza nuestra IA para generar contenido personalizado automáticamente'
 							)}
 						</h3>
 						<ButtonLink
@@ -465,7 +464,7 @@ export default function Home() {
 						<div className="flex flex-col gap-4 justify-start">
 							<p className="text-left text-md font-medium">
 								{t(
-									'Escribe una idea o frase por ejemplo: Instrucciones para el uso del aire acondicionado y te ayudaremos a redactarlo'
+									'Escribe tu idea, por ejemplo: Instrucciones para el uso del aire acondicionado'
 								)}
 							</p>
 						</div>
@@ -479,7 +478,7 @@ export default function Home() {
 						<div className="flex flex-col gap-4 justify-start">
 							<p className="text-left text-md font-medium">
 								{t(
-									'Tus inquilinos podrán crear planes sugeridos por nuestra AI, asociados sus preferencias, tiempo y mobilidad'
+									'Tus inquilinos podrán crear planes sugeridos por nuestra IA, asociados a sus preferencias, tiempo y movilidad'
 								)}
 							</p>
 						</div>
@@ -498,12 +497,12 @@ export default function Home() {
 				</h2>
 				<h3 className="font-heading font-medium text-xl md:text-2xl max-w-[800px] ml-auto mr-auto px-4 text-center text-white">
 					{t(
-						'Saca el máximo partido a tus propiedades con menos esfuerzo'
+						'Mejora la experiencia de tus huéspedes con menos esfuerzo'
 					)}
 				</h3>
 				<div className="flex flex-col items-center p-2 rounded-lg bg-white gap-2">
 					<div className="flex items-center p-2 rounded-md gap-4 font-bold w-full">
-						<p className="w-full">{t('Beneficios')}</p>
+						<p className="w-full">{t('Ventajas')}</p>
 						<p className="w-full">{t('Detalles')}</p>
 					</div>
 					<div className="flex w-full items-center p-4 rounded-md gap-4 bg-gray-100 font-body">
@@ -550,7 +549,7 @@ export default function Home() {
 						</p>
 						<p className="opacity-70  w-full">
 							{t(
-								'Inquilinos organizan su viaje con antelación usando un único enlace'
+								'Los inquilinos organizan su viaje con antelación a través de un único enlace'
 							)}
 						</p>
 					</div>
@@ -586,7 +585,7 @@ export default function Home() {
 						</h2>
 						<h3 className="text-xl md:text-2xl">
 							{t(
-								'Historias de anfitriones que ya disfrutan de sus ventajas'
+								'Anfitriones que ya disfrutan de las ventajas de BNB Explorer'
 							)}
 						</h3>
 						<ButtonLink
