@@ -51,6 +51,7 @@
 		"knip": "5.58.1",
 		"postcss": "8.5.3",
 		"postcss-import": "16.1.0",
+		"supabase": "2.65.3",
 		"tailwindcss": "4.1.4",
 		"typescript": "5"
 	}
