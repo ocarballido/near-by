@@ -1,5 +1,5 @@
 'use client';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useState } from 'react';
 
@@ -20,6 +20,7 @@ type MagicLinkFormInputs = {
 
 export default function MagicLinkPage() {
 	const t = useTranslations();
+	const locale = useLocale();
 
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
@@ -77,7 +78,8 @@ export default function MagicLinkPage() {
 
 			// Enviar magic link
 			const supabase = await createSPASassClient();
-			const { error } = await supabase.signInWithMagicLink(email);
+			const { error } = await supabase.signInWithMagicLink(email, locale);
+
 			if (error) throw error;
 
 			setUserEmail(email);

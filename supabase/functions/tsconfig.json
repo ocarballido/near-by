@@ -1,0 +1,9 @@
+{
+	"compilerOptions": {
+		"allowJs": true,
+		"checkJs": false,
+		"allowImportingTsExtensions": true,
+		"noEmit": true
+	},
+	"include": ["./**/*.ts"]
+}
