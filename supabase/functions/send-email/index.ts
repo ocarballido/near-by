@@ -68,11 +68,10 @@ Deno.serve(async (req: Request) => {
 			magicLink,
 			productName: 'BNBexplorer',
 			appUrl: 'https://bnbexplorer.com',
-			heroUrl: 'https://bnbexplorer.com/static/img/email/hero.png',
-			logoSymbolUrl:
-				'https://bnbexplorer.com/static/img/email/symbol.png',
-			videoImageUrl: 'https://bnbexplorer.com/static/img/email/video.png',
-			footerLogoUrl: 'https://bnbexplorer.com/static/img/email/logo.png',
+			heroUrl: 'https://bnbexplorer.com/static/img/mail/hero.png',
+			logoSymbolUrl: 'https://bnbexplorer.com/static/img/mail/symbol.png',
+			videoImageUrl: 'https://bnbexplorer.com/static/img/mail/video.png',
+			footerLogoUrl: 'https://bnbexplorer.com/static/img/mail/logo.png',
 		});
 
 		const { error } = await resend.emails.send({
