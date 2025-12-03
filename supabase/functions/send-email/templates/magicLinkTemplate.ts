@@ -352,7 +352,7 @@ export function renderMagicLinkEmail({
                   <tbody>
                     <tr>
                       <td>
-                        <a href="${appUrl}" style="text-decoration: none; display: flex; gap: 8px; align-items: center; color: #1F2A37; font-weight: bold;">
+                        <a target="_blank" href="${appUrl}" style="text-decoration: none; display: flex; gap: 8px; align-items: center; color: #1F2A37; font-weight: bold;">
                           <img src="${logoSymbolUrl}" style="display: inline;" alt="${productName} logo" />
                           <p style="margin: 0;">BNBexplorer</p>
                         </a>
@@ -391,7 +391,7 @@ export function renderMagicLinkEmail({
                               <p>${copy.intro}</p>
                               <p>${copy.text1}</p>
                               <p>${copy.text2}</p>
-                              <a href="${appUrl}" style="text-decoration: none; display: block;">
+                              <a target="_blank" href="https://www.youtube.com/watch?v=yPqXtdHK8MM" style="text-decoration: none; display: block;">
                                 <img class="img" src="${videoImageUrl}" alt="Play video tutorial" />
                               </a>
                             </td>
@@ -411,7 +411,7 @@ export function renderMagicLinkEmail({
                   <tbody>
                     <tr>
                       <td class="content-block">
-                        <a href="${appUrl}" style="text-decoration: none; display: block;">
+                        <a href="${appUrl}" target="_blank" style="text-decoration: none; display: block;">
                           <img class="img" src="${footerLogoUrl}" alt="${productName} logo" />
                         </a>
                         <p style="margin-top: 8px;">${copy.footerText}</p>
