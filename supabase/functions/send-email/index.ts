@@ -7,6 +7,18 @@ type DenoEnv = {
 
 declare const Deno: DenoEnv;
 
+interface HeadersWithForEach {
+	forEach: (callback: (value: string, key: string) => void) => void;
+}
+
+function headersToObject(headers: HeadersWithForEach): Record<string, string> {
+	const obj: Record<string, string> = {};
+	headers.forEach((value, key) => {
+		obj[key] = value;
+	});
+	return obj;
+}
+
 import { Webhook } from 'https://esm.sh/standardwebhooks@1.0.0';
 import { Resend } from 'npm:resend';
 import { renderMagicLinkEmail } from './templates/magicLinkTemplate';
@@ -20,10 +32,11 @@ const hookSecret = rawSecret.replace('v1,whsec_', '');
 Deno.serve(async (req: Request) => {
 	try {
 		const payload = await req.text();
-		const headers = Object.fromEntries(req.headers);
+		const headers = headersToObject(
+			req.headers as unknown as HeadersWithForEach
+		);
 
 		const wh = new Webhook(hookSecret);
-
 		const { user, email_data } = wh.verify(payload, headers) as {
 			user: {
 				email: string;
@@ -68,11 +81,10 @@ Deno.serve(async (req: Request) => {
 			magicLink,
 			productName: 'BNBexplorer',
 			appUrl: 'https://bnbexplorer.com',
-			heroUrl: 'https://bnbexplorer.com/static/img/email/hero.png',
-			logoSymbolUrl:
-				'https://bnbexplorer.com/static/img/email/symbol.png',
-			videoImageUrl: 'https://bnbexplorer.com/static/img/email/video.png',
-			footerLogoUrl: 'https://bnbexplorer.com/static/img/email/logo.png',
+			heroUrl: 'https://bnbexplorer.com/static/img/mail/hero.png',
+			logoSymbolUrl: 'https://bnbexplorer.com/static/img/mail/symbol.png',
+			videoImageUrl: 'https://bnbexplorer.com/static/img/mail/video.png',
+			footerLogoUrl: 'https://bnbexplorer.com/static/img/mail/logo.png',
 		});
 
 		const { error } = await resend.emails.send({

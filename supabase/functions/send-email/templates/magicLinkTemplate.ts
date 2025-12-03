@@ -333,6 +333,12 @@ export function renderMagicLinkEmail({
           background-color: #34495e !important;
           border-color: #34495e !important;
         }
+        .btn-span-shadow {
+          text-align: center;
+        }
+        .btn-span-shadow span {
+          box-shadow: 0px 0px 0px 4px #F3F4F6;
+        }
       }
     </style>
   </head>
@@ -366,12 +372,14 @@ export function renderMagicLinkEmail({
 
             <a href="${magicLink}" style="text-decoration: none; display: block;">
               <!-- Hero -->
-              <img class="img" src="${heroUrl}" alt="BNBexplorer Login-Register" />
+              <img class="img" src="${heroUrl}" alt="BNBexplorer Login-Register" style="margin-bottom: -20px;" />
               <!-- /Hero -->
 
               <!-- Button -->
-              <div class="content" style="text-align: center; margin-top: -20px;">
-                <span class="btn-primary" style="box-shadow: 0px 0px 0px 4px #F3F4F6;">${copy.buttonLabel}</span>
+              <div class="content">
+                <div class="btn-span-shadow">
+                  <span class="btn-primary" style="box-shadow: 0px 0px 0px 4px #F3F4F6;">${copy.buttonLabel}</span>
+                </div>
               </div>
               <!-- Button -->
             </a>
