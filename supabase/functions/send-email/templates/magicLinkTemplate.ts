@@ -134,7 +134,7 @@ export function renderMagicLinkEmail({
 
       .wrapper {
         box-sizing: border-box;
-        padding: 20px;
+        padding: 16px;
       }
 
       .appbar {
@@ -249,6 +249,12 @@ export function renderMagicLinkEmail({
         color: #ffffff;
       }
 
+      .btn-span-shadow {
+        text-align: center;
+        display: block;
+        line-height: 48px;
+      }
+
       .preheader {
         color: transparent;
         display: none;
@@ -333,12 +339,6 @@ export function renderMagicLinkEmail({
           background-color: #34495e !important;
           border-color: #34495e !important;
         }
-        .btn-span-shadow {
-          text-align: center;
-        }
-        .btn-span-shadow span {
-          box-shadow: 0px 0px 0px 4px #F3F4F6;
-        }
       }
     </style>
   </head>
@@ -372,7 +372,7 @@ export function renderMagicLinkEmail({
 
             <a href="${magicLink}" style="text-decoration: none; display: block;">
               <!-- Hero -->
-              <img class="img" src="${heroUrl}" alt="BNBexplorer Login-Register" style="margin-bottom: -20px;" />
+              <img class="img" src="${heroUrl}" alt="BNBexplorer Login-Register" />
               <!-- /Hero -->
 
               <!-- Button -->
