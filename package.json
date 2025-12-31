@@ -6,7 +6,10 @@
 		"dev": "next dev",
 		"build": "next build",
 		"start": "next start",
-		"lint": "next lint"
+		"lint": "next lint",
+		"sb:start": "supabase start",
+		"sb:stop": "supabase stop",
+		"sb:status": "supabase status"
 	},
 	"dependencies": {
 		"@headlessui/react": "2.2.2",
