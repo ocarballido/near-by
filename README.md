@@ -36,15 +36,31 @@
 First, run the development server:
 
 ```bash
-npm run dev        # Start development server
-npm run build      # Build for production
-npm run start      # Start the built app
-npm run lint       # Run linter
+npm run dev                 # Start development server
+npm run build               # Build for production
+npm run start               # Start the built app
+npm run lint                # Run linter
+npm run supabase start      # Start Supabase local
+npm run supabase stop       # Stop Supabase local
+npm run supabase status     # Run Supabase Status
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+
+## 🧪 Local Development (Supabase + Docker)
+
+This project uses **Supabase** for database and authentication.
+
+For a **fully local development setup** using Supabase with Docker — including:
+
+-   cloning the production database **schema**
+-   importing **catalog data only** (`categories`, `sub_categories`)
+-   resetting the local database safely
+-   working with Auth and Mailpit locally
+
+👉 See **[README-local.md](./README-local.md)** for the complete step-by-step guide.
 
 ## 🛡️ Legal Status
 
