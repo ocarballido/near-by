@@ -2,7 +2,7 @@
 'use client';
 /// <reference types="google.maps" />
 
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
@@ -31,6 +31,7 @@ type FormValues = {
 
 const AddPropertyForm = () => {
 	const t = useTranslations();
+	const locale = useLocale();
 
 	const router = useRouter();
 
@@ -101,6 +102,7 @@ const AddPropertyForm = () => {
 		fd.append('address', data.address);
 		fd.append('latitude', data.latitude);
 		fd.append('longitude', data.longitude);
+		fd.append('locale', locale);
 		if (file) fd.append('image', file);
 
 		openLoading();
@@ -185,14 +187,17 @@ const AddPropertyForm = () => {
 					></Badge>
 					<Badge label={t('Normas de uso')} color="success"></Badge>
 					<Badge label={t('Horario')} color="success"></Badge>
+					<Badge label={t('Reciclaje')} color="success"></Badge>
 					<Badge label={t('Wifi')} color="success"></Badge>
-					<Badge label={t('Farmacias')} color="success"></Badge>
-					<Badge label={t('Urgencias')} color="success"></Badge>
-					<Badge label={t('Hospitales')} color="success"></Badge>
-					<Badge
-						label={t('Estaciones de policía')}
-						color="success"
-					></Badge>
+				</div>
+				<div className="p-4 bg-sky-100 rounded-md">
+					<p className="text-xs font-normal text-sky-900">
+						{t.rich('auto-content-helper-text', {
+							bold: (chunks) => (
+								<span className="font-bold">{chunks}</span>
+							),
+						})}
+					</p>
 				</div>
 			</fieldset>
 
@@ -245,11 +250,11 @@ const AddPropertyForm = () => {
 					})}
 				/>
 
-				<div className="p-4 bg-sky-100 rounded-md">
+				{/* <div className="p-4 bg-sky-100 rounded-md">
 					<p className="text-xs text-sky-900">
 						{t('Disclaimer de imagen')}
 					</p>
-				</div>
+				</div> */}
 
 				<div className="flex flex-col sm:flex-row gap-2">
 					<ButtonLink
