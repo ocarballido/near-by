@@ -3,6 +3,7 @@ import { AIUsageProvider } from '@/lib/context/AIUsageContext';
 import AppLayout from '@/components/layouts/app';
 import { getSidebarData } from '@/utils/get-sidebar-data';
 import { EditMenuProvider } from '@/lib/context/EditMenuContext';
+import EditorModalStorageCleaner from '@/components/cleanup/auto-content-modal-cleanup';
 
 export default async function Layout({
 	children,
@@ -15,6 +16,7 @@ export default async function Layout({
 			<AIUsageProvider>
 				<AppLayout>
 					<EditMenuProvider initialData={categories}>
+						<EditorModalStorageCleaner />
 						{children}
 					</EditMenuProvider>
 				</AppLayout>
