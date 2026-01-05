@@ -16,6 +16,8 @@ import Button from '@/components/molecules/button';
 import Alert from '@/components/molecules/alert';
 import ButtonMagic from '@/components/molecules/button-magic';
 
+import { DAILY_AI_USAGE_LIMMIT } from '@/config/config-constants';
+
 type AddInfoFormProps = {
 	propertyId: string;
 	categoryId: string;
@@ -125,9 +127,12 @@ const UpdateInfoForm = ({
 
 	const remainingColor = useMemo(() => {
 		if (remaining) {
-			if (remaining >= 20) {
+			if (remaining >= Math.ceil((DAILY_AI_USAGE_LIMMIT / 3) * 2)) {
 				return 'text-primary-500 bg-primary-100';
-			} else if (remaining > 10 && remaining < 20) {
+			} else if (
+				remaining > Math.ceil(DAILY_AI_USAGE_LIMMIT / 3) &&
+				remaining < DAILY_AI_USAGE_LIMMIT
+			) {
 				return 'text-warning-500 bg-warning-100';
 			}
 
