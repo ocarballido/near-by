@@ -469,5 +469,28 @@
 	"Tus inquilinos podrán crear planes sugeridos por nuestra IA, asociados a sus preferencias, tiempo y movilidad": "Tus inquilinos podrán crear planes sugeridos por nuestra AI, asociados a sus preferencias, tiempo y mobilidad.",
 	"Ver casa piloto": "Ver casa piloto",
 	"Compártelo por WhatsApp, Instagram, Facebook": "Compártelo por WhatsApp, Instagram, Facebook... Tus inquilinos NO necesitan estar logados en ninguna plataforma para verlo. ¡Clican y obtienen toda la información!.",
-	"meta title": "BNBExplorer | Guía local Airbnb con IA: descubre gemas y crea tus planes"
+	"meta title": "BNBExplorer | Guía local Airbnb con IA: descubre gemas y crea tus planes",
+	"Contenido generado automáticamente": "Contenido generado automáticamente",
+	"seed": {
+		"lodging": {
+			"wifi": "Mantente conectado durante tu estancia 💻\n- El alojamiento puede disponer de conexión Wifi para uso de los huéspedes.\nLos datos de acceso suelen encontrarse indicados dentro de la vivienda o en esta guía.\nPara una mejor conexión, se recomienda utilizar las zonas comunes o los espacios habilitados para trabajar.\nSi experimentas alguna dificultad con la conexión, comunícalo para poder ayudarte.",
+			"manual": "Bienvenido/a 😊\nHemos preparado esta guía para ayudarte a disfrutar de una estancia cómoda y sin complicaciones. A continuación encontrarás información general sobre el funcionamiento del alojamiento:\nClimatización y confort 🌡️\nSi el alojamiento dispone de sistemas de climatización o calefacción, estos están pensados para tu comodidad. Te recomendamos utilizarlos de forma responsable y apagarlos cuando no sean necesarios.\nAgua caliente 🚿\nEl suministro de agua caliente está preparado para el uso habitual durante la estancia. En algunos casos, puede ser necesario dejar correr el agua unos segundos.\nElectrodomésticos ⚡\nLos electrodomésticos disponibles están destinados a un uso doméstico normal. Te recomendamos seguir las indicaciones básicas y apagarlos tras su uso.\nAcceso al alojamiento 🔐\nEl sistema de acceso ha sido diseñado para ofrecerte una entrada sencilla y segura. Utiliza siempre los métodos indicados y asegúrate de cerrar correctamente al salir.\nSi detectas cualquier incidencia o tienes alguna duda, comunícalo cuanto antes para poder ayudarte.",
+			"schedule": "Para una mejor organización, ten en cuenta lo siguiente:\n- Check-in 🧳\nLa entrada al alojamiento debe realizarse dentro del horario establecido por el anfitrión.\nCheck-out 🧹\nLa salida debe efectuarse respetando el horario indicado, dejando el alojamiento en condiciones adecuadas.\nHorarios de descanso 🌙\nEs importante respetar los periodos de silencio y descanso, especialmente durante la noche.\nSi necesitas flexibilidad horaria, te recomendamos consultarlo con antelación.",
+			"recycling": "Cuidar del entorno es una responsabilidad compartida 🌍\n- Si el alojamiento dispone de sistema de reciclaje:\nSeparación de residuos\nUtiliza los recipientes disponibles según el tipo de residuo.\nContenedores exteriores 🚮\nLos contenedores públicos se encuentran en las inmediaciones del alojamiento.\nAnte cualquier duda, revisa las indicaciones locales o consulta al anfitrión.",
+			"rules": "Estas normas buscan garantizar una experiencia agradable tanto para ti como para el entorno 🤝\nRespeto y convivencia 🔇\nMantén un nivel de ruido adecuado, especialmente durante los horarios de descanso.\nVisitas externas 👥\nSolo deben acceder al alojamiento las personas registradas, salvo autorización previa del anfitrión.\nCuidado de la propiedad 🧼\nTrata el alojamiento y su mobiliario con el mismo cuidado que tu propio hogar.\nUso responsable 🚭\nRespeta las normas específicas del alojamiento sobre fumar, mascotas u otras condiciones particulares.\nGracias por tu colaboración y comprensión."
+		}
+	},
+	"auto-content-helper-text": "Para que tu propiedad esté lista para compartir cuanto antes, añadiremos contenidos base en las secciones principales. No te preocupes, puedes <bold>editarlos o borrarlos</bold> en cualquier momento para que se ajusten al 100% a tu alojamiento.",
+	"auto-modal-title": "Aún no has añadido lugares recomendados",
+	"auto-modal-description": "Hemos detectado que esta propiedad todavía no tiene lugares guardados <bold>(por ejemplo: farmacias, supermercados o restaurantes)</bold>. Si quieres, podemos ayudarte a generarlos automáticamente. Podrás editarlos o eliminarlos más tarde.",
+	"auto-modal-secondary-button-label": "Mas tarde",
+	"auto-modal-primary-button-label": "Generar ahora",
+	"auto-modal-pick-types-label": "Selecciona qué tipos de lugares quieres añadir:",
+	"auto-modal-select-at-least-one": "Selecciona al menos una opción para continuar.",
+	"auto-modal-recommended-description": "Los más útiles para casi cualquier huésped. Puedes ajustar la selección.",
+	"auto-modal-optional-title": "Opcionales",
+	"auto-modal-recommended-title": "Recomendados (incluidos por defecto)",
+	"auto-modal-optional-description": "Añade extras si encajan con tu zona o el tipo de estancia.",
+	"auto-modal-primary-button-loading": "Generando...",
+	"auto-modal-success-message": "Lugares generados correctamente"
 }

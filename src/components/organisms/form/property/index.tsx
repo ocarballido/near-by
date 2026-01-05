@@ -19,6 +19,7 @@ import Button from '@/components/molecules/button';
 import ButtonLink from '@/components/molecules/button-link';
 import Alert from '@/components/molecules/alert';
 import AddressField from '@/components/molecules/google-text-field';
+import Badge from '@/components/atoms/badge';
 
 type FormValues = {
 	name: string;
@@ -172,6 +173,28 @@ const AddPropertyForm = () => {
 					message={alert.message}
 				/>
 			)}
+
+			<fieldset className="w-full max-w-[360px]">
+				<label className="font-bold text-sm mb-2 block">
+					{t('Contenido generado automáticamente')}
+				</label>
+				<div className="flex gap-1 flex-wrap mb-2">
+					<Badge
+						label={t('Manual de alojamiento')}
+						color="success"
+					></Badge>
+					<Badge label={t('Normas de uso')} color="success"></Badge>
+					<Badge label={t('Horario')} color="success"></Badge>
+					<Badge label={t('Wifi')} color="success"></Badge>
+					<Badge label={t('Farmacias')} color="success"></Badge>
+					<Badge label={t('Urgencias')} color="success"></Badge>
+					<Badge label={t('Hospitales')} color="success"></Badge>
+					<Badge
+						label={t('Estaciones de policía')}
+						color="success"
+					></Badge>
+				</div>
+			</fieldset>
 
 			<form
 				onSubmit={handleSubmit(onSubmit)}

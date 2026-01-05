@@ -465,5 +465,28 @@
 	"Tus inquilinos podrán crear planes sugeridos por nuestra IA, asociados a sus preferencias, tiempo y movilidad": "Your tenants will be able to create plans suggested by our AI, based on their preferences, time, and mobility.",
 	"Ver casa piloto": "See show home",
 	"Compártelo por WhatsApp, Instagram, Facebook": "Share it via WhatsApp, Instagram, Facebook... Your tenants don't need to be logged into any platform to view it. They just click and get all the information!",
-	"meta title": "BNBExplorer | Airbnb Local Guide with AI: Find Hidden Gems & Plan Trips"
+	"meta title": "BNBExplorer | Airbnb Local Guide with AI: Find Hidden Gems & Plan Trips",
+	"Contenido generado automáticamente": "Automatically generated content",
+	"seed": {
+		"lodging": {
+			"wifi": "Stay connected during your stay 💻\n-The property may provide a Wi-Fi connection for guest use.\nAccess details are usually indicated inside the home or within this guide.\nFor the best connection, we recommend using common areas or designated workspaces.\nIf you experience any connection issues, please let us know so we can assist you.",
+			"manual": "Welcome! 😊\nWe have prepared this guide to help you enjoy a comfortable and hassle-free stay. Below you will find general information on how the accommodation works:\nClimate and Comfort 🌡️\nIf the property is equipped with air conditioning or heating systems, they are designed for your comfort. We recommend using them responsibly and turning them off when not needed.\nHot Water 🚿\nThe hot water supply is prepared for standard use during your stay. In some cases, it may be necessary to let the water run for a few seconds.\nAppliances ⚡\nAvailable appliances are intended for normal domestic use. We recommend following basic instructions and turning them off after use.\nAccess to the Property 🔐\nThe access system has been designed to provide a simple and secure entry. Always use the indicated methods and ensure everything is properly closed when leaving.\nIf you notice any issues or have any questions, please report them as soon as possible so we can help you.",
+			"schedule": "For better organization, please keep the following in mind:\n- Check-in 🧳\nEntry to the accommodation must take place within the schedule established by the host.\nCheck-out 🧹\nDeparture must be carried out respecting the indicated time, leaving the property in appropriate condition.\nQuiet Hours 🌙\nIt is important to respect periods of silence and rest, especially during the night.\nIf you require schedule flexibility, we recommend inquiring in advance.",
+			"recycling": "Caring for the environment is a shared responsibility 🌍\n- If the property has a recycling system:\nWaste Separation\nPlease use the available bins according to the type of waste.\nOutdoor Bins 🚮\nPublic containers are located in the immediate vicinity of the property.\nIf you have any questions, please check local signs or consult your host.",
+			"rules": "These rules seek to ensure an enjoyable experience for both you and the surroundings 🤝\nRespect and Harmony 🔇\nPlease maintain an appropriate noise level, especially during quiet hours.\nOutside Visitors 👥\nOnly registered guests should access the property, unless prior authorization is granted by the host.\nCaring for the Property 🧼\nPlease treat the accommodation and its furnishings with the same care as your own home.\nResponsible Use 🚭\nRespect specific property rules regarding smoking, pets, or other particular conditions.\nThank you for your cooperation and understanding."
+		}
+	},
+	"auto-content-helper-text": "To get your property ready to share as soon as possible, we'll add basic content to the main sections. Don't worry, you can <bold>edit or delete</bold> it at any time to perfectly match your listing.",
+	"auto-modal-title": "You haven't added recommended places yet",
+	"auto-modal-description": "We've noticed that this property doesn't yet have any saved locations <bold>(for example: pharmacies, supermarkets, or restaurants)</bold>. If you'd like, we can help you generate them automatically. You can edit or delete them later.",
+	"auto-modal-secondary-button-label": "Later",
+	"auto-modal-primary-button-label": "Generate now",
+	"auto-modal-pick-types-label": "Select which types of places you want to add:",
+	"auto-modal-select-at-least-one": "Select at least one option to continue.",
+	"auto-modal-success-message": "Places generated correctly",
+	"auto-modal-primary-button-loading": "Generating...",
+	"auto-modal-recommended-title": "Recommended (included by default)",
+	"auto-modal-recommended-description": "The most useful for almost any guest. You can adjust the selection.",
+	"auto-modal-optional-title": "Optional",
+	"auto-modal-optional-description": "Add extras if they fit your area or the type of stay."
 }
