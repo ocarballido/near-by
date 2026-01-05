@@ -1,14 +1,13 @@
 // app/actions/properties.ts
 'use server';
 
+import { getTranslations } from 'next-intl/server';
+
 import { revalidatePath } from 'next/cache';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 import { createSSRClient } from '@/lib/supabase/server';
 import { MAX_IMAGE_SIZE } from '@/config/config-constants';
-import {
-	FIRST_CATEGORY_ID,
-	FIRST_CATEGORY_SUBCATEGORY_ID,
-} from '@/config/config-constants';
+import { CATEGORIES_SUB_CATEGORIES } from '@/config/config-constants';
 import { z } from 'zod';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
@@ -192,12 +191,107 @@ export async function createProperty(formData: FormData): Promise<FormState> {
 			};
 		}
 
+		// 5) Seed de contenidos automáticos (texto) para "El Alojamiento"
+		//    Importante: se obtiene el locale desde el formData (añádelo en el cliente)
+		const localeRaw = formData.get('locale');
+		const locale =
+			typeof localeRaw === 'string' && localeRaw.length > 0
+				? localeRaw
+				: 'es';
+
+		// Namespace sugerido: "seed.lodging"
+		// Keys esperadas: wifi, manual, schedule, recycling, rules
+		try {
+			const tSeed = await getTranslations({
+				locale,
+				namespace: 'seed.lodging',
+			});
+
+			const lodgingCategoryId = CATEGORIES_SUB_CATEGORIES.LODGING.id;
+
+			const seedRows = [
+				{
+					user_id: userId,
+					property_id: property.id,
+					category_id: lodgingCategoryId,
+					sub_category_id:
+						CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.WIFI
+							.id,
+					type: 'info',
+					description: tSeed('wifi'),
+					name: null,
+				},
+				{
+					user_id: userId,
+					property_id: property.id,
+					category_id: lodgingCategoryId,
+					sub_category_id:
+						CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.MANUAL
+							.id,
+					type: 'info',
+					description: tSeed('manual'),
+					name: null,
+				},
+				{
+					user_id: userId,
+					property_id: property.id,
+					category_id: lodgingCategoryId,
+					sub_category_id:
+						CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES
+							.SCHEDULE.id,
+					type: 'info',
+					description: tSeed('schedule'),
+					name: null,
+				},
+				{
+					user_id: userId,
+					property_id: property.id,
+					category_id: lodgingCategoryId,
+					sub_category_id:
+						CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.RECYCLE
+							.id,
+					type: 'info',
+					description: tSeed('recycling'),
+					name: null,
+				},
+				{
+					user_id: userId,
+					property_id: property.id,
+					category_id: lodgingCategoryId,
+					sub_category_id:
+						CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.RULES
+							.id,
+					type: 'info',
+					description: tSeed('rules'),
+					name: null,
+				},
+			];
+
+			// Insert en bloque (5 filas). No bloqueamos la creación si falla el seed.
+			const { error: seedError } = await db
+				.from('property_data')
+				.insert(seedRows);
+
+			if (seedError) {
+				console.error(
+					'Error al insertar seed de property_data:',
+					seedError
+				);
+			}
+		} catch (seedTranslationsOrInsertError) {
+			// Si falla la carga de traducciones o el insert, no rompemos la creación.
+			console.error(
+				'Error en seed de contenidos automáticos (traducciones/insert):',
+				seedTranslationsOrInsertError
+			);
+		}
+
 		// 10. Revalidar la ruta del dashboard para mostrar la nueva propiedad
 		revalidatePath('/app');
 
 		// 11. Redirigir a la página de edición de la propiedad
 		// const firstCat = categories?.[0];
-		const redirectTo = `/app/properties/${property.id}/${FIRST_CATEGORY_ID}/${FIRST_CATEGORY_SUBCATEGORY_ID}`;
+		const redirectTo = `/app/properties/${property.id}/${CATEGORIES_SUB_CATEGORIES.LODGING.id}/${CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.MANUAL.id}`;
 
 		// if (firstCat) {
 		// 	const catId = firstCat.id;
