@@ -236,7 +236,7 @@ const ModalAutoContent = ({ propertyId, initialHasLocations }: Props) => {
 					}}
 				>
 					<div className="w-full text-left">
-						<p className="text-left text-sm mb-3">
+						<p className="text-left text-sm font-normal mb-4">
 							{t.rich('auto-modal-description', {
 								bold: (chunks) => (
 									<span className="font-bold">{chunks}</span>
@@ -244,7 +244,7 @@ const ModalAutoContent = ({ propertyId, initialHasLocations }: Props) => {
 							})}
 						</p>
 
-						<p className="font-bold text-sm mb-2">
+						<p className="font-bold text-sm mb-1">
 							{t('auto-modal-pick-types-label')}
 						</p>
 
