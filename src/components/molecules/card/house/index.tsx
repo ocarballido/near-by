@@ -8,6 +8,7 @@ import IconEdit from '@/components/atoms/icon/edit';
 import Button from '../../button';
 import ButtonLink from '../../button-link';
 import IconOpenInNew from '@/components/atoms/icon/open-in-new';
+import PropertySteps from '../../property-steps';
 
 type HouseProps = {
 	address: string;
@@ -19,6 +20,8 @@ type HouseProps = {
 	name: string;
 	deleatable?: boolean;
 	editeable?: boolean;
+	hasLocation?: boolean;
+	hasInfo?: boolean;
 };
 
 const House = ({
@@ -30,6 +33,8 @@ const House = ({
 	name,
 	deleatable = true,
 	editeable = true,
+	hasLocation,
+	hasInfo,
 	image = '/static/img/default-property-2x.webp',
 }: HouseProps) => {
 	const t = useTranslations();
@@ -64,6 +69,12 @@ const House = ({
 						{address}
 					</p>
 				</div>
+				{(!hasInfo || !hasLocation) && (
+					<PropertySteps
+						hasLocation={hasLocation || false}
+						hasInfo={hasInfo || false}
+					/>
+				)}
 				<div className="flex gap-2 w-full">
 					{deleatable && (
 						<Button

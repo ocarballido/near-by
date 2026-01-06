@@ -492,5 +492,8 @@
 	"auto-modal-recommended-title": "Recomendados (incluidos por defecto)",
 	"auto-modal-optional-description": "Añade extras si encajan con tu zona o el tipo de estancia.",
 	"auto-modal-primary-button-loading": "Generando...",
-	"auto-modal-success-message": "Lugares generados correctamente"
+	"auto-modal-success-message": "Lugares generados correctamente",
+	"Propiedad añadida": "Propiedad añadida",
+	"Contenido El Alojamiento": "Contenido El Alojamiento",
+	"Localizaciones": "Lugares recomendados"
 }

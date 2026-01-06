@@ -70,7 +70,7 @@ const UpdateInfoForm = ({
 		reset,
 		setValue,
 	} = useForm<FormValues>({
-		defaultValues: { content: initialContent },
+		defaultValues: { content: initialContent ?? '' },
 	});
 
 	const onSubmit: SubmitHandler<FormValues> = async ({ content }) => {
@@ -169,9 +169,7 @@ const UpdateInfoForm = ({
 				<TextArea
 					label={t('Añade el contenido que desees')}
 					defaultValue={initialContent}
-					{...register('content', {
-						required: 'El contenido es obligatorio',
-					})}
+					{...register('content')}
 					error={!!errors.content}
 					helperText={errors.content?.message}
 					rows={15}

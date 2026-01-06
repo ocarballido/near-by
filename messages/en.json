@@ -488,5 +488,8 @@
 	"auto-modal-recommended-title": "Recommended (included by default)",
 	"auto-modal-recommended-description": "The most useful for almost any guest. You can adjust the selection.",
 	"auto-modal-optional-title": "Optional",
-	"auto-modal-optional-description": "Add extras if they fit your area or the type of stay."
+	"auto-modal-optional-description": "Add extras if they fit your area or the type of stay.",
+	"Propiedad añadida": "Property added",
+	"Contenido El Alojamiento": "Contents The Accommodation",
+	"Localizaciones": "Recommended places"
 }

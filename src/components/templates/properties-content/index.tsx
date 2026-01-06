@@ -14,29 +14,17 @@ import IconDelete from '@/components/atoms/icon/delete';
 import Alert from '@/components/molecules/alert';
 import NewPropertyCard from '@/components/molecules/new-property-card';
 
-type Category = {
-	icon: string;
-	name: string;
-	id: string;
-};
-
-type InfoGeneral = {
-	property_id: string;
-	category_id: string;
-	id: string;
-};
-
 type Property = {
 	address: string;
 	slug: string;
 	image_url?: string;
 	name: string;
 	id: string;
-	infoGeneral: InfoGeneral;
+	hasLocation: boolean;
+	hasInfo: boolean;
 };
 
 type PropertiesContentProps = {
-	firstCategory: Category | null;
 	properties: Property[];
 };
 
@@ -117,6 +105,8 @@ const PropertiesContent = ({ properties }: PropertiesContentProps) => {
 					href={`/app/properties/${property?.id}/${CATEGORIES_SUB_CATEGORIES.LODGING.id}/${CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.MANUAL.id}`}
 					address={property?.address}
 					propertyId={property?.id}
+					hasInfo={property?.hasInfo}
+					hasLocation={property?.hasLocation}
 					handleDelete={() => {
 						setIsOpen(true);
 						setSelectedProperty(property?.id);
