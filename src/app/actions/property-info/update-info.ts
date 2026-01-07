@@ -14,7 +14,11 @@ const CreateInfoSchema = z.object({
 	category_id: z.string().uuid(),
 	sub_category_id: z.string().uuid(),
 	type: z.enum(['info', 'location']),
-	content: z.string().nonempty('El contenido es obligatorio'),
+	content: z
+		.string()
+		.transform((v) => v.trim())
+		.transform((v) => (v === '' ? null : v))
+		.nullable(),
 });
 
 export type CreateInfoState = {
@@ -44,7 +48,6 @@ export async function updateInfo(formData: FormData): Promise<CreateInfoState> {
 		}
 
 		const supabase = await createServerAdminClient();
-
 		const db = supabase as unknown as SupabaseClient<Database>;
 
 		const raw = {
@@ -82,7 +85,6 @@ export async function updateInfo(formData: FormData): Promise<CreateInfoState> {
 			.overrideTypes<IdOnly, { merge: false }>();
 
 		if (findError && findError.code !== 'PGRST116') {
-			// 'PGRST116' = no rows found
 			console.error('Error buscando info existente:', findError);
 			return {
 				errors: {
@@ -95,31 +97,43 @@ export async function updateInfo(formData: FormData): Promise<CreateInfoState> {
 
 		let dbError = null;
 
-		if (existing) {
-			const payload: TablesUpdate<'property_data'> = {
-				description: content,
-				updated_at: new Date().toISOString(),
-			};
-			// Actualizar
-			const { error } = await db
-				.from('property_data')
-				.update(payload)
-				.eq('id', existing.id);
+		// ✅ Si el usuario deja vacío: borrar si existe, y si no existe, no hacer nada.
+		if (content === null) {
+			if (existing) {
+				const { error } = await db
+					.from('property_data')
+					.delete()
+					.eq('id', existing.id);
 
-			dbError = error;
+				dbError = error;
+			}
 		} else {
-			// Insertar nuevo
-			const { error } = await db.from('property_data').insert({
-				user_id: user.id,
-				property_id,
-				category_id,
-				sub_category_id,
-				type,
-				description: content,
-				name: null,
-			});
+			// ✅ Hay contenido: update/insert como antes
+			if (existing) {
+				const payload: TablesUpdate<'property_data'> = {
+					description: content,
+					updated_at: new Date().toISOString(),
+				};
 
-			dbError = error;
+				const { error } = await db
+					.from('property_data')
+					.update(payload)
+					.eq('id', existing.id);
+
+				dbError = error;
+			} else {
+				const { error } = await db.from('property_data').insert({
+					user_id: user.id,
+					property_id,
+					category_id,
+					sub_category_id,
+					type,
+					description: content,
+					name: null,
+				});
+
+				dbError = error;
+			}
 		}
 
 		if (dbError) {

@@ -13,7 +13,7 @@ const Spinner = ({ position = 'absolute' }: SpinnerProps) => {
 
 	return (
 		<div
-			className={`flex flex-wrap z-50 items-center justify-center w-full h-full bg-gray-100/80 overflow-hidden inset-0 ${spinnerStyles}`}
+			className={`flex flex-wrap z-100 items-center justify-center w-full h-full bg-gray-100/80 overflow-hidden inset-0 ${spinnerStyles}`}
 		>
 			<div className="relative">
 				<Image

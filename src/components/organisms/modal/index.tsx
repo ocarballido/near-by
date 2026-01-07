@@ -11,6 +11,7 @@ type ModalProps = {
 	description?: React.ReactNode;
 	destructiveButtonLabel?: string;
 	destructiveButtonAction?: () => void;
+	destructiveButtonDisabled?: boolean;
 	icon?: React.ReactNode;
 	message?: string;
 	open: boolean;
@@ -18,23 +19,30 @@ type ModalProps = {
 	title: string;
 	primaryButtonLabel?: string;
 	primaryButtonAction?: () => void;
+	primaryButtonDisabled?: boolean;
 	secondaryButtonLabel?: string;
 	secondaryButtonAction?: () => void;
+	secondaryButtonDisabled?: boolean;
+	children?: React.ReactNode;
 };
 
 const Modal = ({
 	description,
 	destructiveButtonAction,
 	destructiveButtonLabel,
+	destructiveButtonDisabled,
 	icon,
 	message,
 	open,
 	onClose,
 	primaryButtonAction,
 	primaryButtonLabel,
+	primaryButtonDisabled,
 	secondaryButtonAction,
 	secondaryButtonLabel,
+	secondaryButtonDisabled,
 	title,
+	children,
 }: ModalProps) => {
 	return (
 		<Dialog open={open} onClose={onClose} className="relative z-50">
@@ -51,6 +59,8 @@ const Modal = ({
 							<Description>{description}</Description>
 						)}
 						{message && <Description>{message}</Description>}
+
+						{children}
 					</div>
 					<div className="flex justify-end gap-2 p-4 border-t border-t-gray-100">
 						{destructiveButtonLabel && (
@@ -58,6 +68,7 @@ const Modal = ({
 								onClick={destructiveButtonAction}
 								label={destructiveButtonLabel}
 								color="error"
+								disabled={destructiveButtonDisabled}
 							/>
 						)}
 						{secondaryButtonLabel && (
@@ -65,6 +76,7 @@ const Modal = ({
 								onClick={secondaryButtonAction}
 								label={secondaryButtonLabel}
 								color="secondary"
+								disabled={secondaryButtonDisabled}
 							/>
 						)}
 						{primaryButtonLabel && (
@@ -72,6 +84,7 @@ const Modal = ({
 								onClick={primaryButtonAction}
 								label={primaryButtonLabel}
 								color="primary"
+								disabled={primaryButtonDisabled}
 							/>
 						)}
 					</div>

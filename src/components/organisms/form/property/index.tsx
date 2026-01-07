@@ -2,7 +2,7 @@
 'use client';
 /// <reference types="google.maps" />
 
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
@@ -19,6 +19,7 @@ import Button from '@/components/molecules/button';
 import ButtonLink from '@/components/molecules/button-link';
 import Alert from '@/components/molecules/alert';
 import AddressField from '@/components/molecules/google-text-field';
+import Badge from '@/components/atoms/badge';
 
 type FormValues = {
 	name: string;
@@ -30,6 +31,7 @@ type FormValues = {
 
 const AddPropertyForm = () => {
 	const t = useTranslations();
+	const locale = useLocale();
 
 	const router = useRouter();
 
@@ -100,6 +102,7 @@ const AddPropertyForm = () => {
 		fd.append('address', data.address);
 		fd.append('latitude', data.latitude);
 		fd.append('longitude', data.longitude);
+		fd.append('locale', locale);
 		if (file) fd.append('image', file);
 
 		openLoading();
@@ -173,6 +176,31 @@ const AddPropertyForm = () => {
 				/>
 			)}
 
+			<fieldset className="w-full max-w-[360px]">
+				<label className="font-bold text-sm mb-2 block">
+					{t('Contenido generado automáticamente')}
+				</label>
+				<div className="flex gap-1 flex-wrap mb-2">
+					<Badge
+						label={t('Manual de alojamiento')}
+						color="success"
+					></Badge>
+					<Badge label={t('Normas de uso')} color="success"></Badge>
+					<Badge label={t('Horario')} color="success"></Badge>
+					<Badge label={t('Reciclaje')} color="success"></Badge>
+					<Badge label={t('Wifi')} color="success"></Badge>
+				</div>
+				<div className="p-4 bg-sky-100 rounded-md">
+					<p className="text-xs font-normal text-sky-900">
+						{t.rich('auto-content-helper-text', {
+							bold: (chunks) => (
+								<span className="font-bold">{chunks}</span>
+							),
+						})}
+					</p>
+				</div>
+			</fieldset>
+
 			<form
 				onSubmit={handleSubmit(onSubmit)}
 				className="flex flex-col gap-4 w-full max-w-[360px]"
@@ -222,11 +250,11 @@ const AddPropertyForm = () => {
 					})}
 				/>
 
-				<div className="p-4 bg-sky-100 rounded-md">
+				{/* <div className="p-4 bg-sky-100 rounded-md">
 					<p className="text-xs text-sky-900">
 						{t('Disclaimer de imagen')}
 					</p>
-				</div>
+				</div> */}
 
 				<div className="flex flex-col sm:flex-row gap-2">
 					<ButtonLink
