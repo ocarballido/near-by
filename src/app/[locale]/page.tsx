@@ -29,6 +29,7 @@ import ChimneyEffect from '@/components/atoms/chimney';
 import IconCheckCircle from '@/components/atoms/icon/check-circle';
 import ModalVideo from '@/components/templates/modal-video';
 import IconNewRelease from '@/components/atoms/icon/new-releases';
+import Badge from '@/components/atoms/badge';
 
 export default function Home() {
 	const t = useTranslations();
@@ -443,6 +444,23 @@ export default function Home() {
 						<p className="font-body font-medium">
 							{t('section_ready_to_go.description2')}
 						</p>
+						<div className="flex flex-wrap gap-1">
+							<Badge
+								color="success"
+								label={t('Manual de alojamiento')}
+							/>
+							<Badge color="success" label={t('Normas de uso')} />
+							<Badge color="success" label={t('Horario')} />
+							<Badge color="success" label={t('Reciclaje')} />
+							<Badge color="success" label={t('Restaurantes')} />
+							<Badge color="success" label={t('Cafeterías')} />
+							<Badge color="success" label={t('Supermercados')} />
+							<Badge color="success" label={t('Urgencias')} />
+							<Badge
+								color="success"
+								label={t('section_ready_to_go.and_more_badge')}
+							/>
+						</div>
 						<ButtonLink
 							label={t('Comienza gratis!')}
 							href="/app"
