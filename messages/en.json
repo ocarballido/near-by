@@ -493,5 +493,12 @@
 	"Contenido El Alojamiento": "Contents The Accommodation",
 	"Localizaciones": "Recommended places",
 	"Propiedades": "Properties",
-	"Propiedad": "Property"
+	"Propiedad": "Property",
+	"section_ready_to_go": {
+		"title": "Your accommodation ready for guests in 2 clicks",
+		"subtitle": "Less setup. More value for your guests.",
+		"description1": "Al crear tu alojamiento, puedes generar automáticamente los lugares más importantes alrededor de tu propiedad.",
+		"description2": "When creating your accommodation, you can automatically generate the most important places around your property.",
+		"and_more_badge": "...and more"
+	}
 }

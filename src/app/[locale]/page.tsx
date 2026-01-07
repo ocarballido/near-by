@@ -28,6 +28,7 @@ import FilterCategories from '@/components/templates/filter-categories';
 import ChimneyEffect from '@/components/atoms/chimney';
 import IconCheckCircle from '@/components/atoms/icon/check-circle';
 import ModalVideo from '@/components/templates/modal-video';
+import IconNewRelease from '@/components/atoms/icon/new-releases';
 
 export default function Home() {
 	const t = useTranslations();
@@ -409,6 +410,55 @@ export default function Home() {
 								<span className="w-[32px] h-[32px] bg-white rounded-tl-xl block"></span>
 							</span>
 						</div>
+					</div>
+				</div>
+			</section>
+			<section
+				aria-labelledby="ready-to-go"
+				className={`flex flex-col md:flex-row justify-center items-center rounded-lg mt-2 px-4 max-w-[1400px] ml-auto mr-auto relative overflow-hidden bg-gradient-to-t from-[#84E1BC] to-[#265EF8]`}
+			>
+				<div className="flex flex-col-reverse md:flex-row gap-4 items-stretch max-w-[1000px]">
+					<div className="flex flex-col gap-4 text-white px-3 py-6 md:py-8 justify-center">
+						<div className="flex w-fit px-2 py-2 rounded-lg bg-white gap-2 shadow-sm items-center">
+							<IconNewRelease color="warning" />
+							<span className="font-heading text-warning-500 uppercase font-bold text-xs">
+								Propiedad
+							</span>
+							<span className="font-heading text-warning-500 bg-warning-100 py-1 px-3 rounded-sm uppercase text-xs font-bold">
+								Ready-to-go
+							</span>
+						</div>
+						<h2
+							id="features"
+							className="font-heading text-4xl font-bold"
+						>
+							{t('section_ready_to_go.title')}
+						</h2>
+						<h3 className="text-3xl">
+							{t('section_ready_to_go.subtitle')}
+						</h3>
+						<p className="font-body font-medium">
+							{t('section_ready_to_go.description1')}
+						</p>
+						<p className="font-body font-medium">
+							{t('section_ready_to_go.description2')}
+						</p>
+						<ButtonLink
+							label={t('Comienza gratis!')}
+							href="/app"
+							iconLeft={<IconAccountCircle />}
+							color="white"
+							className="w-fit"
+						/>
+					</div>
+
+					<div className="w-full h-full mr-0">
+						<Image
+							alt={t('Enlace público')}
+							src="/static/img/house-crane.webp"
+							width={700}
+							height={800}
+						/>
 					</div>
 				</div>
 			</section>

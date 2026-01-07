@@ -497,5 +497,12 @@
 	"Contenido El Alojamiento": "Contenido El Alojamiento",
 	"Localizaciones": "Lugares recomendados",
 	"Propiedades": "Propiedades",
-	"Propiedad": "Propiedad"
+	"Propiedad": "Propiedad",
+	"section_ready_to_go": {
+		"title": "Tu alojamiento listo para huéspedes en 2 clicks",
+		"subtitle": "Menos configuración. Más valor para tus huéspedes.",
+		"description1": "Al crear tu alojamiento, puedes generar automáticamente los lugares más importantes alrededor de tu propiedad.",
+		"description2": "Tú decides qué incluir. Nosotros hacemos el trabajo pesado.",
+		"and_more_badge": "...y más"
+	}
 }
