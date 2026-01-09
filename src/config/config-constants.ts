@@ -633,6 +633,12 @@ export const CATEGORIES_SUB_CATEGORIES = {
 				type: 'location',
 				name: 'Centros de impresión y copiado',
 			},
+			PARKINGS: {
+				id: '9e2a6f5d-7c42-4f8c-b7ef-6c4c3e4c2a71',
+				order_index: 7,
+				type: 'location',
+				name: 'Aparcamientos',
+			},
 		},
 	},
 
