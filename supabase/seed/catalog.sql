@@ -35,4 +35,28 @@ set
   order_index = excluded.order_index,
   updated_at  = now();
 
+-- Sub-category: Tiendas veganas
+insert into public.sub_categories (
+  id,
+  category_id,
+  name,
+  type,
+  order_index
+)
+values (
+  '6c2f2c8b-3f5d-4a3e-9a0b-6c3a6e8e9f42', -- fixed UUID
+  'e9781151-e27a-4c60-9819-49c095f03cd8', -- Compras
+  'Tiendas veganas',
+  'location'::public.property_data_type,
+  7
+)
+on conflict (id) do update
+set
+  category_id = excluded.category_id,
+  name        = excluded.name,
+  type        = excluded.type,
+  order_index = excluded.order_index,
+  updated_at  = now();
+
+
 commit;
