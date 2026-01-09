@@ -82,6 +82,20 @@ const SUBCAT_TO_GOOGLE: Record<
 		placeType: 'police',
 		keywords: ['police station', 'comisaría', 'comisaria'],
 	},
+	// Services
+	[CATEGORIES_SUB_CATEGORIES.SERVICES.SUB_CATEGORIES.PARKINGS.id]: {
+		categoryId: CATEGORIES_SUB_CATEGORIES.SERVICES.id,
+		placeType: 'parking',
+		keywords: [
+			'parking',
+			'aparcamiento',
+			'estacionamiento',
+			'parking público',
+			'parking publico',
+			'parking garage',
+			'parking lot',
+		],
+	},
 };
 
 function withTimeout(ms: number) {
@@ -147,6 +161,19 @@ async function mapLimit<T, R>(
 // type guard para eliminar nulls con tipado correcto
 function notNull<T>(v: T | null): v is T {
 	return v !== null;
+}
+
+function keywordMatch(place: GooglePlaceResult, keywords?: string[]) {
+	if (!keywords?.length) return false;
+	const haystack = `${place.name ?? ''} ${place.vicinity ?? ''} ${
+		place.formatted_address ?? ''
+	}`.toLowerCase();
+	return keywords.some((k) => haystack.includes(k.toLowerCase()));
+}
+
+function shouldStrictTypeFilter(placeType: string) {
+	// Mantén estricto donde hay más ruido si no filtras
+	return ['police'].includes(placeType);
 }
 
 export async function generateAutoLocations(
@@ -291,9 +318,18 @@ export async function generateAutoLocations(
 
 			// ✅ FILTRO DURO por types cuando usamos un type concreto
 			// Evita que te entre “un gimnasio de oposiciones” si no viene tipado como police.
-			const filtered = (results ?? []).filter((p) =>
-				p.types?.includes(placeType)
-			);
+			const strict = shouldStrictTypeFilter(placeType);
+
+			const filtered = (results ?? []).filter((p) => {
+				// 1) Si trae types y coincide, perfecto
+				if (p.types?.includes(placeType)) return true;
+
+				// 2) Para parking y otros no-estrictos, aceptamos si matchea keyword
+				//    (esto rescata parkings que Google no etiqueta bien)
+				if (!strict && keywordMatch(p, keywords)) return true;
+
+				return false;
+			});
 
 			const finalResults = (filtered.length ? filtered : results ?? [])
 				.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))
