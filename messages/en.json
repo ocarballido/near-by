@@ -502,5 +502,7 @@
 		"and_more_badge": "...and more"
 	},
 	"Aparcamientos": "Parkings",
-	"Tiendas veganas": "Vegan shops"
+	"Tiendas veganas": "Vegan shops",
+	"Descripción": "Description",
+	"description-placeholder": "E.g.: Great for breakfast..., Perfect for having a beer..., Perfect for going with children"
 }

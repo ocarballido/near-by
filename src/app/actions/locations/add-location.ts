@@ -32,6 +32,7 @@ export type LocationFormState = {
 		sub_category_id?: string[];
 		name?: string[];
 		address?: string[];
+		description?: string[];
 		image?: string[];
 		server?: string[];
 	};

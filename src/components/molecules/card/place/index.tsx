@@ -9,6 +9,7 @@ import IconStarShine from '@/components/atoms/icon/star-shine';
 
 type PlaceProps = {
 	address: string;
+	description?: string;
 	className?: string;
 	editeable?: boolean;
 	handleDelete?: () => void;
@@ -21,6 +22,7 @@ type PlaceProps = {
 
 const Place = ({
 	address,
+	description,
 	className,
 	editeable = false,
 	handleDelete,
@@ -61,6 +63,9 @@ const Place = ({
 					<p className="font-body font-medium text-md mt-0.5 text-secondary-600">
 						{address}
 					</p>
+					{description && (
+						<p className="text-sm opacity-75">{description}</p>
+					)}
 				</div>
 				<div className="gap-1 flex">
 					<ButtonIcon

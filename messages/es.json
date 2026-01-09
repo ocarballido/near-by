@@ -506,5 +506,8 @@
 		"and_more_badge": "...y más"
 	},
 	"Aparcamientos": "Aparcamientos",
-	"Tiendas veganas": "Tiendas veganas"
+	"Tiendas veganas": "Tiendas veganas",
+	"Descripción": "Descripción",
+	"description-characters": "La descripción no puede superar {n} caracteres",
+	"description-placeholder": "Ej: Magnífico para desayunar..., Perfecto para tomarse una cerveza..., Perfecto para ir con niños"
 }

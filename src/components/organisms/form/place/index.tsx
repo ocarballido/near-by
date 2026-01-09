@@ -18,6 +18,7 @@ import InputFile from '@/components/molecules/input-file';
 import Button from '@/components/molecules/button';
 import Alert from '@/components/molecules/alert';
 import AddressField from '@/components/molecules/google-text-field';
+import TextArea from '@/components/molecules/text-area';
 
 type FormValues = {
 	property_id: string;
@@ -172,6 +173,12 @@ const AddPlaceForm = ({
 				});
 			if (result.errors.server)
 				setAlert({ type: 'error', message: result.errors.server[0] });
+			if (result.errors.description)
+				setError('description', {
+					type: 'manual',
+					message: result.errors.description[0],
+				});
+
 			return;
 		}
 
@@ -249,6 +256,22 @@ const AddPlaceForm = ({
 
 				<input type="hidden" {...register('latitude')} />
 				<input type="hidden" {...register('longitude')} />
+
+				<TextArea
+					label={t('Descripción')}
+					placeholder={t('description-placeholder')}
+					rows={3}
+					{...register('description', {
+						setValueAs: (v) =>
+							typeof v === 'string' ? v.trim() : v,
+						maxLength: {
+							value: 200,
+							message: t('description-characters', { n: 200 }),
+						},
+					})}
+					error={!!errors.description}
+					helperText={errors.description?.message}
+				/>
 
 				<div>
 					<label className="flex items-center gap-2">

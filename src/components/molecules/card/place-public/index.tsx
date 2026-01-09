@@ -9,6 +9,7 @@ import IconStarShine from '@/components/atoms/icon/star-shine';
 
 type PlacePublicProps = {
 	address: string;
+	description?: string;
 	latitude?: number;
 	longitude?: number;
 	className?: string;
@@ -19,6 +20,7 @@ type PlacePublicProps = {
 
 const PlacePublic = ({
 	address,
+	description,
 	latitude,
 	longitude,
 	className,
@@ -57,6 +59,9 @@ const PlacePublic = ({
 					<p className="font-body font-medium text-md mt-0.5 text-secondary-600">
 						{address}
 					</p>
+					{description && (
+						<p className="text-sm opacity-75">{description}</p>
+					)}
 				</div>
 				{featured && (
 					<div className="p-1.5 rounded-full w-fit h-fit">

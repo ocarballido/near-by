@@ -208,6 +208,7 @@ export function LocationsContent({
 				<Place
 					key={location.id}
 					name={location.name}
+					description={location.description}
 					address={location.address}
 					image={location.image_url}
 					featured={location.featured}
