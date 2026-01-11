@@ -9,6 +9,8 @@ import { CATEGORIES_SUB_CATEGORIES } from '@/config/config-constants';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database, TablesInsert } from '@/lib/types';
 
+import { updatePropertyProgressAndTrack } from '@/lib/updatePropertyProgress';
+
 type GooglePlaceResult = {
 	name: string;
 	vicinity?: string;
@@ -395,6 +397,12 @@ export async function generateAutoLocations(
 				},
 			};
 		}
+
+		await updatePropertyProgressAndTrack({
+			db: supabase,
+			userId: user.id,
+			propertyId,
+		});
 
 		revalidatePath('/app');
 

@@ -2,9 +2,13 @@
 
 import { revalidatePath } from 'next/cache';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
+import { createSSRClient } from '@/lib/supabase/server';
 import { z } from 'zod';
 
-import type { Tables } from '@/lib/types';
+import type { SupabaseClient } from '@supabase/supabase-js';
+import { updatePropertyProgressAndTrack } from '@/lib/updatePropertyProgress';
+import type { Tables, Database } from '@/lib/types';
+
 type PDThumb = Pick<Tables<'property_data'>, 'id' | 'image_url'>;
 
 const DeleteAllSchema = z.object({
@@ -39,8 +43,46 @@ export async function deleteAllLocations(
 
 	const { property_id, sub_category_id } = parsed.data;
 
+	// ✅ Auth (consistente con el resto de actions)
+	const ssrClient = await createSSRClient();
+	const {
+		data: { user },
+		error: authError,
+	} = await ssrClient.auth.getUser();
+
+	if (authError || !user) {
+		return {
+			errors: {
+				server: ['No has iniciado sesión o tu sesión ha expirado'],
+			},
+		};
+	}
+
 	try {
-		const supabase = await createServerAdminClient();
+		const supabase =
+			(await createServerAdminClient()) as unknown as SupabaseClient<Database>;
+		const db = supabase;
+
+		// ✅ Ownership check (mínimo)
+		type PropOwner = { user_id: string };
+		const { data: prop, error: propErr } = await supabase
+			.from('properties')
+			.select('user_id')
+			.eq('id', property_id)
+			.single()
+			.overrideTypes<PropOwner, { merge: false }>();
+
+		if (propErr || !prop?.user_id) {
+			return { errors: { server: ['Propiedad no encontrada.'] } };
+		}
+
+		if (prop.user_id !== user.id) {
+			return {
+				errors: {
+					server: ['No tienes permisos sobre esta propiedad.'],
+				},
+			};
+		}
 
 		const { data: itemsRes, error: fetchError } = await supabase
 			.from('property_data')
@@ -75,7 +117,7 @@ export async function deleteAllLocations(
 			await supabase.storage.from('location-images').remove(imagePaths);
 		}
 
-		const { error: deleteError } = await supabase
+		const { error: deleteError } = await db
 			.from('property_data')
 			.delete()
 			.eq('property_id', property_id)
@@ -88,6 +130,12 @@ export async function deleteAllLocations(
 				},
 			};
 		}
+
+		await updatePropertyProgressAndTrack({
+			db,
+			userId: user.id,
+			propertyId: property_id,
+		});
 
 		revalidatePath('/app/properties');
 

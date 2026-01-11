@@ -6,6 +6,7 @@ import Image from 'next/image';
 import ButtonLink from '../button-link';
 import IconApartment from '@/components/atoms/icon/apartment';
 import IconAdd from '@/components/atoms/icon/add';
+import { trackEvent } from '@/lib/analytics/mixpanel';
 
 const PropertyNumber = async () => {
 	const t = await getTranslations();
@@ -28,6 +29,12 @@ const PropertyNumber = async () => {
 	if (error) {
 		throw new Error('Error contando propiedades: ' + error.message);
 	}
+
+	await trackEvent({
+		event: 'onboarding_start',
+		distinctId: user.id,
+		props: { page: 'dashboard_home' },
+	});
 
 	const n = count ?? 0;
 

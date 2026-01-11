@@ -9,6 +9,8 @@ import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database, Tables, TablesUpdate } from '@/lib/types';
 
+import { updatePropertyProgressAndTrack } from '@/lib/updatePropertyProgress';
+
 const CreateInfoSchema = z.object({
 	property_id: z.string().uuid(),
 	category_id: z.string().uuid(),
@@ -144,6 +146,13 @@ export async function updateInfo(formData: FormData): Promise<CreateInfoState> {
 				},
 			};
 		}
+
+		// Mixpanel
+		await updatePropertyProgressAndTrack({
+			db,
+			userId: user.id,
+			propertyId: property_id,
+		});
 
 		revalidatePath(`/app`);
 

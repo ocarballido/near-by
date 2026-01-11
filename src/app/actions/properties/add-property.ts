@@ -1,17 +1,22 @@
 // app/actions/properties.ts
 'use server';
 
-import { getTranslations } from 'next-intl/server';
+// import { getTranslations } from 'next-intl/server';
 
 import { revalidatePath } from 'next/cache';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 import { createSSRClient } from '@/lib/supabase/server';
-import { MAX_IMAGE_SIZE } from '@/config/config-constants';
+// import { MAX_IMAGE_SIZE } from '@/config/config-constants';
 import { CATEGORIES_SUB_CATEGORIES } from '@/config/config-constants';
 import { z } from 'zod';
 
+import { trackEvent } from '@/lib/analytics/mixpanel';
+
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database, TablesInsert } from '@/lib/types';
+
+import { uploadPropertyImage } from '@/lib/uploadPropertyImage';
+import { seedLodgingContent } from '@/lib/seedLodgingContent';
 
 // Esquema de validación con Zod
 const PropertySchema = z.object({
@@ -97,67 +102,16 @@ export async function createProperty(formData: FormData): Promise<FormState> {
 
 		// 5. Procesar la imagen si existe
 		const imageFile = formData.get('image') as File | null;
-		let imageUrl: string | null = null;
 
-		if (imageFile && imageFile.size > 0) {
-			// Validar tamaño
-			if (imageFile.size > MAX_IMAGE_SIZE) {
-				return {
-					errors: {
-						image: [
-							`La imagen no debe superar los 500 KB. Tamaño actual: ${(
-								imageFile.size / 1024
-							).toFixed(2)} KB`,
-						],
-					},
-				};
-			}
+		const uploadRes = await uploadPropertyImage({
+			db,
+			userId,
+			imageFile,
+		});
 
-			// Validar tipo
-			const validImageTypes = [
-				'image/jpeg',
-				'image/png',
-				'image/webp',
-				'image/gif',
-			];
-			if (!validImageTypes.includes(imageFile.type)) {
-				return {
-					errors: {
-						image: [
-							'El archivo debe ser una imagen (JPEG, PNG, WebP o GIF)',
-						],
-					},
-				};
-			}
+		if (!uploadRes.ok) return uploadRes.errorState;
 
-			// Subir imagen
-			const fileExt = imageFile.name.split('.').pop();
-			const fileName = `${userId}/property_${Date.now()}.${fileExt}`;
-
-			const { error: uploadError } = await db.storage
-				.from('property-images')
-				.upload(fileName, imageFile, {
-					cacheControl: '3600',
-					upsert: false,
-				});
-
-			if (uploadError) {
-				console.error('Error al subir imagen:', uploadError);
-				return {
-					errors: {
-						image: [
-							'Error al subir la imagen. Por favor, inténtalo de nuevo.',
-						],
-					},
-				};
-			}
-
-			// Obtener URL pública
-			const {
-				data: { publicUrl },
-			} = db.storage.from('property-images').getPublicUrl(fileName);
-			imageUrl = publicUrl;
-		}
+		const imageUrl = uploadRes.imageUrl;
 
 		// 8. Crear la propiedad en la base de datos
 		type IdSlug = { id: string; slug: string | null };
@@ -199,92 +153,28 @@ export async function createProperty(formData: FormData): Promise<FormState> {
 				? localeRaw
 				: 'es';
 
+		await trackEvent({
+			event: 'create_property_completed',
+			distinctId: userId,
+			props: {
+				property_id: property.id,
+				locale,
+				has_image: Boolean(imageUrl),
+				has_description: Boolean(
+					validated.description &&
+						validated.description.trim().length > 0
+				),
+			},
+		});
+
 		// Namespace sugerido: "seed.lodging"
 		// Keys esperadas: wifi, manual, schedule, recycling, rules
-		try {
-			const tSeed = await getTranslations({
-				locale,
-				namespace: 'seed.lodging',
-			});
-
-			const lodgingCategoryId = CATEGORIES_SUB_CATEGORIES.LODGING.id;
-
-			const seedRows = [
-				{
-					user_id: userId,
-					property_id: property.id,
-					category_id: lodgingCategoryId,
-					sub_category_id:
-						CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.WIFI
-							.id,
-					type: 'info',
-					description: tSeed('wifi'),
-					name: null,
-				},
-				{
-					user_id: userId,
-					property_id: property.id,
-					category_id: lodgingCategoryId,
-					sub_category_id:
-						CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.MANUAL
-							.id,
-					type: 'info',
-					description: tSeed('manual'),
-					name: null,
-				},
-				{
-					user_id: userId,
-					property_id: property.id,
-					category_id: lodgingCategoryId,
-					sub_category_id:
-						CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES
-							.SCHEDULE.id,
-					type: 'info',
-					description: tSeed('schedule'),
-					name: null,
-				},
-				{
-					user_id: userId,
-					property_id: property.id,
-					category_id: lodgingCategoryId,
-					sub_category_id:
-						CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.RECYCLE
-							.id,
-					type: 'info',
-					description: tSeed('recycling'),
-					name: null,
-				},
-				{
-					user_id: userId,
-					property_id: property.id,
-					category_id: lodgingCategoryId,
-					sub_category_id:
-						CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.RULES
-							.id,
-					type: 'info',
-					description: tSeed('rules'),
-					name: null,
-				},
-			];
-
-			// Insert en bloque (5 filas). No bloqueamos la creación si falla el seed.
-			const { error: seedError } = await db
-				.from('property_data')
-				.insert(seedRows);
-
-			if (seedError) {
-				console.error(
-					'Error al insertar seed de property_data:',
-					seedError
-				);
-			}
-		} catch (seedTranslationsOrInsertError) {
-			// Si falla la carga de traducciones o el insert, no rompemos la creación.
-			console.error(
-				'Error en seed de contenidos automáticos (traducciones/insert):',
-				seedTranslationsOrInsertError
-			);
-		}
+		await seedLodgingContent({
+			db,
+			userId,
+			propertyId: property.id,
+			locale,
+		});
 
 		// 10. Revalidar la ruta del dashboard para mostrar la nueva propiedad
 		revalidatePath('/app');
