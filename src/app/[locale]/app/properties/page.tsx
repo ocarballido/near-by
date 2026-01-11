@@ -36,13 +36,13 @@ export default async function Properties() {
 		.from('properties')
 		.select(
 			`
-    id,
-    name,
-    slug,
-    address,
-    image_url,
-    property_data ( type )
-  `
+				id,
+				name,
+				slug,
+				address,
+				image_url,
+				property_data ( type )
+			`
 		)
 		.eq('user_id', user.id)
 		.overrideTypes<PropertyWithData[], { merge: false }>();

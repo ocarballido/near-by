@@ -9,6 +9,8 @@ import { MAX_IMAGE_SIZE } from '@/config/config-constants';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database, Tables, TablesInsert, TablesUpdate } from '@/lib/types';
 
+import { updatePropertyProgressAndTrack } from '@/lib/updatePropertyProgress';
+
 // 1) Definimos un esquema Zod para validar el formulario
 const LocationSchema = z.object({
 	property_id: z.string().uuid(),
@@ -219,6 +221,13 @@ export async function createLocation(
 				};
 			}
 		}
+
+		// Mixpanel
+		await updatePropertyProgressAndTrack({
+			db,
+			userId: user.id,
+			propertyId: loc.property_id,
+		});
 
 		// 7) Revalidar la lista de locations de esa propiedad
 		revalidatePath(`/app`);

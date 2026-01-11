@@ -9,6 +9,9 @@ import { PropertyDataPublicBySubCategory } from '@/components/templates/property
 import IconStarShine from '@/components/atoms/icon/star-shine';
 import ItineraryForm from '@/components/organisms/form/custom-plan';
 
+import { trackEvent } from '@/lib/analytics/mixpanel';
+import { cookies } from 'next/headers';
+
 import type { Tables } from '@/lib/types';
 
 type FullProperty = Tables<'properties'>;
@@ -35,8 +38,17 @@ interface PageProps {
 export default async function Property({ params }: PageProps) {
 	const t = await getTranslations();
 
+	const cookieStore = await cookies(); // <- importante en tu versión
+	const anonId = cookieStore.get('be_anon_id')?.value ?? 'anon-missing';
+
 	const { slug, locale } = await params;
 	const [propertyId, categoryId, subCategoryId] = slug;
+
+	await trackEvent({
+		event: 'tenant_visit_public_page',
+		distinctId: anonId,
+		props: { property_id: propertyId, page: 'public_property' },
+	});
 
 	const sidebarData = await getPublicSidebarData(propertyId);
 
