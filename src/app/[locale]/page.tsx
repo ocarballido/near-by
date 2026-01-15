@@ -30,6 +30,7 @@ import IconCheckCircle from '@/components/atoms/icon/check-circle';
 import ModalVideo from '@/components/templates/modal-video';
 import IconNewRelease from '@/components/atoms/icon/new-releases';
 import Badge from '@/components/atoms/badge';
+import { ShareMenu } from '@/components/molecules/button-share';
 
 export default function Home() {
 	const t = useTranslations();
@@ -727,7 +728,16 @@ export default function Home() {
 						</div>
 					</div>
 				</div>
-				<div className="text-center pt-32 pb-4 px-4 flex flex-col gap-4 items-center">
+				<div className="text-center pt-24 pb-4 px-4 flex flex-col gap-4 items-center">
+					<div className="flex flex-col items-center mb-12">
+						<p className="font-bold">{t('shareButtonTitle')}</p>
+						<p className="mb-3">{t('shareButtonText')}</p>
+						<ShareMenu
+							url="https://bnbexplorer.com"
+							surface="landing_header"
+							distinctId="anon-missing"
+						/>
+					</div>
 					<Image
 						src={logo}
 						width={200}

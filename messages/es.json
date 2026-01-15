@@ -509,5 +509,9 @@
 	"Tiendas veganas": "Tiendas veganas",
 	"Descripción": "Descripción",
 	"description-characters": "La descripción no puede superar {n} caracteres",
-	"description-placeholder": "Ej: Magnífico para desayunar..., Perfecto para tomarse una cerveza..., Perfecto para ir con niños"
+	"description-placeholder": "Ej: Magnífico para desayunar..., Perfecto para tomarse una cerveza..., Perfecto para ir con niños",
+	"shareButtonTitle": "¿Conoces a otros anfitriones?",
+	"shareButtonText": "Comparte BNBexplorer con ellos.",
+	"shareButtonCopyURL": "Copiar enlace",
+	"shareButtonCopiedURL": "¡Copiado!"
 }
