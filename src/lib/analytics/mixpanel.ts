@@ -7,7 +7,8 @@ type EventName =
 	| 'create_property_completed'
 	| 'tenant_visit_public_page'
 	| 'create_property_started'
-	| 'property_progress_updated';
+	| 'property_progress_updated'
+	| 'share_clicked';
 
 type TrackInput = {
 	event: EventName;

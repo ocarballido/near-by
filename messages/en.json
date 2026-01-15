@@ -504,5 +504,9 @@
 	"Aparcamientos": "Parkings",
 	"Tiendas veganas": "Vegan shops",
 	"Descripción": "Description",
-	"description-placeholder": "E.g.: Great for breakfast..., Perfect for having a beer..., Perfect for going with children"
+	"description-placeholder": "E.g.: Great for breakfast..., Perfect for having a beer..., Perfect for going with children",
+	"shareButtonTitle": "Know other hosts?",
+	"shareButtonText": "Share BNBexplorer with them.",
+	"shareButtonCopyURL": "Copy link",
+	"shareButtonCopiedURL": "Copied!"
 }

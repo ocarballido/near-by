@@ -7,6 +7,7 @@ import ButtonLink from '../button-link';
 import IconApartment from '@/components/atoms/icon/apartment';
 import IconAdd from '@/components/atoms/icon/add';
 import { trackEvent } from '@/lib/analytics/mixpanel';
+import { ShareMenu } from '../button-share';
 
 const PropertyNumber = async () => {
 	const t = await getTranslations();
@@ -69,6 +70,15 @@ const PropertyNumber = async () => {
 					href="/app/properties/new"
 					iconLeft={<IconAdd />}
 					className="w-full sm:w-auto"
+				/>
+			</div>
+			<div className="flex flex-col items-center mt-3">
+				<p className="font-bold">{t('shareButtonTitle')}</p>
+				<p className="mb-3">{t('shareButtonText')}</p>
+				<ShareMenu
+					url="https://bnbexplorer.com"
+					surface="landing_header"
+					distinctId={user.id}
 				/>
 			</div>
 		</>
