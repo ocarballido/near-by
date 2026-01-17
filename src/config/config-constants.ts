@@ -1,6 +1,6 @@
 import { SidebarMenuItemConfig } from '@/lib/types';
 
-export const LOCALES = ['es', 'en'];
+export const LOCALES = ['es', 'en', 'fr'];
 
 export const DEFAULT_LOCALE = 'en';
 
