@@ -8,7 +8,8 @@ type EventName =
 	| 'tenant_visit_public_page'
 	| 'create_property_started'
 	| 'property_progress_updated'
-	| 'share_clicked';
+	| 'share_clicked'
+	| 'property_deleted';
 
 type TrackInput = {
 	event: EventName;
@@ -16,28 +17,66 @@ type TrackInput = {
 	props?: Record<string, unknown>;
 };
 
+function extractClientIpFromForwardedHeader(
+	forwardedForHeader: string,
+): string | null {
+	const clientIp = forwardedForHeader.split(',')[0]?.trim();
+	if (!clientIp) return null;
+	if (clientIp.toLowerCase() === 'unknown') return null;
+	return clientIp;
+}
+
+function normalizeCountryCode(rawCountryCode: string | null): string | null {
+	if (!rawCountryCode) return null;
+
+	const trimmed = rawCountryCode.trim();
+	if (!trimmed) return null;
+
+	return trimmed.length === 2 ? trimmed.toUpperCase() : trimmed;
+}
+
 export async function trackEvent({
 	event,
 	distinctId,
 	props = {},
 }: TrackInput) {
 	try {
-		const token = process.env.MIXPANEL_TOKEN;
-		const endpoint =
+		const mixpanelToken = process.env.MIXPANEL_TOKEN;
+		if (!mixpanelToken) return;
+
+		const trackEndpoint =
 			process.env.MIXPANEL_TRACK_URL ??
 			'https://api.mixpanel.com/track?verbose=1';
-		if (!token) return;
 
-		const h = await headers();
-		const userAgent = h.get('user-agent') ?? '';
-		const referer = h.get('referer') ?? '';
+		const requestHeaders = await headers();
 
-		const payload = [
+		// ── Basic request context
+		const userAgent = requestHeaders.get('user-agent') ?? '';
+		const referer = requestHeaders.get('referer') ?? '';
+
+		// ── Country (edge/CDN provided)
+		const userCountry =
+			normalizeCountryCode(requestHeaders.get('x-vercel-ip-country')) ??
+			normalizeCountryCode(requestHeaders.get('cf-ipcountry')) ??
+			normalizeCountryCode(requestHeaders.get('x-country')) ??
+			normalizeCountryCode(requestHeaders.get('x-geo-country'));
+
+		// ── Client IP (best-effort, for Mixpanel geo enrichment)
+		const forwardedFor = requestHeaders.get('x-forwarded-for');
+		const clientIp = forwardedFor
+			? extractClientIpFromForwardedHeader(forwardedFor)
+			: null;
+
+		const eventPayload = [
 			{
 				event,
 				properties: {
-					token,
+					token: mixpanelToken,
 					distinct_id: distinctId,
+
+					...(clientIp ? { ip: clientIp } : {}),
+					...(userCountry ? { user_country: userCountry } : {}),
+
 					...props,
 					user_agent: userAgent,
 					referer,
@@ -45,14 +84,18 @@ export async function trackEvent({
 			},
 		];
 
-		const data = Buffer.from(JSON.stringify(payload)).toString('base64');
+		const encodedPayload = Buffer.from(
+			JSON.stringify(eventPayload),
+		).toString('base64');
 
-		await fetch(endpoint, {
+		await fetch(trackEndpoint, {
 			method: 'POST',
-			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-			body: new URLSearchParams({ data }),
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+			},
+			body: new URLSearchParams({ data: encodedPayload }),
 		});
 	} catch {
-		// nunca romper el flujo por analytics
+		// Analytics must never break the main flow
 	}
 }

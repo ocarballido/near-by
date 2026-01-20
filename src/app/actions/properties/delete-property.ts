@@ -3,11 +3,24 @@
 
 import { revalidatePath } from 'next/cache';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
+import { createSSRClient } from '@/lib/supabase/server';
+import { trackEvent } from '@/lib/analytics/mixpanel';
 import type { Tables } from '@/lib/types';
 
 // type LocationGroupRow = Database['public']['Tables']['location_groups']['Row'];
 
 export async function deleteProperty(propertyId: string) {
+	const ssrClient = await createSSRClient();
+	const {
+		data: { user },
+		error: authError,
+	} = await ssrClient.auth.getUser();
+
+	if (authError || !user) {
+		throw new Error('No has iniciado sesión o tu sesión ha expirado');
+	}
+	const userId = user.id;
+
 	// 1️⃣ Cliente con Service Role para ignorar RLS
 	const supabase = await createServerAdminClient();
 
@@ -24,7 +37,7 @@ export async function deleteProperty(propertyId: string) {
 	if (propFetchErr) {
 		console.error(
 			'Error obteniendo property para borrar imagen:',
-			propFetchErr
+			propFetchErr,
 		);
 		throw new Error('Error base de datos');
 	}
@@ -33,7 +46,7 @@ export async function deleteProperty(propertyId: string) {
 	if (imageUrl) {
 		// La ruta interna en Storage viene después de ".../property-images/"
 		const parts = imageUrl.split(
-			'/storage/v1/object/public/property-images/'
+			'/storage/v1/object/public/property-images/',
 		);
 		if (parts[1]) {
 			const filePath = parts[1];
@@ -102,6 +115,16 @@ export async function deleteProperty(propertyId: string) {
 		console.error('Error deleting property:', propDelErr);
 		throw new Error('Error base de datos');
 	}
+
+	await trackEvent({
+		event: 'property_deleted',
+		distinctId: userId,
+		props: {
+			property_id: propertyId,
+			had_image: Boolean(imageUrl),
+			deleted_location_groups_count: groupIds.length,
+		},
+	});
 
 	// Invalidar cache/listado
 	revalidatePath('/app/properties');
