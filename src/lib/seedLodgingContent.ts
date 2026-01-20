@@ -11,8 +11,9 @@ export async function seedLodgingContent(args: {
 	userId: string;
 	propertyId: string;
 	locale: string;
+	selectedSubCategoryIds?: string[];
 }) {
-	const { db, userId, propertyId, locale } = args;
+	const { db, userId, propertyId, locale, selectedSubCategoryIds } = args;
 
 	try {
 		const tSeed = await getTranslations({
@@ -76,14 +77,22 @@ export async function seedLodgingContent(args: {
 			},
 		];
 
+		const finalRows = Array.isArray(selectedSubCategoryIds)
+			? seedRows.filter((r) =>
+					selectedSubCategoryIds.includes(r.sub_category_id),
+				)
+			: seedRows;
+
+		if (finalRows.length === 0) return;
+
 		const { error: seedError } = await db
 			.from('property_data')
-			.insert(seedRows);
+			.insert(finalRows);
 
 		if (seedError) {
 			console.error(
 				'Error al insertar seed de property_data:',
-				seedError
+				seedError,
 			);
 		}
 	} catch (e) {
