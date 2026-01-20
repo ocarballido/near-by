@@ -11,7 +11,10 @@ import { useLoading } from '@/lib/context/LoadingContext';
 
 import { createProperty } from '@/app/actions/properties/add-property';
 
-import { MAX_IMAGE_SIZE } from '@/config/config-constants';
+import {
+	MAX_IMAGE_SIZE,
+	CATEGORIES_SUB_CATEGORIES,
+} from '@/config/config-constants';
 
 import TextField from '@/components/molecules/text-field';
 import InputFile from '@/components/molecules/input-file';
@@ -19,7 +22,7 @@ import Button from '@/components/molecules/button';
 import ButtonLink from '@/components/molecules/button-link';
 import Alert from '@/components/molecules/alert';
 import AddressField from '@/components/molecules/google-text-field';
-import Badge from '@/components/atoms/badge';
+import BadgeCheck from '@/components/atoms/BadgeCheck';
 
 type FormValues = {
 	name: string;
@@ -35,10 +38,58 @@ const AddPropertyForm = () => {
 
 	const router = useRouter();
 
+	const INFO_SEED_OPTIONS = [
+		{
+			id: CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.MANUAL.id,
+			labelKey: t(
+				CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.MANUAL.name,
+			),
+			tKey: 'manual',
+		},
+		{
+			id: CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.RULES.id,
+			labelKey: t(
+				CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.RULES.name,
+			),
+			tKey: 'rules',
+		},
+		{
+			id: CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.SCHEDULE.id,
+			labelKey: t(
+				CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.SCHEDULE.name,
+			),
+			tKey: 'schedule',
+		},
+		{
+			id: CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.RECYCLE.id,
+			labelKey: t(
+				CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.RECYCLE.name,
+			),
+			tKey: 'recycling',
+		},
+		{
+			id: CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.WIFI.id,
+			labelKey: t(
+				CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.WIFI.name,
+			),
+			tKey: 'wifi',
+		},
+	] as const;
+
 	const [alert, setAlert] = useState<{
 		type: 'error' | 'success';
 		message: string;
 	} | null>(null);
+
+	const [selectedSeedInfoIds, setSelectedSeedInfoIds] = useState<string[]>(
+		() => INFO_SEED_OPTIONS.map((x) => x.id),
+	);
+
+	const toggleSeed = (id: string) => {
+		setSelectedSeedInfoIds((prev) =>
+			prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
+		);
+	};
 
 	const { openLoading, closeLoading } = useLoading();
 
@@ -91,7 +142,7 @@ const AddPropertyForm = () => {
 					{
 						kb: (MAX_IMAGE_SIZE / 1024).toFixed(0),
 						got: (file.size / 1024).toFixed(0),
-					}
+					},
 				),
 			});
 			return;
@@ -103,6 +154,7 @@ const AddPropertyForm = () => {
 		fd.append('latitude', data.latitude);
 		fd.append('longitude', data.longitude);
 		fd.append('locale', locale);
+		fd.append('seedInfoIds', JSON.stringify(selectedSeedInfoIds));
 		if (file) fd.append('image', file);
 
 		openLoading();
@@ -181,15 +233,21 @@ const AddPropertyForm = () => {
 					{t('Contenido generado automáticamente')}
 				</label>
 				<div className="flex gap-1 flex-wrap mb-2">
-					<Badge
-						label={t('Manual de alojamiento')}
-						color="success"
-					></Badge>
-					<Badge label={t('Normas de uso')} color="success"></Badge>
-					<Badge label={t('Horario')} color="success"></Badge>
-					<Badge label={t('Reciclaje')} color="success"></Badge>
-					<Badge label={t('Wifi')} color="success"></Badge>
+					{INFO_SEED_OPTIONS.map((opt) => (
+						<BadgeCheck
+							key={opt.id}
+							label={opt.labelKey}
+							checked={selectedSeedInfoIds.includes(opt.id)}
+							onToggle={() => toggleSeed(opt.id)}
+						/>
+					))}
 				</div>
+
+				{/* {selectedSeedInfoIds.length === 0 && (
+					<p className="text-xs text-error-600 mt-2">
+						{t('Selecciona al menos un contenido automático')}
+					</p>
+				)} */}
 				<div className="p-4 bg-sky-100 rounded-md">
 					<p className="text-xs font-normal text-sky-900">
 						{t.rich('auto-content-helper-text', {

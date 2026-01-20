@@ -23,16 +23,16 @@ const PropertySchema = z.object({
 	name: z.string().nonempty('El nombre de la propiedad es obligatorio'),
 	description: z.preprocess(
 		(v) => (typeof v === 'string' ? v : ''),
-		z.string()
+		z.string(),
 	),
 	address: z.string().nonempty('La dirección es obligatoria'),
 	latitude: z.preprocess(
 		(v) => (v ? Number(v) : null),
-		z.number().nullable()
+		z.number().nullable(),
 	),
 	longitude: z.preprocess(
 		(v) => (v ? Number(v) : null),
-		z.number().nullable()
+		z.number().nullable(),
 	),
 });
 
@@ -162,10 +162,27 @@ export async function createProperty(formData: FormData): Promise<FormState> {
 				has_image: Boolean(imageUrl),
 				has_description: Boolean(
 					validated.description &&
-						validated.description.trim().length > 0
+					validated.description.trim().length > 0,
 				),
 			},
 		});
+
+		// ✅ Seed selection (sub_category_ids) desde el cliente
+		const seedInfoIdsRaw = formData.get('seedInfoIds');
+
+		let selectedSeedSubCategoryIds: string[] | undefined = undefined;
+
+		if (typeof seedInfoIdsRaw === 'string') {
+			try {
+				const parsed = JSON.parse(seedInfoIdsRaw);
+				if (
+					Array.isArray(parsed) &&
+					parsed.every((x) => typeof x === 'string')
+				) {
+					selectedSeedSubCategoryIds = parsed;
+				}
+			} catch {}
+		}
 
 		// Namespace sugerido: "seed.lodging"
 		// Keys esperadas: wifi, manual, schedule, recycling, rules
@@ -174,6 +191,7 @@ export async function createProperty(formData: FormData): Promise<FormState> {
 			userId,
 			propertyId: property.id,
 			locale,
+			selectedSubCategoryIds: selectedSeedSubCategoryIds,
 		});
 
 		// 10. Revalidar la ruta del dashboard para mostrar la nueva propiedad
