@@ -40,9 +40,9 @@ const PlacePublic = ({
 
 	return (
 		<div
-			className={`w-full flex flex-col gap-4 rounded-xl p-2 relative transition-all hover:bg-gray-100 ${className}`}
+			className={`w-full flex flex-col gap-4 rounded-xl p-2 relative transition-all bg-white shadow-xs ${className}`}
 		>
-			<div className={`w-full flex gap-4 sm:items-center relative`}>
+			<div className={`w-full flex gap-4 relative`}>
 				<div className="w-18 h-18 rounded-md overflow-hidden relative shrink-0">
 					<Image
 						alt={name ?? 'Place image'}
@@ -66,6 +66,28 @@ const PlacePublic = ({
 						<p className="text-sm opacity-75">{description}</p>
 					)}
 				</div>
+				<div className="gap-1 lg:flex hidden items-center">
+					{mustSee && (
+						<div className="p-1.5 rounded-full w-fit h-fit">
+							<IconModeHeat color="error" />
+						</div>
+					)}
+					{featured && (
+						<div className="p-1.5 rounded-full w-fit h-fit">
+							<IconFavorite color="primary" />
+						</div>
+					)}
+				</div>
+				<ButtonLink
+					className="hidden gap-1 lg:flex shrink-0 h-fit self-center"
+					color="primary"
+					iconLeft={<IconDirections />}
+					label={t('Como llegar')}
+					href={`${GOOGLE_MAPS_DIRECTION_URL}${latitude},${longitude}`}
+					target="_blank"
+				/>
+			</div>
+			<div className="flex gap-2 w-full lg:hidden">
 				{mustSee && (
 					<div className="p-1.5 rounded-full w-fit h-fit">
 						<IconModeHeat color="error" />
@@ -77,17 +99,7 @@ const PlacePublic = ({
 					</div>
 				)}
 				<ButtonLink
-					className="hidden gap-1 lg:flex shrink-0"
-					color="primary"
-					iconLeft={<IconDirections />}
-					label={t('Como llegar')}
-					href={`${GOOGLE_MAPS_DIRECTION_URL}${latitude},${longitude}`}
-					target="_blank"
-				/>
-			</div>
-			<div className="flex gap-2 w-full lg:hidden">
-				<ButtonLink
-					className="w-full"
+					className="w-fit ml-auto"
 					color="primary"
 					iconLeft={<IconDirections />}
 					label={t('Como llegar')}

@@ -234,31 +234,36 @@ export function LocationsContent({
 					className="w-full"
 				/>
 			</div>
-			{locations.map((location) => (
-				<Place
-					key={location.id}
-					name={location.name}
-					description={location.description}
-					address={location.address}
-					image={location.image_url}
-					featured={location.featured}
-					mustVisit={location.must_visit}
-					handleDelete={() => {
-						setIsOpen(true);
-						setDeleteTarget('LOCATION');
-						setSelectedLocation(location?.id);
-					}}
-					handleFeatured={() =>
-						handleFeatured(location.id, location.featured ?? false)
-					}
-					handleMustVisit={() =>
-						handleMustVisit(
-							location.id,
-							location.must_visit ?? false,
-						)
-					}
-				/>
-			))}
+			<div className="flex flex-col gap-2">
+				{locations.map((location) => (
+					<Place
+						key={location.id}
+						name={location.name}
+						description={location.description}
+						address={location.address}
+						image={location.image_url}
+						featured={location.featured}
+						mustVisit={location.must_visit}
+						handleDelete={() => {
+							setIsOpen(true);
+							setDeleteTarget('LOCATION');
+							setSelectedLocation(location?.id);
+						}}
+						handleFeatured={() =>
+							handleFeatured(
+								location.id,
+								location.featured ?? false,
+							)
+						}
+						handleMustVisit={() =>
+							handleMustVisit(
+								location.id,
+								location.must_visit ?? false,
+							)
+						}
+					/>
+				))}
+			</div>
 			{locations.length > 1 && (
 				<Button
 					className="w-full lg:w-max ml-auto"

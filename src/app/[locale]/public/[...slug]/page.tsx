@@ -59,7 +59,7 @@ export default async function Property({ params }: PageProps) {
 				longitude={lng}
 				image={property.image_url}
 			>
-				<div className="p-4 font-roboto flex flex-col grow gap-4 bg-white rounded-lg overflow-hidden">
+				<div className="p-1 pt-3 font-roboto flex flex-col grow gap-4 rounded-lg overflow-hidden">
 					{mode === 'welcome' && (
 						<WelcomeSection
 							propertyId={propertyId}
