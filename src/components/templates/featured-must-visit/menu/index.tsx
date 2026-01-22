@@ -86,7 +86,7 @@ export default function FeaturedMustVisitMenu({
 									'flex-shrink-0',
 									isActive
 										? activeCountBgClass
-										: 'bg-transparent',
+										: 'bg-gray-200',
 									isActive
 										? activeTextClass
 										: 'text-gray-500',
