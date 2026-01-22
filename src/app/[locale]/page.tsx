@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 
 import headerImage from '../../../public/static/img/header-trimed-2x.webp';
+import headerImageMobile from '../../../public/static/img/heroMobile.webp';
 import rooftopCentered from '../../../public/static/img/rooftop-centered.png';
 import multyProperty from '../../../public/static/img/multy-property-2x.webp';
 import categories from '../../../public/static/img/categories-2x.webp';
@@ -51,7 +52,7 @@ export default function Home() {
 					</h2>
 					<h3 className="font-heading font-medium text-xl md:text-2xl max-w-[800px] ml-auto mr-auto px-4 text-white">
 						{t(
-							'Gestiona y comparte toda la información local de tus alojamientos Airbnb en segundos, creando tu propia web con ayuda de la IA'
+							'Gestiona y comparte toda la información local de tus alojamientos Airbnb en segundos, creando tu propia web con ayuda de la IA',
 						)}
 					</h3>
 					<div className="px-4 flex flex-col gap-2">
@@ -75,7 +76,7 @@ export default function Home() {
 					<div className="relative w-full">
 						<PlaceTooltip
 							label={t('Bar')}
-							className="absolute left-[10%] top-[-8%] sm:left-[25%] md:left-[25%] md:top-[20%]"
+							className="absolute left-[10%] top-[10%] sm:left-[25%] md:left-[25%] md:top-[20%]"
 						/>
 						<PlaceTooltip
 							label={t('Souvenirs')}
@@ -83,11 +84,11 @@ export default function Home() {
 						/>
 						<PlaceTooltip
 							label={t('Hospital')}
-							className="absolute left-[10%] sm:left-[20%] md:left-[25%] top-[45%] sm:top-[60%] md:top-[80%]"
+							className="absolute left-[10%] sm:left-[20%] md:left-[25%] top-[65%] sm:top-[60%] md:top-[80%]"
 						/>
 						<PlaceTooltip
 							label={t('Emergencias')}
-							className="absolute right-[5%] top-[-8%] sm:right-[15%] sm:top-[5%] md:right-[20%] md:top-[20%]"
+							className="absolute right-[5%] top-[10%] sm:right-[15%] sm:top-[5%] md:right-[20%] md:top-[20%]"
 						/>
 						<PlaceTooltip
 							label={t('Embajada')}
@@ -95,13 +96,28 @@ export default function Home() {
 						/>
 						<PlaceTooltip
 							label={t('Cafetería')}
-							className="absolute right-[15%] top-[45%] sm:top-[60%] md:top-[80%] sm:right-[30%] md:right-[25%]"
+							className="absolute right-[15%] top-[65%] sm:top-[60%] md:top-[80%] sm:right-[30%] md:right-[25%]"
 						/>
 						<Image
 							alt={t(
-								'BNBexplorar, Header con casa con localizaciones'
+								'BNBexplorar, Header con casa con localizaciones',
 							)}
+							className="hidden sm:block"
 							src={headerImage}
+							sizes="100vw"
+							style={{
+								width: '80%',
+								height: 'auto',
+								marginLeft: 'auto',
+								marginRight: 'auto',
+							}}
+						/>
+						<Image
+							alt={t(
+								'BNBexplorar, Header con casa con localizaciones',
+							)}
+							className="block sm:hidden"
+							src={headerImageMobile}
 							sizes="100vw"
 							style={{
 								width: '80%',
@@ -125,7 +141,7 @@ export default function Home() {
 				</h2>
 				<h3 className="font-heading font-medium text-xl md:text-2xl max-w-[800px] ml-auto mr-auto px-4 text-center">
 					{t(
-						'Lleva tu hospitalidad al siguiente nivel con recomendaciones locales'
+						'Lleva tu hospitalidad al siguiente nivel con recomendaciones locales',
 					)}
 				</h3>
 				<div className="flex flex-col md:flex-row gap-4 justify-center max-w-[1000px]">
@@ -140,7 +156,7 @@ export default function Home() {
 						</h3>
 						<p className="font-body font-medium opacity-70">
 							{t(
-								'Centraliza todas las consultas sobre restaurantes, monumentos o museos en un panel intuitivo'
+								'Centraliza todas las consultas sobre restaurantes, monumentos o museos en un panel intuitivo',
 							)}
 						</p>
 					</div>
@@ -155,7 +171,7 @@ export default function Home() {
 						</h3>
 						<p className="font-body font-medium opacity-70">
 							{t(
-								'Ofrece una experiencia local personalizada y comienza a obtener más valoraciones de 5 estrellas'
+								'Ofrece una experiencia local personalizada y comienza a obtener más valoraciones de 5 estrellas',
 							)}
 						</p>
 					</div>
@@ -170,7 +186,7 @@ export default function Home() {
 						</h3>
 						<p className="font-body font-medium opacity-70">
 							{t(
-								'Toda la información que necesitan tus huéspedes'
+								'Toda la información que necesitan tus huéspedes',
 							)}
 						</p>
 					</div>
@@ -209,7 +225,7 @@ export default function Home() {
 						</h3>
 						<p className="font-body font-medium opacity-70">
 							{t(
-								'Crea cada alojamiento con nombre, descripción, foto y dirección (validación de Google Maps)'
+								'Crea cada alojamiento con nombre, descripción, foto y dirección (validación de Google Maps)',
 							)}
 						</p>
 					</div>
@@ -224,7 +240,7 @@ export default function Home() {
 						</h3>
 						<p className="font-body font-medium opacity-70">
 							{t(
-								'Selecciona entre 17 categorías diferentes: Salud y Bienestar, Comida y Bebida, Arte y Cultura…'
+								'Selecciona entre 17 categorías diferentes: Salud y Bienestar, Comida y Bebida, Arte y Cultura…',
 							)}
 						</p>
 					</div>
@@ -239,7 +255,7 @@ export default function Home() {
 						</h3>
 						<p className="font-body font-medium opacity-70">
 							{t(
-								'Obtendrás automáticamente un link único por propiedad'
+								'Obtendrás automáticamente un link único por propiedad',
 							)}
 						</p>
 					</div>
@@ -306,12 +322,12 @@ export default function Home() {
 						<div className="flex-1 flex flex-col justify-center gap-4 py-8 relative">
 							<h3 className="text-3xl pr-4 pl-6">
 								{t(
-									'Elige entre distintas Categorías y Subcategorías '
+									'Elige entre distintas Categorías y Subcategorías ',
 								)}
 							</h3>
 							<p className="font-body font-medium opacity-70 pr-4 pl-6">
 								{t(
-									'Te ayudamos a crear tu guía mediante categorías estándar y subgrupos listos para editar'
+									'Te ayudamos a crear tu guía mediante categorías estándar y subgrupos listos para editar',
 								)}
 							</p>
 							<p className="font-body font-medium opacity-70 pr-4 pl-6">
@@ -333,12 +349,12 @@ export default function Home() {
 							</h3>
 							<p className="font-body font-medium opacity-70 pr-6 pl-4">
 								{t(
-									'Edita, elimina o añade ubicaciones con un par de clics'
+									'Edita, elimina o añade ubicaciones con un par de clics',
 								)}
 							</p>
 							<p className="font-body font-medium opacity-70 pr-6 pl-4">
 								{t(
-									'La app te va guiando paso a paso para que puedas crear la web de tu alojamiento fácilmente en cuestión de segundos'
+									'La app te va guiando paso a paso para que puedas crear la web de tu alojamiento fácilmente en cuestión de segundos',
 								)}
 							</p>
 							<ButtonLink
@@ -387,12 +403,12 @@ export default function Home() {
 							</p>
 							<p className="font-body font-medium opacity-70 pr-4 pl-6">
 								{t(
-									'Sin contraseñas ni logins: tu huésped abre el enlace y descubre lo mejor de la casa y el barrio'
+									'Sin contraseñas ni logins: tu huésped abre el enlace y descubre lo mejor de la casa y el barrio',
 								)}
 							</p>
 							<p className="font-body font-medium pr-4 pl-6">
 								{t(
-									'Compártelo por WhatsApp, Instagram, Facebook'
+									'Compártelo por WhatsApp, Instagram, Facebook',
 								)}
 							</p>
 							<ButtonLink
@@ -514,7 +530,7 @@ export default function Home() {
 						</h2>
 						<h3 className="font-heading font-medium text-xl md:text-xl px-4 text-center">
 							{t(
-								'Utiliza nuestra IA para generar contenido personalizado automáticamente'
+								'Utiliza nuestra IA para generar contenido personalizado automáticamente',
 							)}
 						</h3>
 						<ButtonLink
@@ -533,7 +549,7 @@ export default function Home() {
 						<div className="flex flex-col gap-4 justify-start">
 							<p className="text-left text-md font-medium">
 								{t(
-									'Escribe tu idea, por ejemplo: Instrucciones para el uso del aire acondicionado'
+									'Escribe tu idea, por ejemplo: Instrucciones para el uso del aire acondicionado',
 								)}
 							</p>
 						</div>
@@ -547,7 +563,7 @@ export default function Home() {
 						<div className="flex flex-col gap-4 justify-start">
 							<p className="text-left text-md font-medium">
 								{t(
-									'Tus inquilinos podrán crear planes sugeridos por nuestra IA, asociados a sus preferencias, tiempo y movilidad'
+									'Tus inquilinos podrán crear planes sugeridos por nuestra IA, asociados a sus preferencias, tiempo y movilidad',
 								)}
 							</p>
 						</div>
@@ -566,7 +582,7 @@ export default function Home() {
 				</h2>
 				<h3 className="font-heading font-medium text-xl md:text-2xl max-w-[800px] ml-auto mr-auto px-4 text-center text-white">
 					{t(
-						'Mejora la experiencia de tus huéspedes con menos esfuerzo'
+						'Mejora la experiencia de tus huéspedes con menos esfuerzo',
 					)}
 				</h3>
 				<div className="flex flex-col items-center p-2 rounded-lg bg-white gap-2">
@@ -588,7 +604,7 @@ export default function Home() {
 						</p>
 						<p className="opacity-70  w-full">
 							{t(
-								'Accede al panel desde móvil, tablet u ordenador'
+								'Accede al panel desde móvil, tablet u ordenador',
 							)}
 						</p>
 					</div>
@@ -598,7 +614,7 @@ export default function Home() {
 						</p>
 						<p className="opacity-70  w-full">
 							{t(
-								'Cambia un horario, un contacto de emergencia… ¡se actualiza al instante!'
+								'Cambia un horario, un contacto de emergencia… ¡se actualiza al instante!',
 							)}
 						</p>
 					</div>
@@ -608,7 +624,7 @@ export default function Home() {
 						</p>
 						<p className="opacity-70  w-full">
 							{t(
-								'Tus huéspedes descubren rincones auténticos y viven como locales'
+								'Tus huéspedes descubren rincones auténticos y viven como locales',
 							)}
 						</p>
 					</div>
@@ -618,7 +634,7 @@ export default function Home() {
 						</p>
 						<p className="opacity-70  w-full">
 							{t(
-								'Los inquilinos organizan su viaje con antelación a través de un único enlace'
+								'Los inquilinos organizan su viaje con antelación a través de un único enlace',
 							)}
 						</p>
 					</div>
@@ -628,7 +644,7 @@ export default function Home() {
 						</p>
 						<p className="opacity-70  w-full">
 							{t(
-								'Ofrecer valor añadido fomenta reservas recurrentes y recomendaciones'
+								'Ofrecer valor añadido fomenta reservas recurrentes y recomendaciones',
 							)}
 						</p>
 					</div>
@@ -654,7 +670,7 @@ export default function Home() {
 						</h2>
 						<h3 className="text-xl md:text-2xl">
 							{t(
-								'Anfitriones que ya disfrutan de las ventajas de BNB Explorer'
+								'Anfitriones que ya disfrutan de las ventajas de BNB Explorer',
 							)}
 						</h3>
 						<ButtonLink

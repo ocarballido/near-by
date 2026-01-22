@@ -29,7 +29,7 @@ export default function FeaturedMustVisitMenu({
 	return (
 		<div
 			className={clsx(
-				'flex w-full rounded-full bg-gray-100 p-1 gap-1',
+				'flex w-full rounded-full bg-white p-1 gap-1 shadow-xs',
 				className,
 			)}
 		>
@@ -41,15 +41,17 @@ export default function FeaturedMustVisitMenu({
 					? 'text-primary-500'
 					: 'text-red-500';
 
-				const activeCountBgClass = isFeatured
+				const activeBgClass = isFeatured
 					? 'bg-primary-100'
 					: 'bg-red-100';
+
+				const activeCountBgClass = isFeatured ? 'bg-white' : 'bg-white';
 
 				const iconColor = isActive
 					? isFeatured
 						? 'primary'
 						: 'error'
-					: 'light';
+					: 'body';
 
 				return (
 					<button
@@ -61,9 +63,9 @@ export default function FeaturedMustVisitMenu({
 							'flex-1 rounded-full px-2 py-2 text-md font-medium min-w-0',
 							'flex items-center justify-between gap-2 transition-colors hover:cursor-pointer',
 							isActive
-								? 'bg-white hover:bg-white'
+								? activeBgClass
 								: 'bg-transparent hover:bg-white/50',
-							isActive ? activeTextClass : 'text-gray-400',
+							isActive ? activeTextClass : 'text-gray-800',
 						)}
 					>
 						{/* Left: icon + label */}
@@ -89,7 +91,7 @@ export default function FeaturedMustVisitMenu({
 										: 'bg-gray-200',
 									isActive
 										? activeTextClass
-										: 'text-gray-500',
+										: 'text-gray-800',
 								)}
 							>
 								{tab.count}

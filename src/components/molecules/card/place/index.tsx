@@ -46,9 +46,9 @@ const Place = ({
 
 	return (
 		<div
-			className={`w-full flex flex-col gap-4 rounded-xl p-2 relative transition-all hover:bg-gray-100 ${className}`}
+			className={`w-full flex flex-col gap-4 rounded-xl p-2 relative transition-all bg-white shadow-xs ${className}`}
 		>
-			<div className={`w-full flex gap-4 sm:items-center relative`}>
+			<div className={`w-full flex gap-4 relative`}>
 				<div className="w-18 h-18 rounded-md overflow-hidden relative shrink-0">
 					<Image
 						alt={name}
@@ -72,24 +72,24 @@ const Place = ({
 						<p className="text-sm opacity-75">{description}</p>
 					)}
 				</div>
-				<div className="gap-1 flex">
+				<div className="gap-1 lg:flex hidden items-center">
 					<ButtonIcon
 						onClick={handleMustVisit}
 						icon={<IconModeHeat />}
-						className={`${mustVisit ? 'opacity-100' : 'opacity-30'}`}
+						className={`${mustVisit ? 'opacity-100' : 'opacity-30'} h-fit`}
 						color={`${mustVisit ? 'error' : 'secondary'}`}
 					/>
 					<ButtonIcon
 						onClick={handleFeatured}
 						icon={<IconFavorite />}
-						className={`${featured ? 'opacity-100' : 'opacity-30'}`}
+						className={`${featured ? 'opacity-100' : 'opacity-30'} h-fit`}
 						color={`${featured ? 'primary' : 'secondary'}`}
 					/>
 					<ButtonIcon
 						onClick={handleDelete}
 						icon={<IconDelete />}
 						color="secondary"
-						className="hidden sm:flex"
+						className="hidden sm:flex h-fit"
 					/>
 					{editeable && (
 						<ButtonIcon
@@ -101,14 +101,32 @@ const Place = ({
 					)}
 				</div>
 			</div>
-			<div className="flex gap-2 w-full sm:hidden">
-				<Button
+			<div className="flex gap-2 w-full lg:hidden rounded-full justify-around">
+				<ButtonIcon
+					onClick={handleMustVisit}
+					icon={<IconModeHeat />}
+					className={`${mustVisit ? 'opacity-100' : 'opacity-30'} w-full`}
+					color={`${mustVisit ? 'error' : 'secondary'}`}
+				/>
+				<ButtonIcon
+					onClick={handleFeatured}
+					icon={<IconFavorite />}
+					className={`${featured ? 'opacity-100' : 'opacity-30'} w-full`}
+					color={`${featured ? 'primary' : 'secondary'}`}
+				/>
+				<ButtonIcon
+					onClick={handleDelete}
+					icon={<IconDelete />}
+					color="secondary"
+					className="w-full"
+				/>
+				{/* <Button
 					className="w-full button__delete"
 					color="secondary"
 					iconLeft={<IconDelete />}
 					label={t('Eliminar')}
 					onClick={handleDelete}
-				/>
+				/> */}
 				{editeable && (
 					<Button
 						className="w-full"

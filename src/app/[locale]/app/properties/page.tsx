@@ -42,7 +42,7 @@ export default async function Properties() {
 				address,
 				image_url,
 				property_data ( type )
-			`
+			`,
 		)
 		.eq('user_id', user.id)
 		.overrideTypes<PropertyWithData[], { merge: false }>();
@@ -53,7 +53,7 @@ export default async function Properties() {
 
 	const properties = (data ?? []).map((p) => {
 		const types = (p.property_data ?? []).map((x) =>
-			(x?.type ?? '').toString().trim().toLowerCase()
+			(x?.type ?? '').toString().trim().toLowerCase(),
 		);
 
 		return {
