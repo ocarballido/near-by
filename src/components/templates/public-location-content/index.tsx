@@ -1,11 +1,12 @@
 import PlacePublic from '@/components/molecules/card/place-public';
-import { PropertyLocation } from '@/lib/types';
+
+import { PropertyDataItem } from '../property-data-public';
 
 const PublicLocationContent = ({
 	sub_category_name,
 	locations = [],
 }: {
-	locations: PropertyLocation[];
+	locations: PropertyDataItem[];
 	sub_category_name?: string;
 }) => {
 	return (
@@ -27,6 +28,7 @@ const PublicLocationContent = ({
 					longitude={loc.longitude}
 					address={loc.address}
 					featured={loc.featured}
+					mustSee={loc.must_visit}
 					image={loc.image_url}
 				/>
 			))}

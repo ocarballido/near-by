@@ -5,7 +5,8 @@ import { GOOGLE_MAPS_DIRECTION_URL } from '@/config/config-constants';
 import Image from 'next/image';
 import IconDirections from '@/components/atoms/icon/directions';
 import ButtonLink from '../../button-link';
-import IconStarShine from '@/components/atoms/icon/star-shine';
+import IconFavorite from '@/components/atoms/icon/favorite';
+import IconModeHeat from '@/components/atoms/icon/mode-heat';
 
 type PlacePublicProps = {
 	address: string;
@@ -14,6 +15,7 @@ type PlacePublicProps = {
 	longitude?: number;
 	className?: string;
 	featured?: boolean;
+	mustSee?: boolean;
 	image?: string;
 	name: string;
 };
@@ -25,6 +27,7 @@ const PlacePublic = ({
 	longitude,
 	className,
 	featured,
+	mustSee,
 	name,
 	image = '/static/img/default-location-2x.webp',
 }: PlacePublicProps) => {
@@ -32,7 +35,7 @@ const PlacePublic = ({
 
 	const graySvg = `<svg xmlns="http://www.w3.org/2000/svg" width="4" height="4"><rect width="4" height="4" fill="#a3e7d0" /></svg>`;
 	const grayDataUrl = `data:image/svg+xml;base64,${Buffer.from(
-		graySvg
+		graySvg,
 	).toString('base64')}`;
 
 	return (
@@ -63,9 +66,14 @@ const PlacePublic = ({
 						<p className="text-sm opacity-75">{description}</p>
 					)}
 				</div>
+				{mustSee && (
+					<div className="p-1.5 rounded-full w-fit h-fit">
+						<IconModeHeat color="error" />
+					</div>
+				)}
 				{featured && (
 					<div className="p-1.5 rounded-full w-fit h-fit">
-						<IconStarShine color="warning" />
+						<IconFavorite color="primary" />
 					</div>
 				)}
 				<ButtonLink

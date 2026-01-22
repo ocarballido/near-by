@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl';
 import { deleteLocation } from '@/app/actions/locations/delete-location';
 import { deleteAllLocations } from '@/app/actions/locations/delete-all-locations';
 import { toggleFeatured } from '@/app/actions/properties/toggle-featured';
+import { toggleMustVisit } from '@/app/actions/properties/toggle-must-visit';
 
 import Place from '@/components/molecules/card/place';
 import ButtonLink from '@/components/molecules/button-link';
@@ -27,6 +28,7 @@ export interface Location {
 	longitude?: number;
 	type?: 'info' | 'location';
 	featured?: boolean;
+	must_visit?: boolean;
 }
 
 type AlertState = {
@@ -124,7 +126,7 @@ export function LocationsContent({
 
 	const handleFeatured = async (
 		locationId: string,
-		currentFeatured: boolean
+		currentFeatured: boolean,
 	) => {
 		if (loading) return;
 		openLoading();
@@ -137,13 +139,41 @@ export function LocationsContent({
 			setAlert({
 				type: 'success',
 				message: newValue
-					? 'Marcado como destacado correctamente'
-					: 'Destacado eliminado correctamente',
+					? 'Marcado como favorito correctamente'
+					: 'Desmarcado como favorito correctamente',
 			});
 		} else {
 			setAlert({
 				type: 'error',
-				message: 'Error al actualizar destacado',
+				message: 'Error al actualizar favorito',
+			});
+		}
+
+		closeLoading();
+	};
+
+	const handleMustVisit = async (
+		locationId: string,
+		currentMustVisit: boolean,
+	) => {
+		if (loading) return;
+		openLoading();
+		setAlert(null);
+
+		const newValue = !currentMustVisit;
+		const result = await toggleMustVisit(locationId, newValue);
+
+		if (result.success) {
+			setAlert({
+				type: 'success',
+				message: newValue
+					? 'mustSeeMarkedSuccessfullt'
+					: 'mustSeeUnMarkedSuccessfullt',
+			});
+		} else {
+			setAlert({
+				type: 'error',
+				message: 'mustSeeMarkError',
 			});
 		}
 
@@ -172,8 +202,8 @@ export function LocationsContent({
 					deleteTarget === 'LOCATION'
 						? t('Estás a punto de eliminar uno de tus sitios')
 						: t(
-								'Estás a punto de eliminar todas tus localizaciones'
-						  )
+								'Estás a punto de eliminar todas tus localizaciones',
+							)
 				}
 				message={t('¿Estás seguro que deseas continuar?')}
 				open={isOpen}
@@ -212,6 +242,7 @@ export function LocationsContent({
 					address={location.address}
 					image={location.image_url}
 					featured={location.featured}
+					mustVisit={location.must_visit}
 					handleDelete={() => {
 						setIsOpen(true);
 						setDeleteTarget('LOCATION');
@@ -219,6 +250,12 @@ export function LocationsContent({
 					}}
 					handleFeatured={() =>
 						handleFeatured(location.id, location.featured ?? false)
+					}
+					handleMustVisit={() =>
+						handleMustVisit(
+							location.id,
+							location.must_visit ?? false,
+						)
 					}
 				/>
 			))}

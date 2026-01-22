@@ -3,7 +3,7 @@
 import { PropertyInfoContent } from '../property-info-content';
 import PublicLocationContent from '../public-location-content';
 
-type PropertyDataItem = {
+export type PropertyDataItem = {
 	id: string;
 	name: string;
 	address: string;
@@ -13,6 +13,7 @@ type PropertyDataItem = {
 	longitude?: number;
 	type?: 'info' | 'location';
 	featured?: boolean;
+	must_visit?: boolean;
 };
 
 export function PropertyDataPublicBySubCategory({
@@ -26,6 +27,7 @@ export function PropertyDataPublicBySubCategory({
 	lat: number;
 	lng: number;
 }) {
+	console.log(propertyData);
 	return (
 		<>
 			{type === 'info' ? (

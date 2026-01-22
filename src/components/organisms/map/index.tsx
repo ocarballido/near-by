@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { PropertyLocation } from '@/lib/types';
+import { PropertyDataItem } from '@/components/templates/property-data-public';
 
 type MapProps = {
-	locations: PropertyLocation[];
+	locations: PropertyDataItem[];
 };
 
 const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;

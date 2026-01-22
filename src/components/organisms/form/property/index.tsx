@@ -243,11 +243,6 @@ const AddPropertyForm = () => {
 					))}
 				</div>
 
-				{/* {selectedSeedInfoIds.length === 0 && (
-					<p className="text-xs text-error-600 mt-2">
-						{t('Selecciona al menos un contenido automático')}
-					</p>
-				)} */}
 				<div className="p-4 bg-sky-100 rounded-md">
 					<p className="text-xs font-normal text-sky-900">
 						{t.rich('auto-content-helper-text', {
@@ -307,12 +302,6 @@ const AddPropertyForm = () => {
 						},
 					})}
 				/>
-
-				{/* <div className="p-4 bg-sky-100 rounded-md">
-					<p className="text-xs text-sky-900">
-						{t('Disclaimer de imagen')}
-					</p>
-				</div> */}
 
 				<div className="flex flex-col sm:flex-row gap-2">
 					<ButtonLink

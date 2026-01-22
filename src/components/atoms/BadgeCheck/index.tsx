@@ -1,24 +1,91 @@
 'use client';
 
 import clsx from 'clsx';
-import IconCheck from '../icon/check';
+import IconCircle from '../icon/circle';
+import IconCheckCircle from '../icon/check-circle';
 
 type BadgeCheckProps = {
 	label: string;
+	className?: string;
+	checkedColor?:
+		| 'primary'
+		| 'secondary'
+		| 'success'
+		| 'warning'
+		| 'info'
+		| 'error'
+		| 'body'
+		| 'light'
+		| 'white'
+		| undefined;
 	checked: boolean;
+	iconUnchecked?: React.ReactNode;
+	iconChecked?: React.ReactNode;
 	onToggle: () => void;
 };
 
-const BadgeCheck = ({ label, checked, onToggle }: BadgeCheckProps) => {
+const BadgeCheck = ({
+	label,
+	checked,
+	className = '',
+	onToggle,
+	checkedColor = 'primary',
+	iconUnchecked = <IconCircle color="light" size={20} />,
+	iconChecked = (
+		<IconCheckCircle
+			color={
+				checkedColor === 'body'
+					? 'white'
+					: checkedColor === 'white'
+						? 'body'
+						: checkedColor
+			}
+			size={20}
+		/>
+	),
+}: BadgeCheckProps) => {
 	const badgeStyles = clsx(
-		'rounded-sm inline-flex items-center gap-1 font-bold text-xs pl-2 pr-2 py-1 cursor-pointer select-none transition-colors min-h-[32px]',
+		`rounded-full inline-flex items-center gap-1 font-bold text-xs pl-1.5 pr-3 py-1 cursor-pointer select-none transition-colors min-h-[32px] ${className}`,
 		{
 			'bg-secondary-200 text-secondary-900 hover:bg-secondary-300':
 				!checked,
-
-			'bg-success-200 text-success-900 hover:bg-success-300 pl-2 pr-3':
-				checked,
-		}
+		},
+		{
+			'bg-primary-200 text-primary-900 hover:bg-primary-300':
+				checkedColor === 'primary' && checked,
+		},
+		{
+			'bg-secondary-200 text-secondary-900 hover:bg-secondary-300':
+				checkedColor === 'secondary' && checked,
+		},
+		{
+			'bg-success-200 text-success-900 hover:bg-success-300':
+				checkedColor === 'success' && checked,
+		},
+		{
+			'bg-warning-200 text-warning-900 hover:bg-warning-300':
+				checkedColor === 'warning' && checked,
+		},
+		{
+			'bg-info-200 text-info-900 hover:bg-info-300':
+				checkedColor === 'info' && checked,
+		},
+		{
+			'bg-error-200 text-error-900 hover:bg-error-300':
+				checkedColor === 'error' && checked,
+		},
+		{
+			'bg-gray-800 text-gray-200 hover:bg-gray-950':
+				checkedColor === 'body' && checked,
+		},
+		{
+			'bg-gray-300 text-gray-900 hover:bg-gray-300':
+				checkedColor === 'light' && checked,
+		},
+		{
+			'bg-gray-100 text-gray-900 hover:bg-gray-300':
+				checkedColor === 'white' && checked,
+		},
 	);
 
 	return (
@@ -28,7 +95,11 @@ const BadgeCheck = ({ label, checked, onToggle }: BadgeCheckProps) => {
 			role="button"
 			aria-pressed={checked}
 		>
-			{checked && <IconCheck color="primary" size={20} />}
+			{checked ? (
+				iconChecked
+			) : (
+				<div className="opacity-50">{iconUnchecked}</div>
+			)}
 			<span>{label}</span>
 		</div>
 	);

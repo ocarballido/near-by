@@ -19,6 +19,9 @@ import Button from '@/components/molecules/button';
 import Alert from '@/components/molecules/alert';
 import AddressField from '@/components/molecules/google-text-field';
 import TextArea from '@/components/molecules/text-area';
+import BadgeCheck from '@/components/atoms/BadgeCheck';
+import IconModeHeat from '@/components/atoms/icon/mode-heat';
+import IconFavorite from '@/components/atoms/icon/favorite';
 
 type FormValues = {
 	property_id: string;
@@ -33,6 +36,7 @@ type FormValues = {
 	phone?: string;
 	image?: FileList;
 	featured: boolean;
+	must_visit: boolean;
 };
 
 const AddPlaceForm = ({
@@ -63,6 +67,7 @@ const AddPlaceForm = ({
 		setError,
 		clearErrors,
 		reset,
+		watch,
 		formState: { errors, isSubmitting },
 	} = useForm<FormValues>({
 		defaultValues: {
@@ -76,8 +81,12 @@ const AddPlaceForm = ({
 			website: '',
 			phone: '',
 			featured: false,
+			must_visit: false,
 		},
 	});
+
+	const featuredValue = watch('featured');
+	const mustVisitValue = watch('must_visit');
 
 	const {
 		validate: validateAddress,
@@ -112,7 +121,7 @@ const AddPlaceForm = ({
 					{
 						kb: (MAX_IMAGE_SIZE / 1024).toFixed(0),
 						got: (file.size / 1024).toFixed(0),
-					}
+					},
 				),
 			});
 			return;
@@ -126,7 +135,8 @@ const AddPlaceForm = ({
 		fd.append('address', data.address);
 		fd.append('latitude', data.latitude);
 		fd.append('longitude', data.longitude);
-		fd.append('featured', String(data.featured));
+		fd.append('featured', String(featuredValue));
+		fd.append('must_visit', String(mustVisitValue));
 		fd.append('type', 'location');
 
 		// Campos opcionales
@@ -184,7 +194,7 @@ const AddPlaceForm = ({
 
 		if (result.redirectTo) {
 			router.push(
-				`${result.redirectTo}/${propertyId}/${categoryId}/${subCategoryId}`
+				`${result.redirectTo}/${propertyId}/${categoryId}/${subCategoryId}`,
 			);
 			return;
 		}
@@ -273,16 +283,54 @@ const AddPlaceForm = ({
 					helperText={errors.description?.message}
 				/>
 
-				<div>
-					<label className="flex items-center gap-2">
-						<input
-							type="checkbox"
-							{...register('featured')}
-							className="accent-primary"
-						/>
-						<span>{t('Marcar como destacado')}</span>
-					</label>
-				</div>
+				<fieldset className="flex flex-col gap-2">
+					<p className="font-bold text-sm">{t('markLocation')}</p>
+					<div className="flex items-center gap-2">
+						<div className="flex gap-0.5 items-center w-full">
+							<div className="shrink-0">
+								<IconFavorite color="primary" size={20} />
+							</div>
+							<BadgeCheck
+								label={t('markFavoriteCheck')}
+								checked={!!featuredValue}
+								className="w-full"
+								onToggle={() => {
+									setValue('featured', !featuredValue, {
+										shouldDirty: true,
+										shouldTouch: true,
+										shouldValidate: true,
+									});
+								}}
+							/>
+						</div>
+						<div className="flex gap-0.5 items-center w-full">
+							<div className="shrink-0">
+								<IconModeHeat color="error" size={20} />
+							</div>
+							<BadgeCheck
+								label={t('markMustSeeCheck')}
+								checked={!!mustVisitValue}
+								className="w-full"
+								checkedColor="error"
+								onToggle={() => {
+									setValue('must_visit', !mustVisitValue, {
+										shouldDirty: true,
+										shouldTouch: true,
+										shouldValidate: true,
+									});
+								}}
+							/>
+						</div>
+					</div>
+					<div className="p-4 bg-sky-100 rounded-md">
+						<p className="text-xs text-sky-900 mb-2">
+							{t('favoriteExplained')}
+						</p>
+						<p className="text-xs text-sky-900">
+							{t('mustSeeExplained')}
+						</p>
+					</div>
+				</fieldset>
 
 				<InputFile
 					label={t('Imagen')}
@@ -302,11 +350,11 @@ const AddPlaceForm = ({
 					})}
 				/>
 
-				<div className="p-4 bg-sky-100 rounded-md">
+				{/* <div className="p-4 bg-sky-100 rounded-md">
 					<p className="text-xs text-sky-900">
 						{t('Disclaimer de imagen')}
 					</p>
-				</div>
+				</div> */}
 
 				<div className="flex flex-col sm:flex-row gap-2">
 					<Button
