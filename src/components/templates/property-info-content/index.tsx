@@ -1,4 +1,4 @@
-import { PropertyLocation } from '@/lib/types';
+import { PropertyDataItem } from '../property-data-public';
 
 export interface PropertyInfo {
 	id: string;
@@ -10,10 +10,11 @@ export interface PropertyInfo {
 	longitude?: number;
 	type?: string;
 	featured?: boolean;
+	mustSee?: boolean;
 }
 
 interface PropertyInfoProps {
-	infos: PropertyLocation[];
+	infos: PropertyDataItem[];
 	sub_category_name?: string;
 }
 

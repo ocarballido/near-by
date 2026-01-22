@@ -47,11 +47,12 @@ export default async function Property({ params }: PageProps) {
 	const { data: propertyData, error: errorPropertyData } = await supabase
 		.from('property_data')
 		.select(
-			'id,name,description,image_url,type,name,latitude,longitude,featured,address'
+			'id,name,description,image_url,type,name,latitude,longitude,featured,address,must_visit',
 		)
 		.eq('property_id', propertyId)
 		.eq('sub_category_id', subCategoryId)
 		.order('featured', { ascending: false })
+		.order('must_visit', { ascending: false })
 		.order('name', { ascending: true });
 
 	const { data: categoryType, error: errorCategoryType } = await supabase

@@ -25,6 +25,10 @@ const LocationSchema = z.object({
 		.preprocess((v) => v === 'true' || v === true, z.boolean())
 		.optional()
 		.default(false),
+	must_visit: z
+		.preprocess((v) => v === 'true' || v === true, z.boolean())
+		.optional()
+		.default(false),
 });
 
 // 2) Tipo para el estado de la acción
@@ -44,7 +48,7 @@ export type LocationFormState = {
 };
 
 export async function createLocation(
-	formData: FormData
+	formData: FormData,
 ): Promise<LocationFormState> {
 	try {
 		// 3) Autenticación
@@ -77,6 +81,7 @@ export async function createLocation(
 			latitude: formData.get('latitude'),
 			longitude: formData.get('longitude'),
 			featured: formData.get('featured'),
+			must_visit: formData.get('must_visit'),
 		};
 
 		const result = LocationSchema.safeParse(raw);
@@ -132,7 +137,7 @@ export async function createLocation(
 			if (upErr) {
 				console.error(
 					'Error subiendo imagen a location-images:',
-					upErr
+					upErr,
 				);
 				return {
 					errors: {
@@ -178,6 +183,7 @@ export async function createLocation(
 				description: loc.description,
 				image_url,
 				featured: loc.featured,
+				must_visit: loc.must_visit,
 				updated_at: new Date().toISOString(),
 			};
 
@@ -208,6 +214,7 @@ export async function createLocation(
 				longitude: loc.longitude,
 				image_url,
 				featured: loc.featured,
+				must_visit: loc.must_visit,
 			};
 
 			const { error: insertErr } = await db

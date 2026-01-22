@@ -22,6 +22,7 @@ type PropertyDataItem = {
 	longitude?: number;
 	type?: 'info' | 'location';
 	featured?: boolean;
+	mustVisit?: boolean;
 };
 
 export function PropertyDataBySubCategory({
@@ -60,7 +61,7 @@ export function PropertyDataBySubCategory({
 							className="mt-12"
 							onClick={() =>
 								router.push(
-									`/app/info/${propertyId}/${categoryId}/${subCategoryId}`
+									`/app/info/${propertyId}/${categoryId}/${subCategoryId}`,
 								)
 							}
 						/>
@@ -77,7 +78,7 @@ export function PropertyDataBySubCategory({
 							className="mt-12"
 							onClick={() =>
 								router.push(
-									`/app/location/${propertyId}/${categoryId}/${subCategoryId}`
+									`/app/location/${propertyId}/${categoryId}/${subCategoryId}`,
 								)
 							}
 						/>

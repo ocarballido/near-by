@@ -1,22 +1,14 @@
-'use client';
-
-import { useState } from 'react';
-
-import IconLocationOn from '@/components/atoms/icon/location-on';
 import PlacePublic from '@/components/molecules/card/place-public';
-import IconList from '@/components/atoms/icon/list';
-import Map from '@/components/organisms/map';
-import { PropertyLocation } from '@/lib/types';
+
+import { PropertyDataItem } from '../property-data-public';
 
 const PublicLocationContent = ({
 	sub_category_name,
 	locations = [],
 }: {
-	locations: PropertyLocation[];
+	locations: PropertyDataItem[];
 	sub_category_name?: string;
 }) => {
-	const [activeView, setActiveView] = useState('list');
-
 	return (
 		<>
 			<div className="bg-white flex gap-1 rounded-lg p-1 justify-end items-center top-2 right-2">
@@ -25,54 +17,21 @@ const PublicLocationContent = ({
 						{sub_category_name}
 					</h3>
 				)}
-				<button
-					type="button"
-					className={`w-[36px] h-[36px] hover:cursor-pointer hover:${
-						activeView === 'list'
-							? 'bg-primary-500'
-							: 'bg-primary-100'
-					} flex justify-center items-center rounded-md ${
-						activeView === 'list' ? 'bg-primary-500' : 'bg-white'
-					}`}
-					onClick={() => setActiveView('list')}
-				>
-					<IconList
-						color={activeView === 'list' ? 'white' : 'primary'}
-					/>
-				</button>
-				<button
-					type="button"
-					className={`w-[36px] h-[36px] hover:cursor-pointer hover:${
-						activeView === 'map'
-							? 'bg-primary-500'
-							: 'bg-primary-100'
-					} flex justify-center items-center rounded-md ${
-						activeView === 'map' ? 'bg-primary-500' : 'bg-white'
-					}`}
-					onClick={() => setActiveView('map')}
-				>
-					<IconLocationOn
-						color={activeView === 'map' ? 'white' : 'primary'}
-					/>
-				</button>
 			</div>
 
-			{activeView === 'list' ? (
-				locations.map((loc) => (
-					<PlacePublic
-						key={loc.id}
-						name={loc.name}
-						description={loc.description}
-						latitude={loc.latitude}
-						longitude={loc.longitude}
-						address={loc.address}
-						featured={loc.featured}
-						image={loc.image_url}
-					/>
-				))
-			) : (
-				<Map locations={locations} />
-			)}
+			{locations.map((loc) => (
+				<PlacePublic
+					key={loc.id}
+					name={loc.name}
+					description={loc.description}
+					latitude={loc.latitude}
+					longitude={loc.longitude}
+					address={loc.address}
+					featured={loc.featured}
+					mustSee={loc.must_visit}
+					image={loc.image_url}
+				/>
+			))}
 		</>
 	);
 };

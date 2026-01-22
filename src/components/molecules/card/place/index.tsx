@@ -5,7 +5,8 @@ import IconDelete from '@/components/atoms/icon/delete';
 import IconEdit from '@/components/atoms/icon/edit';
 import Button from '../../button';
 import ButtonIcon from '@/components/atoms/button-icon';
-import IconStarShine from '@/components/atoms/icon/star-shine';
+import IconFavorite from '@/components/atoms/icon/favorite';
+import IconModeHeat from '@/components/atoms/icon/mode-heat';
 
 type PlaceProps = {
 	address: string;
@@ -15,9 +16,11 @@ type PlaceProps = {
 	handleDelete?: () => void;
 	handleEdit?: () => void;
 	handleFeatured?: () => void;
+	handleMustVisit?: () => void;
 	image?: string;
 	name: string;
 	featured?: boolean;
+	mustVisit?: boolean;
 };
 
 const Place = ({
@@ -28,15 +31,17 @@ const Place = ({
 	handleDelete,
 	handleEdit,
 	handleFeatured,
+	handleMustVisit,
 	name,
 	featured,
+	mustVisit,
 	image = '/static/img/default-location-2x.webp',
 }: PlaceProps) => {
 	const t = useTranslations();
 
 	const graySvg = `<svg xmlns="http://www.w3.org/2000/svg" width="4" height="4"><rect width="4" height="4" fill="#a3e7d0" /></svg>`;
 	const grayDataUrl = `data:image/svg+xml;base64,${Buffer.from(
-		graySvg
+		graySvg,
 	).toString('base64')}`;
 
 	return (
@@ -69,10 +74,16 @@ const Place = ({
 				</div>
 				<div className="gap-1 flex">
 					<ButtonIcon
+						onClick={handleMustVisit}
+						icon={<IconModeHeat />}
+						className={`${mustVisit ? 'opacity-100' : 'opacity-30'}`}
+						color={`${mustVisit ? 'error' : 'secondary'}`}
+					/>
+					<ButtonIcon
 						onClick={handleFeatured}
-						icon={<IconStarShine />}
+						icon={<IconFavorite />}
 						className={`${featured ? 'opacity-100' : 'opacity-30'}`}
-						color={`${featured ? 'warning' : 'secondary'}`}
+						color={`${featured ? 'primary' : 'secondary'}`}
 					/>
 					<ButtonIcon
 						onClick={handleDelete}
