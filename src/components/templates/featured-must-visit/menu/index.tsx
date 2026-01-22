@@ -58,12 +58,12 @@ export default function FeaturedMustVisitMenu({
 						onClick={() => onChange(tab.key)}
 						aria-pressed={isActive}
 						className={clsx(
-							'flex-1 rounded-full px-2 py-2 text-md font-medium',
-							'flex items-center justify-between gap-3 transition-colors hover:cursor-pointer',
+							'flex-1 rounded-full px-2 py-2 text-md font-medium min-w-0',
+							'flex items-center justify-between gap-2 transition-colors hover:cursor-pointer',
 							isActive
 								? 'bg-white hover:bg-white'
 								: 'bg-transparent hover:bg-white/50',
-							isActive ? activeTextClass : 'text-gray-500',
+							isActive ? activeTextClass : 'text-gray-400',
 						)}
 					>
 						{/* Left: icon + label */}
@@ -73,7 +73,9 @@ export default function FeaturedMustVisitMenu({
 							) : (
 								<IconModeHeat color={iconColor} />
 							)}
-							<span className="truncate">{tab.label}</span>
+							<span className="truncate uppercase font-semibold text-sm flex-1 min-w-0">
+								{tab.label}
+							</span>
 						</span>
 
 						{/* Right: count */}

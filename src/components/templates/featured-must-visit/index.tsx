@@ -120,12 +120,6 @@ export default function FeaturedMustVisit({
 
 			{activeTab === 'featured' && hasFeatured && (
 				<div className="flex flex-col gap-4">
-					{labels.featuredHeading && (
-						<h2 className="font-heading text-lg font-semibold">
-							{labels.featuredHeading}
-						</h2>
-					)}
-
 					{featuredGroups.map((group) => (
 						<PropertyDataPublicBySubCategory
 							key={group.sub_category_id}
@@ -141,12 +135,6 @@ export default function FeaturedMustVisit({
 
 			{activeTab === 'must_visit' && hasMustVisit && (
 				<div className="flex flex-col gap-4">
-					{labels.mustVisitHeading && (
-						<h2 className="font-heading text-lg font-semibold">
-							{labels.mustVisitHeading}
-						</h2>
-					)}
-
 					{mustVisitGroups.map((group) => (
 						<PropertyDataPublicBySubCategory
 							key={group.sub_category_id}

@@ -521,6 +521,6 @@
 	"mustSeeMarkedSuccessfullt": "Marked as Must See correctly",
 	"mustSeeUnMarkedSuccessfullt": "Correctly unmarked as Must See",
 	"mustSeeMarkError": "Error updating Must See",
-	"favorites": "Personal recommendation",
+	"favorites": "Favorites",
 	"mustSees": "Must see, essential visit"
 }
