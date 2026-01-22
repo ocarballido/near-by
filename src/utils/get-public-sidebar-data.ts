@@ -1,12 +1,18 @@
 'use server';
 
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
-import type { Tables } from '@/lib/types';
+import type { Tables, Enums } from '@/lib/types'; // 👈 añadimos Enums
+
+type PropertyDataType = Enums<'property_data_type'>; // 'info' | 'location'
+
+// ✅ helper de tipos: convierte unknown -> PropertyDataType
+const isPropertyDataType = (v: unknown): v is PropertyDataType =>
+	v === 'info' || v === 'location';
 
 export type PublicSubCategory = {
 	id: string;
 	name: string;
-	type: string;
+	type: PropertyDataType; // 👈 antes string
 	order?: number | null;
 };
 
@@ -15,7 +21,7 @@ export type PublicCategory = {
 	name: string;
 	icon: string | null;
 	order_index: number;
-	type: 'info' | 'location';
+	type: PropertyDataType; // 👈 antes 'info'|'location' (sin null) + no se devolvía
 	sub_categories: PublicSubCategory[];
 };
 
@@ -33,14 +39,15 @@ type SubCatRow = Pick<
 >;
 
 export async function getPublicSidebarData(
-	propertyId: string
+	propertyId: string,
 ): Promise<PublicCategory[]> {
 	const supabase = await createServerAdminClient();
 
 	// 1. Obtener todas las categorías ordenadas
 	const { data: categories, error: catError } = await supabase
 		.from('categories')
-		.select('id, name, icon, order_index')
+		// ✅ incluimos type porque tu PublicCategory lo exige
+		.select('id, name, icon, order_index, type')
 		.order('order_index', { ascending: true })
 		.overrideTypes<CategoryLite[], { merge: false }>();
 
@@ -63,13 +70,13 @@ export async function getPublicSidebarData(
 		...new Set(
 			usedSubCategories
 				.filter(
-					(item) => item.name || item.description || item.latitude
+					(item) => item.name || item.description || item.latitude,
 				)
 				.map((item) => item.sub_category_id)
 				.filter(
 					(id): id is string =>
-						typeof id === 'string' && id.length > 0
-				)
+						typeof id === 'string' && id.length > 0,
+				),
 		),
 	];
 
@@ -88,10 +95,17 @@ export async function getPublicSidebarData(
 		if (!subCatsByCategory[sub.category_id]) {
 			subCatsByCategory[sub.category_id] = [];
 		}
+
+		// ✅ si viene null o algo raro, lo convertimos a 'info' (default)
+		// (esto NO cambia la lógica estructural; solo evita que el tipo sea inválido)
+		const safeType: PropertyDataType = isPropertyDataType(sub.type)
+			? sub.type
+			: 'info';
+
 		subCatsByCategory[sub.category_id].push({
 			id: sub.id,
 			name: sub.name,
-			type: sub.type as 'info' | 'location',
+			type: safeType,
 			order: sub.order_index,
 		});
 	}
@@ -99,7 +113,7 @@ export async function getPublicSidebarData(
 	// Ordenar subcategorías dentro de cada categoría
 	for (const catId in subCatsByCategory) {
 		subCatsByCategory[catId].sort(
-			(a, b) => (a.order ?? 0) - (b.order ?? 0)
+			(a, b) => (a.order ?? 0) - (b.order ?? 0),
 		);
 	}
 
@@ -107,17 +121,24 @@ export async function getPublicSidebarData(
 	const result: PublicCategory[] = categories
 		.map((cat) => {
 			const subcats = subCatsByCategory[cat.id] || [];
+
+			// ✅ type del category: mismo tratamiento (null -> 'info')
+			const safeCatType: PropertyDataType = isPropertyDataType(cat.type)
+				? cat.type
+				: 'info';
+
 			return subcats.length > 0
 				? {
 						id: cat.id,
 						name: cat.name,
 						icon: cat.icon,
 						order_index: cat.order_index,
+						type: safeCatType,
 						sub_categories: subcats,
-				  }
+					}
 				: null;
 		})
-		.filter(Boolean) as PublicCategory[];
+		.filter((x): x is PublicCategory => x !== null);
 
 	return result;
 }

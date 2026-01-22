@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState } from 'react';
 
-import { CategoryWithSubCategories } from '../types';
+import { CategoryWithSubCategories } from '@/types/db';
 
 type EditPublicMenuContextType = {
 	sidebarData: CategoryWithSubCategories[];
@@ -31,7 +31,7 @@ export const EditPublicMenuProvider = ({
 }) => {
 	const [sidebarData, setSidebarData] = useState(initialData);
 	const [activeCategoryId, setActiveCategoryId] = useState<string | null>(
-		null
+		null,
 	);
 	const [activeSubCategoryType, setActiveSubCategoryType] = useState<
 		string | null
@@ -75,7 +75,7 @@ export const usePublicSidebarData = (): EditPublicMenuContextType => {
 	const context = useContext(EditPublicMenuContext);
 	if (!context)
 		throw new Error(
-			'usePublicSidebarData must be used within EditPublicMenuProvider'
+			'usePublicSidebarData must be used within EditPublicMenuProvider',
 		);
 	return context;
 };

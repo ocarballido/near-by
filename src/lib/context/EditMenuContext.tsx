@@ -8,7 +8,7 @@ import {
 } from 'react';
 // import { usePathname } from 'next/navigation';
 
-import { CategoryWithSubCategories } from '../types';
+import { CategoryWithSubCategories } from '@/types/db';
 
 type EditMenuContextType = {
 	sidebarData: CategoryWithSubCategories[];
@@ -25,7 +25,7 @@ type EditMenuContextType = {
 };
 
 const EditMenuContext = createContext<EditMenuContextType | undefined>(
-	undefined
+	undefined,
 );
 
 export const EditMenuProvider = ({
@@ -39,7 +39,7 @@ export const EditMenuProvider = ({
 
 	const [sidebarData, setSidebarData] = useState(initialData);
 	const [activeCategoryId, setActiveCategoryId] = useState<string | null>(
-		null
+		null,
 	);
 	const [activeSubCategoryType, setActiveSubCategoryType] = useState<
 		string | null

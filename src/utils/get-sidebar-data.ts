@@ -2,7 +2,7 @@
 'use server';
 
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
-import { CategoryWithSubCategories } from '@/lib/types';
+import { CategoryWithSubCategories } from '@/types/db';
 import type { Tables } from '@/lib/types';
 
 type SubMini = Pick<
@@ -35,7 +35,7 @@ export async function getSidebarData(): Promise<CategoryWithSubCategories[]> {
 				type,
 				order_index
 			)
-		`
+		`,
 		)
 		.order('order_index', { ascending: true })
 		.overrideTypes<CatWithSubs[], { merge: false }>();
@@ -48,7 +48,7 @@ export async function getSidebarData(): Promise<CategoryWithSubCategories[]> {
 	if (data) {
 		data.forEach((category) => {
 			category.sub_categories.sort(
-				(a, b) => (a.order_index ?? 0) - (b.order_index ?? 0)
+				(a, b) => (a.order_index ?? 0) - (b.order_index ?? 0),
 			);
 		});
 	}

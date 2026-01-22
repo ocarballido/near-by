@@ -1,4 +1,4 @@
-import { SidebarMenuItemConfig } from '@/lib/types';
+import type { SidebarMenuItemConfig } from '@/types/sidebar';
 
 export const LOCALES = ['es', 'en', 'fr'];
 
