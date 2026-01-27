@@ -525,10 +525,17 @@
 	"mustSees": "Must see, essential visit",
 	"page_home": {
 		"mainAction": "Create my free guide",
+		"pilotHouseAction": "See how my guests see it",
 		"section_hero": {
 			"title": "Stop answering the same questions to your guests",
 			"subtitle": "Create an automatic digital guide for your accommodation with all the information your guests need: rules, schedules, and local recommendations. Ready in minutes.",
-			"pilotButton": "See how my guests see it"
+			"pilotButton": "See how my guests see it",
+			"tooltip1": "Bar",
+			"tooltip2": "Souvenirs",
+			"tooltip3": "Hospital",
+			"tooltip4": "Emergencies",
+			"tooltip5": "Embassy",
+			"tooltip6": "Café"
 		},
 		"section_why": {
 			"title": "Why BNB Explorer?",
@@ -536,25 +543,27 @@
 			"cardTitle1": "Fewer repeated messages",
 			"cardSubtitle1": "Your guests find answers without messaging you: rules, schedules, WiFi, and recommendations all in one place.",
 			"cardTitle2": "Better reviews",
-			"cardSubTitle2": "Informed guests = fewer issues, a better experience, and more 5-star reviews.",
+			"cardSubtitle2": "Informed guests = fewer issues, a better experience, and more 5-star reviews.",
 			"cardTitle3": "Everything in one link",
-			"cardSubTitle3": "Share your guide via WhatsApp, QR, or email. No apps, no passwords."
+			"cardSubtitle3": "Share your guide via WhatsApp, QR, or email. No apps, no passwords."
 		},
 		"section_reade_to_go": {
 			"title": "Your accommodation ready for guests in minutes",
 			"subtitle": "Less setup. More value for your guests.",
-			"body": "No websites, no PDFs, no long explanations. Share your guide and let it work for you."
+			"body": "No websites, no PDFs, no long explanations. Share your guide and let it work for you.",
+			"badge": "Property"
 		},
 		"section_how": {
 			"title": "How it works (in under 2 minutes)",
 			"cardTitle1": "Tell us where your accommodation is",
 			"cardSubtitle1": "AI automatically generates the basic content.",
 			"cardTitle2": "Review or adjust if you want",
-			"cardSubTitle2": "Rules, schedules, and key places are already prepared.",
+			"cardSubtitle2": "Rules, schedules, and key places are already prepared.",
 			"cardTitle3": "Share the link with your guests",
-			"cardSubTitle3": "And let the guide do the work for you."
+			"cardSubtitle3": "And let the guide do the work for you."
 		},
 		"section_features": {
+			"title": "The experience starts before check-in",
 			"titleFeatureOne": "Unlimited multi-property support",
 			"bodyFeatureOne": "Add as many properties as you want. Manage each one independently and save hours of personalized support.",
 			"titleFeatureTwo": "Categories, Favorites, Must-sees...",

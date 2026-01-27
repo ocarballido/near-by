@@ -530,10 +530,17 @@
 	"mustSees": "Visite essentielle",
 	"page_home": {
 		"mainAction": "Créer mon guide gratuit",
+		"pilotHouseAction": "Voir ce que voient mes voyageurs",
 		"section_hero": {
 			"title": "Arrêtez de répondre toujours aux mêmes questions de vos voyageurs",
 			"subtitle": "Créez un guide numérique automatique pour votre logement avec toutes les informations dont vos voyageurs ont besoin : règles, horaires et recommandations locales. Prêt en quelques minutes.",
-			"pilotButton": "Voir ce que voient mes voyageurs"
+			"pilotButton": "Voir ce que voient mes voyageurs",
+			"tooltip1": "Bar",
+			"tooltip2": "Souvenirs",
+			"tooltip3": "Hôpital",
+			"tooltip4": "Urgences",
+			"tooltip5": "Ambassade",
+			"tooltip6": "Café"
 		},
 		"section_why": {
 			"title": "Pourquoi BNB Explorer ?",
@@ -541,25 +548,27 @@
 			"cardTitle1": "Moins de messages répétitifs",
 			"cardSubtitle1": "Vos voyageurs trouvent les réponses sans vous écrire : règles, horaires, WiFi et recommandations au même endroit.",
 			"cardTitle2": "De meilleures évaluations",
-			"cardSubTitle2": "Des voyageurs bien informés = moins de problèmes, une meilleure expérience et plus d’avis 5 étoiles.",
+			"cardSubtitle2": "Des voyageurs bien informés = moins de problèmes, une meilleure expérience et plus d’avis 5 étoiles.",
 			"cardTitle3": "Tout en un seul lien",
-			"cardSubTitle3": "Partagez votre guide via WhatsApp, QR ou email. Sans application, sans mot de passe."
+			"cardSubtitle3": "Partagez votre guide via WhatsApp, QR ou email. Sans application, sans mot de passe."
 		},
 		"section_reade_to_go": {
 			"title": "Votre logement prêt pour vos voyageurs en quelques minutes",
 			"subtitle": "Moins de configuration. Plus de valeur pour vos voyageurs.",
-			"body": "Pas de sites web, pas de PDF, pas de longues explications. Partagez votre guide et laissez-le travailler pour vous."
+			"body": "Pas de sites web, pas de PDF, pas de longues explications. Partagez votre guide et laissez-le travailler pour vous.",
+			"badge": "Propriété"
 		},
 		"section_how": {
 			"title": "Comment ça fonctionne (en moins de 2 minutes)",
 			"cardTitle1": "Dites-nous où se trouve votre logement",
 			"cardSubtitle1": "L’IA génère automatiquement le contenu de base.",
 			"cardTitle2": "Vérifiez ou ajustez si vous le souhaitez",
-			"cardSubTitle2": "Les règles, horaires et lieux importants sont déjà prêts.",
+			"cardSubtitle2": "Les règles, horaires et lieux importants sont déjà prêts.",
 			"cardTitle3": "Partagez le lien avec vos voyageurs",
-			"cardSubTitle3": "Et laissez le guide faire le travail pour vous."
+			"cardSubtitle3": "Et laissez le guide faire le travail pour vous."
 		},
 		"section_features": {
+			"title": "The experience starts before check-in",
 			"titleFeatureOne": "Multi-logements sans limite",
 			"bodyFeatureOne": "Ajoutez autant de propriétés que vous le souhaitez. Gérez chacune indépendamment et économisez des heures de support personnalisé.",
 			"titleFeatureTwo": "Catégories, Favoris, Incontournables...",
