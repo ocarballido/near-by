@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Select, SelectOption } from '@/components/molecules/select';
-import Badge from '@/components/atoms/badge';
+import BadgeCheck from '@/components/atoms/BadgeCheck';
 
 const subcategories = {
 	alojamiento: [
@@ -155,7 +155,7 @@ const FilterCategories = () => {
 			/>
 			<div className="flex flex-wrap gap-1">
 				{subcategories[category].map((item) => (
-					<Badge color="success" key={item} label={t(item)} />
+					<BadgeCheck checked key={item} label={t(item)} />
 				))}
 			</div>
 		</div>
