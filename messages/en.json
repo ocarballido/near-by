@@ -522,5 +522,96 @@
 	"mustSeeUnMarkedSuccessfullt": "Correctly unmarked as Must See",
 	"mustSeeMarkError": "Error updating Must See",
 	"favorites": "Favorites",
-	"mustSees": "Must see, essential visit"
+	"mustSees": "Must see, essential visit",
+	"page_home": {
+		"mainAction": "Create my free guide",
+		"pilotHouseAction": "See how my guests see it",
+		"section_hero": {
+			"title": "Stop answering the same questions to your guests",
+			"subtitle": "Create an automatic digital guide for your accommodation with all the information your guests need: rules, schedules, and local recommendations. Ready in minutes.",
+			"pilotButton": "See how my guests see it",
+			"tooltip1": "Bar",
+			"tooltip2": "Souvenirs",
+			"tooltip3": "Hospital",
+			"tooltip4": "Emergencies",
+			"tooltip5": "Embassy",
+			"tooltip6": "Café"
+		},
+		"section_why": {
+			"title": "Why BNB Explorer?",
+			"subtitle": "Take your hospitality to the next level with local recommendations",
+			"cardTitle1": "Fewer repeated messages",
+			"cardSubtitle1": "Your guests find answers without messaging you: rules, schedules, WiFi, and recommendations all in one place.",
+			"cardTitle2": "Better reviews",
+			"cardSubtitle2": "Informed guests = fewer issues, a better experience, and more 5-star reviews.",
+			"cardTitle3": "Everything in one link",
+			"cardSubtitle3": "Share your guide via WhatsApp, QR, or email. No apps, no passwords."
+		},
+		"section_reade_to_go": {
+			"title": "Your accommodation ready for guests in minutes",
+			"subtitle": "Less setup. More value for your guests.",
+			"body": "No websites, no PDFs, no long explanations. Share your guide and let it work for you.",
+			"badge": "Property"
+		},
+		"section_how": {
+			"title": "How it works (in under 2 minutes)",
+			"cardTitle1": "Tell us where your accommodation is",
+			"cardSubtitle1": "AI automatically generates the basic content.",
+			"cardTitle2": "Review or adjust if you want",
+			"cardSubtitle2": "Rules, schedules, and key places are already prepared.",
+			"cardTitle3": "Share the link with your guests",
+			"cardSubtitle3": "And let the guide do the work for you."
+		},
+		"section_features": {
+			"title": "The experience starts before check-in",
+			"titleFeatureOne": "Unlimited multi-property support",
+			"bodyFeatureOne": "Add as many properties as you want. Manage each one independently and save hours of personalized support.",
+			"titleFeatureTwo": "Categories, Favorites, Must-sees...",
+			"bodyFeatureTwo1": "Forget starting from scratch:",
+			"bodyFeatureTwo2": "When your guests have all the information clearly from the start, everything flows better: fewer questions, less stress, and better reviews.",
+			"bodyFeatureTwoLabel": "Select a category",
+			"titleFeatureThree": "Edit only if you want",
+			"bodyFeatureThree": "Everything is generated automatically. You can customize it… or leave it as is and use it right away.",
+			"titleFeatureFour": "One link. All the answers.",
+			"bodyFeatureFour1": "Each accommodation gets its own URL.",
+			"bodyFeatureFour2": "Send it via WhatsApp, print it as a QR code, or share it however you prefer. Guests access it without registering."
+		},
+		"section_ai": {
+			"body1": "AI creates the content for you: rules, schedules, recycling, and local recommendations.",
+			"body2": "You decide what to show. We do the heavy lifting."
+		},
+		"section_benefits": {
+			"title": "Benefits for you",
+			"subtitle": "Less management. More peace of mind. Better guests",
+			"tableHeading1": "What it removes",
+			"tableHeading2": "What it gives you",
+			"negative1": "Repeated messages at all hours",
+			"negative2": "Constant questions before and during the stay",
+			"negative3": "Explaining rules over and over again",
+			"negative4": "PDFs, notes, and long messages",
+			"negative5": "Stress and misunderstandings",
+			"negative6": "Unnecessary loss of time",
+			"negative7": "Avoidable complaints",
+			"positive1": "One single link with all the answers",
+			"positive2": "Well-informed guests from day one",
+			"positive3": "Clear rules that actually get read",
+			"positive4": "Always up-to-date digital guide",
+			"positive5": "Smoother, friction-free stays",
+			"positive6": "More free time for you",
+			"positive7": "Better ratings and 5-star reviews"
+		},
+		"section_quotes": {
+			"title": "I used to answer the same questions all the time. Now I just share the link.",
+			"subtitle": "Stories from hosts already enjoying the benefits",
+			"quote1Title": "It removed a lot of daily stress.",
+			"quote1Body": "I used to have PDFs, notes, and long messages. Now everything is in one place and I share it via WhatsApp in seconds.",
+			"quote1Person": "— María G., host in Valencia",
+			"quote2Title": "My guests arrive much more relaxed.",
+			"quote2Body": "They clearly understand the rules, schedules, and what's nearby. I’m also more relaxed because everything is explained before they arrive.",
+			"quote2Person": "— Carlos R., host in Barcelona",
+			"quote3Title": "I used to answer the same questions over and over.",
+			"quote3Body": "Now I just share my guide link and guests understand everything from the start. Fewer messages and zero confusion.",
+			"quote3Person": "— Lucía M., host in Seville"
+		}
+	}
 }

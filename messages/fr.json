@@ -527,5 +527,96 @@
 	"mustSeeUnMarkedSuccessfullt": "Correctement non marqué comme essentiel",
 	"mustSeeMarkError": "Erreur de mise à jour essentielle",
 	"favorites": "Favoris",
-	"mustSees": "Visite essentielle"
+	"mustSees": "Visite essentielle",
+	"page_home": {
+		"mainAction": "Créer mon guide gratuit",
+		"pilotHouseAction": "Voir ce que voient mes voyageurs",
+		"section_hero": {
+			"title": "Arrêtez de répondre toujours aux mêmes questions de vos voyageurs",
+			"subtitle": "Créez un guide numérique automatique pour votre logement avec toutes les informations dont vos voyageurs ont besoin : règles, horaires et recommandations locales. Prêt en quelques minutes.",
+			"pilotButton": "Voir ce que voient mes voyageurs",
+			"tooltip1": "Bar",
+			"tooltip2": "Souvenirs",
+			"tooltip3": "Hôpital",
+			"tooltip4": "Urgences",
+			"tooltip5": "Ambassade",
+			"tooltip6": "Café"
+		},
+		"section_why": {
+			"title": "Pourquoi BNB Explorer ?",
+			"subtitle": "Faites passer votre hospitalité au niveau supérieur grâce aux recommandations locales",
+			"cardTitle1": "Moins de messages répétitifs",
+			"cardSubtitle1": "Vos voyageurs trouvent les réponses sans vous écrire : règles, horaires, WiFi et recommandations au même endroit.",
+			"cardTitle2": "De meilleures évaluations",
+			"cardSubtitle2": "Des voyageurs bien informés = moins de problèmes, une meilleure expérience et plus d’avis 5 étoiles.",
+			"cardTitle3": "Tout en un seul lien",
+			"cardSubtitle3": "Partagez votre guide via WhatsApp, QR ou email. Sans application, sans mot de passe."
+		},
+		"section_reade_to_go": {
+			"title": "Votre logement prêt pour vos voyageurs en quelques minutes",
+			"subtitle": "Moins de configuration. Plus de valeur pour vos voyageurs.",
+			"body": "Pas de sites web, pas de PDF, pas de longues explications. Partagez votre guide et laissez-le travailler pour vous.",
+			"badge": "Propriété"
+		},
+		"section_how": {
+			"title": "Comment ça fonctionne (en moins de 2 minutes)",
+			"cardTitle1": "Dites-nous où se trouve votre logement",
+			"cardSubtitle1": "L’IA génère automatiquement le contenu de base.",
+			"cardTitle2": "Vérifiez ou ajustez si vous le souhaitez",
+			"cardSubtitle2": "Les règles, horaires et lieux importants sont déjà prêts.",
+			"cardTitle3": "Partagez le lien avec vos voyageurs",
+			"cardSubtitle3": "Et laissez le guide faire le travail pour vous."
+		},
+		"section_features": {
+			"title": "The experience starts before check-in",
+			"titleFeatureOne": "Multi-logements sans limite",
+			"bodyFeatureOne": "Ajoutez autant de propriétés que vous le souhaitez. Gérez chacune indépendamment et économisez des heures de support personnalisé.",
+			"titleFeatureTwo": "Catégories, Favoris, Incontournables...",
+			"bodyFeatureTwo1": "Oubliez le fait de commencer de zéro :",
+			"bodyFeatureTwo2": "Lorsque vos voyageurs disposent de toutes les informations dès le départ, tout est plus fluide : moins de questions, moins de stress et de meilleures évaluations.",
+			"bodyFeatureTwoLabel": "Sélectionnez une catégorie",
+			"titleFeatureThree": "Modifiez seulement si vous le souhaitez",
+			"bodyFeatureThree": "Tout est généré automatiquement. Vous pouvez le personnaliser… ou ne rien toucher et l’utiliser tel quel.",
+			"titleFeatureFour": "Un seul lien. Toutes les réponses.",
+			"bodyFeatureFour1": "Chaque logement dispose de sa propre URL.",
+			"bodyFeatureFour2": "Envoyez-la par WhatsApp, imprimez-la en QR ou partagez-la comme vous le souhaitez. Vos voyageurs y accèdent sans inscription."
+		},
+		"section_ai": {
+			"body1": "L’IA crée le contenu pour vous : règles, horaires, tri des déchets et recommandations locales.",
+			"body2": "Vous décidez quoi montrer. Nous faisons le gros du travail."
+		},
+		"section_benefits": {
+			"title": "Les avantages pour vous",
+			"subtitle": "Moins de gestion. Plus de tranquillité. De meilleurs voyageurs",
+			"tableHeading1": "Ce que cela supprime",
+			"tableHeading2": "Ce que cela vous apporte",
+			"negative1": "Messages répétitifs à toute heure",
+			"negative2": "Questions constantes avant et pendant le séjour",
+			"negative3": "Expliquer les règles encore et encore",
+			"negative4": "PDF, notes et longs messages",
+			"negative5": "Stress et malentendus",
+			"negative6": "Perte de temps inutile",
+			"negative7": "Réclamations évitables",
+			"positive1": "Un seul lien avec toutes les réponses",
+			"positive2": "Des voyageurs informés dès le premier jour",
+			"positive3": "Des règles claires qui sont vraiment lues",
+			"positive4": "Guide numérique toujours à jour",
+			"positive5": "Séjours plus fluides et sans frictions",
+			"positive6": "Plus de temps libre pour vous",
+			"positive7": "De meilleures évaluations et avis 5 étoiles"
+		},
+		"section_quotes": {
+			"title": "Avant, je répondais toujours aux mêmes questions. Maintenant, je partage simplement le lien.",
+			"subtitle": "Témoignages d’hôtes qui profitent déjà de ses avantages",
+			"quote1Title": "Cela a supprimé beaucoup de stress au quotidien.",
+			"quote1Body": "Avant, j’avais des PDF, des notes et de longs messages. Maintenant, tout est au même endroit et je le partage sur WhatsApp en quelques secondes.",
+			"quote1Person": "— María G., hôte à Valence",
+			"quote2Title": "Mes voyageurs arrivent beaucoup plus sereins.",
+			"quote2Body": "Ils comprennent clairement les règles, les horaires et ce qu’il y a à proximité. Je suis aussi plus serein car tout est expliqué avant leur arrivée.",
+			"quote2Person": "— Carlos R., hôte à Barcelone",
+			"quote3Title": "Avant, je répondais toujours aux mêmes questions.",
+			"quote3Body": "Maintenant, je partage simplement le lien de mon guide et les voyageurs comprennent tout dès le départ. Moins de messages et zéro confusion.",
+			"quote3Person": "— Lucía M., hôte à Séville"
+		}
+	}
 }
