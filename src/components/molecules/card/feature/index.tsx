@@ -63,8 +63,8 @@ const Feature = ({
 					/>
 				</div>
 			)}
-			<div className="p-6 ">
-				<h3 className="text-2xl font-bold">{title}</h3>
+			<div className="p-6">
+				<h3 className="text-2xl font-bold mb-2">{title}</h3>
 				<p className="font-body font-medium opacity-70">{body}</p>
 			</div>
 		</div>

@@ -259,8 +259,8 @@ export default function Home() {
 					<Feature
 						color="gradient"
 						number={1}
-						title={t('page_home.section_how.cardTitle3')}
-						body={t('page_home.section_how.cardSubtitle3')}
+						title={t('page_home.section_how.cardTitle1')}
+						body={t('page_home.section_how.cardSubtitle1')}
 					/>
 					<Feature
 						color="gradient"
@@ -272,8 +272,8 @@ export default function Home() {
 					<Feature
 						color="gradient"
 						number={3}
-						title={t('page_home.section_how.cardTitle1')}
-						body={t('page_home.section_how.cardSubtitle1')}
+						title={t('page_home.section_how.cardTitle3')}
+						body={t('page_home.section_how.cardSubtitle3')}
 						className="md:row-span-2 md:col-start-2 md:row-start-1"
 						isFeatured
 						image={how.src}
