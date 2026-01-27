@@ -527,5 +527,87 @@
 	"mustSeeUnMarkedSuccessfullt": "Desmarcado como imprescindible correctamente",
 	"mustSeeMarkError": "Error al actualizar imprescindible",
 	"favorites": "Favoritos",
-	"mustSees": "Visita obligatoria"
+	"mustSees": "Visita obligatoria",
+	"page_home": {
+		"mainAction": "Crear mi guía gratis",
+		"section_hero": {
+			"title": "Deja de responder siempre lo mismo a tus huéspedes",
+			"subtitle": "Crea una guía digital automática para tu alojamiento con toda la información que tus huéspedes necesitan: normas, horarios y recomendaciones locales. Lista en minutos.",
+			"pilotButton": "Ver cómo lo ven mis huéspedes"
+		},
+		"section_why": {
+			"title": "¿Por qué BNB Explorer?",
+			"subtitle": "Lleva tu hospitalidad al siguiente nivel con recomendaciones locales",
+			"cardTitle1": "Menos mensajes repetidos",
+			"cardSubtitle1": "Tus huéspedes encuentran respuestas sin escribirte: normas, horarios, WiFi y recomendaciones en un solo lugar.",
+			"cardTitle2": "Mejores valoraciones",
+			"cardSubTitle2": "Huéspedes informados = menos problemas, mejor experiencia y más reseñas de 5 estrellas.",
+			"cardTitle3": "Todo en un solo enlace",
+			"cardSubTitle3": "Comparte tu guía por WhatsApp, QR o email. Sin apps, sin contraseñas."
+		},
+		"section_reade_to_go": {
+			"title": "Tu alojamiento listo para tus huéspedes en minutos",
+			"subtitle": "Menos configuración. Más valor para tus huéspedes.",
+			"body": "Sin webs, sin PDFs, sin explicaciones largas. Comparte tu guía y deja que trabaje por ti."
+		},
+		"section_how": {
+			"title": "Cómo funciona (en menos de 2 minutos)",
+			"cardTitle1": "Dinos dónde está tu alojamiento",
+			"cardSubtitle1": "La IA genera automáticamente el contenido básico.",
+			"cardTitle2": "Revisa o ajusta si quieres",
+			"cardSubTitle2": "Normas, horarios y lugares importantes ya están listos.",
+			"cardTitle3": "Comparte el enlace con tus huéspedes",
+			"cardSubTitle3": "Y deja que la guía haga el trabajo por ti."
+		},
+		"section_features": {
+			"titleFeatureOne": "Multi-alojamiento sin límites",
+			"bodyFeatureOne": "Añade tantas propiedades como quieras. Gestiona cada una de forma independiente y ahorra horas de atención personalizada.",
+			"titleFeatureTwo": "Categorías, Favoritos, Imprescindibles...",
+			"bodyFeatureTwo1": "Olvídate de empezar de cero:",
+			"bodyFeatureTwo2": "Cuando tus huéspedes tienen toda la información clara desde el primer momento, todo fluye mejor: menos dudas, menos estrés y mejores valoraciones.",
+			"bodyFeatureTwoLabel": "Selecciona una categoría",
+			"titleFeatureThree": "Edita solo si quieres",
+			"bodyFeatureThree": "Todo se genera automáticamente. Puedes personalizarlo… o no tocar nada y usarlo tal cual.",
+			"titleFeatureFour": "Un enlace. Todas las respuestas.",
+			"bodyFeatureFour1": "Cada alojamiento recibe su propia URL.",
+			"bodyFeatureFour2": "Envíalo por WhatsApp, imprímelo en QR o compártelo como prefieras. Tus huéspedes acceden sin registrarse."
+		},
+		"section_ai": {
+			"body1": "La IA crea el contenido por ti: normas, horarios, reciclaje y recomendaciones locales.",
+			"body2": "Tú decides qué mostrar. Nosotros hacemos el trabajo pesado."
+		},
+		"section_benefits": {
+			"title": "Beneficios para tí",
+			"subtitle": "Menos gestión. Más tranquilidad. Mejores huéspedes",
+			"tableHeading1": "Lo que te quita",
+			"tableHeading2": "Lo que te aporta",
+			"negative1": "Mensajes repetidos a todas horas",
+			"negative2": "Dudas constantes antes y durante la estancia",
+			"negative3": "Explicar normas una y otra vez",
+			"negative4": "PDFs, notas y mensajes largos",
+			"negative5": "Estrés y malentendidos",
+			"negative6": "Pérdida de tiempo innecesaria",
+			"negative7": "Quejas evitables",
+			"positive1": "Un solo enlace con todas las respuestas",
+			"positive2": "Huéspedes informados desde el primer día",
+			"positive3": "Normas claras que sí se leen",
+			"positive4": "Guía digital siempre actualizada",
+			"positive5": "Estancias más fluidas y sin fricciones",
+			"positive6": "Más tiempo libre para ti",
+			"positive7": "Mejores valoraciones y reseñas 5 Estrellas"
+		},
+		"section_quotes": {
+			"title": "Antes respondía siempre lo mismo. Ahora solo comparto el enlace.",
+			"subtitle": "Historias de anfitriones que ya disfrutan de sus ventajas",
+			"quote1Title": "Me ha quitado mucho estrés del día a día.",
+			"quote1Body": "Antes tenía PDFs, notas y mensajes largos. Ahora todo está en un solo sitio y lo comparto por WhatsApp en segundos.",
+			"quote1Person": "— María G., anfitriona en Valencia",
+			"quote2Title": "Mis huéspedes llegan mucho más tranquilos.",
+			"quote2Body": "Tienen claras las normas, el horario y qué hay cerca. Yo también estoy más tranquilo porque todo está explicado antes de que lleguen.",
+			"quote2Person": "— Carlos R., anfitrión en Barcelona",
+			"quote3Title": "Antes respondía siempre las mismas preguntas.",
+			"quote3Body": "Ahora solo comparto el enlace de mi guía y los huéspedes lo entienden todo desde el principio. Menos mensajes y cero confusiones.",
+			"quote3Person": "— Lucía M., anfitriona en Sevilla"
+		}
+	}
 }
