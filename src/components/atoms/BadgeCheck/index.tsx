@@ -21,7 +21,7 @@ type BadgeCheckProps = {
 	checked: boolean;
 	iconUnchecked?: React.ReactNode;
 	iconChecked?: React.ReactNode;
-	onToggle: () => void;
+	onToggle?: () => void;
 };
 
 const BadgeCheck = ({
@@ -51,27 +51,27 @@ const BadgeCheck = ({
 				!checked,
 		},
 		{
-			'bg-primary-200 text-primary-900 hover:bg-primary-300':
+			'bg-primary-100 text-primary-900 hover:bg-primary-200':
 				checkedColor === 'primary' && checked,
 		},
 		{
-			'bg-secondary-200 text-secondary-900 hover:bg-secondary-300':
+			'bg-secondary-100 text-secondary-900 hover:bg-secondary-200':
 				checkedColor === 'secondary' && checked,
 		},
 		{
-			'bg-success-200 text-success-900 hover:bg-success-300':
+			'bg-success-100 text-success-900 hover:bg-success-200':
 				checkedColor === 'success' && checked,
 		},
 		{
-			'bg-warning-200 text-warning-900 hover:bg-warning-300':
+			'bg-warning-100 text-warning-900 hover:bg-warning-200':
 				checkedColor === 'warning' && checked,
 		},
 		{
-			'bg-info-200 text-info-900 hover:bg-info-300':
+			'bg-info-100 text-info-900 hover:bg-info-200':
 				checkedColor === 'info' && checked,
 		},
 		{
-			'bg-error-200 text-error-900 hover:bg-error-300':
+			'bg-error-100 text-error-900 hover:bg-error-200':
 				checkedColor === 'error' && checked,
 		},
 		{

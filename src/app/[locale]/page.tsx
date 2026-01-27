@@ -7,6 +7,10 @@ import headerImage from '../../../public/static/img/header-trimed-2x.webp';
 import headerImageMobile from '../../../public/static/img/heroMobile.webp';
 import rooftopCentered from '../../../public/static/img/rooftop-centered.png';
 import multyProperty from '../../../public/static/img/multy-property-2x.webp';
+import blur from '../../../public/static/img/home/blur_01.webp';
+import why from '../../../public/static/img/home/why_bnbexplorer.webp';
+import how from '../../../public/static/img/home/how_bnbexplorer.webp';
+
 import categories from '../../../public/static/img/categories-2x.webp';
 import uiEdit from '../../../public/static/img/ui-edit-2x.webp';
 import publicUi from '../../../public/static/img/public-ui-2x.webp';
@@ -15,23 +19,30 @@ import testimony02 from '../../../public/static/img/testimony-02.webp';
 import testimony03 from '../../../public/static/img/testimony-03.webp';
 import logo from '../../../public/static/img/logo-color-2x.webp';
 
-import styles from './page.module.css';
-
 import LandingAppBar from '@/components/organisms/landing-appbar';
-import IconAcute from '@/components/atoms/icon/acute';
-import IconHeartPlus from '@/components/atoms/icon/heart-plus';
-import IconStarShine from '@/components/atoms/icon/star-shine';
 import Link from 'next/link';
 import ButtonLink from '@/components/molecules/button-link';
 import PlaceTooltip from '@/components/atoms/place-tooltip';
 import IconAccountCircle from '@/components/atoms/icon/account-circle';
 import FilterCategories from '@/components/templates/filter-categories';
 import ChimneyEffect from '@/components/atoms/chimney';
-import IconCheckCircle from '@/components/atoms/icon/check-circle';
 import ModalVideo from '@/components/templates/modal-video';
-import IconNewRelease from '@/components/atoms/icon/new-releases';
-import Badge from '@/components/atoms/badge';
+
+import IconChatBubble from '@/components/atoms/icon/chat-bubble';
+import IconStarShine from '@/components/atoms/icon/star-shine';
+import IconCheckCircle from '@/components/atoms/icon/check-circle';
+import IconFavorite from '@/components/atoms/icon/favorite';
+import IconInterests from '@/components/atoms/icon/interests';
+
+import Feature from '@/components/molecules/card/feature';
+import ListItem from '@/components/molecules/list-item';
+import FancyBadge from '@/components/atoms/fancy-badge';
+import BadgeCheck from '@/components/atoms/BadgeCheck';
 import { ShareMenu } from '@/components/molecules/button-share';
+import IconCancel from '@/components/atoms/icon/cancel';
+import Quote from '@/components/molecules/quote';
+
+import styles from './page.module.css';
 
 export default function Home() {
 	const t = useTranslations();
@@ -48,23 +59,20 @@ export default function Home() {
 						id="BNB-explorer"
 						className="font-heading text-4xl md:text-6xl font-bold max-w-[800px] ml-auto mr-auto px-4 text-white"
 					>
-						{t('Tu guía de huéspedes reinventada')}
+						{t('page_home.section_hero.title')}
 					</h2>
 					<h3 className="font-heading font-medium text-xl md:text-2xl max-w-[800px] ml-auto mr-auto px-4 text-white">
-						{t(
-							'Gestiona y comparte toda la información local de tus alojamientos Airbnb en segundos, creando tu propia web con ayuda de la IA',
-						)}
+						{t('page_home.section_hero.subtitle')}
 					</h3>
 					<div className="px-4 flex flex-col gap-2">
 						<ButtonLink
-							label={t('Crea tu primera guía gratis')}
+							label={t('page_home.mainAction')}
 							href="/app"
 							color="primary"
-							className="w-fit"
 						/>
 						<div className="flex gap-1">
 							<ButtonLink
-								label={t('Ver casa piloto')}
+								label={t('page_home.pilotHouseAction')}
 								href="https://www.bnbexplorer.com/es/public/37a03a95-cd39-4d40-a22b-7628cbb50245/welcome/highlights"
 								color="white"
 								className="w-full"
@@ -75,33 +83,31 @@ export default function Home() {
 					</div>
 					<div className="relative w-full">
 						<PlaceTooltip
-							label={t('Bar')}
+							label={t('page_home.section_hero.tooltip1')}
 							className="absolute left-[10%] top-[10%] sm:left-[25%] md:left-[25%] md:top-[20%]"
 						/>
 						<PlaceTooltip
-							label={t('Souvenirs')}
+							label={t('page_home.section_hero.tooltip2')}
 							className="absolute hidden sm:flex left-[2%] top-[30%] md:top-[50%] sm:left-[5%] md:left-[15%]"
 						/>
 						<PlaceTooltip
-							label={t('Hospital')}
+							label={t('page_home.section_hero.tooltip3')}
 							className="absolute left-[10%] sm:left-[20%] md:left-[25%] top-[65%] sm:top-[60%] md:top-[80%]"
 						/>
 						<PlaceTooltip
-							label={t('Emergencias')}
+							label={t('page_home.section_hero.tooltip4')}
 							className="absolute right-[5%] top-[10%] sm:right-[15%] sm:top-[5%] md:right-[20%] md:top-[20%]"
 						/>
 						<PlaceTooltip
-							label={t('Embajada')}
+							label={t('page_home.section_hero.tooltip5')}
 							className="hidden sm:flex absolute right-[5%] top-[35%] md:top-[50%] md:right-[15%]"
 						/>
 						<PlaceTooltip
-							label={t('Cafetería')}
+							label={t('page_home.section_hero.tooltip6')}
 							className="absolute right-[15%] top-[65%] sm:top-[60%] md:top-[80%] sm:right-[30%] md:right-[25%]"
 						/>
 						<Image
-							alt={t(
-								'BNBexplorar, Header con casa con localizaciones',
-							)}
+							alt="Explore locations"
 							className="hidden sm:block"
 							src={headerImage}
 							sizes="100vw"
@@ -113,9 +119,7 @@ export default function Home() {
 							}}
 						/>
 						<Image
-							alt={t(
-								'BNBexplorar, Header con casa con localizaciones',
-							)}
+							alt="Explore locations"
 							className="block sm:hidden"
 							src={headerImageMobile}
 							sizes="100vw"
@@ -131,137 +135,152 @@ export default function Home() {
 			</section>
 			<section
 				aria-labelledby="why"
-				className="flex flex-col gap-8 rounded-lg mt-2 px-0 py-16 items-center max-w-[1400px] ml-auto mr-auto"
+				className="flex flex-col gap-8 rounded-lg mt-2 py-16 px-4 items-center max-w-[1400px] ml-auto mr-auto relative"
 			>
+				<Image
+					src={blur}
+					fill={true}
+					alt="Blur image"
+					className="-z-1 object-cover md:object-fill md:h-full md:w-auto"
+				/>
 				<h2
 					id="why"
 					className="font-heading text-4xl font-bold max-w-[800px] ml-auto mr-auto px-4 text-center"
 				>
-					{t('¿Por qué BNB Explorer?')}
+					{t('page_home.section_why.title')}
 				</h2>
 				<h3 className="font-heading font-medium text-xl md:text-2xl max-w-[800px] ml-auto mr-auto px-4 text-center">
-					{t(
-						'Lleva tu hospitalidad al siguiente nivel con recomendaciones locales',
-					)}
+					{t('page_home.section_why.subtitle')}
 				</h3>
-				<div className="flex flex-col md:flex-row gap-4 justify-center max-w-[1000px]">
-					<div className="flex flex-1 flex-col gap-4 p-6 rounded-xl items-center text-center">
-						<div className="flex justify-center items-center w-18 h-18 rounded-full bg-gradient-to-tr from-[#FF6B06]/10 to-[#31C48D]/10">
-							<span className="flex justify-center items-center w-12 h-12 rounded-full bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] font-bold text-xl">
-								<IconAcute color="white" />
-							</span>
-						</div>
-						<h3 className="text-2xl font-bold">
-							{t('Fácil y rápido')}
-						</h3>
-						<p className="font-body font-medium opacity-70">
-							{t(
-								'Centraliza todas las consultas sobre restaurantes, monumentos o museos en un panel intuitivo',
-							)}
-						</p>
-					</div>
-					<div className="flex flex-1 flex-col gap-4 p-6 rounded-xl items-center text-center">
-						<div className="flex justify-center items-center w-18 h-18 rounded-full bg-gradient-to-tr from-[#FF6B06]/10 to-[#31C48D]/10">
-							<span className="flex justify-center items-center w-12 h-12 rounded-full bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] font-bold text-xl">
-								<IconHeartPlus color="white" />
-							</span>
-						</div>
-						<h3 className="text-2xl font-bold">
-							{t('Mejora tu reputación')}
-						</h3>
-						<p className="font-body font-medium opacity-70">
-							{t(
-								'Ofrece una experiencia local personalizada y comienza a obtener más valoraciones de 5 estrellas',
-							)}
-						</p>
-					</div>
-					<div className="flex flex-1 flex-col gap-4 p-6 rounded-xl items-center text-center">
-						<div className="flex justify-center items-center w-18 h-18 rounded-full bg-gradient-to-tr from-[#FF6B06]/10 to-[#31C48D]/10">
-							<span className="flex justify-center items-center w-12 h-12 rounded-full bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] font-bold text-xl">
-								<IconStarShine color="white" />
-							</span>
-						</div>
-						<h3 className="text-2xl font-bold">
-							{t('Comunicación cero esfuerzo')}
-						</h3>
-						<p className="font-body font-medium opacity-70">
-							{t(
-								'Toda la información que necesitan tus huéspedes',
-							)}
-						</p>
-					</div>
+				<div className="grid grid-cols-1 grid-rows-1 md:grid-cols-2 md:grid-rows-2 gap-2 max-w-[900px]">
+					<Feature
+						color="gradient"
+						icon={<IconChatBubble color="white" />}
+						title={t('page_home.section_why.cardTitle1')}
+						body={t('page_home.section_why.cardSubtitle1')}
+						className="md:row-span-2"
+						isFeatured
+						image={why.src}
+					/>
+					<Feature
+						color="gradient"
+						icon={<IconStarShine color="white" />}
+						title={t('page_home.section_why.cardTitle2')}
+						body={t('page_home.section_why.cardSubtitle2')}
+					/>
+					<Feature
+						color="gradient"
+						icon={<IconCheckCircle color="white" />}
+						title={t('page_home.section_why.cardTitle3')}
+						body={t('page_home.section_why.cardSubtitle3')}
+						className="md:col-start-2 md:row-start-2"
+					/>
 				</div>
 				<ButtonLink
-					label={t('Comienza gratis!')}
+					label={t('page_home.mainAction')}
 					href="/app"
 					iconLeft={<IconAccountCircle />}
 				/>
 			</section>
 			<section
-				aria-labelledby="how"
-				className="flex flex-col gap-8 rounded-lg mt-2 px-0 py-12 text-center items-center max-w-[1400px] ml-auto mr-auto bg-gray-50"
+				aria-labelledby="ready-to-go"
+				className="flex flex-col md:flex-row justify-center items-center rounded-lg mt-2 px-4 max-w-[1400px] ml-auto mr-auto relative overflow-hidden bg-gradient-to-t from-[#84E1BC] to-[#265EF8]"
 			>
+				<div className="flex flex-col-reverse lg:flex-row gap-4 items-stretch max-w-[1000px]">
+					<div className="flex flex-col gap-6 text-white px-6 py-6 lg:py-20 justify-center">
+						<FancyBadge
+							firstText={t('page_home.section_reade_to_go.badge')}
+						/>
+						<h2
+							id="features"
+							className="font-heading text-4xl font-bold"
+						>
+							{t('page_home.section_reade_to_go.title')}
+						</h2>
+						<h3 className="text-3xl">
+							{t('page_home.section_reade_to_go.subtitle')}
+						</h3>
+						<p className="font-body font-medium">
+							{t('page_home.section_reade_to_go.body')}
+						</p>
+						<div className="flex flex-wrap gap-1">
+							<BadgeCheck
+								label={t('Manual de alojamiento')}
+								checked
+							/>
+							<BadgeCheck label={t('Normas de uso')} checked />
+							<BadgeCheck label={t('Horario')} checked />
+							<BadgeCheck label={t('Reciclaje')} checked />
+							<BadgeCheck label={t('Restaurantes')} checked />
+							<BadgeCheck label={t('Cafeterías')} checked />
+							<BadgeCheck label={t('Supermercados')} checked />
+							<BadgeCheck
+								label={t('section_ready_to_go.and_more_badge')}
+								checked
+							/>
+						</div>
+						<ButtonLink
+							label={t('page_home.mainAction')}
+							href="/app"
+							iconLeft={<IconAccountCircle />}
+							color="white"
+							className="w-fit"
+						/>
+					</div>
+
+					<div className="w-full h-full mr-0">
+						<Image
+							alt={t('Enlace público')}
+							src="/static/img/house-crane.webp"
+							width={800}
+							height={800}
+							className="mx-auto"
+						/>
+					</div>
+				</div>
+			</section>
+			<section
+				aria-labelledby="how"
+				className="flex flex-col gap-8 rounded-lg mt-2 py-16 px-4 text-center items-center max-w-[1400px] ml-auto mr-auto relative"
+			>
+				<Image
+					src={blur}
+					fill={true}
+					alt="Blur image"
+					className="-z-1 object-cover md:object-fill md:h-full md:w-auto"
+				/>
 				<h2
 					id="how"
 					className="font-heading text-4xl font-bold max-w-[800px] ml-auto mr-auto px-4"
 				>
-					{t('Cómo funciona')}
+					{t('page_home.section_how.title')}
 				</h2>
-				<h2
-					id="how"
-					className="font-heading font-medium text-xl md:text-2xl max-w-[800px] ml-auto mr-auto px-4 text-center"
-				>
-					{t('en 3 sencillos pasos')}
-				</h2>
-				<div className="flex flex-col md:flex-row gap-4 items-center max-w-[1000px]">
-					<div className="flex flex-1 flex-col gap-4 p-4 items-center text-center">
-						<div className="flex justify-center items-center w-18 h-18 rounded-full bg-gradient-to-tr from-[#FF6B06]/10 to-[#31C48D]/10">
-							<span className="flex justify-center items-center w-12 h-12 rounded-full bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] font-bold text-white text-xl">
-								1
-							</span>
-						</div>
-						<h3 className="text-xl font-bold">
-							{t('Añade tus propiedades')}
-						</h3>
-						<p className="font-body font-medium opacity-70">
-							{t(
-								'Crea cada alojamiento con nombre, descripción, foto y dirección (validación de Google Maps)',
-							)}
-						</p>
-					</div>
-					<div className="flex flex-1 flex-col gap-4 p-4 items-center text-center">
-						<div className="flex justify-center items-center w-18 h-18 rounded-full bg-gradient-to-tr from-[#FF6B06]/10 to-[#31C48D]/10">
-							<span className="flex justify-center items-center w-12 h-12 rounded-full bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] font-bold text-white text-xl">
-								2
-							</span>
-						</div>
-						<h3 className="text-xl font-bold">
-							{t('Organiza tus categorías')}
-						</h3>
-						<p className="font-body font-medium opacity-70">
-							{t(
-								'Selecciona entre 17 categorías diferentes: Salud y Bienestar, Comida y Bebida, Arte y Cultura…',
-							)}
-						</p>
-					</div>
-					<div className="flex flex-1 flex-col gap-4 p-4 items-center text-center">
-						<div className="flex justify-center items-center w-18 h-18 rounded-full bg-gradient-to-tr from-[#FF6B06]/10 to-[#31C48D]/10">
-							<span className="flex justify-center items-center w-12 h-12 rounded-full bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] font-bold text-white text-xl">
-								3
-							</span>
-						</div>
-						<h3 className="text-xl font-bold">
-							{t('Comparte tu Enlace')}
-						</h3>
-						<p className="font-body font-medium opacity-70">
-							{t(
-								'Obtendrás automáticamente un link único por propiedad',
-							)}
-						</p>
-					</div>
+				<div className="grid grid-cols-1 grid-rows-1 md:grid-cols-2 md:grid-rows-2 gap-2 max-w-[900px]">
+					<Feature
+						color="gradient"
+						number={1}
+						title={t('page_home.section_how.cardTitle3')}
+						body={t('page_home.section_how.cardSubtitle3')}
+					/>
+					<Feature
+						color="gradient"
+						number={2}
+						title={t('page_home.section_how.cardTitle2')}
+						body={t('page_home.section_how.cardSubtitle2')}
+						className="md:col-start-1 md:row-start-2"
+					/>
+					<Feature
+						color="gradient"
+						number={3}
+						title={t('page_home.section_how.cardTitle1')}
+						body={t('page_home.section_how.cardSubtitle1')}
+						className="md:row-span-2 md:col-start-2 md:row-start-1"
+						isFeatured
+						image={how.src}
+					/>
 				</div>
 				<ButtonLink
-					label={t('Comienza gratis!')}
+					label={t('page_home.mainAction')}
 					href="/app"
 					iconLeft={<IconAccountCircle />}
 				/>
@@ -274,19 +293,21 @@ export default function Home() {
 					id="features"
 					className="font-heading text-4xl font-bold max-w-[800px] ml-auto mr-auto px-4 text-center"
 				>
-					{t('Conviértete en un anfitrión de 5 estrellas')}
+					{t('page_home.section_features.title')}
 				</h2>
 				<div className="flex flex-col gap-4 md:gap-0 max-w-[960px] px-4">
 					<div className="flex flex-col md:flex-row items-stretch">
 						<div className="flex-1 flex flex-col justify-center gap-4 py-8 relative">
 							<h3 className="text-3xl pr-6 pl-4">
-								{t('Multi-alojamiento sin límites')}
+								{t(
+									'page_home.section_features.titleFeatureOne',
+								)}
 							</h3>
 							<p className="font-body font-medium opacity-70 pr-6 pl-4">
-								{t('Añade tantas propiedades como quieras')}
+								{t('page_home.section_features.bodyFeatureOne')}
 							</p>
 							<ButtonLink
-								label={t('Comienza gratis!')}
+								label={t('page_home.mainAction')}
 								href="/app"
 								iconLeft={<IconAccountCircle />}
 								className="w-fit ml-4"
@@ -322,16 +343,18 @@ export default function Home() {
 						<div className="flex-1 flex flex-col justify-center gap-4 py-8 relative">
 							<h3 className="text-3xl pr-4 pl-6">
 								{t(
-									'Elige entre distintas Categorías y Subcategorías ',
+									'page_home.section_features.titleFeatureTwo',
 								)}
 							</h3>
 							<p className="font-body font-medium opacity-70 pr-4 pl-6">
 								{t(
-									'Te ayudamos a crear tu guía mediante categorías estándar y subgrupos listos para editar',
+									'page_home.section_features.bodyFeatureTwo1',
 								)}
 							</p>
 							<p className="font-body font-medium opacity-70 pr-4 pl-6">
-								{t('Hospitales, Gimnasios, Restaurantes')}
+								{t(
+									'page_home.section_features.bodyFeatureTwo2',
+								)}
 							</p>
 							<span className="w-[32px] h-[32px] bg-primary-400 absolute top-0 left-0 hidden md:block">
 								<span className="w-[32px] h-[32px] bg-white rounded-tl-xl block"></span>
@@ -345,20 +368,17 @@ export default function Home() {
 					<div className="flex flex-col md:flex-row items-stretch">
 						<div className="flex-1 flex flex-col justify-center gap-4 py-8 relative">
 							<h3 className="text-3xl pr-6 pl-4">
-								{t('Edición fácil y ágil')}
+								{t(
+									'page_home.section_features.titleFeatureThree',
+								)}
 							</h3>
 							<p className="font-body font-medium opacity-70 pr-6 pl-4">
 								{t(
-									'Edita, elimina o añade ubicaciones con un par de clics',
-								)}
-							</p>
-							<p className="font-body font-medium opacity-70 pr-6 pl-4">
-								{t(
-									'La app te va guiando paso a paso para que puedas crear la web de tu alojamiento fácilmente en cuestión de segundos',
+									'page_home.section_features.bodyFeatureThree',
 								)}
 							</p>
 							<ButtonLink
-								label={t('Comienza gratis!')}
+								label={t('page_home.mainAction')}
 								href="/app"
 								iconLeft={<IconAccountCircle />}
 								className="w-fit ml-4"
@@ -396,29 +416,28 @@ export default function Home() {
 						</div>
 						<div className="flex-1 flex flex-col justify-center gap-4 py-8 relative">
 							<h3 className="text-3xl pr-4 pl-6">
-								{t('Comparte tu link al momento')}
+								{t(
+									'page_home.section_features.titleFeatureFour',
+								)}
 							</h3>
 							<p className="font-body font-medium opacity-70 pr-4 pl-6">
-								{t('Cada alojamiento recibe su propia URL')}
+								{t(
+									'page_home.section_features.bodyFeatureFour1',
+								)}
 							</p>
 							<p className="font-body font-medium opacity-70 pr-4 pl-6">
 								{t(
-									'Sin contraseñas ni logins: tu huésped abre el enlace y descubre lo mejor de la casa y el barrio',
-								)}
-							</p>
-							<p className="font-body font-medium pr-4 pl-6">
-								{t(
-									'Compártelo por WhatsApp, Instagram, Facebook',
+									'page_home.section_features.bodyFeatureFour2',
 								)}
 							</p>
 							<ButtonLink
-								label={t('Comienza gratis!')}
+								label={t('page_home.mainAction')}
 								href="/app"
 								iconLeft={<IconAccountCircle />}
 								className="w-fit ml-6 -mb-3"
 							/>
 							<ButtonLink
-								label={t('Ver casa piloto')}
+								label={t('page_home.pilotHouseAction')}
 								href="https://www.bnbexplorer.com/es/public/37a03a95-cd39-4d40-a22b-7628cbb50245/welcome/highlights"
 								color="secondary"
 								className="w-fit ml-6"
@@ -428,72 +447,6 @@ export default function Home() {
 								<span className="w-[32px] h-[32px] bg-white rounded-tl-xl block"></span>
 							</span>
 						</div>
-					</div>
-				</div>
-			</section>
-			<section
-				aria-labelledby="ready-to-go"
-				className={`flex flex-col md:flex-row justify-center items-center rounded-lg mt-2 px-4 max-w-[1400px] ml-auto mr-auto relative overflow-hidden bg-gradient-to-t from-[#84E1BC] to-[#265EF8]`}
-			>
-				<div className="flex flex-col-reverse md:flex-row gap-4 items-stretch max-w-[1000px]">
-					<div className="flex flex-col gap-4 text-white px-3 py-6 md:py-8 justify-center">
-						<div className="flex w-fit px-2 py-2 rounded-lg bg-white gap-2 shadow-sm items-center">
-							<IconNewRelease color="warning" />
-							<span className="font-heading text-warning-500 uppercase font-bold text-xs">
-								{t('Propiedad')}
-							</span>
-							<span className="font-heading text-warning-500 bg-warning-100 py-1 px-3 rounded-sm uppercase text-xs font-bold">
-								Ready-to-go
-							</span>
-						</div>
-						<h2
-							id="features"
-							className="font-heading text-4xl font-bold"
-						>
-							{t('section_ready_to_go.title')}
-						</h2>
-						<h3 className="text-3xl">
-							{t('section_ready_to_go.subtitle')}
-						</h3>
-						<p className="font-body font-medium">
-							{t('section_ready_to_go.description1')}
-						</p>
-						<p className="font-body font-medium">
-							{t('section_ready_to_go.description2')}
-						</p>
-						<div className="flex flex-wrap gap-1">
-							<Badge
-								color="success"
-								label={t('Manual de alojamiento')}
-							/>
-							<Badge color="success" label={t('Normas de uso')} />
-							<Badge color="success" label={t('Horario')} />
-							<Badge color="success" label={t('Reciclaje')} />
-							<Badge color="success" label={t('Restaurantes')} />
-							<Badge color="success" label={t('Cafeterías')} />
-							<Badge color="success" label={t('Supermercados')} />
-							<Badge color="success" label={t('Urgencias')} />
-							<Badge
-								color="success"
-								label={t('section_ready_to_go.and_more_badge')}
-							/>
-						</div>
-						<ButtonLink
-							label={t('Comienza gratis!')}
-							href="/app"
-							iconLeft={<IconAccountCircle />}
-							color="white"
-							className="w-fit"
-						/>
-					</div>
-
-					<div className="w-full h-full mr-0">
-						<Image
-							alt={t('Enlace público')}
-							src="/static/img/house-crane.webp"
-							width={700}
-							height={800}
-						/>
 					</div>
 				</div>
 			</section>
@@ -521,144 +474,157 @@ export default function Home() {
 
 				<div className="flex flex-col gap-8 max-w-[400px] md:max-w-sm items-center text-center relative w-full mr-0">
 					<div className="absolute -inset-1 z-[-1] rounded-md bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] blur-xl opacity-30"></div>
-					<div className="bg-white rounded-lg p-6 flex flex-col gap-4">
-						<h2
-							id="artificial-inteligence"
-							className="font-heading text-2xl md:text-4xl font-bold bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] bg-clip-text text-transparent"
-						>
-							{t('Inteligencia artificial')}
-						</h2>
-						<h3 className="font-heading font-medium text-xl md:text-xl px-4 text-center">
-							{t(
-								'Utiliza nuestra IA para generar contenido personalizado automáticamente',
-							)}
-						</h3>
-						<ButtonLink
-							label={t('Comienza gratis!')}
-							href="/app"
-							iconLeft={<IconAccountCircle />}
-							color="primary"
-						/>
-					</div>
-					<div className="bg-white rounded-lg p-6 flex flex-col gap-4 relative ml-8 mt-4 md:ml-0">
-						<div className="flex absolute top-[-36px] left-[-36px] justify-center items-center w-18 h-18 rounded-full bg-gradient-to-tr from-[#FF6B06]/10 to-[#31C48D]/10">
-							<span className="flex justify-center items-center w-12 h-12 rounded-full bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] font-bold text-xl">
-								<IconCheckCircle color="white" />
-							</span>
-						</div>
-						<div className="flex flex-col gap-4 justify-start">
-							<p className="text-left text-md font-medium">
-								{t(
-									'Escribe tu idea, por ejemplo: Instrucciones para el uso del aire acondicionado',
-								)}
-							</p>
-						</div>
-					</div>
-					<div className="bg-white rounded-lg p-6 flex flex-col gap-4 relative ml-8 mt-4 md:ml-0">
-						<div className="flex absolute top-[-36px] left-[-36px] justify-center items-center w-18 h-18 rounded-full bg-gradient-to-tr from-[#FF6B06]/10 to-[#31C48D]/10">
-							<span className="flex justify-center items-center w-12 h-12 rounded-full bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] font-bold text-xl">
-								<IconCheckCircle color="white" />
-							</span>
-						</div>
-						<div className="flex flex-col gap-4 justify-start">
-							<p className="text-left text-md font-medium">
-								{t(
-									'Tus inquilinos podrán crear planes sugeridos por nuestra IA, asociados a sus preferencias, tiempo y movilidad',
-								)}
-							</p>
-						</div>
-					</div>
+					<Feature
+						color="gradient"
+						icon={<IconFavorite color="white" />}
+						body={t('page_home.section_ai.body1')}
+					/>
+					<Feature
+						color="gradient"
+						icon={<IconInterests color="white" />}
+						body={t('page_home.section_ai.body2')}
+					/>
 				</div>
 			</section>
 			<section
 				aria-labelledby="benefits"
-				className="flex flex-col gap-8 rounded-lg mt-2 px-4 py-12 items-center max-w-[1400px] ml-auto mr-auto bg-gradient-to-tr from-[#FF6B06] to-[#31C48D]"
+				className="flex flex-col gap-8 rounded-lg mt-2 px-4 py-12 items-center max-w-[1400px] ml-auto mr-auto bg-gray-50 relative"
 			>
-				<h2
-					id="benefits"
-					className="font-heading text-4xl font-bold max-w-[800px] ml-auto mr-auto px-4 text-white"
-				>
-					{t('Beneficios para ti')}
-				</h2>
-				<h3 className="font-heading font-medium text-xl md:text-2xl max-w-[800px] ml-auto mr-auto px-4 text-center text-white">
-					{t(
-						'Mejora la experiencia de tus huéspedes con menos esfuerzo',
-					)}
-				</h3>
-				<div className="flex flex-col items-center p-2 rounded-lg bg-white gap-2">
-					<div className="flex items-center p-2 rounded-md gap-4 font-bold w-full">
-						<p className="w-full">{t('Ventajas')}</p>
-						<p className="w-full">{t('Detalles')}</p>
-					</div>
-					<div className="flex w-full items-center p-4 rounded-md gap-4 bg-gray-100 font-body">
-						<p className="font-bold opacity-70  w-full">
-							{t('Más recomendaciones 5 estrellas')}
-						</p>
-						<p className="opacity-70  w-full">
-							{t('Clientes satisfechos = mejor reputación')}
-						</p>
-					</div>
-					<div className="flex  w-full items-center p-4 rounded-md gap-4 bg-gray-100 font-body">
-						<p className="font-bold opacity-70  w-full">
-							{t('Gestión desde cualquier lugar')}
-						</p>
-						<p className="opacity-70  w-full">
-							{t(
-								'Accede al panel desde móvil, tablet u ordenador',
-							)}
-						</p>
-					</div>
-					<div className="flex  w-full items-center p-4 rounded-md gap-4 bg-gray-100 font-body">
-						<p className="font-bold opacity-70  w-full">
-							{t('Actualizaciones en tiempo real')}
-						</p>
-						<p className="opacity-70  w-full">
-							{t(
-								'Cambia un horario, un contacto de emergencia… ¡se actualiza al instante!',
-							)}
-						</p>
-					</div>
-					<div className="flex  w-full items-center p-4 rounded-md gap-4 bg-gray-100 font-body">
-						<p className="font-bold opacity-70  w-full">
-							{t('Experiencia local inmersiva')}
-						</p>
-						<p className="opacity-70  w-full">
-							{t(
-								'Tus huéspedes descubren rincones auténticos y viven como locales',
-							)}
-						</p>
-					</div>
-					<div className="flex  w-full items-center p-4 rounded-md gap-4 bg-gray-100 font-body">
-						<p className="font-bold opacity-70  w-full">
-							{t('Planificación ágil')}
-						</p>
-						<p className="opacity-70  w-full">
-							{t(
-								'Los inquilinos organizan su viaje con antelación a través de un único enlace',
-							)}
-						</p>
-					</div>
-					<div className="flex  w-full items-center p-4 rounded-md gap-4 bg-gray-100 font-body">
-						<p className="font-bold opacity-70  w-full">
-							{t('Fidelización de huéspedes')}
-						</p>
-						<p className="opacity-70  w-full">
-							{t(
-								'Ofrecer valor añadido fomenta reservas recurrentes y recomendaciones',
-							)}
-						</p>
-					</div>
-				</div>
-				<ButtonLink
-					label={t('Comienza gratis!')}
-					href="/app"
-					iconLeft={<IconAccountCircle />}
-					color="white"
+				<Image
+					src={blur}
+					fill={true}
+					alt="Blur image"
+					className="z-0 object-cover md:object-fill md:h-full md:w-auto"
 				/>
+				<div className="relative z-1 flex flex-col gap-8">
+					<h2
+						id="benefits"
+						className="font-heading text-4xl font-bold max-w-[800px] ml-auto mr-auto px-4 text-center"
+					>
+						{t('page_home.section_benefits.title')}
+					</h2>
+					<h3 className="font-heading font-medium text-xl md:text-2xl max-w-[800px] ml-auto mr-auto px-4 text-center">
+						{t('page_home.section_benefits.subtitle')}
+					</h3>
+					<div className="flex flex-col items-center rounded-xl bg-white overflow-hidden shadow-2xl/20">
+						<div className="flex items-center p-4 gap-4 font-bold w-full bg-primary-400">
+							<p className="w-full text-xl text-white">
+								{t('Ventajas')}
+							</p>
+							<p className="w-full text-xl text-white">
+								{t('Detalles')}
+							</p>
+						</div>
+						<div className="flex w-full items-center p-4 gap-4 font-body">
+							<ListItem
+								icon={<IconCancel color="error" />}
+								label={t(
+									'page_home.section_benefits.negative1',
+								)}
+							/>
+							<ListItem
+								icon={<IconCheckCircle color="primary" />}
+								label={t(
+									'page_home.section_benefits.positive1',
+								)}
+							/>
+						</div>
+						<div className="flex w-full items-center p-4 gap-4 font-body bg-primary-50">
+							<ListItem
+								icon={<IconCancel color="error" />}
+								label={t(
+									'page_home.section_benefits.negative2',
+								)}
+							/>
+							<ListItem
+								icon={<IconCheckCircle color="primary" />}
+								label={t(
+									'page_home.section_benefits.positive2',
+								)}
+							/>
+						</div>
+						<div className="flex w-full items-center p-4 gap-4 font-body">
+							<ListItem
+								icon={<IconCancel color="error" />}
+								label={t(
+									'page_home.section_benefits.negative3',
+								)}
+							/>
+							<ListItem
+								icon={<IconCheckCircle color="primary" />}
+								label={t(
+									'page_home.section_benefits.positive3',
+								)}
+							/>
+						</div>
+						<div className="flex w-full items-center p-4 gap-4 font-body bg-primary-50">
+							<ListItem
+								icon={<IconCancel color="error" />}
+								label={t(
+									'page_home.section_benefits.negative4',
+								)}
+							/>
+							<ListItem
+								icon={<IconCheckCircle color="primary" />}
+								label={t(
+									'page_home.section_benefits.positive4',
+								)}
+							/>
+						</div>
+						<div className="flex w-full items-center p-4 gap-4 font-body">
+							<ListItem
+								icon={<IconCancel color="error" />}
+								label={t(
+									'page_home.section_benefits.negative5',
+								)}
+							/>
+							<ListItem
+								icon={<IconCheckCircle color="primary" />}
+								label={t(
+									'page_home.section_benefits.positive5',
+								)}
+							/>
+						</div>
+						<div className="flex w-full items-center p-4 gap-4 font-body bg-primary-50">
+							<ListItem
+								icon={<IconCancel color="error" />}
+								label={t(
+									'page_home.section_benefits.negative6',
+								)}
+							/>
+							<ListItem
+								icon={<IconCheckCircle color="primary" />}
+								label={t(
+									'page_home.section_benefits.positive6',
+								)}
+							/>
+						</div>
+						<div className="flex w-full items-center p-4 gap-4 font-body">
+							<ListItem
+								icon={<IconCancel color="error" />}
+								label={t(
+									'page_home.section_benefits.negative7',
+								)}
+							/>
+							<ListItem
+								icon={<IconCheckCircle color="primary" />}
+								label={t(
+									'page_home.section_benefits.positive7',
+								)}
+							/>
+						</div>
+					</div>
+					<ButtonLink
+						label={t('page_home.mainAction')}
+						href="/app"
+						iconLeft={<IconAccountCircle />}
+						className="w-fit mx-auto"
+					/>
+				</div>
 			</section>
 			<section
 				aria-labelledby="quotes"
-				className="flex flex-col gap-8 rounded-lg mt-2 px-4 py-12 items-center max-w-[1400px] ml-auto mr-auto bg-gray-50 border-2 border-white"
+				className="flex flex-col gap-8 rounded-lg mt-2 px-4 py-12 items-center max-w-[1400px] ml-auto mr-auto"
 			>
 				<div className="flex flex-col lg:flex-row items-center max-w-[1200px] gap-6 ml-auto mr-auto">
 					<div className="w-full lg:max-w-[500px] flex flex-col justify-center gap-4 p-6 relative">
@@ -666,15 +632,13 @@ export default function Home() {
 							id="quotes"
 							className="font-heading text-4xl font-bold"
 						>
-							{t('Testimonios')}
+							{t('page_home.section_quotes.title')}
 						</h2>
 						<h3 className="text-xl md:text-2xl">
-							{t(
-								'Anfitriones que ya disfrutan de las ventajas de BNB Explorer',
-							)}
+							{t('page_home.section_quotes.subtitle')}
 						</h3>
 						<ButtonLink
-							label={t('Comienza gratis!')}
+							label={t('page_home.mainAction')}
 							href="/app"
 							iconLeft={<IconAccountCircle />}
 							className="w-fit"
@@ -682,64 +646,42 @@ export default function Home() {
 					</div>
 					<div className="w-full flex flex-col items-center">
 						<div className="flex flex-col gap-2 sm:flex-row items-center">
-							<div className="flex flex-col gap-4 p-4 rounded-lg bg-white shadow-xl">
-								<div className="w-[100px] h-[100px] rounded-full border-8 border-primary-200 overflow-hidden">
-									<Image
-										alt={t('Houst01')}
-										src={testimony01}
-										sizes="100vw"
-										style={{
-											width: '100%',
-											height: 'auto',
-										}}
-									/>
-								</div>
-								<p className="font-body opacity-70">
-									{t('Quote01')}
-								</p>
-								<p className="font-bold text-lg">
-									{t('Houst01')}
-								</p>
-							</div>
+							<Quote
+								title={t(
+									'page_home.section_quotes.quote1Title',
+								)}
+								body={t('page_home.section_quotes.quote1Body')}
+								person={t(
+									'page_home.section_quotes.quote1Person',
+								)}
+								image={testimony01.src}
+								isFeatured
+							/>
 							<div className="flex flex-col gap-2">
-								<div className="flex flex-col gap-4 p-4 rounded-lg bg-white shadow-xl">
-									<div className="w-[64px] h-[64px] rounded-full border-8 border-primary-200 overflow-hidden">
-										<Image
-											alt={t('Houst02')}
-											src={testimony02}
-											sizes="100vw"
-											style={{
-												width: '100%',
-												height: 'auto',
-											}}
-										/>
-									</div>
-									<p className="font-body opacity-70">
-										{t('Quote02')}
-									</p>
-									<p className="font-bold text-lg">
-										{t('Houst02')}
-									</p>
-								</div>
-								<div className="flex flex-col gap-4 p-4 rounded-lg bg-white shadow-xl">
-									<div className="w-[64px] h-[64px] rounded-full border-8 border-primary-200 overflow-hidden">
-										<Image
-											alt={t('Houst03')}
-											src={testimony03}
-											sizes="100vw"
-											style={{
-												width: '100%',
-												height: 'auto',
-											}}
-										/>
-									</div>
-									<p className="font-body opacity-70">
-										{t('Quote03')}
-									</p>
-									<p className="font-bold text-lg">
-										{t('Houst03')}
-									</p>
-								</div>
+								<Quote
+									title={t(
+										'page_home.section_quotes.quote2Title',
+									)}
+									body={t(
+										'page_home.section_quotes.quote2Body',
+									)}
+									person={t(
+										'page_home.section_quotes.quote2Person',
+									)}
+									image={testimony02.src}
+								/>
+								<Quote
+									title={t(
+										'page_home.section_quotes.quote3Title',
+									)}
+									body={t(
+										'page_home.section_quotes.quote3Body',
+									)}
+									person={t(
+										'page_home.section_quotes.quote3Person',
+									)}
+									image={testimony03.src}
+								/>
 							</div>
 						</div>
 					</div>
