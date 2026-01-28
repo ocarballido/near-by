@@ -7,7 +7,7 @@ import headerImage from '../../../public/static/img/header-trimed-2x.webp';
 import headerImageMobile from '../../../public/static/img/heroMobile.webp';
 import rooftopCentered from '../../../public/static/img/rooftop-centered.png';
 import multyProperty from '../../../public/static/img/multy-property-2x.webp';
-import blur from '../../../public/static/img/home/blur_01.webp';
+import blur from '../../../public/static/img/home/blur.webp';
 import why from '../../../public/static/img/home/why_bnbexplorer.webp';
 import how from '../../../public/static/img/home/how_bnbexplorer.webp';
 
