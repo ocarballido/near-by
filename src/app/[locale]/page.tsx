@@ -509,10 +509,10 @@ export default function Home() {
 					<div className="flex flex-col items-center rounded-xl bg-white overflow-hidden shadow-2xl/20">
 						<div className="flex items-center p-4 gap-4 font-bold w-full bg-primary-400">
 							<p className="w-full text-xl text-white">
-								{t('Ventajas')}
+								{t('page_home.section_benefits.tableHeading1')}
 							</p>
 							<p className="w-full text-xl text-white">
-								{t('Detalles')}
+								{t('page_home.section_benefits.tableHeading2')}
 							</p>
 						</div>
 						<div className="flex w-full items-center p-4 gap-4 font-body">
