@@ -11,14 +11,12 @@ import type { Database, TablesInsert } from '@/lib/types';
 
 import { updatePropertyProgressAndTrack } from '@/lib/updatePropertyProgress';
 
-type GooglePlaceResult = {
-	name: string;
-	vicinity?: string;
-	formatted_address?: string;
-	rating?: number;
-	types?: string[]; // ✅ IMPORTANT: para filtrar resultados
-	geometry?: { location: { lat: number; lng: number } };
-};
+import {
+	googlePlacesNearbySearch,
+	type GooglePlaceNearbyResult,
+} from '@/lib/places/nearby';
+
+type GooglePlaceResult = GooglePlaceNearbyResult;
 
 const Schema = z.object({
 	propertyId: z.string().uuid(),
@@ -100,49 +98,11 @@ const SUBCAT_TO_GOOGLE: Record<
 	},
 };
 
-function withTimeout(ms: number) {
-	const controller = new AbortController();
-	const id = setTimeout(() => controller.abort(), ms);
-	return { controller, cancel: () => clearTimeout(id) };
-}
-
-async function fetchNearbyPlaces(params: {
-	apiKey: string;
-	lat: number;
-	lng: number;
-	type: string;
-	keyword?: string;
-}) {
-	const { apiKey, lat, lng, type, keyword } = params;
-
-	const keywordParam = keyword
-		? `&keyword=${encodeURIComponent(keyword)}`
-		: '';
-
-	const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${RADIUS_METERS}&type=${encodeURIComponent(
-		type
-	)}${keywordParam}&rankby=${RANKBY}&key=${apiKey}`;
-
-	const { controller, cancel } = withTimeout(4500);
-	try {
-		const res = await fetch(url, { signal: controller.signal });
-		if (!res.ok) throw new Error(`Google Places HTTP ${res.status}`);
-
-		const json = await res.json();
-
-		if (!json || !Array.isArray(json.results))
-			return [] as GooglePlaceResult[];
-		return json.results as GooglePlaceResult[];
-	} finally {
-		cancel();
-	}
-}
-
 // Concurrencia limitada (sin librerías)
 async function mapLimit<T, R>(
 	items: T[],
 	limit: number,
-	fn: (item: T) => Promise<R>
+	fn: (item: T) => Promise<R>,
 ): Promise<R[]> {
 	const results: R[] = new Array(items.length);
 	let idx = 0;
@@ -153,7 +113,7 @@ async function mapLimit<T, R>(
 				const current = idx++;
 				results[current] = await fn(items[current]);
 			}
-		}
+		},
 	);
 
 	await Promise.all(workers);
@@ -180,7 +140,7 @@ function shouldStrictTypeFilter(placeType: string) {
 
 export async function generateAutoLocations(
 	propertyId: string,
-	subCategoryIds: string[]
+	subCategoryIds: string[],
 ): Promise<GenerateAutoLocationsState> {
 	try {
 		const parsed = Schema.safeParse({ propertyId, subCategoryIds });
@@ -266,31 +226,37 @@ export async function generateAutoLocations(
 
 			// 1) Intento principal: type + (primer keyword si existe)
 			if (keywords?.length) {
-				results = await fetchNearbyPlaces({
+				results = await googlePlacesNearbySearch({
 					apiKey,
 					lat: prop.latitude!,
 					lng: prop.longitude!,
 					type: placeType,
 					keyword: keywords[0],
+					radius: RADIUS_METERS,
+					rankby: RANKBY,
 				});
 			} else {
-				results = await fetchNearbyPlaces({
+				results = await googlePlacesNearbySearch({
 					apiKey,
 					lat: prop.latitude!,
 					lng: prop.longitude!,
 					type: placeType,
+					radius: RADIUS_METERS,
+					rankby: RANKBY,
 				});
 			}
 
 			// 2) Si hay más keywords, probarlas hasta encontrar algo decente
 			if ((!results || results.length === 0) && keywords?.length) {
 				for (let i = 1; i < keywords.length; i++) {
-					const fb = await fetchNearbyPlaces({
+					const fb = await googlePlacesNearbySearch({
 						apiKey,
 						lat: prop.latitude!,
 						lng: prop.longitude!,
 						type: placeType,
 						keyword: keywords[i],
+						radius: RADIUS_METERS,
+						rankby: RANKBY,
 					});
 					if (fb?.length) {
 						results = fb;
@@ -305,11 +271,13 @@ export async function generateAutoLocations(
 				fallbackPlaceTypes?.length
 			) {
 				for (const fbType of fallbackPlaceTypes) {
-					const fbResults = await fetchNearbyPlaces({
+					const fbResults = await googlePlacesNearbySearch({
 						apiKey,
 						lat: prop.latitude!,
 						lng: prop.longitude!,
 						type: fbType,
+						radius: RADIUS_METERS,
+						rankby: RANKBY,
 					});
 					if (fbResults?.length) {
 						results = fbResults;
@@ -319,7 +287,6 @@ export async function generateAutoLocations(
 			}
 
 			// ✅ FILTRO DURO por types cuando usamos un type concreto
-			// Evita que te entre “un gimnasio de oposiciones” si no viene tipado como police.
 			const strict = shouldStrictTypeFilter(placeType);
 
 			const filtered = (results ?? []).filter((p) => {
@@ -327,13 +294,12 @@ export async function generateAutoLocations(
 				if (p.types?.includes(placeType)) return true;
 
 				// 2) Para parking y otros no-estrictos, aceptamos si matchea keyword
-				//    (esto rescata parkings que Google no etiqueta bien)
 				if (!strict && keywordMatch(p, keywords)) return true;
 
 				return false;
 			});
 
-			const finalResults = (filtered.length ? filtered : results ?? [])
+			const finalResults = (filtered.length ? filtered : (results ?? []))
 				.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))
 				.slice(0, MAX_RESULTS)
 				.map((p) => ({ subCatId, place: p }));

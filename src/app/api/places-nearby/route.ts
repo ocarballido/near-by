@@ -1,6 +1,8 @@
 // app/api/places-nearby/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 
+import { googlePlacesNearbySearch } from '@/lib/places/nearby';
+
 type GooglePlaceResult = {
 	name: string;
 	vicinity?: string;
@@ -24,28 +26,49 @@ export async function POST(req: NextRequest) {
 		} = body;
 
 		const apiKey = process.env.GOOGLE_MAPS_BACKEND_KEY;
-		const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&language=${language}&key=${apiKey}`;
+		if (!apiKey) {
+			return NextResponse.json(
+				{
+					success: false,
+					error: 'La API Key de Google Places no está configurada.',
+				},
+				{ status: 500 },
+			);
+		}
 
-		const results = [];
+		const results: Array<{
+			name: string;
+			type: string;
+			lat: number;
+			lng: number;
+			description: string;
+			estimated_duration: number;
+		}> = [];
 
 		for (const type of types) {
-			const res = await fetch(`${url}&type=${type}`);
-			const data = await res.json();
+			const places = await googlePlacesNearbySearch({
+				apiKey,
+				lat: Number(lat),
+				lng: Number(lng),
+				type,
+				radius: Number(radius),
+				rankby: 'prominence',
+				language,
+			});
 
-			if (data.results) {
-				results.push(
-					...data.results
-						.slice(0, 5)
-						.map((place: GooglePlaceResult) => ({
-							name: place.name,
-							type,
-							lat: place.geometry.location.lat,
-							lng: place.geometry.location.lng,
-							description: place.vicinity || 'Lugar cercano',
-							estimated_duration: 60,
-						}))
-				);
-			}
+			results.push(
+				...places
+					.slice(0, 5)
+					.map((place) => place as unknown as GooglePlaceResult)
+					.map((place: GooglePlaceResult) => ({
+						name: place.name,
+						type,
+						lat: place.geometry.location.lat,
+						lng: place.geometry.location.lng,
+						description: place.vicinity || 'Lugar cercano',
+						estimated_duration: 60,
+					})),
+			);
 		}
 
 		return NextResponse.json({ success: true, places: results });
@@ -53,7 +76,7 @@ export async function POST(req: NextRequest) {
 		console.error('Error in /api/places-nearby:', error);
 		return NextResponse.json(
 			{ success: false, error: 'Error fetching nearby places' },
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }
