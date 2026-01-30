@@ -613,5 +613,9 @@
 			"quote3Body": "Now I just share my guide link and guests understand everything from the start. Fewer messages and zero confusion.",
 			"quote3Person": "— Lucía M., host in Seville"
 		}
-	}
+	},
+	"addressHelperIdle": "Start typing and select a suggestion.",
+	"addressHelperSelected": "We’ll use this location to recommend nearby places. It won’t be shown publicly.",
+	"addressHelperError": "Address suggestions could not be loaded.",
+	"addressChange": "Change address"
 }

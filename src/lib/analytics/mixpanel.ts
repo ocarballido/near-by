@@ -2,14 +2,16 @@
 
 import { headers } from 'next/headers';
 
-type EventName =
+export type EventName =
 	| 'onboarding_start'
 	| 'create_property_completed'
 	| 'tenant_visit_public_page'
 	| 'create_property_started'
 	| 'property_progress_updated'
 	| 'share_clicked'
-	| 'property_deleted';
+	| 'property_deleted'
+	| 'create_property_failed'
+	| 'create_property_abandoned';
 
 type TrackInput = {
 	event: EventName;

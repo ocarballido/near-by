@@ -5,6 +5,11 @@ import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 import { createSSRClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { Database, TablesInsert } from '@/lib/types';
+
+import { googlePlacesNearbySearch } from '@/lib/places/nearby';
+
 type GooglePlaceResult = {
 	name: string;
 	vicinity: string;
@@ -44,8 +49,12 @@ export type DiscoverNearbyState = {
 	redirectTo?: string;
 };
 
+function notNull<T>(v: T | null): v is T {
+	return v !== null;
+}
+
 export async function discoverNearbyPlaces(
-	formData: FormData
+	formData: FormData,
 ): Promise<DiscoverNearbyState> {
 	try {
 		const raw = {
@@ -87,13 +96,16 @@ export async function discoverNearbyPlaces(
 			};
 		}
 
-		const response = await fetch(
-			`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&type=${type}&rankby=prominence&key=${apiKey}`
-		);
+		const results = await googlePlacesNearbySearch({
+			apiKey,
+			lat: parseFloat(lat),
+			lng: parseFloat(lng),
+			type,
+			radius: parseInt(radius, 10),
+			rankby: 'prominence',
+		});
 
-		const data = await response.json();
-
-		if (!data.results || !Array.isArray(data.results)) {
+		if (!results || !Array.isArray(results)) {
 			return {
 				errors: { server: ['Respuesta inválida de Google Places'] },
 			};
@@ -110,16 +122,18 @@ export async function discoverNearbyPlaces(
 			return { errors: { server: ['Usuario no autenticado'] } };
 		}
 
-		const supabase = await createServerAdminClient();
+		// ✅ CLAVE: tipamos el cliente como en generateAutoLocations (evita `never`)
+		const supabase =
+			(await createServerAdminClient()) as unknown as SupabaseClient<Database>;
+
 		const now = new Date().toISOString();
 
-		const insertables = data.results
-			.sort(
-				(a: GooglePlaceResult, b: GooglePlaceResult) =>
-					(b.rating ?? 0) - (a.rating ?? 0)
-			)
+		const typedResults = results as unknown as GooglePlaceResult[];
+
+		const insertables: TablesInsert<'property_data'>[] = typedResults
+			.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))
 			.slice(0, maxResults)
-			.map((place: GooglePlaceResult) => {
+			.map((place) => {
 				const latitude = place.geometry?.location?.lat;
 				const longitude = place.geometry?.location?.lng;
 				const name = place.name?.trim();
@@ -144,7 +158,7 @@ export async function discoverNearbyPlaces(
 					updated_at: now,
 				};
 			})
-			.filter(Boolean);
+			.filter(notNull);
 
 		if (insertables.length > 0) {
 			const { error: insertError } = await supabase
@@ -156,7 +170,7 @@ export async function discoverNearbyPlaces(
 			if (insertError) {
 				console.error(
 					'🛑 Error insertando lugares en Supabase:',
-					insertError
+					insertError,
 				);
 				return {
 					errors: {
