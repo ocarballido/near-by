@@ -5,8 +5,9 @@
 import { useTranslations, useLocale } from 'next-intl';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLoading } from '@/lib/context/LoadingContext';
+import { useGlobal } from '@/lib/context/GlobalContext';
 
 import { createProperty } from '@/app/actions/properties/add-property';
 
@@ -26,6 +27,8 @@ import BadgeCheck from '@/components/atoms/BadgeCheck';
 import PlaceAutocompleteField from '@/components/molecules/place-autocomplete';
 import { SelectedPlace } from '@/components/molecules/place-autocomplete';
 
+import { trackClientEvent } from '@/lib/analytics/trackClient';
+
 type FormValues = {
 	name: string;
 	address: string;
@@ -39,6 +42,15 @@ const AddPropertyForm = () => {
 	const locale = useLocale();
 
 	const router = useRouter();
+
+	const { user } = useGlobal();
+	const distinctId = user?.id;
+
+	// Para saber si completó y evitar “abandoned” tras success
+	const didCompleteRef = useRef(false);
+
+	// Para medir abandono con algo útil
+	const formOpenedAtRef = useRef<number>(Date.now());
 
 	const INFO_SEED_OPTIONS = [
 		{
@@ -98,6 +110,7 @@ const AddPropertyForm = () => {
 	const {
 		register,
 		handleSubmit,
+		getValues,
 		setValue,
 		setError,
 		clearErrors,
@@ -165,6 +178,18 @@ const AddPropertyForm = () => {
 		const result = await createProperty(fd);
 
 		if (result.errors) {
+			// Track: create_property_failed
+			if (distinctId) {
+				const errorFields = Object.keys(result.errors);
+				trackClientEvent({
+					event: 'create_property_failed',
+					distinctId,
+					props: {
+						error_fields: errorFields,
+					},
+				});
+			}
+
 			closeLoading();
 
 			if (result.errors.name)
@@ -187,6 +212,8 @@ const AddPropertyForm = () => {
 			return;
 		}
 
+		didCompleteRef.current = true;
+
 		closeLoading();
 
 		setAlert({
@@ -208,6 +235,30 @@ const AddPropertyForm = () => {
 			setValue('longitude', String(coords.lng), { shouldDirty: true });
 		}
 	}, [coords, setValue]);
+
+	useEffect(() => {
+		const openedAt = formOpenedAtRef.current;
+
+		return () => {
+			if (didCompleteRef.current) return;
+			if (!distinctId) return;
+
+			const timeOnFormMs = Date.now() - openedAt;
+
+			const hasName = Boolean(getValues('name')?.trim());
+			const hasSelectedAddress = Boolean(coords);
+
+			trackClientEvent({
+				event: 'create_property_abandoned',
+				distinctId,
+				props: {
+					time_on_form_ms: timeOnFormMs,
+					has_name: hasName,
+					has_selected_address: hasSelectedAddress,
+				},
+			});
+		};
+	}, [distinctId, getValues, coords]);
 
 	return (
 		<>
@@ -312,6 +363,7 @@ const AddPropertyForm = () => {
 						href="/app/properties"
 						className="w-full"
 					/>
+
 					<Button
 						type="submit"
 						label={t('Añadir propiedad')}
