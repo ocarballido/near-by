@@ -6,6 +6,7 @@ import { OUTFIT } from '@/config/fonts';
 import CookieConsent from '@/components/Cookies';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { AnalyticsTracker } from '@/components/analytics';
+import GoogleMapsScript from '@/components/providers/GoogleMapsScript';
 
 import '@/app/globals.css';
 
@@ -24,6 +25,7 @@ const BaseLayout: React.FC<BaseProps> = async ({ children, locale }) => {
 				<body
 					className={`${OUTFIT.className} ${ROBOTO.className} antialiased`}
 				>
+					<GoogleMapsScript />
 					{children}
 					{/* <Analytics /> */}
 					<CookieConsent />

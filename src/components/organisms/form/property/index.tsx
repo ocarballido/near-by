@@ -6,7 +6,6 @@ import { useTranslations, useLocale } from 'next-intl';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { useAddressValidation } from '@/hooks/useAddressValidation';
 import { useLoading } from '@/lib/context/LoadingContext';
 
 import { createProperty } from '@/app/actions/properties/add-property';
@@ -21,8 +20,11 @@ import InputFile from '@/components/molecules/input-file';
 import Button from '@/components/molecules/button';
 import ButtonLink from '@/components/molecules/button-link';
 import Alert from '@/components/molecules/alert';
-import AddressField from '@/components/molecules/google-text-field';
 import BadgeCheck from '@/components/atoms/BadgeCheck';
+
+// ✅ New Places widget field
+import PlaceAutocompleteField from '@/components/molecules/place-autocomplete';
+import { SelectedPlace } from '@/components/molecules/place-autocomplete';
 
 type FormValues = {
 	name: string;
@@ -96,7 +98,6 @@ const AddPropertyForm = () => {
 	const {
 		register,
 		handleSubmit,
-		getValues,
 		setValue,
 		setError,
 		clearErrors,
@@ -106,29 +107,31 @@ const AddPropertyForm = () => {
 		defaultValues: { name: '', address: '', latitude: '', longitude: '' },
 	});
 
-	const {
-		validate: validateAddress,
-		loading: loadingGeo,
-		error: geoError,
-		coords,
-		clear: clearValidation,
-	} = useAddressValidation({
-		getRawAddress: () => getValues('address'),
-		setFormattedAddress: (val) =>
-			setValue('address', val, {
-				shouldDirty: true,
-				shouldValidate: true,
-			}),
-		setFieldError: (msg) =>
-			setError('address', { type: 'manual', message: msg }),
-		clearFieldError: () => clearErrors('address'),
-	});
+	// ✅ coords now come from PlaceAutocompleteElement selection
+	const [coords, setCoords] = useState<SelectedPlace | null>(null);
+
+	const handleSelectAddress = (p: SelectedPlace) => {
+		setCoords(p);
+
+		setValue('address', p.formattedAddress, {
+			shouldDirty: true,
+			shouldValidate: true,
+		});
+
+		clearErrors('address');
+	};
+
+	const clearSelection = () => {
+		setCoords(null);
+		setValue('latitude', '', { shouldDirty: true });
+		setValue('longitude', '', { shouldDirty: true });
+	};
 
 	const onSubmit: SubmitHandler<FormValues> = async (data) => {
 		if (!coords) {
 			setError('address', {
 				type: 'manual',
-				message: t('Debes validar la dirección primero'),
+				message: t('Selecciona una dirección sugerida para continuar'),
 			});
 			return;
 		}
@@ -196,7 +199,7 @@ const AddPropertyForm = () => {
 		}
 
 		reset();
-		clearValidation();
+		setCoords(null);
 	};
 
 	useEffect(() => {
@@ -208,15 +211,6 @@ const AddPropertyForm = () => {
 
 	return (
 		<>
-			<Alert
-				hideTime={3000}
-				open={coords !== null}
-				title={t('Validado')}
-				dismissible
-				type="success"
-				message={'La dirección se ha validado correctamente'}
-			/>
-
 			{alert && (
 				<Alert
 					hideTime={3000}
@@ -269,19 +263,27 @@ const AddPropertyForm = () => {
 					helperText={errors.name?.message}
 				/>
 
-				<AddressField
-					registerReturn={register('address', {
-						required: t('La dirección es obligatoria'),
-					})}
-					loading={loadingGeo}
-					error={Boolean(errors.address)}
-					helperText={errors.address?.message || geoError || ''}
-					coords={coords ?? undefined}
-					onValidate={validateAddress}
+				{/* ✅ New widget-based address input */}
+				<PlaceAutocompleteField
 					label={t('Dirección *')}
 					placeholder={t('Dirección ejemplo')}
+					locale={locale}
+					countryCodes={['es']}
+					error={Boolean(errors.address)}
+					helperTextIdle={t('addressHelperIdle')}
+					helperTextSelected={t('addressHelperSelected')}
+					helperTextError={t('addressHelperError')}
+					onSelect={handleSelectAddress}
+					onClearSelection={clearSelection}
 				/>
 
+				{/* ✅ RHF needs the fields registered; the visible input is managed by Google */}
+				<input
+					type="hidden"
+					{...register('address', {
+						required: t('La dirección es obligatoria'),
+					})}
+				/>
 				<input type="hidden" {...register('latitude')} />
 				<input type="hidden" {...register('longitude')} />
 

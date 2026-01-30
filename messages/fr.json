@@ -618,5 +618,9 @@
 			"quote3Body": "Maintenant, je partage simplement le lien de mon guide et les voyageurs comprennent tout dès le départ. Moins de messages et zéro confusion.",
 			"quote3Person": "— Lucía M., hôte à Séville"
 		}
-	}
+	},
+	"addressHelperIdle": "Commencez à écrire et sélectionnez une suggestion.",
+	"addressHelperSelected": "Nous utiliserons cette localisation pour recommander des lieux à proximité. Elle ne sera pas affichée publiquement.",
+	"addressHelperError": "Impossible de charger les suggestions d’adresse.",
+	"addressChange": "Changer d'adresse"
 }
