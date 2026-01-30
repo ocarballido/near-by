@@ -2,11 +2,10 @@
 'use client';
 /// <reference types="google.maps" />
 
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { useAddressValidation } from '@/hooks/useAddressValidation';
 import { useLoading } from '@/lib/context/LoadingContext';
 
 import { createLocation } from '@/app/actions/locations/add-location';
@@ -17,11 +16,13 @@ import TextField from '@/components/molecules/text-field';
 import InputFile from '@/components/molecules/input-file';
 import Button from '@/components/molecules/button';
 import Alert from '@/components/molecules/alert';
-import AddressField from '@/components/molecules/google-text-field';
 import TextArea from '@/components/molecules/text-area';
 import BadgeCheck from '@/components/atoms/BadgeCheck';
 import IconModeHeat from '@/components/atoms/icon/mode-heat';
 import IconFavorite from '@/components/atoms/icon/favorite';
+
+import PlaceAutocompleteField from '@/components/molecules/place-autocomplete';
+import { SelectedPlace } from '@/components/molecules/place-autocomplete';
 
 type FormValues = {
 	property_id: string;
@@ -49,7 +50,7 @@ const AddPlaceForm = ({
 	categoryId: string;
 }) => {
 	const t = useTranslations();
-
+	const locale = useLocale();
 	const router = useRouter();
 
 	const [alert, setAlert] = useState<{
@@ -62,7 +63,6 @@ const AddPlaceForm = ({
 	const {
 		register,
 		handleSubmit,
-		getValues,
 		setValue,
 		setError,
 		clearErrors,
@@ -73,6 +73,7 @@ const AddPlaceForm = ({
 		defaultValues: {
 			property_id: propertyId,
 			sub_category_id: subCategoryId,
+			category_id: categoryId,
 			name: '',
 			address: '',
 			latitude: '',
@@ -88,26 +89,39 @@ const AddPlaceForm = ({
 	const featuredValue = watch('featured');
 	const mustVisitValue = watch('must_visit');
 
-	const {
-		validate: validateAddress,
-		loading: loadingGeo,
-		error: geoError,
-		coords,
-		clear: clearValidation,
-	} = useAddressValidation({
-		getRawAddress: () => getValues('address'),
-		setFormattedAddress: (val) =>
-			setValue('address', val, { shouldValidate: true }),
-		setFieldError: (msg) =>
-			setError('address', { type: 'manual', message: msg }),
-		clearFieldError: () => clearErrors('address'),
-	});
+	// ✅ coords now come from PlaceAutocomplete selection
+	const [coords, setCoords] = useState<SelectedPlace | null>(null);
+
+	const handleSelectAddress = (p: SelectedPlace) => {
+		setCoords(p);
+
+		setValue('address', p.formattedAddress, {
+			shouldDirty: true,
+			shouldTouch: true,
+			shouldValidate: true,
+		});
+
+		clearErrors('address');
+	};
+
+	const clearSelection = () => {
+		setCoords(null);
+		setValue('latitude', '', { shouldDirty: true, shouldValidate: true });
+		setValue('longitude', '', { shouldDirty: true, shouldValidate: true });
+	};
+
+	useEffect(() => {
+		if (coords) {
+			setValue('latitude', String(coords.lat), { shouldValidate: true });
+			setValue('longitude', String(coords.lng), { shouldValidate: true });
+		}
+	}, [coords, setValue]);
 
 	const onSubmit: SubmitHandler<FormValues> = async (data) => {
 		if (!coords) {
 			setError('address', {
 				type: 'manual',
-				message: t('Debes validar la dirección primero'),
+				message: t('Selecciona una dirección sugerida para continuar'),
 			});
 			return;
 		}
@@ -139,25 +153,13 @@ const AddPlaceForm = ({
 		fd.append('must_visit', String(mustVisitValue));
 		fd.append('type', 'location');
 
-		// Campos opcionales
-		if (data.description) {
-			fd.append('description', data.description);
-		}
-		if (data.website) {
-			fd.append('website', data.website);
-		}
-		if (data.phone) {
-			fd.append('phone', data.phone);
-		}
-
-		if (file) {
-			fd.append('image', file);
-		}
+		if (data.description) fd.append('description', data.description);
+		if (data.website) fd.append('website', data.website);
+		if (data.phone) fd.append('phone', data.phone);
+		if (file) fd.append('image', file);
 
 		openLoading();
-
 		const result = await createLocation(fd);
-
 		closeLoading();
 
 		if (result.errors) {
@@ -188,7 +190,6 @@ const AddPlaceForm = ({
 					type: 'manual',
 					message: result.errors.description[0],
 				});
-
 			return;
 		}
 
@@ -200,27 +201,11 @@ const AddPlaceForm = ({
 		}
 
 		reset();
-		clearValidation();
+		setCoords(null);
 	};
-
-	useEffect(() => {
-		if (coords) {
-			setValue('latitude', String(coords.lat), { shouldValidate: true });
-			setValue('longitude', String(coords.lng), { shouldValidate: true });
-		}
-	}, [coords, setValue]);
 
 	return (
 		<>
-			<Alert
-				hideTime={3000}
-				open={coords !== null}
-				title={t('Validado')}
-				dismissible
-				type="success"
-				message={'La dirección se ha validado correctamente'}
-			/>
-
 			{alert && (
 				<Alert
 					hideTime={3000}
@@ -251,19 +236,26 @@ const AddPlaceForm = ({
 					helperText={errors.name?.message}
 				/>
 
-				<AddressField
-					registerReturn={register('address', {
-						required: t('La dirección es obligatoria'),
-					})}
-					loading={loadingGeo}
-					error={Boolean(errors.address)}
-					helperText={errors.address?.message || geoError || ''}
-					coords={coords ?? undefined}
-					onValidate={validateAddress}
+				<PlaceAutocompleteField
 					label={t('Dirección *')}
 					placeholder={t('Sitio dirección ejemplo')}
+					locale={locale}
+					countryCodes={['es']}
+					error={Boolean(errors.address)}
+					helperTextIdle={t('addressHelperIdle')}
+					helperTextSelected={t('addressHelperSelected')}
+					helperTextError={t('addressHelperError')}
+					onSelect={handleSelectAddress}
+					onClearSelection={clearSelection}
 				/>
 
+				{/* RHF: registramos address aunque el input visible lo gestione Google */}
+				<input
+					type="hidden"
+					{...register('address', {
+						required: t('La dirección es obligatoria'),
+					})}
+				/>
 				<input type="hidden" {...register('latitude')} />
 				<input type="hidden" {...register('longitude')} />
 
@@ -349,12 +341,6 @@ const AddPlaceForm = ({
 						},
 					})}
 				/>
-
-				{/* <div className="p-4 bg-sky-100 rounded-md">
-					<p className="text-xs text-sky-900">
-						{t('Disclaimer de imagen')}
-					</p>
-				</div> */}
 
 				<div className="flex flex-col sm:flex-row gap-2">
 					<Button
