@@ -15,6 +15,8 @@ import TextArea from '@/components/molecules/text-area';
 import Button from '@/components/molecules/button';
 import Alert from '@/components/molecules/alert';
 import ButtonMagic from '@/components/molecules/button-magic';
+import ButtonLink from '@/components/molecules/button-link';
+import IconHelp from '@/components/atoms/icon/help';
 
 import { DAILY_AI_USAGE_LIMMIT } from '@/config/config-constants';
 
@@ -99,7 +101,7 @@ const UpdateInfoForm = ({
 
 		if (result.redirectTo) {
 			router.push(
-				`${result.redirectTo}/${propertyId}/${categoryId}/${subCategoryId}`
+				`${result.redirectTo}/${propertyId}/${categoryId}/${subCategoryId}`,
 			);
 			return;
 		}
@@ -177,13 +179,13 @@ const UpdateInfoForm = ({
 
 				<h2 className="font-heading font-bold text-2xl -mb-3">
 					{t(
-						'Utiliza nuestra Inteligenta Artificial para generar contenidos'
+						'Utiliza nuestra Inteligenta Artificial para generar contenidos',
 					)}
 				</h2>
 
 				<p className="text-md">
 					{t(
-						'Utiliza nuestra IA para generar contenido personalizado automáticamente'
+						'Utiliza nuestra IA para generar contenido personalizado automáticamente',
 					)}
 				</p>
 
@@ -192,13 +194,13 @@ const UpdateInfoForm = ({
 					<div className="w-[full] bg-white rounded-lg p-4 flex flex-col gap-2 shadow-sm">
 						<TextArea
 							label={t(
-								'Describe lo que quieres que la IA escriba'
+								'Describe lo que quieres que la IA escriba',
 							)}
 							value={prompt}
 							onChange={(e) => setPrompt(e.target.value)}
 							rows={4}
 							placeholder={t(
-								'Instrucciones para el uso del aire acondicionado y te ayudaremos a redactarlo'
+								'Instrucciones para el uso del aire acondicionado y te ayudaremos a redactarlo',
 							)}
 						/>
 
@@ -222,7 +224,7 @@ const UpdateInfoForm = ({
 								<p className="text-xs flex justify-center items-center text-gray-600 font-medium py-1 px-3 w-full text-center uppercase">
 									<span>
 										{t(
-											'Número de consultas restantes de la AI'
+											'Número de consultas restantes de la AI',
 										)}
 									</span>
 									<span
@@ -252,6 +254,14 @@ const UpdateInfoForm = ({
 						disabled={isSubmitting}
 					/>
 				</div>
+
+				<ButtonLink
+					label={t('feedback.cta')}
+					href={`/app/feedback/create_info/property/${propertyId}?returnTo=/app/properties/${propertyId}/${categoryId}/${subCategoryId}`}
+					color="white"
+					className="w-full"
+					iconLeft={<IconHelp />}
+				/>
 			</form>
 		</>
 	);

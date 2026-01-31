@@ -617,5 +617,45 @@
 	"addressHelperIdle": "Start typing and select a suggestion.",
 	"addressHelperSelected": "We’ll use this location to recommend nearby places. It won’t be shown publicly.",
 	"addressHelperError": "Address suggestions could not be loaded.",
-	"addressChange": "Change address"
+	"addressChange": "Change address",
+	"feedback": {
+		"title": "We want to hear you",
+		"subtitle": "This isn’t support. It helps us improve the app with you.",
+		"type": {
+			"label": "Type",
+			"placeholder": "Select an option",
+			"options": {
+				"question": "I have a question",
+				"suggestion": "Suggestion",
+				"unclear": "Something isn’t clear",
+				"bug": "I ran into an issue",
+				"other": "Other"
+			}
+		},
+		"message": {
+			"label": "Message *",
+			"placeholder": "Tell us what happened or what you’d improve"
+		},
+		"email": {
+			"label": "Email (optional)",
+			"placeholder": "Only if you want a reply"
+		},
+		"actions": {
+			"cancel": "Cancel",
+			"submit": "Send feedback",
+			"back": "Back"
+		},
+		"alerts": {
+			"successTitle": "Saved",
+			"errorTitle": "Error",
+			"successMessage": "Thanks! Your message is now in our hands.",
+			"genericServerError": "We couldn’t send your message. Please try again."
+		},
+		"validation": {
+			"typeRequired": "Type is required",
+			"messageRequired": "Message is required",
+			"emailInvalid": "Invalid email"
+		},
+		"cta": "Question or feedback?"
+	}
 }

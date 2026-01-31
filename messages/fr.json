@@ -622,5 +622,45 @@
 	"addressHelperIdle": "Commencez à écrire et sélectionnez une suggestion.",
 	"addressHelperSelected": "Nous utiliserons cette localisation pour recommander des lieux à proximité. Elle ne sera pas affichée publiquement.",
 	"addressHelperError": "Impossible de charger les suggestions d’adresse.",
-	"addressChange": "Changer d'adresse"
+	"addressChange": "Changer d'adresse",
+	"feedback": {
+		"title": "On veut t’écouter",
+		"subtitle": "Ce n’est pas du support. Ça nous aide à améliorer l’app avec toi.",
+		"type": {
+			"label": "Type",
+			"placeholder": "Sélectionne une option",
+			"options": {
+				"question": "J’ai une question",
+				"suggestion": "Suggestion",
+				"unclear": "Quelque chose n’est pas clair",
+				"bug": "J’ai eu un problème",
+				"other": "Autre"
+			}
+		},
+		"message": {
+			"label": "Message *",
+			"placeholder": "Explique-nous ce qui s’est passé ou ce que tu améliorerais"
+		},
+		"email": {
+			"label": "Email (optionnel)",
+			"placeholder": "Seulement si tu veux une réponse"
+		},
+		"actions": {
+			"cancel": "Annuler",
+			"submit": "Envoyer",
+			"back": "Retour"
+		},
+		"alerts": {
+			"successTitle": "Validé",
+			"errorTitle": "Erreur",
+			"successMessage": "Merci ! Ton message est bien pris en compte.",
+			"genericServerError": "Impossible d’envoyer ton message. Réessaie."
+		},
+		"validation": {
+			"typeRequired": "Le type est obligatoire",
+			"messageRequired": "Le message est obligatoire",
+			"emailInvalid": "Email invalide"
+		},
+		"cta": "Question ou avis ?"
+	}
 }

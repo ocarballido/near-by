@@ -31,7 +31,7 @@ const Sidebar = ({
 
 	const sidebarContentStyles = clsx(
 		{ 'translate-x-0': isOpen },
-		{ '-translate-x-full': !isOpen }
+		{ '-translate-x-full': !isOpen },
 	);
 
 	return (

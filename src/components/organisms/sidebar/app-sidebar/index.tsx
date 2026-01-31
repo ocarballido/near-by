@@ -9,6 +9,8 @@ import IconApartment from '@/components/atoms/icon/apartment';
 import IconNewRelease from '@/components/atoms/icon/new-releases';
 import IconLanguage from '@/components/atoms/icon/language';
 import SidebarMenuItem from '@/components/molecules/sidebar-menu-item';
+import ButtonLink from '@/components/molecules/button-link';
+import IconHelp from '@/components/atoms/icon/help';
 
 const ICON_COMPONENTS = {
 	IconHome,
@@ -39,6 +41,13 @@ const AppSidebar = () => {
 					/>
 				);
 			})}
+			<ButtonLink
+				label={t('feedback.cta')}
+				href={`/app/feedback/dashboard`}
+				color="secondary"
+				className="w-full"
+				iconLeft={<IconHelp />}
+			/>
 		</>
 	);
 };

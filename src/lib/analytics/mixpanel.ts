@@ -11,7 +11,11 @@ export type EventName =
 	| 'share_clicked'
 	| 'property_deleted'
 	| 'create_property_failed'
-	| 'create_property_abandoned';
+	| 'create_property_abandoned'
+	| 'feedback_opened'
+	| 'feedback_submitted'
+	| 'feedback_cancelled'
+	| 'feedback_submit_failed';
 
 type TrackInput = {
 	event: EventName;

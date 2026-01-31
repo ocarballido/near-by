@@ -622,5 +622,45 @@
 	"addressHelperIdle": "Empieza a escribir y selecciona una sugerencia.",
 	"addressHelperSelected": "Usaremos esta ubicación para recomendar lugares cercanos. No se muestra públicamente.",
 	"addressHelperError": "No se pudieron cargar sugerencias de dirección.",
-	"addressChange": "Cambiar dirección"
+	"addressChange": "Cambiar dirección",
+	"feedback": {
+		"title": "Queremos escucharte",
+		"subtitle": "Esto no es soporte. Es para mejorar la app contigo.",
+		"type": {
+			"label": "Tipo",
+			"placeholder": "Selecciona una opción",
+			"options": {
+				"question": "Tengo una duda",
+				"suggestion": "Sugerencia",
+				"unclear": "Algo no me ha quedado claro",
+				"bug": "He tenido un problema",
+				"other": "Otro"
+			}
+		},
+		"message": {
+			"label": "Mensaje *",
+			"placeholder": "Cuéntanos con tus palabras qué te ha pasado o qué mejorarías"
+		},
+		"email": {
+			"label": "Email (opcional)",
+			"placeholder": "Solo si quieres respuesta"
+		},
+		"actions": {
+			"cancel": "Cancelar",
+			"submit": "Enviar comentario",
+			"back": "Volver"
+		},
+		"alerts": {
+			"successTitle": "Validado",
+			"errorTitle": "Error",
+			"successMessage": "¡Gracias! Tu comentario ya está en nuestras manos.",
+			"genericServerError": "No se pudo enviar el comentario. Por favor, inténtalo de nuevo."
+		},
+		"validation": {
+			"typeRequired": "El tipo es obligatorio",
+			"messageRequired": "El mensaje es obligatorio",
+			"emailInvalid": "Email inválido"
+		},
+		"cta": "¿Duda o comentario?"
+	}
 }

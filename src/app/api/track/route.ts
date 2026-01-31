@@ -11,6 +11,14 @@ const ALLOWED_EVENTS: ReadonlySet<EventName> = new Set([
 	'property_deleted',
 	'create_property_failed',
 	'create_property_abandoned',
+
+	// ✅ Feedback
+	'feedback_opened',
+	'feedback_submitted',
+	'feedback_cancelled',
+	'feedback_submit_failed',
+	// (si más adelante quieres)
+	// 'feedback_abandoned',
 ]);
 
 function isEventName(v: unknown): v is EventName {

@@ -17,6 +17,8 @@ import {
 import Alert from '@/components/molecules/alert';
 import { Select, SelectOption } from '@/components/molecules/select';
 import Button from '@/components/molecules/button';
+import ButtonLink from '@/components/molecules/button-link';
+import IconHelp from '@/components/atoms/icon/help';
 
 type FormValues = {
 	type: string;
@@ -29,7 +31,7 @@ const quantityOptions: SelectOption[] = Array.from(
 	(_, i) => ({
 		value: (i + 1).toString(),
 		label: `${i + 1}`,
-	})
+	}),
 );
 
 const MagicFinderForm = ({
@@ -139,7 +141,7 @@ const MagicFinderForm = ({
 
 		if (result.redirectTo) {
 			router.push(
-				`${result.redirectTo}/${propertyId}/${categoryId}/${subCategoryId}`
+				`${result.redirectTo}/${propertyId}/${categoryId}/${subCategoryId}`,
 			);
 			return;
 		}
@@ -157,7 +159,7 @@ const MagicFinderForm = ({
 			</p>
 			<p className="w-full font-medium text-gray-500">
 				{t(
-					'Con un solo clic, añade automáticamente los lugares más valorados en la zona: restaurantes, farmacias, parques, museos y mucho más'
+					'Con un solo clic, añade automáticamente los lugares más valorados en la zona: restaurantes, farmacias, parques, museos y mucho más',
 				)}
 			</p>
 
@@ -250,6 +252,13 @@ const MagicFinderForm = ({
 						className="w-full"
 					/>
 				</div>
+				<ButtonLink
+					label={t('feedback.cta')}
+					href={`/app/feedback/create_location/property/${propertyId}?returnTo=/app/properties/${propertyId}/${categoryId}/${subCategoryId}`}
+					color="white"
+					className="w-full"
+					iconLeft={<IconHelp />}
+				/>
 			</form>
 		</div>
 	);

@@ -20,6 +20,8 @@ import TextArea from '@/components/molecules/text-area';
 import BadgeCheck from '@/components/atoms/BadgeCheck';
 import IconModeHeat from '@/components/atoms/icon/mode-heat';
 import IconFavorite from '@/components/atoms/icon/favorite';
+import ButtonLink from '@/components/molecules/button-link';
+import IconHelp from '@/components/atoms/icon/help';
 
 import PlaceAutocompleteField from '@/components/molecules/place-autocomplete';
 import { SelectedPlace } from '@/components/molecules/place-autocomplete';
@@ -356,6 +358,13 @@ const AddPlaceForm = ({
 						disabled={isSubmitting}
 					/>
 				</div>
+				<ButtonLink
+					label={t('feedback.cta')}
+					href={`/app/feedback/create_location/property/${propertyId}?returnTo=/app/properties/${propertyId}/${categoryId}/${subCategoryId}`}
+					color="white"
+					className="w-full"
+					iconLeft={<IconHelp />}
+				/>
 			</form>
 		</>
 	);
