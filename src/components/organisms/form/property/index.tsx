@@ -28,6 +28,7 @@ import PlaceAutocompleteField from '@/components/molecules/place-autocomplete';
 import { SelectedPlace } from '@/components/molecules/place-autocomplete';
 
 import { trackClientEvent } from '@/lib/analytics/trackClient';
+import IconHelp from '@/components/atoms/icon/help';
 
 type FormValues = {
 	name: string;
@@ -372,6 +373,16 @@ const AddPropertyForm = () => {
 					/>
 				</div>
 			</form>
+
+			<div className="w-full max-w-[360px] mb-4">
+				<ButtonLink
+					label={t('feedback.cta')}
+					href="/app/feedback/create_property?returnTo=/app/properties/new"
+					color="white"
+					className="w-full"
+					iconLeft={<IconHelp />}
+				/>
+			</div>
 		</>
 	);
 };

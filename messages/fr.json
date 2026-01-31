@@ -660,6 +660,7 @@
 			"typeRequired": "Le type est obligatoire",
 			"messageRequired": "Le message est obligatoire",
 			"emailInvalid": "Email invalide"
-		}
+		},
+		"cta": "Question ou avis ?"
 	}
 }
