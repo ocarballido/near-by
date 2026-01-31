@@ -22,6 +22,7 @@ import IconShoppingBag from '@/components/atoms/icon/shopping-bag';
 import CategoryAccordion from '@/components/molecules/category-accordion';
 import ButtonLink from '@/components/molecules/button-link';
 import GroupItem from '@/components/molecules/group-item';
+import IconHelp from '@/components/atoms/icon/help';
 
 const ICON_COMPONENTS = {
 	IconHealing,
@@ -68,6 +69,13 @@ const PropertySidebar = ({
 				iconLeft={<IconApartment />}
 				className="hidden md:flex w-full"
 			/>
+			<ButtonLink
+				label={t('feedback.cta')}
+				href={`/app/feedback/dashboard/property/${propertyId}?returnTo=/app/properties/${propertyId}/${categoryId}/${subCategoryId}`}
+				color="secondary"
+				className="w-full"
+				iconLeft={<IconHelp />}
+			/>
 			{sidebarData &&
 				sidebarData.map((category) => {
 					const iconName = category.icon as IconName;
@@ -81,7 +89,7 @@ const PropertySidebar = ({
 							onClick={() => {
 								closeSidebar();
 								router.push(
-									`/app/properties/${propertyId}/${category.id}/${category.sub_categories[0].id}`
+									`/app/properties/${propertyId}/${category.id}/${category.sub_categories[0].id}`,
 								);
 							}}
 							icon={<IconComponent />}
@@ -101,13 +109,13 @@ const PropertySidebar = ({
 										onClick={() => {
 											closeSidebar();
 											router.push(
-												`/app/properties/${propertyId}/${category.id}/${subcategory.id}`
+												`/app/properties/${propertyId}/${category.id}/${subcategory.id}`,
 											);
 										}}
 										handleEdit={(e) => {
 											e.stopPropagation();
 											router.push(
-												`/app/info/${propertyId}/${category.id}/${subcategory.id}`
+												`/app/info/${propertyId}/${category.id}/${subcategory.id}`,
 											);
 										}}
 									/>
