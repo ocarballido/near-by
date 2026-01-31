@@ -4,6 +4,7 @@ import { TIPS } from '@/config/config-constants';
 
 import AppContentTemplate from '@/components/templates/app-content';
 import PropertyNumber from '@/components/molecules/property-number';
+import ButtonLink from '@/components/molecules/button-link';
 
 export default function DashboardContent() {
 	const t = useTranslations();
@@ -12,6 +13,11 @@ export default function DashboardContent() {
 		<AppContentTemplate>
 			<div className="p-4 font-roboto flex flex-col grow justify-center items-center gap-4 bg-white rounded-lg overflow-hidden">
 				<PropertyNumber />
+
+				<ButtonLink
+					href="/app/feedback/dashboard"
+					label="Tienes una duda o comentario?"
+				/>
 
 				<div className="flex flex-wrap max-w-[1000px] p-4 rounded-2xl border-2 border-primary-100 mt-8">
 					{TIPS.map((tip) => (

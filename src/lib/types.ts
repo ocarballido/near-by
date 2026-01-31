@@ -1,633 +1,698 @@
 export type Json =
-	| string
-	| number
-	| boolean
-	| null
-	| { [key: string]: Json | undefined }
-	| Json[];
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
 
 export type Database = {
-	public: {
-		Tables: {
-			ai_usage: {
-				Row: {
-					count: number;
-					created_at: string | null;
-					date: string;
-					id: string;
-					updated_at: string | null;
-					user_id: string | null;
-				};
-				Insert: {
-					count?: number;
-					created_at?: string | null;
-					date?: string;
-					id?: string;
-					updated_at?: string | null;
-					user_id?: string | null;
-				};
-				Update: {
-					count?: number;
-					created_at?: string | null;
-					date?: string;
-					id?: string;
-					updated_at?: string | null;
-					user_id?: string | null;
-				};
-				Relationships: [];
-			};
-			categories: {
-				Row: {
-					created_at: string | null;
-					icon: string | null;
-					id: string;
-					name: string;
-					order_index: number;
-					type:
-						| Database['public']['Enums']['property_data_type']
-						| null;
-				};
-				Insert: {
-					created_at?: string | null;
-					icon?: string | null;
-					id?: string;
-					name: string;
-					order_index: number;
-					type?:
-						| Database['public']['Enums']['property_data_type']
-						| null;
-				};
-				Update: {
-					created_at?: string | null;
-					icon?: string | null;
-					id?: string;
-					name?: string;
-					order_index?: number;
-					type?:
-						| Database['public']['Enums']['property_data_type']
-						| null;
-				};
-				Relationships: [];
-			};
-			location_groups: {
-				Row: {
-					category_id: string | null;
-					created_at: string | null;
-					id: string;
-					name: string;
-					order_index: number;
-					property_id: string | null;
-					slug: string | null;
-					updated_at: string | null;
-				};
-				Insert: {
-					category_id?: string | null;
-					created_at?: string | null;
-					id?: string;
-					name: string;
-					order_index: number;
-					property_id?: string | null;
-					slug?: string | null;
-					updated_at?: string | null;
-				};
-				Update: {
-					category_id?: string | null;
-					created_at?: string | null;
-					id?: string;
-					name?: string;
-					order_index?: number;
-					property_id?: string | null;
-					slug?: string | null;
-					updated_at?: string | null;
-				};
-				Relationships: [
-					{
-						foreignKeyName: 'location_groups_category_id_fkey';
-						columns: ['category_id'];
-						isOneToOne: false;
-						referencedRelation: 'categories';
-						referencedColumns: ['id'];
-					},
-					{
-						foreignKeyName: 'location_groups_property_id_fkey';
-						columns: ['property_id'];
-						isOneToOne: false;
-						referencedRelation: 'properties';
-						referencedColumns: ['id'];
-					},
-				];
-			};
-			locations: {
-				Row: {
-					address: string;
-					created_at: string | null;
-					description: string | null;
-					group_id: string | null;
-					id: string;
-					image_url: string | null;
-					latitude: number | null;
-					longitude: number | null;
-					name: string;
-					phone: string | null;
-					property_id: string;
-					updated_at: string | null;
-					website: string | null;
-				};
-				Insert: {
-					address: string;
-					created_at?: string | null;
-					description?: string | null;
-					group_id?: string | null;
-					id?: string;
-					image_url?: string | null;
-					latitude?: number | null;
-					longitude?: number | null;
-					name: string;
-					phone?: string | null;
-					property_id: string;
-					updated_at?: string | null;
-					website?: string | null;
-				};
-				Update: {
-					address?: string;
-					created_at?: string | null;
-					description?: string | null;
-					group_id?: string | null;
-					id?: string;
-					image_url?: string | null;
-					latitude?: number | null;
-					longitude?: number | null;
-					name?: string;
-					phone?: string | null;
-					property_id?: string;
-					updated_at?: string | null;
-					website?: string | null;
-				};
-				Relationships: [
-					{
-						foreignKeyName: 'locations_group_id_fkey';
-						columns: ['group_id'];
-						isOneToOne: false;
-						referencedRelation: 'location_groups';
-						referencedColumns: ['id'];
-					},
-					{
-						foreignKeyName: 'locations_property_id_fkey';
-						columns: ['property_id'];
-						isOneToOne: false;
-						referencedRelation: 'properties';
-						referencedColumns: ['id'];
-					},
-				];
-			};
-			properties: {
-				Row: {
-					address: string;
-					created_at: string | null;
-					description: string | null;
-					id: string;
-					image_url: string | null;
-					latitude: number | null;
-					longitude: number | null;
-					name: string;
-					slug: string | null;
-					summary: string | null;
-					updated_at: string | null;
-					user_id: string | null;
-				};
-				Insert: {
-					address: string;
-					created_at?: string | null;
-					description?: string | null;
-					id?: string;
-					image_url?: string | null;
-					latitude?: number | null;
-					longitude?: number | null;
-					name: string;
-					slug?: string | null;
-					summary?: string | null;
-					updated_at?: string | null;
-					user_id?: string | null;
-				};
-				Update: {
-					address?: string;
-					created_at?: string | null;
-					description?: string | null;
-					id?: string;
-					image_url?: string | null;
-					latitude?: number | null;
-					longitude?: number | null;
-					name?: string;
-					slug?: string | null;
-					summary?: string | null;
-					updated_at?: string | null;
-					user_id?: string | null;
-				};
-				Relationships: [];
-			};
-			property_data: {
-				Row: {
-					address: string | null;
-					category_id: string | null;
-					created_at: string;
-					description: string | null;
-					featured: boolean;
-					id: string;
-					image_url: string | null;
-					latitude: number | null;
-					longitude: number | null;
-					must_visit: boolean;
-					name: string | null;
-					property_id: string | null;
-					sub_category_id: string | null;
-					type: string;
-					updated_at: string;
-					user_id: string | null;
-				};
-				Insert: {
-					address?: string | null;
-					category_id?: string | null;
-					created_at?: string;
-					description?: string | null;
-					featured?: boolean;
-					id?: string;
-					image_url?: string | null;
-					latitude?: number | null;
-					longitude?: number | null;
-					must_visit?: boolean;
-					name?: string | null;
-					property_id?: string | null;
-					sub_category_id?: string | null;
-					type: string;
-					updated_at?: string;
-					user_id?: string | null;
-				};
-				Update: {
-					address?: string | null;
-					category_id?: string | null;
-					created_at?: string;
-					description?: string | null;
-					featured?: boolean;
-					id?: string;
-					image_url?: string | null;
-					latitude?: number | null;
-					longitude?: number | null;
-					must_visit?: boolean;
-					name?: string | null;
-					property_id?: string | null;
-					sub_category_id?: string | null;
-					type?: string;
-					updated_at?: string;
-					user_id?: string | null;
-				};
-				Relationships: [
-					{
-						foreignKeyName: 'property_data_category_id_fkey';
-						columns: ['category_id'];
-						isOneToOne: false;
-						referencedRelation: 'categories';
-						referencedColumns: ['id'];
-					},
-					{
-						foreignKeyName: 'property_data_property_id_fkey';
-						columns: ['property_id'];
-						isOneToOne: false;
-						referencedRelation: 'properties';
-						referencedColumns: ['id'];
-					},
-					{
-						foreignKeyName: 'property_data_sub_category_id_fkey';
-						columns: ['sub_category_id'];
-						isOneToOne: false;
-						referencedRelation: 'sub_categories';
-						referencedColumns: ['id'];
-					},
-				];
-			};
-			property_info: {
-				Row: {
-					category_id: string;
-					content: string | null;
-					created_at: string;
-					id: string;
-					property_id: string;
-					title: string;
-					updated_at: string;
-				};
-				Insert: {
-					category_id: string;
-					content?: string | null;
-					created_at?: string;
-					id?: string;
-					property_id: string;
-					title: string;
-					updated_at?: string;
-				};
-				Update: {
-					category_id?: string;
-					content?: string | null;
-					created_at?: string;
-					id?: string;
-					property_id?: string;
-					title?: string;
-					updated_at?: string;
-				};
-				Relationships: [
-					{
-						foreignKeyName: 'property_info_category_id_fkey';
-						columns: ['category_id'];
-						isOneToOne: false;
-						referencedRelation: 'categories';
-						referencedColumns: ['id'];
-					},
-					{
-						foreignKeyName: 'property_info_property_id_fkey';
-						columns: ['property_id'];
-						isOneToOne: false;
-						referencedRelation: 'properties';
-						referencedColumns: ['id'];
-					},
-				];
-			};
-			sub_categories: {
-				Row: {
-					category_id: string;
-					created_at: string | null;
-					id: string;
-					name: string;
-					order_index: number | null;
-					type:
-						| Database['public']['Enums']['property_data_type']
-						| null;
-					updated_at: string | null;
-				};
-				Insert: {
-					category_id: string;
-					created_at?: string | null;
-					id?: string;
-					name: string;
-					order_index?: number | null;
-					type?:
-						| Database['public']['Enums']['property_data_type']
-						| null;
-					updated_at?: string | null;
-				};
-				Update: {
-					category_id?: string;
-					created_at?: string | null;
-					id?: string;
-					name?: string;
-					order_index?: number | null;
-					type?:
-						| Database['public']['Enums']['property_data_type']
-						| null;
-					updated_at?: string | null;
-				};
-				Relationships: [
-					{
-						foreignKeyName: 'sub_categories_category_id_fkey';
-						columns: ['category_id'];
-						isOneToOne: false;
-						referencedRelation: 'categories';
-						referencedColumns: ['id'];
-					},
-				];
-			};
-			subscription_plans: {
-				Row: {
-					id: string;
-					interval: string;
-					name: string;
-					price_cents: number;
-				};
-				Insert: {
-					id: string;
-					interval: string;
-					name: string;
-					price_cents: number;
-				};
-				Update: {
-					id?: string;
-					interval?: string;
-					name?: string;
-					price_cents?: number;
-				};
-				Relationships: [];
-			};
-			subscriptions: {
-				Row: {
-					created_at: string | null;
-					current_period_end: string | null;
-					current_period_start: string | null;
-					id: string;
-					plan_id: string;
-					status: string;
-					updated_at: string | null;
-					user_id: string | null;
-				};
-				Insert: {
-					created_at?: string | null;
-					current_period_end?: string | null;
-					current_period_start?: string | null;
-					id?: string;
-					plan_id: string;
-					status: string;
-					updated_at?: string | null;
-					user_id?: string | null;
-				};
-				Update: {
-					created_at?: string | null;
-					current_period_end?: string | null;
-					current_period_start?: string | null;
-					id?: string;
-					plan_id?: string;
-					status?: string;
-					updated_at?: string | null;
-					user_id?: string | null;
-				};
-				Relationships: [
-					{
-						foreignKeyName: 'subscription_plan_fk';
-						columns: ['plan_id'];
-						isOneToOne: false;
-						referencedRelation: 'subscription_plans';
-						referencedColumns: ['id'];
-					},
-				];
-			};
-			todo_list: {
-				Row: {
-					created_at: string;
-					description: string | null;
-					done: boolean;
-					done_at: string | null;
-					id: number;
-					owner: string;
-					title: string;
-					urgent: boolean;
-				};
-				Insert: {
-					created_at?: string;
-					description?: string | null;
-					done?: boolean;
-					done_at?: string | null;
-					id?: number;
-					owner: string;
-					title: string;
-					urgent?: boolean;
-				};
-				Update: {
-					created_at?: string;
-					description?: string | null;
-					done?: boolean;
-					done_at?: string | null;
-					id?: number;
-					owner?: string;
-					title?: string;
-					urgent?: boolean;
-				};
-				Relationships: [];
-			};
-		};
-		Views: {
-			[_ in never]: never;
-		};
-		Functions: {
-			[_ in never]: never;
-		};
-		Enums: {
-			property_data_type: 'info' | 'location';
-		};
-		CompositeTypes: {
-			[_ in never]: never;
-		};
-	};
-};
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json
+          operationName?: string
+          query?: string
+          variables?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
+  public: {
+    Tables: {
+      ai_usage: {
+        Row: {
+          count: number
+          created_at: string | null
+          date: string
+          id: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          count?: number
+          created_at?: string | null
+          date?: string
+          id?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          count?: number
+          created_at?: string | null
+          date?: string
+          id?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      categories: {
+        Row: {
+          created_at: string | null
+          icon: string | null
+          id: string
+          name: string
+          order_index: number
+          type: Database["public"]["Enums"]["property_data_type"] | null
+        }
+        Insert: {
+          created_at?: string | null
+          icon?: string | null
+          id?: string
+          name: string
+          order_index: number
+          type?: Database["public"]["Enums"]["property_data_type"] | null
+        }
+        Update: {
+          created_at?: string | null
+          icon?: string | null
+          id?: string
+          name?: string
+          order_index?: number
+          type?: Database["public"]["Enums"]["property_data_type"] | null
+        }
+        Relationships: []
+      }
+      feedback_messages: {
+        Row: {
+          category: string
+          context_id: string | null
+          context_type: string | null
+          created_at: string
+          flow_name: string | null
+          id: string
+          locale: string | null
+          message: string
+          metadata: Json
+          page_path: string | null
+          source_area: string
+          status: string
+          user_email: string | null
+          user_id: string
+        }
+        Insert: {
+          category?: string
+          context_id?: string | null
+          context_type?: string | null
+          created_at?: string
+          flow_name?: string | null
+          id?: string
+          locale?: string | null
+          message: string
+          metadata?: Json
+          page_path?: string | null
+          source_area: string
+          status?: string
+          user_email?: string | null
+          user_id: string
+        }
+        Update: {
+          category?: string
+          context_id?: string | null
+          context_type?: string | null
+          created_at?: string
+          flow_name?: string | null
+          id?: string
+          locale?: string | null
+          message?: string
+          metadata?: Json
+          page_path?: string | null
+          source_area?: string
+          status?: string
+          user_email?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      location_groups: {
+        Row: {
+          category_id: string | null
+          created_at: string | null
+          id: string
+          name: string
+          order_index: number
+          property_id: string | null
+          slug: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          category_id?: string | null
+          created_at?: string | null
+          id?: string
+          name: string
+          order_index: number
+          property_id?: string | null
+          slug?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          category_id?: string | null
+          created_at?: string | null
+          id?: string
+          name?: string
+          order_index?: number
+          property_id?: string | null
+          slug?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "location_groups_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "location_groups_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      locations: {
+        Row: {
+          address: string
+          created_at: string | null
+          description: string | null
+          group_id: string | null
+          id: string
+          image_url: string | null
+          latitude: number | null
+          longitude: number | null
+          name: string
+          phone: string | null
+          property_id: string
+          updated_at: string | null
+          website: string | null
+        }
+        Insert: {
+          address: string
+          created_at?: string | null
+          description?: string | null
+          group_id?: string | null
+          id?: string
+          image_url?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          name: string
+          phone?: string | null
+          property_id: string
+          updated_at?: string | null
+          website?: string | null
+        }
+        Update: {
+          address?: string
+          created_at?: string | null
+          description?: string | null
+          group_id?: string | null
+          id?: string
+          image_url?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          name?: string
+          phone?: string | null
+          property_id?: string
+          updated_at?: string | null
+          website?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "locations_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "location_groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "locations_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      properties: {
+        Row: {
+          address: string
+          created_at: string | null
+          description: string | null
+          id: string
+          image_url: string | null
+          latitude: number | null
+          longitude: number | null
+          name: string
+          slug: string | null
+          summary: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          address: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          name: string
+          slug?: string | null
+          summary?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          address?: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          name?: string
+          slug?: string | null
+          summary?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      property_data: {
+        Row: {
+          address: string | null
+          category_id: string | null
+          created_at: string
+          description: string | null
+          featured: boolean
+          id: string
+          image_url: string | null
+          latitude: number | null
+          longitude: number | null
+          must_visit: boolean
+          name: string | null
+          property_id: string | null
+          sub_category_id: string | null
+          type: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          address?: string | null
+          category_id?: string | null
+          created_at?: string
+          description?: string | null
+          featured?: boolean
+          id?: string
+          image_url?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          must_visit?: boolean
+          name?: string | null
+          property_id?: string | null
+          sub_category_id?: string | null
+          type: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          address?: string | null
+          category_id?: string | null
+          created_at?: string
+          description?: string | null
+          featured?: boolean
+          id?: string
+          image_url?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          must_visit?: boolean
+          name?: string | null
+          property_id?: string | null
+          sub_category_id?: string | null
+          type?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_data_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_data_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_data_sub_category_id_fkey"
+            columns: ["sub_category_id"]
+            isOneToOne: false
+            referencedRelation: "sub_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_info: {
+        Row: {
+          category_id: string
+          content: string | null
+          created_at: string
+          id: string
+          property_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category_id: string
+          content?: string | null
+          created_at?: string
+          id?: string
+          property_id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category_id?: string
+          content?: string | null
+          created_at?: string
+          id?: string
+          property_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_info_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_info_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sub_categories: {
+        Row: {
+          category_id: string
+          created_at: string | null
+          id: string
+          name: string
+          order_index: number | null
+          type: Database["public"]["Enums"]["property_data_type"] | null
+          updated_at: string | null
+        }
+        Insert: {
+          category_id: string
+          created_at?: string | null
+          id?: string
+          name: string
+          order_index?: number | null
+          type?: Database["public"]["Enums"]["property_data_type"] | null
+          updated_at?: string | null
+        }
+        Update: {
+          category_id?: string
+          created_at?: string | null
+          id?: string
+          name?: string
+          order_index?: number | null
+          type?: Database["public"]["Enums"]["property_data_type"] | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sub_categories_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      subscription_plans: {
+        Row: {
+          id: string
+          interval: string
+          name: string
+          price_cents: number
+        }
+        Insert: {
+          id: string
+          interval: string
+          name: string
+          price_cents: number
+        }
+        Update: {
+          id?: string
+          interval?: string
+          name?: string
+          price_cents?: number
+        }
+        Relationships: []
+      }
+      subscriptions: {
+        Row: {
+          created_at: string | null
+          current_period_end: string | null
+          current_period_start: string | null
+          id: string
+          plan_id: string
+          status: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          current_period_end?: string | null
+          current_period_start?: string | null
+          id?: string
+          plan_id: string
+          status: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          current_period_end?: string | null
+          current_period_start?: string | null
+          id?: string
+          plan_id?: string
+          status?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscription_plan_fk"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "subscription_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      todo_list: {
+        Row: {
+          created_at: string
+          description: string | null
+          done: boolean
+          done_at: string | null
+          id: number
+          owner: string
+          title: string
+          urgent: boolean
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          done?: boolean
+          done_at?: string | null
+          id?: number
+          owner: string
+          title: string
+          urgent?: boolean
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          done?: boolean
+          done_at?: string | null
+          id?: number
+          owner?: string
+          title?: string
+          urgent?: boolean
+        }
+        Relationships: []
+      }
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      [_ in never]: never
+    }
+    Enums: {
+      property_data_type: "info" | "location"
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
+}
 
-type DatabaseWithoutInternals = Omit<Database, '__InternalSupabase'>;
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
 
-type DefaultSchema = DatabaseWithoutInternals[Extract<
-	keyof Database,
-	'public'
->];
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
 
 export type Tables<
-	DefaultSchemaTableNameOrOptions extends
-		| keyof (DefaultSchema['Tables'] & DefaultSchema['Views'])
-		| { schema: keyof DatabaseWithoutInternals },
-	TableName extends DefaultSchemaTableNameOrOptions extends {
-		schema: keyof DatabaseWithoutInternals;
-	}
-		? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
-				DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])
-		: never = never,
+  DefaultSchemaTableNameOrOptions extends
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
-	schema: keyof DatabaseWithoutInternals;
+  schema: keyof DatabaseWithoutInternals
 }
-	? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
-			DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])[TableName] extends {
-			Row: infer R;
-		}
-		? R
-		: never
-	: DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema['Tables'] &
-				DefaultSchema['Views'])
-		? (DefaultSchema['Tables'] &
-				DefaultSchema['Views'])[DefaultSchemaTableNameOrOptions] extends {
-				Row: infer R;
-			}
-			? R
-			: never
-		: never;
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
+        Row: infer R
+      }
+      ? R
+      : never
+    : never
 
 export type TablesInsert<
-	DefaultSchemaTableNameOrOptions extends
-		| keyof DefaultSchema['Tables']
-		| { schema: keyof DatabaseWithoutInternals },
-	TableName extends DefaultSchemaTableNameOrOptions extends {
-		schema: keyof DatabaseWithoutInternals;
-	}
-		? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
-		: never = never,
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
-	schema: keyof DatabaseWithoutInternals;
+  schema: keyof DatabaseWithoutInternals
 }
-	? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
-			Insert: infer I;
-		}
-		? I
-		: never
-	: DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
-		? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
-				Insert: infer I;
-			}
-			? I
-			: never
-		: never;
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Insert: infer I
+      }
+      ? I
+      : never
+    : never
 
 export type TablesUpdate<
-	DefaultSchemaTableNameOrOptions extends
-		| keyof DefaultSchema['Tables']
-		| { schema: keyof DatabaseWithoutInternals },
-	TableName extends DefaultSchemaTableNameOrOptions extends {
-		schema: keyof DatabaseWithoutInternals;
-	}
-		? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
-		: never = never,
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
-	schema: keyof DatabaseWithoutInternals;
+  schema: keyof DatabaseWithoutInternals
 }
-	? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
-			Update: infer U;
-		}
-		? U
-		: never
-	: DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
-		? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
-				Update: infer U;
-			}
-			? U
-			: never
-		: never;
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Update: infer U
+      }
+      ? U
+      : never
+    : never
 
 export type Enums<
-	DefaultSchemaEnumNameOrOptions extends
-		| keyof DefaultSchema['Enums']
-		| { schema: keyof DatabaseWithoutInternals },
-	EnumName extends DefaultSchemaEnumNameOrOptions extends {
-		schema: keyof DatabaseWithoutInternals;
-	}
-		? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums']
-		: never = never,
+  DefaultSchemaEnumNameOrOptions extends
+    | keyof DefaultSchema["Enums"]
+    | { schema: keyof DatabaseWithoutInternals },
+  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    : never = never,
 > = DefaultSchemaEnumNameOrOptions extends {
-	schema: keyof DatabaseWithoutInternals;
+  schema: keyof DatabaseWithoutInternals
 }
-	? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums'][EnumName]
-	: DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema['Enums']
-		? DefaultSchema['Enums'][DefaultSchemaEnumNameOrOptions]
-		: never;
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
+    : never
 
 export type CompositeTypes<
-	PublicCompositeTypeNameOrOptions extends
-		| keyof DefaultSchema['CompositeTypes']
-		| { schema: keyof DatabaseWithoutInternals },
-	CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
-		schema: keyof DatabaseWithoutInternals;
-	}
-		? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes']
-		: never = never,
+  PublicCompositeTypeNameOrOptions extends
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof DatabaseWithoutInternals },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
 > = PublicCompositeTypeNameOrOptions extends {
-	schema: keyof DatabaseWithoutInternals;
+  schema: keyof DatabaseWithoutInternals
 }
-	? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes'][CompositeTypeName]
-	: PublicCompositeTypeNameOrOptions extends keyof DefaultSchema['CompositeTypes']
-		? DefaultSchema['CompositeTypes'][PublicCompositeTypeNameOrOptions]
-		: never;
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+    : never
 
 export const Constants = {
-	public: {
-		Enums: {
-			property_data_type: ['info', 'location'],
-		},
-	},
-} as const;
+  graphql_public: {
+    Enums: {},
+  },
+  public: {
+    Enums: {
+      property_data_type: ["info", "location"],
+    },
+  },
+} as const
+

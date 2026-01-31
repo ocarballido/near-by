@@ -11,7 +11,7 @@ export default function Subscription() {
 				<div className="w-full max-w-[600px] text-center mb-4">
 					<h1 className="font-heading font-bold text-xl mb-2 text-primary-500">
 						{t(
-							'Aunque tienes una suscripción FREE, estás disfrutando de los beneficios de la suscripción PREMIUM'
+							'Aunque tienes una suscripción FREE, estás disfrutando de los beneficios de la suscripción PREMIUM',
 						)}
 					</h1>
 					<p className="font-medium">{t('Acceso completo')}</p>
@@ -23,17 +23,17 @@ export default function Subscription() {
 						className="max-w-[360px] w-full"
 						price="0€"
 					/>
-					<SubscriptionCard
+					{/* <SubscriptionCard
 						active={false}
 						type="PREMIUM"
 						className="max-w-[360px] w-full"
 						price={`0.00€/${t('Mes')}`}
 						// price={`9.99€/${t('Mes')}`}
-					/>
+					/> */}
 				</div>
 				<p className="text-xs mt-4 max-w-[400px] text-center">
 					{t(
-						'Nuestra lista de funciones está en constante evolución'
+						'Nuestra lista de funciones está en constante evolución',
 					)}
 				</p>
 			</div>
