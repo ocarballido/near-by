@@ -22,6 +22,9 @@ import IconModeHeat from '@/components/atoms/icon/mode-heat';
 import IconFavorite from '@/components/atoms/icon/favorite';
 import ButtonLink from '@/components/molecules/button-link';
 import IconHelp from '@/components/atoms/icon/help';
+import FancyIcon from '@/components/atoms/icon/fancy-icon';
+import Typography from '@/components/atoms/typography';
+import IconApartment from '@/components/atoms/icon/apartment';
 
 import PlaceAutocompleteField from '@/components/molecules/place-autocomplete';
 import { SelectedPlace } from '@/components/molecules/place-autocomplete';
@@ -207,7 +210,7 @@ const AddPlaceForm = ({
 	};
 
 	return (
-		<>
+		<div className="bg-white p-2 rounded-xl max-w-[400px] w-full shadow-xs">
 			{alert && (
 				<Alert
 					hideTime={3000}
@@ -219,14 +222,20 @@ const AddPlaceForm = ({
 				/>
 			)}
 
+			<div className="rounded-lg p-3 pt-0 flex flex-col gap-2 items-center">
+				<FancyIcon
+					icon={<IconApartment color="white" />}
+					color="gradient"
+				/>
+				<Typography component="h2" size="lg">
+					{t('Nuevo Sitio')}
+				</Typography>
+			</div>
+
 			<form
 				onSubmit={handleSubmit(onSubmit)}
-				className="flex flex-col gap-4 w-full max-w-[360px]"
+				className="flex flex-col gap-4 p-2 w-full"
 			>
-				<h1 className="font-heading font-bold text-lg">
-					{t('Nuevo Sitio')}
-				</h1>
-
 				<TextField
 					label={t('Nombre del sitio *')}
 					placeholder={t('Sitio nombre ejemplo')}
@@ -278,7 +287,7 @@ const AddPlaceForm = ({
 				/>
 
 				<fieldset className="flex flex-col gap-2">
-					<p className="font-bold text-sm">{t('markLocation')}</p>
+					<p className="font-medium text-sm">{t('markLocation')}</p>
 					<div className="flex items-center gap-2">
 						<div className="flex gap-0.5 items-center w-full">
 							<div className="shrink-0">
@@ -344,29 +353,29 @@ const AddPlaceForm = ({
 					})}
 				/>
 
-				<div className="flex flex-col sm:flex-row gap-2">
-					<Button
-						label={t('Cancelar')}
-						className="w-full"
-						color="secondary"
-						onClick={() => router.back()}
-					/>
+				<div className="flex flex-col gap-2">
 					<Button
 						type="submit"
 						label={t('Añadir')}
 						className="w-full"
 						disabled={isSubmitting}
 					/>
+					<Button
+						label={t('Cancelar')}
+						className="w-full"
+						color="secondary"
+						onClick={() => router.back()}
+					/>
+					<ButtonLink
+						label={t('feedback.cta')}
+						href={`/app/feedback/create_location/property/${propertyId}?returnTo=/app/properties/${propertyId}/${categoryId}/${subCategoryId}`}
+						color="white"
+						className="w-full"
+						iconLeft={<IconHelp />}
+					/>
 				</div>
-				<ButtonLink
-					label={t('feedback.cta')}
-					href={`/app/feedback/create_location/property/${propertyId}?returnTo=/app/properties/${propertyId}/${categoryId}/${subCategoryId}`}
-					color="white"
-					className="w-full"
-					iconLeft={<IconHelp />}
-				/>
 			</form>
-		</>
+		</div>
 	);
 };
 

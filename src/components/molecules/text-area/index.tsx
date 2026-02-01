@@ -29,7 +29,7 @@ const TextArea = ({
 			[styles.icon]: true,
 			[styles['icon--error']]: error,
 		},
-		className
+		className,
 	);
 
 	const labelStyles = clsx({ 'text-error-500': error });
@@ -41,7 +41,7 @@ const TextArea = ({
 		{ 'pr-9': iconRight },
 		{ 'border-transparent': !error },
 		{ 'border-error-500': error },
-		{ 'opacity-30': disabled }
+		{ 'opacity-30': disabled },
 	);
 
 	return (
@@ -49,7 +49,7 @@ const TextArea = ({
 			{label && (
 				<label
 					htmlFor={rest.id}
-					className={`font-bold text-sm ${labelStyles}`}
+					className={`font-medium text-sm ${labelStyles}`}
 				>
 					{label}
 				</label>

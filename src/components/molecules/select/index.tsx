@@ -43,7 +43,7 @@ export function Select<V extends string = string>({
 		<div className={clsx('flex flex-col gap-1', className)}>
 			{label && (
 				<label
-					className={`font-bold text-sm ${labelStyles}`}
+					className={`font-medium text-sm ${labelStyles}`}
 					htmlFor={name}
 				>
 					{label}

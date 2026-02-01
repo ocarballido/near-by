@@ -7,6 +7,9 @@ import { useLoading } from '@/lib/context/LoadingContext';
 import Alert from '@/components/molecules/alert';
 import { Select, SelectOption } from '@/components/molecules/select';
 import Button from '@/components/molecules/button';
+import Typography from '@/components/atoms/typography';
+import FancyIcon from '@/components/atoms/icon/fancy-icon';
+import IconMap from '@/components/atoms/icon/map';
 import { fetchNearbyPOIs, POI } from '@/lib/fetcher-nearby';
 
 type FormValues = {
@@ -112,16 +115,21 @@ const ItineraryForm = ({
 	};
 
 	return (
-		<div className="w-full max-w-[500px] flex flex-col gap-4 ml-auto mr-auto">
-			<h1 className="font-bold font-heading text-3xl">
-				{t('Crea tu día ideal')}
-			</h1>
+		<div className="bg-white p-2 rounded-xl max-w-[500px] w-full shadow-xs flex flex-col gap-4 mx-auto">
+			<div className="rounded-lg p-2 pt-0 flex flex-col gap-2 items-center">
+				<FancyIcon icon={<IconMap color="white" />} color="gradient" />
+				<Typography component="h2" size="lg">
+					{t('Crea tu día ideal')}
+				</Typography>
 
-			<h2 className="bg-info-100 rounded-lg p-4">
-				{t(
-					'El contenido que se generará a continuación ha sido creado automáticamente mediante inteligencia artificial'
-				)}
-			</h2>
+				<div className="p-4 bg-sky-100 rounded-md">
+					<Typography component="p" size="sm" color="text-sky-900">
+						{t(
+							'El contenido que se generará a continuación ha sido creado automáticamente mediante inteligencia artificial',
+						)}
+					</Typography>
+				</div>
+			</div>
 
 			{alert && (
 				<Alert
@@ -135,7 +143,7 @@ const ItineraryForm = ({
 
 			<form
 				onSubmit={handleSubmit(onSubmit)}
-				className="flex flex-col gap-6"
+				className="flex flex-col gap-6 p-2"
 			>
 				<Controller
 					name="preferences"
@@ -166,7 +174,7 @@ const ItineraryForm = ({
 					control={control}
 					rules={{
 						required: t(
-							'Selecciona cuánto tiempo tienes disponible'
+							'Selecciona cuánto tiempo tienes disponible',
 						),
 					}}
 					render={({ field }) => (

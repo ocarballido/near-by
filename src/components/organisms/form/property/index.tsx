@@ -22,6 +22,9 @@ import Button from '@/components/molecules/button';
 import ButtonLink from '@/components/molecules/button-link';
 import Alert from '@/components/molecules/alert';
 import BadgeCheck from '@/components/atoms/BadgeCheck';
+import Typography from '@/components/atoms/typography';
+import IconAdd from '@/components/atoms/icon/add';
+import FancyIcon from '@/components/atoms/icon/fancy-icon';
 
 // ✅ New Places widget field
 import PlaceAutocompleteField from '@/components/molecules/place-autocomplete';
@@ -262,7 +265,7 @@ const AddPropertyForm = () => {
 	}, [distinctId, getValues, coords]);
 
 	return (
-		<>
+		<div className="bg-white p-2 rounded-xl w-full max-w-[400px] shadow-xs">
 			{alert && (
 				<Alert
 					hideTime={3000}
@@ -274,7 +277,14 @@ const AddPropertyForm = () => {
 				/>
 			)}
 
-			<fieldset className="w-full max-w-[360px]">
+			<div className="rounded-lg p-3 pt-0 flex flex-col gap-2 items-center">
+				<FancyIcon icon={<IconAdd color="white" />} color="gradient" />
+				<Typography component="h2" size="lg">
+					{t('Nuevo Alojamiento')}
+				</Typography>
+			</div>
+
+			<fieldset className="w-full p-2">
 				<label className="font-bold text-sm mb-2 block">
 					{t('Contenido generado automáticamente')}
 				</label>
@@ -288,21 +298,11 @@ const AddPropertyForm = () => {
 						/>
 					))}
 				</div>
-
-				<div className="p-4 bg-sky-100 rounded-md">
-					<p className="text-xs font-normal text-sky-900">
-						{t.rich('auto-content-helper-text', {
-							bold: (chunks) => (
-								<span className="font-bold">{chunks}</span>
-							),
-						})}
-					</p>
-				</div>
 			</fieldset>
 
 			<form
 				onSubmit={handleSubmit(onSubmit)}
-				className="flex flex-col gap-4 w-full max-w-[360px]"
+				className="flex flex-col gap-4 w-full p-2"
 			>
 				<TextField
 					label={t('Nombre de la propiedad *')}
@@ -357,7 +357,13 @@ const AddPropertyForm = () => {
 					})}
 				/>
 
-				<div className="flex flex-col sm:flex-row gap-2">
+				<div className="flex flex-col gap-2">
+					<Button
+						type="submit"
+						label={t('Añadir propiedad')}
+						className="w-full"
+						disabled={isSubmitting}
+					/>
 					<ButtonLink
 						label={t('Cancelar')}
 						color="secondary"
@@ -365,25 +371,16 @@ const AddPropertyForm = () => {
 						className="w-full"
 					/>
 
-					<Button
-						type="submit"
-						label={t('Añadir propiedad')}
+					<ButtonLink
+						label={t('feedback.cta')}
+						href="/app/feedback/create_property?returnTo=/app/properties/new"
+						color="white"
 						className="w-full"
-						disabled={isSubmitting}
+						iconLeft={<IconHelp />}
 					/>
 				</div>
 			</form>
-
-			<div className="w-full max-w-[360px] mb-4">
-				<ButtonLink
-					label={t('feedback.cta')}
-					href="/app/feedback/create_property?returnTo=/app/properties/new"
-					color="white"
-					className="w-full"
-					iconLeft={<IconHelp />}
-				/>
-			</div>
-		</>
+		</div>
 	);
 };
 

@@ -183,7 +183,7 @@ export default function PlaceAutocompleteField({
 			) : (
 				<div className="flex flex-col gap-2">
 					<label
-						className={`font-bold text-sm ${error ? 'text-error-500' : ''}`}
+						className={`font-medium text-sm ${error ? 'text-error-500' : ''}`}
 					>
 						{label}
 					</label>
