@@ -2,12 +2,7 @@ import { redirect } from 'next/navigation';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 import { createSSRClient } from '@/lib/supabase/server';
 
-import Image from 'next/image';
-
-import addProperty from '../../../../../public/static/img/add-property.webp';
-
 import PropertiesContent from '@/components/templates/properties-content';
-import PropertiesContentEmpty from '@/components/templates/properties-content-empty';
 import AppContentTemplate from '@/components/templates/app-content';
 
 type PropertyWithData = {
@@ -60,8 +55,8 @@ export default async function Properties() {
 			id: p.id,
 			name: p.name,
 			slug: p.slug,
-			address: p.address ?? '', // ✅ aquí
-			image_url: p.image_url ?? undefined, // ✅ opcional para que case con el tipo del cliente
+			address: p.address ?? '',
+			image_url: p.image_url ?? undefined,
 			hasLocation: types.includes('location'),
 			hasInfo: types.includes('info'),
 		};
@@ -69,23 +64,9 @@ export default async function Properties() {
 
 	return (
 		<AppContentTemplate>
-			{properties.length === 0 ? (
-				<div className="p-4 font-roboto flex flex-col grow gap-4 bg-white rounded-lg overflow-hidden">
-					<div className="block ml-auto mr-auto">
-						<Image
-							alt="Add location"
-							src={addProperty}
-							height={184}
-							width={248}
-						/>
-					</div>
-					<PropertiesContentEmpty url="/app/properties/new" />
-				</div>
-			) : (
-				<div className="p-4 font-roboto bg-white rounded-lg overflow-hidden grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 auto-rows-min h-full">
-					<PropertiesContent properties={properties} />
-				</div>
-			)}
+			<div className="p-4 font-roboto bg-white rounded-lg overflow-hidden grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 auto-rows-min h-full">
+				<PropertiesContent properties={properties} />
+			</div>
 		</AppContentTemplate>
 	);
 }

@@ -4,6 +4,7 @@
 
 import { useTranslations, useLocale } from 'next-intl';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { usePaywall } from '@/lib/context/PaywallContext';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react';
 import { useLoading } from '@/lib/context/LoadingContext';
@@ -46,6 +47,8 @@ const AddPropertyForm = () => {
 	const locale = useLocale();
 
 	const router = useRouter();
+
+	const { incrementPropertyCount } = usePaywall();
 
 	const { user } = useGlobal();
 	const distinctId = user?.id;
@@ -219,6 +222,8 @@ const AddPropertyForm = () => {
 		didCompleteRef.current = true;
 
 		closeLoading();
+
+		incrementPropertyCount();
 
 		setAlert({
 			type: 'success',

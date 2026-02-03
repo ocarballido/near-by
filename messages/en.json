@@ -657,5 +657,27 @@
 			"emailInvalid": "Invalid email"
 		},
 		"cta": "Question or feedback?"
+	},
+	"paywall": {
+		"beta": {
+			"title": "You’re using BNB Explorer early access",
+			"description": "In the future, the free plan will include 1 property.",
+			"message": "Managing multiple properties will be available through specific plans. For now, you can keep creating properties without limits.",
+			"primaryButton": "Continue creating properties"
+		},
+		"soft": {
+			"title": "BNB Explorer is evolving",
+			"description": "We are preparing plans for hosts managing multiple properties.",
+			"message": "Soon, the free plan will include 1 property. If you manage more accommodations, you’ll be able to choose a plan that fits your needs.",
+			"primaryButton": "Continue using the beta",
+			"secondaryButton": "Notify me when plans are available"
+		},
+		"hard": {
+			"title": "You’ve reached your plan limit",
+			"description": "Your current plan includes up to {limit} properties.",
+			"message": "To add more accommodations, you’ll need to upgrade to a higher plan.",
+			"primaryButton": "Choose a plan",
+			"secondaryButton": "Cancel"
+		}
 	}
 }
