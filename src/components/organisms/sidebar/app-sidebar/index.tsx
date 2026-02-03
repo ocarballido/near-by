@@ -11,6 +11,7 @@ import IconLanguage from '@/components/atoms/icon/language';
 import SidebarMenuItem from '@/components/molecules/sidebar-menu-item';
 import ButtonLink from '@/components/molecules/button-link';
 import IconHelp from '@/components/atoms/icon/help';
+import CreatePropertyEntry from '@/components/molecules/property-entry';
 
 const ICON_COMPONENTS = {
 	IconHome,
@@ -31,15 +32,41 @@ const AppSidebar = () => {
 			{SIDEBAR_MENU.map((item) => {
 				const iconName = item.icon as IconName;
 				const IconComponent = ICON_COMPONENTS[iconName];
+				const url = item.url;
 
-				return (
-					<SidebarMenuItem
-						key={item.label}
-						icon={<IconComponent />}
-						href={item.url}
-						label={t(item.label)}
-					/>
-				);
+				if (url === '/app/properties/new') {
+					return (
+						<CreatePropertyEntry
+							href="/app/properties/new"
+							key={item.label}
+							link={
+								<SidebarMenuItem
+									key={item.label}
+									icon={<IconComponent />}
+									href={item.url}
+									label={t(item.label)}
+								/>
+							}
+							action={
+								<div
+									className={`rounded-md w-full transition-all flex items-center gap-2 hover:bg-secondary-200 hover:cursor-pointer disabled:pointer-events-none font-medium text-sm text-md py-4 px-3.5`}
+								>
+									<IconAdd />
+									{t(item.label)}
+								</div>
+							}
+						/>
+					);
+				} else {
+					return (
+						<SidebarMenuItem
+							key={item.label}
+							icon={<IconComponent />}
+							href={item.url}
+							label={t(item.label)}
+						/>
+					);
+				}
 			})}
 			<ButtonLink
 				label={t('feedback.cta')}
