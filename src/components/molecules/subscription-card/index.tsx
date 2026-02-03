@@ -37,19 +37,19 @@ const SubscriptionCard = ({
 			'bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] text-white':
 				type === 'PREMIUM',
 		},
-		{ 'bg-gray-900 text-white': type === 'PLATINUM' }
+		{ 'bg-gray-900 text-white': type === 'PLATINUM' },
 	);
 
 	const cardHeadingStyles = clsx(
 		{ 'bg-gray-200 text-primary-500': type === 'FREE' && active },
 		{ 'bg-white/20 text-white': type === 'PREMIUM' && active },
-		{ 'bg-gray-800': type === 'PLATINUM' && active }
+		{ 'bg-gray-800': type === 'PLATINUM' && active },
 	);
 
 	return (
 		<div className={`${className}`}>
 			<div
-				className={`flex flex-col p-2 rounded-xl w-full ${cardStyles}`}
+				className={`flex flex-col p-2 rounded-xl w-full shadow-xs ${cardStyles}`}
 			>
 				<div
 					className={`flex p-4 rounded-lg items-center ${cardHeadingStyles}`}

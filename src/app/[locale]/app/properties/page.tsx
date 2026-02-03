@@ -64,7 +64,7 @@ export default async function Properties() {
 
 	return (
 		<AppContentTemplate>
-			<div className="p-4 font-roboto bg-white rounded-lg overflow-hidden grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 auto-rows-min h-full">
+			<div className="p-4 font-roboto rounded-lg overflow-hidden grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 auto-rows-min h-full">
 				<PropertiesContent properties={properties} />
 			</div>
 		</AppContentTemplate>

@@ -10,7 +10,7 @@ export default function DashboardContent() {
 
 	return (
 		<AppContentTemplate>
-			<div className="p-4 font-roboto flex flex-col grow justify-center items-center gap-4 bg-white rounded-lg overflow-hidden">
+			<div className="p-4 font-roboto flex flex-col grow justify-center items-center gap-4 rounded-lg overflow-hidden">
 				<PropertyNumber />
 
 				<div className="flex flex-wrap max-w-[1000px] p-4 rounded-2xl border-2 border-primary-100 mt-8">

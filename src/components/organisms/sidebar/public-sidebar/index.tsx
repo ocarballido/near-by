@@ -66,7 +66,7 @@ const PublicSidebar = ({
 
 	const sidebarContentStyles = clsx(
 		{ 'translate-x-0': isOpen },
-		{ '-translate-x-full': !isOpen }
+		{ '-translate-x-full': !isOpen },
 	);
 
 	const { sidebarData, setActiveSubCategoryType } = usePublicSidebarData();
@@ -101,7 +101,7 @@ const PublicSidebar = ({
 						onClick={() => {
 							closeSidebar();
 							router.push(
-								`/public/${propertyId}/welcome/highlights`
+								`/public/${propertyId}/welcome/highlights`,
 							);
 						}}
 					/>
@@ -121,7 +121,7 @@ const PublicSidebar = ({
 									setActiveSubCategoryType(category.type);
 									closeSidebar();
 									router.push(
-										`/public/${propertyId}/${category.id}/${category.sub_categories[0].id}`
+										`/public/${propertyId}/${category.id}/${category.sub_categories[0].id}`,
 									);
 								}}
 								icon={<IconComponent />}
@@ -136,11 +136,11 @@ const PublicSidebar = ({
 											}
 											onClick={() => {
 												setActiveSubCategoryType(
-													subcategory.type
+													subcategory.type,
 												);
 												closeSidebar();
 												router.push(
-													`/public/${propertyId}/${category.id}/${subcategory.id}`
+													`/public/${propertyId}/${category.id}/${subcategory.id}`,
 												);
 											}}
 										/>
@@ -156,7 +156,7 @@ const PublicSidebar = ({
 					onClick={() => {
 						closeSidebar();
 						router.push(
-							`/public/${propertyId}/custom-plans/create-plan`
+							`/public/${propertyId}/custom-plans/create-plan`,
 						);
 					}}
 					icon={<IconMap />}
@@ -167,7 +167,7 @@ const PublicSidebar = ({
 						onClick={() => {
 							closeSidebar();
 							router.push(
-								`/public/${propertyId}/custom-plans/create-plan`
+								`/public/${propertyId}/custom-plans/create-plan`,
 							);
 						}}
 					/>
