@@ -7,6 +7,7 @@ import IconDirections from '@/components/atoms/icon/directions';
 import ButtonLink from '../../button-link';
 import IconFavorite from '@/components/atoms/icon/favorite';
 import IconModeHeat from '@/components/atoms/icon/mode-heat';
+import Typography from '@/components/atoms/typography';
 
 type PlacePublicProps = {
 	address: string;
@@ -29,7 +30,7 @@ const PlacePublic = ({
 	featured,
 	mustSee,
 	name,
-	image = '/static/img/default-location-2x.webp',
+	image = '/static/img/place-placeholder/place_placeholder_01.webp',
 }: PlacePublicProps) => {
 	const t = useTranslations();
 
@@ -40,66 +41,46 @@ const PlacePublic = ({
 
 	return (
 		<div
-			className={`w-full flex flex-col gap-4 rounded-xl p-2 relative transition-all bg-white shadow-xs ${className}`}
+			className={`flex gap-0 flex-col p-2 bg-white rounded-xl items-center justify-center text-center relative shadow-xs ${className}`}
 		>
-			<div className={`w-full flex gap-4 relative`}>
-				<div className="w-18 h-18 rounded-md overflow-hidden relative shrink-0">
-					<Image
-						alt={name ?? 'Place image'}
-						className="object-cover z-0 "
-						src={
-							image === null
-								? '/static/img/default-location-2x.webp'
-								: image
-						}
-						placeholder="blur"
-						blurDataURL={grayDataUrl}
-						fill
-					/>
-				</div>
-				<div className="flex flex-col gap-0 mr-auto">
-					<h5 className="font-heading font-bold text-md">{name}</h5>
-					<p className="font-body font-medium text-md mt-0.5 text-secondary-600">
-						{address}
-					</p>
-					{description && (
-						<p className="text-sm opacity-75">{description}</p>
-					)}
-				</div>
-				<div className="gap-1 lg:flex hidden items-center">
-					{mustSee && (
-						<div className="p-1.5 rounded-full w-fit h-fit">
-							<IconModeHeat color="error" />
-						</div>
-					)}
-					{featured && (
-						<div className="p-1.5 rounded-full w-fit h-fit">
-							<IconFavorite color="primary" />
-						</div>
-					)}
-				</div>
-				<ButtonLink
-					className="hidden gap-1 lg:flex shrink-0 h-fit self-center"
-					color="primary"
-					iconLeft={<IconDirections />}
-					label={t('Como llegar')}
-					href={`${GOOGLE_MAPS_DIRECTION_URL}${latitude},${longitude}`}
-					target="_blank"
+			<div className="relative grow min-h-[250px] h-full w-full rounded-md overflow-hidden bg-gradient-to-tr from-[#ffa263] to-[#6cffc9]">
+				{(mustSee || featured) && (
+					<div className="flex p-1 items-center absolute z-1 rounded-full right-2 top-2 gap-1">
+						{mustSee && (
+							<div className="p-1.5 rounded-full w-fit h-fit bg-white shadow-xs">
+								<IconModeHeat color="error" size={20} />
+							</div>
+						)}
+						{featured && (
+							<div className="p-1.5 rounded-full w-fit h-fit bg-white shadow-xs">
+								<IconFavorite color="primary" size={20} />
+							</div>
+						)}
+					</div>
+				)}
+				<Image
+					alt="Mountains"
+					src={
+						image === null
+							? '/static/img/place-placeholder/place_placeholder_01.webp'
+							: image
+					}
+					fill={true}
+					className="object-cover w-full h-auto"
+					blurDataURL={grayDataUrl}
 				/>
 			</div>
-			<div className="flex gap-2 w-full lg:hidden">
-				{mustSee && (
-					<div className="p-1.5 rounded-full w-fit h-fit">
-						<IconModeHeat color="error" />
-					</div>
+			<div className="p-2 w-full text-left flex flex-col gap-1">
+				<Typography component="h5">{name}</Typography>
+				<Typography>{address}</Typography>
+
+				{description && (
+					<p className="text-sm opacity-75">{description}</p>
 				)}
-				{featured && (
-					<div className="p-1.5 rounded-full w-fit h-fit">
-						<IconFavorite color="primary" />
-					</div>
-				)}
+			</div>
+			<div className="p-2 w-full flex gap-2 items-center">
 				<ButtonLink
-					className="w-fit ml-auto"
+					className="w-full"
 					color="primary"
 					iconLeft={<IconDirections />}
 					label={t('Como llegar')}

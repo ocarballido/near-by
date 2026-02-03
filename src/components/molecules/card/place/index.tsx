@@ -35,7 +35,7 @@ const Place = ({
 	name,
 	featured,
 	mustVisit,
-	image = '/static/img/default-location-2x.webp',
+	image = '/static/img/place-placeholder/place_placeholder_01.webp',
 }: PlaceProps) => {
 	const t = useTranslations();
 
@@ -49,7 +49,7 @@ const Place = ({
 			className={`w-full flex flex-col gap-4 rounded-xl p-2 relative transition-all bg-white shadow-xs ${className}`}
 		>
 			<div className={`w-full flex gap-4 relative`}>
-				<div className="w-18 h-18 rounded-md overflow-hidden relative shrink-0">
+				<div className="w-18 h-18 rounded-md overflow-hidden relative shrink-0 bg-gradient-to-tr from-[#ffa263] to-[#6cffc9]">
 					<Image
 						alt={name}
 						className="object-cover z-0 "
@@ -57,7 +57,7 @@ const Place = ({
 						blurDataURL={grayDataUrl}
 						src={
 							image === null
-								? '/static/img/default-location-2x.webp'
+								? '/static/img/place-placeholder/place_placeholder_01.webp'
 								: image
 						}
 						fill
