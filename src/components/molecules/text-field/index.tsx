@@ -48,11 +48,11 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
 			type = 'text',
 			...rest
 		},
-		forwardedRef
+		forwardedRef,
 	) => {
 		const textFieldStyles = clsx(
 			{ [styles.icon]: true, [styles['icon--error']]: error },
-			className
+			className,
 		);
 		const labelStyles = clsx({ 'text-error-500': error });
 		const helperTextStyles = clsx({ 'text-error-500': error });
@@ -61,7 +61,7 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
 			{ 'pr-9': iconRight },
 			{ 'border-transparent': !error },
 			{ 'border-error-500': error },
-			{ 'opacity-30': disabled }
+			{ 'opacity-30': disabled },
 		);
 
 		// Mezcla el ref de RHF (forwardedRef) con nuestro inputRef
@@ -72,7 +72,7 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
 				{label && (
 					<label
 						htmlFor={id}
-						className={`font-bold text-sm ${labelStyles}`}
+						className={`font-medium text-sm ${labelStyles}`}
 					>
 						{label}
 					</label>
@@ -103,7 +103,7 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
 				)}
 			</div>
 		);
-	}
+	},
 );
 
 TextField.displayName = 'TextField';

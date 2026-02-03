@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useLoading } from '@/lib/context/LoadingContext';
+import { usePaywall } from '@/lib/context/PaywallContext';
 import { useTranslations } from 'use-intl';
 
 import { deleteProperty } from '@/app/actions/properties/delete-property';
@@ -36,6 +37,8 @@ type AlertState = {
 const PropertiesContent = ({ properties }: PropertiesContentProps) => {
 	const t = useTranslations();
 
+	const { decrementPropertyCount } = usePaywall();
+
 	const [isOpen, setIsOpen] = useState(false);
 	const [alert, setAlert] = useState<AlertState | null>(null);
 	const [selectedProperty, setSelectedProperty] = useState<string>('');
@@ -52,6 +55,8 @@ const PropertiesContent = ({ properties }: PropertiesContentProps) => {
 
 		try {
 			await deleteProperty(propertyId);
+
+			decrementPropertyCount();
 
 			setAlert({
 				type: 'success',
@@ -83,7 +88,7 @@ const PropertiesContent = ({ properties }: PropertiesContentProps) => {
 			<Modal
 				title={t('Eliminar propiedad')}
 				description={t(
-					'Estás a punto de eliminar una de tus propiedades'
+					'Estás a punto de eliminar una de tus propiedades',
 				)}
 				message={t('¿Estás seguro que deseas continuar?')}
 				open={isOpen}

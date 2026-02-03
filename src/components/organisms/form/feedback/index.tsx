@@ -8,6 +8,9 @@ import { useMemo, useState, useRef, useEffect } from 'react';
 import Alert from '@/components/molecules/alert';
 import Button from '@/components/molecules/button';
 import TextField from '@/components/molecules/text-field';
+import Typography from '@/components/atoms/typography';
+import IconHelp from '@/components/atoms/icon/help';
+import FancyIcon from '@/components/atoms/icon/fancy-icon';
 import { Select, SelectOption } from '@/components/molecules/select';
 
 import { useLoading } from '@/lib/context/LoadingContext';
@@ -222,14 +225,13 @@ export default function FeedbackForm({
 	};
 
 	return (
-		<div className="w-full max-w-[400px] flex flex-col gap-4">
-			<h1 className="font-heading w-full">
-				<span className="text-lg font-bold">{t('feedback.title')}</span>
-			</h1>
-
-			<p className="w-full font-medium text-gray-500 -mt-2">
-				{t('feedback.subtitle')}
-			</p>
+		<div className="bg-white p-2 rounded-xl max-w-[400px] w-full shadow-xs flex flex-col gap-4">
+			<div className="rounded-lg p-3 pt-0 flex flex-col gap-2 items-center">
+				<FancyIcon icon={<IconHelp color="white" />} color="gradient" />
+				<Typography component="h2" size="lg">
+					{t('feedback.title')}
+				</Typography>
+			</div>
 
 			{alert && (
 				<Alert
@@ -248,8 +250,9 @@ export default function FeedbackForm({
 
 			<form
 				onSubmit={handleSubmit(onSubmit)}
-				className="flex flex-col gap-4"
+				className="flex flex-col gap-4 p-2"
 			>
+				<Typography component="p">{t('feedback.subtitle')}</Typography>
 				<Controller
 					name="category"
 					control={control}
@@ -316,7 +319,13 @@ export default function FeedbackForm({
 					helperText={errors.user_email?.message}
 				/>
 
-				<div className="flex flex-col sm:flex-row gap-2 mt-2">
+				<div className="flex flex-col gap-2 mt-2">
+					<Button
+						type="submit"
+						label={t('feedback.actions.submit')}
+						disabled={isSubmitting || didSucceed}
+						className="w-full"
+					/>
 					<Button
 						type="button"
 						label={t('feedback.actions.cancel')}
@@ -324,12 +333,6 @@ export default function FeedbackForm({
 						onClick={onCancel}
 						className="w-full"
 						disabled={didSucceed}
-					/>
-					<Button
-						type="submit"
-						label={t('feedback.actions.submit')}
-						disabled={isSubmitting || didSucceed}
-						className="w-full"
 					/>
 				</div>
 			</form>

@@ -27,7 +27,6 @@ export function PropertyDataPublicBySubCategory({
 	lat: number;
 	lng: number;
 }) {
-	console.log(propertyData);
 	return (
 		<>
 			{type === 'info' ? (

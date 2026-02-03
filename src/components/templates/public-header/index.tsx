@@ -5,6 +5,7 @@ import { GOOGLE_MAPS_DIRECTION_URL } from '@/config/config-constants';
 import IconDirections from '@/components/atoms/icon/directions';
 import IconLocationOn from '@/components/atoms/icon/location-on';
 import ButtonLink from '@/components/molecules/button-link';
+import Typography from '@/components/atoms/typography';
 
 type PublicHeaderProps = {
 	address: string;
@@ -25,37 +26,21 @@ const PublicHeader = ({
 }: PublicHeaderProps) => {
 	const graySvg = `<svg xmlns="http://www.w3.org/2000/svg" width="4" height="4"><rect width="4" height="4" fill="#a3e7d0" /></svg>`;
 	const grayDataUrl = `data:image/svg+xml;base64,${Buffer.from(
-		graySvg
+		graySvg,
 	).toString('base64')}`;
 
 	return (
 		<>
 			<div
-				className={`flex flex-col gap-6 rounded-xl overflow-hidden p-4 relative transition-all [&>.content]:p-3 [&>.content]:rounded-lg ${className}`}
+				className={`flex flex-col gap-6 rounded-xl overflow-hidden p-2 relative transition-all bg-gradient-to-tr from-[#ffa263] to-[#6cffc9] ${className} absolute top-0`}
 			>
-				<h2 className="z-6 text-white font-bold font-heading text-2xl">
-					{name}
-				</h2>
-				<div className="content transition-all flex justify-end gap-2 flex-col relative bg-white z-6 min-w-[300px] w-fit">
-					<div className="w-20 h-20 relative rounded-md overflow-hidden mb-2">
-						<Image
-							className="object-cover z-0"
-							src={
-								image === null
-									? '/static/img/default-property-2x.webp'
-									: image
-							}
-							fill={true}
-							placeholder="blur"
-							blurDataURL={grayDataUrl}
-							alt={name}
-						/>
-					</div>
-					<div className="flex gap-2 mb-2">
-						<IconLocationOn />
-						<p className="font-body font-medium text-md mt-0.5">
-							{address}
-						</p>
+				<div className="content transition-all flex justify-end gap-2 flex-col relative bg-white/70 z-6 min-w-[300px] w-fit p-4 backdrop-blur-xl rounded-lg">
+					<Typography component="h1" size="lg">
+						{name}
+					</Typography>
+					<div className="flex gap-1 mb-2 items-center">
+						<IconLocationOn size={20} />
+						<Typography>{address}</Typography>
 					</div>
 					<ButtonLink
 						label="Como llegar"
@@ -65,9 +50,8 @@ const PublicHeader = ({
 						target="_blank"
 					/>
 				</div>
-				<div className="absolute left-0 top-0 bottom-0 right-0 bg-black/40 z-5"></div>
 				<Image
-					className="object-cover z-0 blur-lg"
+					className="object-cover z-0"
 					src={
 						image === null
 							? '/static/img/default-property-2x.webp'

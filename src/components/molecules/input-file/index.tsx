@@ -35,12 +35,12 @@ const InputFile = forwardRef<HTMLInputElement, InputFileProps>(
 			name,
 			...rest
 		},
-		forwardedRef
+		forwardedRef,
 	) => {
 		const t = useTranslations();
 		const internalRef = useRef<HTMLInputElement>(null);
 		const [selectedImage, setSelectedImage] = React.useState<string | null>(
-			null
+			null,
 		);
 
 		useImperativeHandle(forwardedRef, () => internalRef.current!);
@@ -63,7 +63,7 @@ const InputFile = forwardRef<HTMLInputElement, InputFileProps>(
 		const inputStyles = clsx(
 			{ 'border-transparent': !error },
 			{ 'border-error-500': error },
-			{ 'opacity-30': disabled }
+			{ 'opacity-30': disabled },
 		);
 
 		return (
@@ -71,7 +71,7 @@ const InputFile = forwardRef<HTMLInputElement, InputFileProps>(
 				{label && (
 					<label
 						htmlFor={id}
-						className={`font-bold text-sm ${labelStyles}`}
+						className={`font-medium text-sm ${labelStyles}`}
 					>
 						{label}
 					</label>
@@ -118,7 +118,7 @@ const InputFile = forwardRef<HTMLInputElement, InputFileProps>(
 				)}
 			</div>
 		);
-	}
+	},
 );
 
 InputFile.displayName = 'InputFile';

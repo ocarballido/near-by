@@ -4,10 +4,12 @@ import { createSSRClient } from '@/lib/supabase/server';
 
 import Image from 'next/image';
 import ButtonLink from '../button-link';
+import Button from '../button';
 import IconApartment from '@/components/atoms/icon/apartment';
 import IconAdd from '@/components/atoms/icon/add';
 import { trackEvent } from '@/lib/analytics/mixpanel';
 import { ShareMenu } from '../button-share';
+import CreatePropertyEntry from '../property-entry';
 
 const PropertyNumber = async () => {
 	const t = await getTranslations();
@@ -65,11 +67,31 @@ const PropertyNumber = async () => {
 						className="w-full sm:w-auto"
 					/>
 				) : null}
-				<ButtonLink
-					label={n > 0 ? t('Nueva propiedad') : t('Añadir propiedad')}
+				<CreatePropertyEntry
 					href="/app/properties/new"
-					iconLeft={<IconAdd />}
-					className="w-full sm:w-auto"
+					link={
+						<ButtonLink
+							label={
+								n > 0
+									? t('Nueva propiedad')
+									: t('Añadir propiedad')
+							}
+							href="/app/properties/new"
+							iconLeft={<IconAdd />}
+							className="w-full sm:w-auto"
+						/>
+					}
+					action={
+						<Button
+							label={
+								n > 0
+									? t('Nueva propiedad')
+									: t('Añadir propiedad')
+							}
+							iconLeft={<IconAdd />}
+							className="w-full sm:w-auto"
+						/>
+					}
 				/>
 			</div>
 			<div className="flex flex-col items-center mt-3">

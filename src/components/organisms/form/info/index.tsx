@@ -17,6 +17,9 @@ import Alert from '@/components/molecules/alert';
 import ButtonMagic from '@/components/molecules/button-magic';
 import ButtonLink from '@/components/molecules/button-link';
 import IconHelp from '@/components/atoms/icon/help';
+import FancyIcon from '@/components/atoms/icon/fancy-icon';
+import IconInfo from '@/components/atoms/icon/info';
+import Typography from '@/components/atoms/typography';
 
 import { DAILY_AI_USAGE_LIMMIT } from '@/config/config-constants';
 
@@ -145,7 +148,7 @@ const UpdateInfoForm = ({
 	}, [remaining]);
 
 	return (
-		<>
+		<div className="bg-white p-2 rounded-xl max-w-[600px] w-full shadow-xs">
 			{alert && (
 				<Alert
 					hideTime={3000}
@@ -157,16 +160,19 @@ const UpdateInfoForm = ({
 				/>
 			)}
 
+			<div className="rounded-lg p-2 pt-0 flex flex-col gap-2 items-center">
+				<FancyIcon icon={<IconInfo color="white" />} color="gradient" />
+				{name && (
+					<Typography component="h2" size="lg">
+						{t(name)}
+					</Typography>
+				)}
+			</div>
+
 			<form
 				onSubmit={handleSubmit(onSubmit)}
-				className="flex flex-col gap-4 w-full max-w-[600px]"
+				className="flex flex-col gap-4 w-full p-2"
 			>
-				{name && (
-					<h1 className="font-heading font-bold text-lg">
-						{t(name)}
-					</h1>
-				)}
-
 				{/* Text content */}
 				<TextArea
 					label={t('Añade el contenido que desees')}
@@ -177,93 +183,68 @@ const UpdateInfoForm = ({
 					rows={15}
 				/>
 
-				<h2 className="font-heading font-bold text-2xl -mb-3">
-					{t(
-						'Utiliza nuestra Inteligenta Artificial para generar contenidos',
-					)}
-				</h2>
-
-				<p className="text-md">
-					{t(
-						'Utiliza nuestra IA para generar contenido personalizado automáticamente',
-					)}
-				</p>
-
 				<div className="relative z-10 bg-white rounded-md">
-					<div className="absolute -inset-1 z-[-1] rounded-md bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] blur-xl opacity-30"></div>
-					<div className="w-[full] bg-white rounded-lg p-4 flex flex-col gap-2 shadow-sm">
-						<TextArea
-							label={t(
-								'Describe lo que quieres que la IA escriba',
-							)}
-							value={prompt}
-							onChange={(e) => setPrompt(e.target.value)}
-							rows={4}
-							placeholder={t(
-								'Instrucciones para el uso del aire acondicionado y te ayudaremos a redactarlo',
-							)}
-						/>
+					<TextArea
+						label={t('Describe lo que quieres que la IA escriba')}
+						value={prompt}
+						onChange={(e) => setPrompt(e.target.value)}
+						rows={4}
+						placeholder={t(
+							'Instrucciones para el uso del aire acondicionado y te ayudaremos a redactarlo',
+						)}
+					/>
 
-						<ButtonMagic
-							label={
-								generating
-									? t('Generando')
-									: t('Generar con IA')
-							}
-							disabled={!prompt || generating || remaining === 0}
-							className="w-full shadow-none ml-auto mr-auto mb-2"
-							onClick={generateAI}
-						/>
+					<ButtonMagic
+						label={
+							generating ? t('Generando') : t('Generar con IA')
+						}
+						disabled={!prompt || generating || remaining === 0}
+						className="w-full shadow-none ml-auto mr-auto my-2"
+						onClick={generateAI}
+					/>
 
-						{remaining !== null &&
-							(remaining === 0 ? (
-								<p className="text-xs text-error-500 font-medium py-1 px-3 w-full text-center uppercase">
-									{t('Has alcanzado el límite diario de IA')}
-								</p>
-							) : (
-								<p className="text-xs flex justify-center items-center text-gray-600 font-medium py-1 px-3 w-full text-center uppercase">
-									<span>
-										{t(
-											'Número de consultas restantes de la AI',
-										)}
-									</span>
-									<span
-										className={`font-bold w-6 h-6 inline-flex items-center justify-center rounded-full ml-1 ${remainingColor}`}
-									>{` ${remaining}`}</span>
-									{/* {remaining > 0
-									? t(
-											'Número de consultas restantes de la AI'
-									  ) + ` ${remaining}`
-									: t('Has alcanzado el límite diario de IA')} */}
-								</p>
-							))}
-					</div>
+					{remaining !== null &&
+						(remaining === 0 ? (
+							<p className="text-xs text-error-500 font-medium py-1 px-3 w-full text-center uppercase">
+								{t('Has alcanzado el límite diario de IA')}
+							</p>
+						) : (
+							<p className="text-xs flex justify-center items-center text-gray-600 font-medium py-1 px-3 w-full text-center uppercase">
+								<span>
+									{t(
+										'Número de consultas restantes de la AI',
+									)}
+								</span>
+								<span
+									className={`font-bold w-6 h-6 inline-flex items-center justify-center rounded-full ml-1 ${remainingColor}`}
+								>{` ${remaining}`}</span>
+							</p>
+						))}
 				</div>
 
-				<div className="flex flex-col sm:flex-row gap-2">
-					<Button
-						label={t('Cancelar')}
-						className="w-full"
-						color="secondary"
-						onClick={() => router.back()}
-					/>
+				<div className="flex flex-col gap-2">
 					<Button
 						type="submit"
 						label={t('Añadir información')}
 						className="w-full"
 						disabled={isSubmitting}
 					/>
+					<Button
+						label={t('Cancelar')}
+						className="w-full"
+						color="secondary"
+						onClick={() => router.back()}
+					/>
+					<ButtonLink
+						label={t('feedback.cta')}
+						href={`/app/feedback/create_info/property/${propertyId}?returnTo=/app/properties/${propertyId}/${categoryId}/${subCategoryId}`}
+						color="white"
+						className="w-full"
+						iconLeft={<IconHelp />}
+					/>
 				</div>
-
-				<ButtonLink
-					label={t('feedback.cta')}
-					href={`/app/feedback/create_info/property/${propertyId}?returnTo=/app/properties/${propertyId}/${categoryId}/${subCategoryId}`}
-					color="white"
-					className="w-full"
-					iconLeft={<IconHelp />}
-				/>
 			</form>
-		</>
+		</div>
 	);
 };
 

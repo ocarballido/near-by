@@ -662,5 +662,27 @@
 			"emailInvalid": "Email invalide"
 		},
 		"cta": "Question ou avis ?"
+	},
+	"paywall": {
+		"beta": {
+			"title": "Vous utilisez BNB Explorer en accès anticipé",
+			"description": "À l’avenir, le plan gratuit inclura 1 logement.",
+			"message": "La gestion de plusieurs logements sera disponible via des plans spécifiques. Pour le moment, vous pouvez continuer à créer des logements sans limite.",
+			"primaryButton": "Continuer à créer des logements"
+		},
+		"soft": {
+			"title": "BNB Explorer évolue",
+			"description": "Nous préparons des plans pour les hôtes ayant plusieurs logements.",
+			"message": "Bientôt, le plan gratuit inclura 1 logement. Si vous gérez plusieurs hébergements, vous pourrez choisir un plan adapté à vos besoins.",
+			"primaryButton": "Continuer avec la bêta",
+			"secondaryButton": "Me prévenir lorsque les plans seront disponibles"
+		},
+		"hard": {
+			"title": "Vous avez atteint la limite de votre plan",
+			"description": "Votre plan actuel inclut jusqu’à {limit} logements.",
+			"message": "Pour ajouter d’autres hébergements, vous devez passer à un plan supérieur.",
+			"primaryButton": "Choisir un plan",
+			"secondaryButton": "Annuler"
+		}
 	}
 }

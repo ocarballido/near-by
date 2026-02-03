@@ -19,6 +19,9 @@ import { Select, SelectOption } from '@/components/molecules/select';
 import Button from '@/components/molecules/button';
 import ButtonLink from '@/components/molecules/button-link';
 import IconHelp from '@/components/atoms/icon/help';
+import Typography from '@/components/atoms/typography';
+import FancyIcon from '@/components/atoms/icon/fancy-icon';
+import IconSearch from '@/components/atoms/icon/search';
 
 type FormValues = {
 	type: string;
@@ -148,20 +151,26 @@ const MagicFinderForm = ({
 	};
 
 	return (
-		<div className="w-full max-w-[400px] flex flex-col gap-4">
-			<h1 className="font-heading w-full">
-				<span className="text-lg font-bold">
+		<div className="bg-white p-2 rounded-xl max-w-[400px] w-full shadow-xs gap-4">
+			<div className="rounded-lg p-3 pt-0 flex flex-col gap-2 items-center">
+				<FancyIcon
+					icon={<IconSearch color="white" />}
+					color="gradient"
+				/>
+				<Typography component="h2" size="lg">
 					{t('Buscador mágico')}:
-				</span>
-			</h1>
-			<p className="w-full font-medium -mb-2">
-				{t('Descubre lo mejor cerca de tu propiedad')}
-			</p>
-			<p className="w-full font-medium text-gray-500">
-				{t(
-					'Con un solo clic, añade automáticamente los lugares más valorados en la zona: restaurantes, farmacias, parques, museos y mucho más',
-				)}
-			</p>
+				</Typography>
+			</div>
+
+			<div className="p-2">
+				<div className="p-4 bg-sky-100 rounded-md">
+					<Typography component="p" size="sm" color="text-sky-900">
+						{t(
+							'Con un solo clic, añade automáticamente los lugares más valorados en la zona: restaurantes, farmacias, parques, museos y mucho más',
+						)}
+					</Typography>
+				</div>
+			</div>
 
 			{alert && (
 				<Alert
@@ -175,7 +184,7 @@ const MagicFinderForm = ({
 
 			<form
 				onSubmit={handleSubmit(onSubmit)}
-				className="flex flex-col gap-6 max-w-md"
+				className="flex flex-col gap-6 max-w-md p-2"
 			>
 				<Controller
 					name="type"
@@ -237,7 +246,13 @@ const MagicFinderForm = ({
 					)}
 				/>
 
-				<div className="flex flex-col sm:flex-row gap-2 mt-4">
+				<div className="flex flex-col gap-2 mt-4">
+					<Button
+						type="submit"
+						label={t('Añadir')}
+						disabled={isSubmitting}
+						className="w-full"
+					/>
 					<Button
 						type="button"
 						label={t('Cancelar')}
@@ -245,20 +260,14 @@ const MagicFinderForm = ({
 						onClick={() => router.back()}
 						className="w-full"
 					/>
-					<Button
-						type="submit"
-						label={t('Añadir')}
-						disabled={isSubmitting}
+					<ButtonLink
+						label={t('feedback.cta')}
+						href={`/app/feedback/create_location/property/${propertyId}?returnTo=/app/properties/${propertyId}/${categoryId}/${subCategoryId}`}
+						color="white"
 						className="w-full"
+						iconLeft={<IconHelp />}
 					/>
 				</div>
-				<ButtonLink
-					label={t('feedback.cta')}
-					href={`/app/feedback/create_location/property/${propertyId}?returnTo=/app/properties/${propertyId}/${categoryId}/${subCategoryId}`}
-					color="white"
-					className="w-full"
-					iconLeft={<IconHelp />}
-				/>
 			</form>
 		</div>
 	);

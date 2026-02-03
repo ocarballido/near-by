@@ -41,12 +41,18 @@ function normalizeCountryCode(rawCountryCode: string | null): string | null {
 	return trimmed.length === 2 ? trimmed.toUpperCase() : trimmed;
 }
 
+function isMixpanelEnabled(): boolean {
+	return process.env.MIXPANEL_ENABLED === 'true';
+}
+
 export async function trackEvent({
 	event,
 	distinctId,
 	props = {},
 }: TrackInput) {
 	try {
+		if (!isMixpanelEnabled()) return;
+
 		const mixpanelToken = process.env.MIXPANEL_TOKEN;
 		if (!mixpanelToken) return;
 

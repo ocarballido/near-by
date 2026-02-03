@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 
 import Spinner from '@/components/atoms/spinner';
 import AppBar from '@/components/organisms/appbar';
+import PaywallModal from '@/components/templates/paywall-modal';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
 	const t = useTranslations();
@@ -38,6 +39,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 		<>
 			{loading && <Spinner />}
 			<div className="p-4 flex flex-col gap-2 items-stretch w-full min-h-screen bg-gray-100 font-body overflow-hidden">
+				<PaywallModal />
 				<AppBar
 					accommodationHref={
 						publicLink.showPublicLink ? publicLink.url : ''
