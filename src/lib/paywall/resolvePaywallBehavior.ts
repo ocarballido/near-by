@@ -8,7 +8,7 @@ export type PaywallBehavior =
 	| 'block_with_modal';
 
 export function getPlanLimit(plan: Plan): number | 'unlimited' {
-	if (plan === 'free') return 1;
+	if (plan === 'free') return 2;
 	if (plan === 'host') return 5;
 	return 'unlimited';
 }
