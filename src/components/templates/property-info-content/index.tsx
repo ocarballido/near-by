@@ -1,4 +1,5 @@
 import { PropertyDataItem } from '../property-data-public';
+import Typography from '@/components/atoms/typography';
 
 export interface PropertyInfo {
 	id: string;
@@ -33,9 +34,9 @@ export function PropertyInfoContent({
 			{info?.description && (
 				<>
 					{sub_category_name && (
-						<h3 className="font-heading font-bold mr-auto">
+						<Typography component="h2" size="lg">
 							{sub_category_name}
-						</h3>
+						</Typography>
 					)}
 					<div className="font-medium whitespace-pre-wrap">
 						{info?.description}

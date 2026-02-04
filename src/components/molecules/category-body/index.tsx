@@ -12,7 +12,7 @@ type CategoryBodyProps = {
 const CategoryBody = ({ children, open = false }: CategoryBodyProps) => {
 	// const bodyRef = useRef<HTMLDivElement>(null);
 
-	const bodyStyles = clsx({ 'h-0': !open }, { 'h-auto': open });
+	const bodyStyles = clsx({ 'h-0 mt-0': !open }, { 'h-auto mt-1': open });
 
 	return (
 		<div

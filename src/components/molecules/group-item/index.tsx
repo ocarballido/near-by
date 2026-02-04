@@ -26,12 +26,12 @@ const GroupItem = ({
 	handleDelete,
 }: GroupItemProps) => {
 	const buttonStyles = clsx({
-		'bg-secondary-200': active,
+		'bg-[#f3f3f3]': active,
 	});
 
 	return (
 		<div
-			className={`rounded-md w-full transition-all flex items-center justify-between hover:bg-secondary-200 hover:cursor-pointer disabled:pointer-events-none font-medium py-2 px-4 min-h-14 ${buttonStyles}`}
+			className={`rounded-md w-full transition-all flex items-center justify-between hover:bg-[#f3f3f3] hover:cursor-pointer disabled:pointer-events-none font-medium py-2 px-4 min-h-14 ${buttonStyles}`}
 			onClick={onClick}
 		>
 			{label}

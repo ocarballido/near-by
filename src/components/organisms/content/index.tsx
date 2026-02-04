@@ -49,7 +49,7 @@ const Content = ({
 
 	return (
 		<main className="flex flex-col gap-2 w-full grow rounded-lg overflow-hidden bg-gray-50">
-			<div className="flex gap-2 md:hidden">
+			<div className="flex flex-col sm:flex-row gap-2 md:hidden p-2">
 				<Button
 					label={t('Abrir menú')}
 					color="white"
@@ -58,7 +58,7 @@ const Content = ({
 					className="shadow-sm w-full"
 				/>
 				{publicLink.showPublicLink ? (
-					<>
+					<div className="flex gap-2 w-full">
 						<ButtonLink
 							label={t('Sitio público')}
 							color="primary"
@@ -70,7 +70,7 @@ const Content = ({
 						<ButtonQr
 							url={`https://www.bnbexplorer.com/public/${propertyId}/welcome/highlights`}
 						/>
-					</>
+					</div>
 				) : null}
 			</div>
 			{children}

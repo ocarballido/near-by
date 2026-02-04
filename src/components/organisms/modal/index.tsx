@@ -62,7 +62,7 @@ const Modal = ({
 
 						{children}
 					</div>
-					<div className="flex justify-end gap-2 p-4 border-t border-t-gray-100">
+					<div className="flex flex-col sm:flex-row justify-end gap-2 p-4 border-t border-t-gray-100">
 						{destructiveButtonLabel && (
 							<Button
 								onClick={destructiveButtonAction}
@@ -85,6 +85,7 @@ const Modal = ({
 								label={primaryButtonLabel}
 								color="primary"
 								disabled={primaryButtonDisabled}
+								className="order-first sm:order-last"
 							/>
 						)}
 					</div>

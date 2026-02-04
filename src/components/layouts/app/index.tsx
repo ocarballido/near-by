@@ -38,7 +38,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 	return (
 		<>
 			{loading && <Spinner />}
-			<div className="p-4 flex flex-col gap-2 items-stretch w-full min-h-screen bg-gray-100 font-body overflow-hidden">
+			<div className="p-2 flex flex-col gap-2 items-stretch w-full min-h-screen bg-[#EFEFEF] font-body overflow-hidden">
 				<PaywallModal />
 				<AppBar
 					accommodationHref={
