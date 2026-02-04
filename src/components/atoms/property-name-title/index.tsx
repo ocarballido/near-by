@@ -1,3 +1,5 @@
+import Typography from '../typography';
+
 type PropertyNameTitleProps = {
 	propertyName: string;
 	subCategoryName?: string;
@@ -8,12 +10,11 @@ const PropertyNameTitle = ({
 	subCategoryName,
 }: PropertyNameTitleProps) => {
 	return (
-		<>
-			<h3 className="font-heading font-bold text-lg md:text-2xl">
-				{propertyName}:{' '}
-				<span className="font-normal">{subCategoryName}</span>
-			</h3>
-		</>
+		<div className="flex gap-1">
+			<Typography component="h3" size="lg">
+				{propertyName}: {subCategoryName}
+			</Typography>
+		</div>
 	);
 };
 
