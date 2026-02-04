@@ -27,6 +27,7 @@ import Button from '@/components/molecules/button';
 import GroupItem from '@/components/molecules/group-item';
 import IconHome from '@/components/atoms/icon/home';
 import IconMap from '@/components/atoms/icon/map';
+import HousePublic from '@/components/molecules/card/house-public';
 
 const ICON_COMPONENTS = {
 	IconHealing,
@@ -51,12 +52,22 @@ type PublicSidebarProps = {
 	propertyId?: string;
 	categoryId?: string;
 	subCategoryId?: string;
+	address: string;
+	image?: string | null;
+	latitude: number;
+	longitude: number;
+	name: string;
 };
 
 const PublicSidebar = ({
 	propertyId,
 	categoryId,
 	subCategoryId,
+	address,
+	latitude,
+	longitude,
+	name,
+	image = '/static/img/default-property-2x.webp',
 }: PublicSidebarProps) => {
 	const t = useTranslations();
 
@@ -74,8 +85,16 @@ const PublicSidebar = ({
 	return (
 		<>
 			<aside
-				className={`fixed bottom-0 left-0 right-0 top-0 p-4 z-10 overflow-y-scroll md:top-0 md:p-0 md:overflow-y-auto md:relative md:w-full md:max-w-80 grow flex gap-2 flex-col md:h-fit bg-gray-100 transition-all duration-300 md:translate-x-0 ${sidebarContentStyles}`}
+				className={`fixed bottom-0 left-0 right-0 top-0 p-4 z-10 overflow-y-scroll md:top-0 md:p-0 md:overflow-y-auto md:relative md:w-full md:max-w-80 grow flex gap-2 flex-col md:h-fit transition-all duration-300 md:translate-x-0 bg-[#EFEFEF] ${sidebarContentStyles}`}
 			>
+				<HousePublic
+					address={address}
+					latitude={latitude}
+					longitude={longitude}
+					name={name}
+					image={image}
+					className="hidden md:flex"
+				/>
 				<div className="flex gap-2 items-center md:hidden">
 					<Button
 						label={t('Ocultar menú')}
@@ -85,7 +104,6 @@ const PublicSidebar = ({
 						className="shadow-sm grow"
 					/>
 				</div>
-
 				<CategoryAccordion
 					open={categoryId === 'welcome'}
 					name="Welcome"
@@ -106,7 +124,6 @@ const PublicSidebar = ({
 						}}
 					/>
 				</CategoryAccordion>
-
 				{sidebarData &&
 					sidebarData.map((category) => {
 						const iconName = category.icon as IconName;
@@ -149,7 +166,6 @@ const PublicSidebar = ({
 							</CategoryAccordion>
 						);
 					})}
-
 				<CategoryAccordion
 					open={categoryId === 'custom-plans'}
 					name={t('Planes personalizados')}

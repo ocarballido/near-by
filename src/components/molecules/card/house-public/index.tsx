@@ -10,25 +10,27 @@ import IconLocationOn from '@/components/atoms/icon/location-on';
 import IconModeHeat from '@/components/atoms/icon/mode-heat';
 import IconFavorite from '@/components/atoms/icon/favorite';
 
-type PlacePublicProps = {
+type HousePublicProps = {
 	address: string;
+	className?: string;
 	latitude?: number;
 	longitude?: number;
 	featured?: boolean;
 	mustSee?: boolean;
-	image?: string;
+	image?: string | null;
 	name: string;
 };
 
-const PlacePublic = ({
+const HousePublic = ({
 	address,
+	className,
 	latitude,
 	longitude,
 	featured,
 	mustSee,
 	name,
-	image = '/static/img/place-placeholder/place_placeholder_01.webp',
-}: PlacePublicProps) => {
+	image = '/static/img/header-trimed-2x.webp',
+}: HousePublicProps) => {
 	const t = useTranslations();
 
 	const graySvg = `<svg xmlns="http://www.w3.org/2000/svg" width="4" height="4"><rect width="4" height="4" fill="#a3e7d0" /></svg>`;
@@ -38,7 +40,7 @@ const PlacePublic = ({
 
 	return (
 		<div
-			className={`flex items-end rounded-xl overflow-hidden p-2 relative h-[350px] transition-all [&>.content]:p-3 [&>.content]:rounded-lg shadow-xs hover:p-0 hover:[&>.content]:p-5 hover:[&>.content]:rounded-none bg-gradient-to-tr from-[#ffa263] to-[#6cffc9]`}
+			className={`flex items-end rounded-xl overflow-hidden p-2 relative h-[350px] transition-all [&>.content]:p-3 [&>.content]:rounded-lg shadow-xs hover:p-0 hover:[&>.content]:p-5 hover:[&>.content]:rounded-none bg-gradient-to-tr from-[#ffa263] to-[#6cffc9] ${className}`}
 		>
 			{(mustSee || featured) && (
 				<div className="flex p-1 items-center absolute z-1 rounded-full right-2 top-2 gap-1">
@@ -76,9 +78,7 @@ const PlacePublic = ({
 			<Image
 				className="object-cover z-0"
 				src={
-					image === null
-						? '/static/img/default-property-2x.webp'
-						: image
+					image === null ? '/static/img/header-trimed-2x.webp' : image
 				}
 				fill={true}
 				placeholder="blur"
@@ -89,4 +89,4 @@ const PlacePublic = ({
 	);
 };
 
-export default PlacePublic;
+export default HousePublic;

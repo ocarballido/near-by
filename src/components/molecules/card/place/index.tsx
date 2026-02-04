@@ -46,7 +46,7 @@ const Place = ({
 
 	return (
 		<div
-			className={`w-full flex flex-col gap-4 rounded-xl p-2 relative transition-all bg-white shadow-xs ${className}`}
+			className={`w-full flex flex-col gap-4 rounded-xl p-2 relative transition-all hover:shadow-xs hover:bg-white ${className}`}
 		>
 			<div className={`w-full flex gap-4 relative`}>
 				<div className="w-18 h-18 rounded-md overflow-hidden relative shrink-0 bg-gradient-to-tr from-[#ffa263] to-[#6cffc9]">

@@ -21,14 +21,14 @@ const CategoryAccordion = ({
 }: CategoryAccordionProps) => {
 	const buttonStyles = clsx(
 		{
-			'bg-white shadow-sm': open,
+			'bg-white shadow-xs': open,
 		},
-		{ 'hover:bg-white hover:shadow-sm hover:cursor-pointer': !open },
+		{ 'hover:bg-white hover:shadow-xs hover:cursor-pointer': !open },
 	);
 
 	return (
 		<div
-			className={`rounded-xl w-full flex flex-col items-center disabled:pointer-events-none font-medium py-2 pl-2 pr-2 transition-all ${buttonStyles}`}
+			className={`rounded-xl w-full flex flex-col items-center disabled:pointer-events-none font-medium p-2 transition-all ${buttonStyles}`}
 		>
 			<CategoryButton
 				name={name}

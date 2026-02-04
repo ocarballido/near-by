@@ -30,9 +30,9 @@ const AppContentTemplate = ({
 }: AppContentTemplateProps) => {
 	return (
 		<SidebarProvider>
-			<div className="flex flex-col gap-2 items-stretch w-full bg-gray-100 font-body overflow-hidden grow">
+			<div className="flex flex-col gap-2 items-stretch w-full font-body overflow-hidden grow">
 				<div
-					className={`flex flex-auto gap-4 md:gap-4 min-h-full relative w-full`}
+					className={`flex flex-auto gap-4 min-h-full relative w-full`}
 				>
 					<Sidebar
 						sidebar={sidebar}

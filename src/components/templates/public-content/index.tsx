@@ -2,7 +2,7 @@ import { SidebarProvider } from '@/lib/context/SidebarContext';
 
 import PublicSidebar from '@/components/organisms/sidebar/public-sidebar';
 import Content from '@/components/organisms/content';
-import PublicHeader from '../public-header';
+import HousePublic from '@/components/molecules/card/house-public';
 
 type PublicContentTemplateProps = {
 	address: string;
@@ -30,21 +30,27 @@ const PublicContentTemplate = ({
 }: PublicContentTemplateProps) => {
 	return (
 		<SidebarProvider>
-			<PublicHeader
+			<HousePublic
 				address={address}
-				name={name}
-				image={image}
 				latitude={latitude}
 				longitude={longitude}
+				name={name}
+				image={image}
+				className="block md:hidden"
 			/>
-			<div className="flex flex-col gap-2 items-stretch w-full bg-gray-100 font-body overflow-hidden grow">
+			<div className="flex flex-col gap-2 items-stretch w-full font-body overflow-hidden grow">
 				<div
-					className={`flex flex-auto gap-4 md:gap-4 min-h-full relative w-full`}
+					className={`flex flex-auto gap-4 min-h-full relative w-full`}
 				>
 					<PublicSidebar
 						categoryId={categoryId}
 						subCategoryId={subCategoryId}
 						propertyId={propertyId}
+						address={address}
+						name={name}
+						image={image}
+						latitude={latitude}
+						longitude={longitude}
 					/>
 					<Content>{children}</Content>
 				</div>
