@@ -54,7 +54,7 @@ export function ShareMenu({
 
 	const trackShare = async (
 		channel: ShareChannel,
-		extra?: Record<string, unknown>
+		extra?: Record<string, unknown>,
 	) => {
 		// server action: no bloqueamos UX si falla
 		try {
@@ -103,7 +103,7 @@ export function ShareMenu({
 	};
 
 	return (
-		<div className="flex items-center gap-1 p-1 bg-gray-100 rounded-full">
+		<div className="flex items-center gap-1 p-1 bg-gray-200 rounded-full">
 			<FacebookShareButton
 				url={shareUrl}
 				// react-share llama a onClick antes del popup

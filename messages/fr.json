@@ -684,5 +684,20 @@
 			"primaryButton": "Choisir un plan",
 			"secondaryButton": "Annuler"
 		}
+	},
+	"createPropertyTipsModal": {
+		"title": "Conseils pour créer un guide que vos voyageurs apprécieront",
+		"description": "Ces recommandations vous aideront à créer un guide clair, utile et personnel, conçu pour améliorer l’expérience de vos voyageurs dès le premier jour.",
+		"button": {
+			"close": "Fermer"
+		}
+	},
+	"propertiesStatus": {
+		"completed": "Prêtes",
+		"inProgress": "En cours"
+	},
+	"lastActivity": {
+		"title": "Dernière activité",
+		"edited": "Vous avez modifié \"{property}\" {time}"
 	}
 }
