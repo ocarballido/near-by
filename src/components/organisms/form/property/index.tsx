@@ -15,6 +15,7 @@ import { createProperty } from '@/app/actions/properties/add-property';
 import {
 	MAX_IMAGE_SIZE,
 	CATEGORIES_SUB_CATEGORIES,
+	TIPS,
 } from '@/config/config-constants';
 
 import TextField from '@/components/molecules/text-field';
@@ -26,6 +27,7 @@ import BadgeCheck from '@/components/atoms/BadgeCheck';
 import Typography from '@/components/atoms/typography';
 import IconAdd from '@/components/atoms/icon/add';
 import FancyIcon from '@/components/atoms/icon/fancy-icon';
+import Modal from '../../modal';
 
 // ✅ New Places widget field
 import PlaceAutocompleteField from '@/components/molecules/place-autocomplete';
@@ -33,6 +35,8 @@ import { SelectedPlace } from '@/components/molecules/place-autocomplete';
 
 import { trackClientEvent } from '@/lib/analytics/trackClient';
 import IconHelp from '@/components/atoms/icon/help';
+import ButtonIcon from '@/components/atoms/button-icon';
+import IconInfo from '@/components/atoms/icon/info';
 
 type FormValues = {
 	name: string;
@@ -105,6 +109,8 @@ const AddPropertyForm = () => {
 	const [selectedSeedInfoIds, setSelectedSeedInfoIds] = useState<string[]>(
 		() => INFO_SEED_OPTIONS.map((x) => x.id),
 	);
+
+	const [isOpen, setIsOpen] = useState(false);
 
 	const toggleSeed = (id: string) => {
 		setSelectedSeedInfoIds((prev) =>
@@ -282,10 +288,52 @@ const AddPropertyForm = () => {
 				/>
 			)}
 
-			<div className="rounded-lg p-3 pt-0 flex flex-col gap-2 items-center">
+			<Modal
+				title={t('createPropertyTipsModal.title')}
+				// description={t('createPropertyTipsModal.description')}
+				open={isOpen}
+				onClose={() => {
+					setIsOpen(false);
+				}}
+				primaryButtonAction={() => {
+					setIsOpen(false);
+				}}
+				primaryButtonLabel="Cancel"
+				size="max-w-3xl"
+			>
+				<div className="flex flex-wrap max-w-[1000px]">
+					{TIPS.map((tip) => (
+						<div
+							key={tip.id}
+							className="flex flex-col w-full md:w-full lg:w-1/2 xl:w-1/3 gap-1 p-4 items-center text-center"
+						>
+							<div className="flex justify-center items-center w-14 h-14 rounded-full bg-gradient-to-tr from-[#FF6B06]/10 to-[#31C48D]/10">
+								<span className="flex justify-center items-center w-9 h-9 rounded-full bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] font-bold text-white text-base">
+									{tip.id}
+								</span>
+							</div>
+							<Typography component="h3" size="base">
+								{t(tip.title)}
+							</Typography>
+							<Typography size="sm">{t(tip.subtitle)}</Typography>
+						</div>
+					))}
+				</div>
+			</Modal>
+
+			<div className="rounded-lg p-3 pt-0 flex flex-col gap-2 items-center text-center">
 				<FancyIcon icon={<IconAdd color="white" />} color="gradient" />
-				<Typography component="h2" size="lg">
+				<Typography
+					component="h2"
+					size="lg"
+					className="flex items-center gap-1"
+				>
 					{t('Nuevo Alojamiento')}
+					<ButtonIcon
+						size="small"
+						icon={<IconInfo />}
+						onClick={() => setIsOpen(true)}
+					/>
 				</Typography>
 			</div>
 

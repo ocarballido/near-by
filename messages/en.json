@@ -679,5 +679,20 @@
 			"primaryButton": "Choose a plan",
 			"secondaryButton": "Cancel"
 		}
+	},
+	"createPropertyTipsModal": {
+		"title": "Tips to create a guide your guests will love",
+		"description": "These recommendations will help you build a clear, useful and personal guide that improves your guests’ experience from day one.",
+		"button": {
+			"close": "Close"
+		}
+	},
+	"propertiesStatus": {
+		"completed": "Ready",
+		"inProgress": "In progress"
+	},
+	"lastActivity": {
+		"title": "Last activity",
+		"edited": "You edited \"{property}\" {time}"
 	}
 }

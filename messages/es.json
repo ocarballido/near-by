@@ -684,5 +684,20 @@
 			"primaryButton": "Elegir plan",
 			"secondaryButton": "Cancelar"
 		}
+	},
+	"createPropertyTipsModal": {
+		"title": "Consejos para crear una guía que tus huéspedes agradecerán",
+		"description": "Estas recomendaciones te ayudarán a crear una guía clara, útil y personal, pensada para mejorar la experiencia de tus huéspedes desde el primer día.",
+		"button": {
+			"close": "Cerrar"
+		}
+	},
+	"propertiesStatus": {
+		"completed": "Listas",
+		"inProgress": "Pendientes"
+	},
+	"lastActivity": {
+		"title": "Última actividad",
+		"edited": "Editaste \"{property}\" {time}"
 	}
 }

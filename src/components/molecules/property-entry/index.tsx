@@ -19,10 +19,10 @@ export default function CreatePropertyEntry({ link, action, href }: Props) {
 
 	// Casos beta / soft / hard → acción controlada
 	return (
-		<span
+		<div
 			role="button"
 			tabIndex={0}
-			className="inline-block"
+			className="w-full"
 			onClick={() => requestCreateProperty(href)}
 			onKeyDown={(e) => {
 				if (e.key === 'Enter' || e.key === ' ') {
@@ -32,6 +32,6 @@ export default function CreatePropertyEntry({ link, action, href }: Props) {
 			}}
 		>
 			{action}
-		</span>
+		</div>
 	);
 }
