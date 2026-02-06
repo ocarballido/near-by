@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 import { createSSRClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
+import { touchPropertyUpdatedAt } from '@/lib/properties/touch-property';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database, TablesInsert } from '@/lib/types';
@@ -177,6 +178,11 @@ export async function discoverNearbyPlaces(
 						server: ['No se pudieron guardar las localizaciones'],
 					},
 				};
+			}
+
+			// Marcar última actividad de la propiedad (dashboard)
+			if (insertables.length > 0) {
+				await touchPropertyUpdatedAt(supabase, property_id);
 			}
 		}
 

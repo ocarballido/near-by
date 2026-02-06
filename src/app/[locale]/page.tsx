@@ -41,6 +41,7 @@ import BadgeCheck from '@/components/atoms/BadgeCheck';
 import { ShareMenu } from '@/components/molecules/button-share';
 import IconCancel from '@/components/atoms/icon/cancel';
 import Quote from '@/components/molecules/quote';
+import Typography from '@/components/atoms/typography';
 
 import styles from './page.module.css';
 
@@ -688,8 +689,12 @@ export default function Home() {
 				</div>
 				<div className="text-center pt-24 pb-4 px-4 flex flex-col gap-4 items-center">
 					<div className="flex flex-col items-center mb-12">
-						<p className="font-bold">{t('shareButtonTitle')}</p>
-						<p className="mb-3">{t('shareButtonText')}</p>
+						<Typography component="h3" size="lg">
+							{t('shareButtonTitle')}
+						</Typography>
+						<Typography className="mb-2">
+							{t('shareButtonText')}
+						</Typography>
 						<ShareMenu
 							url="https://bnbexplorer.com"
 							surface="landing_header"

@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
+import { touchPropertyUpdatedAt } from '@/lib/properties/touch-property';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database, Tables } from '@/lib/types';
@@ -27,7 +28,7 @@ export async function deleteLocation(locationId: string) {
 
 	if (!fetchErr && loc?.image_url) {
 		const [, path] = loc.image_url.split(
-			'/storage/v1/object/public/location-images/'
+			'/storage/v1/object/public/location-images/',
 		);
 		if (path) {
 			await db.storage.from('location-images').remove([path]);
@@ -40,6 +41,10 @@ export async function deleteLocation(locationId: string) {
 		.delete()
 		.eq('id', locationId);
 	if (delErr) throw new Error('No se pudo eliminar el sitio');
+
+	if (!fetchErr && loc?.property_id) {
+		await touchPropertyUpdatedAt(db, loc.property_id);
+	}
 
 	// 3) Recalcular progreso (best-effort)
 	if (!fetchErr && loc?.property_id && loc?.user_id) {
