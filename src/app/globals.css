@@ -180,6 +180,8 @@
 	--roboto: Roboto;
 	--outfit: Outfit;
 	--roboto-mono: Roboto Mono;
+
+	color-scheme: light;
 }
 
 @theme {
