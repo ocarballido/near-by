@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { createSSRClient } from '@/lib/supabase/server';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
+import { touchPropertyUpdatedAt } from '@/lib/properties/touch-property';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database, Tables, TablesUpdate } from '@/lib/types';
@@ -98,8 +99,9 @@ export async function updateInfo(formData: FormData): Promise<CreateInfoState> {
 		}
 
 		let dbError = null;
+		let didMutate = false;
 
-		// ✅ Si el usuario deja vacío: borrar si existe, y si no existe, no hacer nada.
+		// Si el usuario deja vacío: borrar si existe, y si no existe, no hacer nada.
 		if (content === null) {
 			if (existing) {
 				const { error } = await db
@@ -108,9 +110,10 @@ export async function updateInfo(formData: FormData): Promise<CreateInfoState> {
 					.eq('id', existing.id);
 
 				dbError = error;
+				didMutate = !error;
 			}
 		} else {
-			// ✅ Hay contenido: update/insert como antes
+			// Hay contenido: update/insert como antes
 			if (existing) {
 				const payload: TablesUpdate<'property_data'> = {
 					description: content,
@@ -123,6 +126,7 @@ export async function updateInfo(formData: FormData): Promise<CreateInfoState> {
 					.eq('id', existing.id);
 
 				dbError = error;
+				didMutate = !error;
 			} else {
 				const { error } = await db.from('property_data').insert({
 					user_id: user.id,
@@ -135,6 +139,7 @@ export async function updateInfo(formData: FormData): Promise<CreateInfoState> {
 				});
 
 				dbError = error;
+				didMutate = true;
 			}
 		}
 
@@ -145,6 +150,10 @@ export async function updateInfo(formData: FormData): Promise<CreateInfoState> {
 					server: ['Error al guardar la información.'],
 				},
 			};
+		}
+
+		if (didMutate) {
+			await touchPropertyUpdatedAt(db, property_id);
 		}
 
 		// Mixpanel

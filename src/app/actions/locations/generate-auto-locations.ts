@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { createSSRClient } from '@/lib/supabase/server';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 import { CATEGORIES_SUB_CATEGORIES } from '@/config/config-constants';
+import { touchPropertyUpdatedAt } from '@/lib/properties/touch-property';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database, TablesInsert } from '@/lib/types';
@@ -363,6 +364,9 @@ export async function generateAutoLocations(
 				},
 			};
 		}
+
+		// Marcar última actividad de la propiedad (dashboard)
+		await touchPropertyUpdatedAt(supabase, propertyId);
 
 		await updatePropertyProgressAndTrack({
 			db: supabase,

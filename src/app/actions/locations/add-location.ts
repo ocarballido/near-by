@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { createSSRClient } from '@/lib/supabase/server';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 import { MAX_IMAGE_SIZE } from '@/config/config-constants';
+import { touchPropertyUpdatedAt } from '@/lib/properties/touch-property';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database, Tables, TablesInsert, TablesUpdate } from '@/lib/types';
@@ -228,6 +229,9 @@ export async function createLocation(
 				};
 			}
 		}
+
+		// Marcar última actividad de la propiedad (dashboard)
+		await touchPropertyUpdatedAt(db, loc.property_id);
 
 		// Mixpanel
 		await updatePropertyProgressAndTrack({

@@ -1,6 +1,5 @@
 import { redirect } from 'next/navigation';
-import { getTranslations } from 'next-intl/server';
-import { getLocale } from 'next-intl/server';
+import { getTranslations, getLocale } from 'next-intl/server';
 import { createSSRClient } from '@/lib/supabase/server';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 
@@ -16,11 +15,11 @@ import IconError from '@/components/atoms/icon/error';
 import IconOpenInNew from '@/components/atoms/icon/open-in-new';
 import Typography from '@/components/atoms/typography';
 import IconApartment from '@/components/atoms/icon/apartment';
-
-import { formatRelativeDays } from '@/utils/format-relative-days';
 import IconCheck from '@/components/atoms/icon/check';
 
-type PropertyForCounts = {
+import { formatRelativeDays } from '@/utils/format-relative-days';
+
+type PropertyRow = {
 	id: string;
 	name: string;
 	updated_at: string | null;
@@ -45,14 +44,14 @@ const PropertyNumber = async () => {
 		.from('properties')
 		.select(
 			`
-			id,
-			name,
-			updated_at,
-			property_data ( type )
-		`,
+				id,
+				name,
+				updated_at,
+				property_data ( type )
+			`,
 		)
 		.eq('user_id', user.id)
-		.overrideTypes<PropertyForCounts[], { merge: false }>();
+		.overrideTypes<PropertyRow[], { merge: false }>();
 
 	if (error) {
 		throw new Error('Error cargando propiedades: ' + error.message);
@@ -60,39 +59,46 @@ const PropertyNumber = async () => {
 
 	const rows = data ?? [];
 
-	const lastEdited = rows
-		.filter((p) => p.updated_at)
-		.sort(
-			(a, b) =>
-				new Date(b.updated_at as string).getTime() -
-				new Date(a.updated_at as string).getTime(),
-		)[0];
+	let completedCount = 0;
+	let lastEdited: { name: string; updated_at: string } | null = null;
+	let lastEditedTs = -1;
 
-	const completedCount = rows.reduce((acc, p) => {
+	for (const p of rows) {
+		// counts
 		const types = (p.property_data ?? []).map((x) =>
 			(x?.type ?? '').toString().trim().toLowerCase(),
 		);
 
 		const hasLocation = types.includes('location');
 		const hasInfo = types.includes('info');
+		if (hasLocation && hasInfo) completedCount++;
 
-		const isCompleted = hasLocation && hasInfo;
-
-		return acc + (isCompleted ? 1 : 0);
-	}, 0);
+		// last activity
+		if (p.updated_at) {
+			const ts = new Date(p.updated_at).getTime();
+			if (ts > lastEditedTs) {
+				lastEditedTs = ts;
+				lastEdited = { name: p.name, updated_at: p.updated_at };
+			}
+		}
+	}
 
 	const n = rows.length;
 	const incompleteCount = n - completedCount;
 
-	await trackEvent({
-		event: 'onboarding_start',
-		distinctId: user.id,
-		props: { page: 'dashboard_home' },
-	});
+	try {
+		await trackEvent({
+			event: 'onboarding_start',
+			distinctId: user.id,
+			props: { page: 'dashboard_home' },
+		});
+	} catch (e) {
+		console.warn('trackEvent failed:', e);
+	}
 
 	return (
 		<>
-			<div className="flex flex-col gap-1 items-center px-4 py-8 rounded-xl bg-white shadow-xs w-full max-w-xs">
+			<div className="flex flex-col gap-1 items-center px-4 py-8 pb-4 rounded-xl bg-white shadow-xs w-full max-w-xs">
 				<div className="relative">
 					<Image
 						alt="Add property"
@@ -112,10 +118,12 @@ const PropertyNumber = async () => {
 						<BadgeCheck
 							checkedColor="primary"
 							checked
+							className="w-full"
 							label={`${t('propertiesStatus.completed')}: ${completedCount}`}
 						/>
 						<BadgeCheck
 							checkedColor="error"
+							className="w-full"
 							checked
 							iconChecked={<IconError color="error" size={20} />}
 							label={`${t('propertiesStatus.inProgress')}: ${incompleteCount}`}
@@ -128,12 +136,12 @@ const PropertyNumber = async () => {
 						href="/app/properties"
 						iconLeft={<IconApartment />}
 						color="secondary"
-						className="w-fit"
+						className="w-full"
 					/>
 				) : null}
 			</div>
 
-			<div className="flex flex-col justify-center items-center gap-1 grow-0 p-1 bg-gray-200 rounded-3xl">
+			<div className="flex flex-col justify-center items-center gap-1 grow-0 p-1 bg-gray-200 rounded-3xl w-full max-w-xs">
 				<CreatePropertyEntry
 					href="/app/properties/new"
 					link={
@@ -165,7 +173,7 @@ const PropertyNumber = async () => {
 					href="https://www.bnbexplorer.com/es/public/37a03a95-cd39-4d40-a22b-7628cbb50245/welcome/highlights"
 					iconRight={<IconOpenInNew />}
 					color="white"
-					className="w-fit"
+					className="w-full"
 					target="_blank"
 				/>
 			</div>
@@ -191,7 +199,7 @@ const PropertyNumber = async () => {
 				<Typography component="h3" size="lg">
 					{t('shareButtonTitle')}
 				</Typography>
-				<p className="mb-3">{t('shareButtonText')}</p>
+				<Typography>{t('shareButtonText')}</Typography>
 				<ShareMenu
 					url="https://bnbexplorer.com"
 					surface="landing_header"

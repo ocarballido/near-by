@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 import { createSSRClient } from '@/lib/supabase/server';
 import { z } from 'zod';
+import { touchPropertyUpdatedAt } from '@/lib/properties/touch-property';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { updatePropertyProgressAndTrack } from '@/lib/updatePropertyProgress';
@@ -28,7 +29,7 @@ export type DeleteAllLocationsState = {
 };
 
 export async function deleteAllLocations(
-	formData: FormData
+	formData: FormData,
 ): Promise<DeleteAllLocationsState> {
 	const raw = {
 		property_id: formData.get('property_id'),
@@ -107,7 +108,7 @@ export async function deleteAllLocations(
 			.map((item) => {
 				if (!item.image_url) return null;
 				const [, path] = item.image_url.split(
-					'/storage/v1/object/public/location-images/'
+					'/storage/v1/object/public/location-images/',
 				);
 				return path || null;
 			})
@@ -130,6 +131,9 @@ export async function deleteAllLocations(
 				},
 			};
 		}
+
+		// Marcar última actividad de la propiedad (dashboard)
+		await touchPropertyUpdatedAt(db, property_id);
 
 		await updatePropertyProgressAndTrack({
 			db,
