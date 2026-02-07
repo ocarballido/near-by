@@ -5,10 +5,11 @@
 import { useTranslations, useLocale } from 'next-intl';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLoading } from '@/lib/context/LoadingContext';
 
 import { createLocation } from '@/app/actions/locations/add-location';
+import { type PlaceRecommendation } from '@/app/actions/locations/get-recommendations';
 
 import { MAX_IMAGE_SIZE } from '@/config/config-constants';
 
@@ -49,14 +50,18 @@ const AddPlaceForm = ({
 	propertyId,
 	subCategoryId,
 	categoryId,
+	initialRecos = [],
 }: {
 	propertyId: string;
 	subCategoryId: string;
 	categoryId: string;
+	initialRecos?: PlaceRecommendation[];
 }) => {
 	const t = useTranslations();
 	const locale = useLocale();
 	const router = useRouter();
+
+	const formTopRef = useRef<HTMLDivElement | null>(null);
 
 	const [alert, setAlert] = useState<{
 		type: 'error' | 'success';
@@ -91,6 +96,12 @@ const AddPlaceForm = ({
 		},
 	});
 
+	const RECO_UI_ENABLED =
+		process.env.NEXT_PUBLIC_RECOMMENDATIONS_ENABLED === 'true';
+
+	const [recos] = useState<PlaceRecommendation[]>(initialRecos);
+	const [selectedRecoId, setSelectedRecoId] = useState<string | null>(null);
+
 	const featuredValue = watch('featured');
 	const mustVisitValue = watch('must_visit');
 
@@ -111,6 +122,9 @@ const AddPlaceForm = ({
 
 	const clearSelection = () => {
 		setCoords(null);
+		setSelectedRecoId(null);
+
+		setValue('address', '', { shouldDirty: true, shouldValidate: true });
 		setValue('latitude', '', { shouldDirty: true, shouldValidate: true });
 		setValue('longitude', '', { shouldDirty: true, shouldValidate: true });
 	};
@@ -209,8 +223,32 @@ const AddPlaceForm = ({
 		setCoords(null);
 	};
 
+	const applyRecommendation = (r: PlaceRecommendation) => {
+		setSelectedRecoId(r.id);
+
+		setValue('name', r.name, {
+			shouldDirty: true,
+			shouldTouch: true,
+			shouldValidate: true,
+		});
+
+		handleSelectAddress({
+			formattedAddress: r.address,
+			lat: r.latitude,
+			lng: r.longitude,
+		} as SelectedPlace);
+
+		formTopRef.current?.scrollIntoView({
+			behavior: 'smooth',
+			block: 'start',
+		});
+	};
+
 	return (
-		<div className="bg-white p-2 rounded-xl max-w-[400px] w-full shadow-xs">
+		<div
+			ref={formTopRef}
+			className="bg-white p-2 rounded-xl max-w-[400px] w-full shadow-xs"
+		>
 			{alert && (
 				<Alert
 					hideTime={3000}
@@ -258,6 +296,8 @@ const AddPlaceForm = ({
 					helperTextError={t('addressHelperError')}
 					onSelect={handleSelectAddress}
 					onClearSelection={clearSelection}
+					isSelected={!!coords}
+					selectedValue={watch('address')}
 				/>
 
 				{/* RHF: registramos address aunque el input visible lo gestione Google */}
@@ -375,6 +415,63 @@ const AddPlaceForm = ({
 					/>
 				</div>
 			</form>
+
+			{RECO_UI_ENABLED && (
+				<div className="flex flex-col gap-2">
+					{recos.length ? (
+						<>
+							<p className="text-sm font-medium">
+								{/* {t('Cerca de tu alojamiento')} */}
+								Cerca de tu alojamiento
+							</p>
+							<div className="flex flex-col gap-2">
+								{recos.map((r) => {
+									const selected = selectedRecoId === r.id;
+									return (
+										<button
+											key={r.id}
+											type="button"
+											onClick={() =>
+												applyRecommendation(r)
+											}
+											className={[
+												'w-full text-left rounded-lg border p-3',
+												selected
+													? 'border-primary-500 bg-primary-50'
+													: 'border-gray-200 bg-white',
+											].join(' ')}
+										>
+											<div className="flex items-start justify-between gap-2">
+												<div>
+													<p className="text-sm font-medium">
+														{r.name}
+													</p>
+													<p className="text-xs text-gray-600">
+														{r.address}
+													</p>
+												</div>
+												<div className="text-xs text-gray-600">
+													{typeof r.rating ===
+													'number'
+														? `★ ${r.rating.toFixed(1)}`
+														: null}
+												</div>
+											</div>
+											<div className="mt-2">
+												<span className="inline-flex items-center rounded-md px-2 py-1 text-xs border">
+													{selected
+														? 'Seleccionado'
+														: 'Usar este sitio'}
+												</span>
+											</div>
+										</button>
+									);
+								})}
+							</div>
+						</>
+					) : null}
+				</div>
+			)}
 		</div>
 	);
 };
