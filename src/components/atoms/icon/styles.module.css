@@ -2,6 +2,10 @@
 	fill: var(--primary-500);
 }
 
+.icon--secondary {
+	fill: var(--secondary-500);
+}
+
 .icon--success {
 	fill: var(--success-500);
 }
