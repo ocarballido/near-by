@@ -9,9 +9,11 @@ import Typography from '@/components/atoms/typography';
 import IconLocationOn from '@/components/atoms/icon/location-on';
 import IconModeHeat from '@/components/atoms/icon/mode-heat';
 import IconFavorite from '@/components/atoms/icon/favorite';
+import IconInfo from '@/components/atoms/icon/info';
 
 type PlacePublicProps = {
 	address: string;
+	description?: string;
 	latitude?: number;
 	longitude?: number;
 	featured?: boolean;
@@ -22,6 +24,7 @@ type PlacePublicProps = {
 
 const PlacePublic = ({
 	address,
+	description,
 	latitude,
 	longitude,
 	featured,
@@ -58,14 +61,28 @@ const PlacePublic = ({
 				<div className="flex gap-2">
 					<Typography component="h5">{name}</Typography>
 				</div>
-				<div className="flex gap-1 mb-2">
+				<div className="flex gap-1">
 					<span className="grow-0">
-						<IconLocationOn size={20} />
+						<IconLocationOn size={20} color="primary" />
 					</span>
-					<Typography>{address}</Typography>
+					<Typography weight="medium">{address}</Typography>
 				</div>
+				{description && (
+					<div className="flex gap-1">
+						<span className="grow-0">
+							<IconInfo size={20} color="primary" />
+						</span>
+						<Typography
+							weight="normal"
+							size="sm"
+							color="text-gray-500"
+						>
+							{description}
+						</Typography>
+					</div>
+				)}
 				<ButtonLink
-					className="w-full"
+					className="w-full mt-2"
 					color="primary"
 					iconLeft={<IconDirections />}
 					label={t('Como llegar')}

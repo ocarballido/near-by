@@ -22,6 +22,7 @@ const PublicLocationContent = ({
 					<PlacePublic
 						key={loc.id}
 						name={loc.name}
+						description={loc.description}
 						latitude={loc.latitude}
 						longitude={loc.longitude}
 						address={loc.address}

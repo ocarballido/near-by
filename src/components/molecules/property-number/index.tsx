@@ -15,9 +15,11 @@ import IconError from '@/components/atoms/icon/error';
 import IconOpenInNew from '@/components/atoms/icon/open-in-new';
 import Typography from '@/components/atoms/typography';
 import IconApartment from '@/components/atoms/icon/apartment';
-import IconCheck from '@/components/atoms/icon/check';
+
+import { CATEGORIES_SUB_CATEGORIES } from '@/config/config-constants';
 
 import { formatRelativeDays } from '@/utils/format-relative-days';
+import IconArrowRightAlt from '@/components/atoms/icon/arrow-right-alt';
 
 type PropertyRow = {
 	id: string;
@@ -60,7 +62,8 @@ const PropertyNumber = async () => {
 	const rows = data ?? [];
 
 	let completedCount = 0;
-	let lastEdited: { name: string; updated_at: string } | null = null;
+	let lastEdited: { id: string; name: string; updated_at: string } | null =
+		null;
 	let lastEditedTs = -1;
 
 	for (const p of rows) {
@@ -78,7 +81,11 @@ const PropertyNumber = async () => {
 			const ts = new Date(p.updated_at).getTime();
 			if (ts > lastEditedTs) {
 				lastEditedTs = ts;
-				lastEdited = { name: p.name, updated_at: p.updated_at };
+				lastEdited = {
+					id: p.id,
+					name: p.name,
+					updated_at: p.updated_at,
+				};
 			}
 		}
 	}
@@ -179,12 +186,10 @@ const PropertyNumber = async () => {
 			</div>
 			{lastEdited?.updated_at ? (
 				<div className="flex flex-col items-center text-center">
-					<Typography component="h3" size="lg">
+					<Typography component="h3" size="lg" className="mb-1">
 						{t('lastActivity.title')}
 					</Typography>
-					<BadgeCheck
-						checked
-						iconChecked={<IconCheck color="success" />}
+					<ButtonLink
 						label={t('lastActivity.edited', {
 							property: lastEdited.name,
 							time: formatRelativeDays(
@@ -192,6 +197,9 @@ const PropertyNumber = async () => {
 								locale,
 							),
 						})}
+						color="secondary"
+						href={`/app/properties/${lastEdited.id}/${CATEGORIES_SUB_CATEGORIES.LODGING.id}/${CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.MANUAL.id}`}
+						iconRight={<IconArrowRightAlt />}
 					/>
 				</div>
 			) : null}
