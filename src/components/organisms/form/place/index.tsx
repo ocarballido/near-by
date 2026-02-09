@@ -5,7 +5,7 @@
 import { useTranslations, useLocale } from 'next-intl';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useLoading } from '@/lib/context/LoadingContext';
 
 import { createLocation } from '@/app/actions/locations/add-location';
@@ -26,9 +26,12 @@ import IconHelp from '@/components/atoms/icon/help';
 import FancyIcon from '@/components/atoms/icon/fancy-icon';
 import Typography from '@/components/atoms/typography';
 import IconApartment from '@/components/atoms/icon/apartment';
+import Modal from '@/components/organisms/modal';
+import RecomendationCard from '../../recomendation-card';
 
 import PlaceAutocompleteField from '@/components/molecules/place-autocomplete';
 import { SelectedPlace } from '@/components/molecules/place-autocomplete';
+import IconLocationOn from '@/components/atoms/icon/location-on';
 
 type FormValues = {
 	property_id: string;
@@ -60,8 +63,6 @@ const AddPlaceForm = ({
 	const t = useTranslations();
 	const locale = useLocale();
 	const router = useRouter();
-
-	const formTopRef = useRef<HTMLDivElement | null>(null);
 
 	const [alert, setAlert] = useState<{
 		type: 'error' | 'success';
@@ -101,11 +102,11 @@ const AddPlaceForm = ({
 
 	const [recos] = useState<PlaceRecommendation[]>(initialRecos);
 	const [selectedRecoId, setSelectedRecoId] = useState<string | null>(null);
+	const [modalOpen, setModalOpen] = useState(false);
 
 	const featuredValue = watch('featured');
 	const mustVisitValue = watch('must_visit');
 
-	// ✅ coords now come from PlaceAutocomplete selection
 	const [coords, setCoords] = useState<SelectedPlace | null>(null);
 
 	const handleSelectAddress = (p: SelectedPlace) => {
@@ -237,18 +238,14 @@ const AddPlaceForm = ({
 			lat: r.latitude,
 			lng: r.longitude,
 		} as SelectedPlace);
-
-		formTopRef.current?.scrollIntoView({
-			behavior: 'smooth',
-			block: 'start',
-		});
 	};
 
+	const teaserReco =
+		(selectedRecoId ? recos.find((r) => r.id === selectedRecoId) : null) ??
+		recos[0];
+
 	return (
-		<div
-			ref={formTopRef}
-			className="bg-white p-2 rounded-xl max-w-[400px] w-full shadow-xs"
-		>
+		<div className="bg-white p-2 rounded-xl max-w-[400px] w-full shadow-xs">
 			{alert && (
 				<Alert
 					hideTime={3000}
@@ -274,6 +271,77 @@ const AddPlaceForm = ({
 				onSubmit={handleSubmit(onSubmit)}
 				className="flex flex-col gap-4 p-2 w-full"
 			>
+				{RECO_UI_ENABLED && recos.length > 0 && (
+					<>
+						<Modal
+							title={t('recommendations.title')}
+							open={modalOpen}
+							onClose={() => {
+								setModalOpen(false);
+							}}
+							secondaryButtonAction={() => setModalOpen(false)}
+							secondaryButtonLabel="Cancel"
+							size="max-w-md"
+						>
+							<div className="flex flex-col gap-3 text-left items-center">
+								<FancyIcon
+									color="gradient"
+									icon={<IconLocationOn color="white" />}
+								/>
+								<Typography component="h5">
+									{t('recommendations.subtitle')}
+								</Typography>
+								<div className="flex flex-col gap-1 w-full">
+									{recos.map((r) => {
+										const selected =
+											selectedRecoId === r.id;
+										return (
+											<RecomendationCard
+												key={r.id}
+												id={r.id}
+												name={r.name}
+												address={r.address}
+												rating={r.rating}
+												selected={selected}
+												applyRecommendation={() => {
+													applyRecommendation(r);
+													setModalOpen(false);
+												}}
+											/>
+										);
+									})}
+								</div>
+							</div>
+						</Modal>
+						<fieldset className="flex flex-col gap-2">
+							<Typography weight="medium" size="sm">
+								{t('recommendations.title')}
+							</Typography>
+							<div className="bg-gray-200 p-1 rounded-b-3xl rounded-t-2xl flex flex-col gap-1">
+								{teaserReco && (
+									<RecomendationCard
+										id={teaserReco.id}
+										name={teaserReco.name}
+										address={teaserReco.address}
+										rating={teaserReco.rating}
+										selected={
+											selectedRecoId === teaserReco.id
+										}
+										applyRecommendation={() =>
+											applyRecommendation(teaserReco)
+										}
+									/>
+								)}
+
+								<Button
+									color="white"
+									onClick={() => setModalOpen(true)}
+									label={t('recommendations.cta')}
+								/>
+							</div>
+						</fieldset>
+					</>
+				)}
 				<TextField
 					label={t('Nombre del sitio *')}
 					placeholder={t('Sitio nombre ejemplo')}
@@ -300,7 +368,6 @@ const AddPlaceForm = ({
 					selectedValue={watch('address')}
 				/>
 
-				{/* RHF: registramos address aunque el input visible lo gestione Google */}
 				<input
 					type="hidden"
 					{...register('address', {
@@ -365,14 +432,6 @@ const AddPlaceForm = ({
 							/>
 						</div>
 					</div>
-					<div className="p-4 bg-sky-100 rounded-md">
-						<p className="text-xs text-sky-900 mb-2">
-							{t('favoriteExplained')}
-						</p>
-						<p className="text-xs text-sky-900">
-							{t('mustSeeExplained')}
-						</p>
-					</div>
 				</fieldset>
 
 				<InputFile
@@ -415,63 +474,6 @@ const AddPlaceForm = ({
 					/>
 				</div>
 			</form>
-
-			{RECO_UI_ENABLED && (
-				<div className="flex flex-col gap-2">
-					{recos.length ? (
-						<>
-							<p className="text-sm font-medium">
-								{/* {t('Cerca de tu alojamiento')} */}
-								Cerca de tu alojamiento
-							</p>
-							<div className="flex flex-col gap-2">
-								{recos.map((r) => {
-									const selected = selectedRecoId === r.id;
-									return (
-										<button
-											key={r.id}
-											type="button"
-											onClick={() =>
-												applyRecommendation(r)
-											}
-											className={[
-												'w-full text-left rounded-lg border p-3',
-												selected
-													? 'border-primary-500 bg-primary-50'
-													: 'border-gray-200 bg-white',
-											].join(' ')}
-										>
-											<div className="flex items-start justify-between gap-2">
-												<div>
-													<p className="text-sm font-medium">
-														{r.name}
-													</p>
-													<p className="text-xs text-gray-600">
-														{r.address}
-													</p>
-												</div>
-												<div className="text-xs text-gray-600">
-													{typeof r.rating ===
-													'number'
-														? `★ ${r.rating.toFixed(1)}`
-														: null}
-												</div>
-											</div>
-											<div className="mt-2">
-												<span className="inline-flex items-center rounded-md px-2 py-1 text-xs border">
-													{selected
-														? 'Seleccionado'
-														: 'Usar este sitio'}
-												</span>
-											</div>
-										</button>
-									);
-								})}
-							</div>
-						</>
-					) : null}
-				</div>
-			)}
 		</div>
 	);
 };
