@@ -24,6 +24,8 @@ type Props = {
 	helperTextError?: string;
 	onSelect: (place: SelectedPlace) => void;
 	onClearSelection?: () => void;
+	isSelected?: boolean;
+	selectedValue?: string;
 };
 
 type GmpSelectEvent = Event & {
@@ -49,6 +51,8 @@ export default function PlaceAutocompleteField({
 	helperTextError,
 	onSelect,
 	onClearSelection,
+	isSelected: isSelectedExternal,
+	selectedValue,
 }: Props) {
 	const hostRef = useRef<HTMLDivElement | null>(null);
 	const elRef = useRef<google.maps.places.PlaceAutocompleteElement | null>(
@@ -58,11 +62,30 @@ export default function PlaceAutocompleteField({
 	const t = useTranslations();
 
 	const [internalError, setInternalError] = useState<string | null>(null);
-	const [selectedAddress, setSelectedAddress] = useState('');
-	const [isSelected, setIsSelected] = useState(false);
+	const [selectedAddressInternal, setSelectedAddressInternal] = useState('');
+	const [isSelectedInternal, setIsSelectedInternal] = useState(false);
+
+	const isSelectedEffective = isSelectedExternal ?? isSelectedInternal;
+
+	// ✅ Dirección efectiva (externa tiene prioridad)
+	const selectedAddressEffective =
+		typeof selectedValue === 'string'
+			? selectedValue
+			: selectedAddressInternal;
+
+	// ✅ Sincroniza estado interno cuando el padre fuerza selección externa
+	useEffect(() => {
+		if (typeof isSelectedExternal === 'boolean') {
+			setIsSelectedInternal(isSelectedExternal);
+		}
+		if (typeof selectedValue === 'string') {
+			setSelectedAddressInternal(selectedValue);
+		}
+	}, [isSelectedExternal, selectedValue]);
 
 	useEffect(() => {
-		if (isSelected) return;
+		// Si ya está seleccionado (interno o externo), no montamos el widget
+		if (isSelectedEffective) return;
 
 		let cancelled = false;
 
@@ -80,7 +103,7 @@ export default function PlaceAutocompleteField({
 				placeholder,
 			});
 
-			// 🔹 Estilo UNA vez (suficiente)
+			// 🔹 Estilo UNA vez
 			el.style.display = 'block';
 			el.style.width = '100%';
 			el.style.backgroundColor = 'rgba(31, 41, 55, 0.05)';
@@ -113,9 +136,11 @@ export default function PlaceAutocompleteField({
 						lng: place.location.lng(),
 					});
 
-					setSelectedAddress(place.formattedAddress);
-					setIsSelected(true);
+					// ✅ marca seleccionado internamente
+					setSelectedAddressInternal(place.formattedAddress);
+					setIsSelectedInternal(true);
 
+					// desmonta widget
 					hostRef.current!.innerHTML = '';
 					elRef.current = null;
 				} catch {
@@ -141,33 +166,34 @@ export default function PlaceAutocompleteField({
 		countryCodes,
 		locale,
 		placeholder,
-		isSelected,
+		isSelectedEffective,
 		onSelect,
 		error,
 		helperTextError,
 	]);
 
 	const handleChange = () => {
-		setIsSelected(false);
-		setSelectedAddress('');
+		// ✅ Resetea interno (el padre limpia coords/address y deselecciona card)
+		setIsSelectedInternal(false);
+		setSelectedAddressInternal('');
 		setInternalError(null);
 		onClearSelection?.();
 	};
 
 	const helperTextToShow = internalError
 		? internalError
-		: isSelected
+		: isSelectedEffective
 			? helperTextSelected
 			: helperTextIdle;
 
 	return (
 		<div className="flex flex-col gap-2">
-			{isSelected ? (
+			{isSelectedEffective ? (
 				<>
 					<div className="flex gap-2 items-end">
 						<TextField
 							label={label}
-							value={selectedAddress}
+							value={selectedAddressEffective}
 							disabled
 							error={error}
 							helperText={helperTextToShow}

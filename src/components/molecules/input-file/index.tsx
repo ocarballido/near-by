@@ -91,7 +91,7 @@ const InputFile = forwardRef<HTMLInputElement, InputFileProps>(
 				/>
 
 				<div
-					className={`w-full max-w-96 h-full min-h-48 bg-gray-800/5 border-2 flex items-center justify-center cursor-pointer relative rounded-lg overflow-hidden ${inputStyles}`}
+					className={`w-full max-w-96 h-full min-h-44 bg-gray-800/5 border-2 flex items-center justify-center cursor-pointer relative rounded-lg overflow-hidden ${inputStyles}`}
 					onClick={handleClick}
 				>
 					{selectedImage ? (

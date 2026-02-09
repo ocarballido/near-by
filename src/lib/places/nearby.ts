@@ -1,10 +1,12 @@
 'use server';
 
 export type GooglePlaceNearbyResult = {
+	place_id?: string;
 	name: string;
 	vicinity?: string;
 	formatted_address?: string;
 	rating?: number;
+	user_ratings_total?: number;
 	types?: string[];
 	geometry?: { location: { lat: number; lng: number } };
 };
@@ -57,7 +59,11 @@ export async function googlePlacesNearbySearch(params: {
 
 	const { controller, cancel } = withTimeout(timeoutMs);
 	try {
-		const res = await fetch(url.toString(), { signal: controller.signal });
+		const res = await fetch(url.toString(), {
+			signal: controller.signal,
+			next: { revalidate: 86400 },
+		});
+
 		if (!res.ok) throw new Error(`Google Places HTTP ${res.status}`);
 
 		const json = (await res.json()) as NearbySearchResponse;

@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react';
 import { useLoading } from '@/lib/context/LoadingContext';
 
 import { createLocation } from '@/app/actions/locations/add-location';
+import { type PlaceRecommendation } from '@/app/actions/locations/get-recommendations';
 
 import { MAX_IMAGE_SIZE } from '@/config/config-constants';
 
@@ -25,9 +26,12 @@ import IconHelp from '@/components/atoms/icon/help';
 import FancyIcon from '@/components/atoms/icon/fancy-icon';
 import Typography from '@/components/atoms/typography';
 import IconApartment from '@/components/atoms/icon/apartment';
+import Modal from '@/components/organisms/modal';
+import RecomendationCard from '../../recomendation-card';
 
 import PlaceAutocompleteField from '@/components/molecules/place-autocomplete';
 import { SelectedPlace } from '@/components/molecules/place-autocomplete';
+import IconLocationOn from '@/components/atoms/icon/location-on';
 
 type FormValues = {
 	property_id: string;
@@ -49,10 +53,12 @@ const AddPlaceForm = ({
 	propertyId,
 	subCategoryId,
 	categoryId,
+	initialRecos = [],
 }: {
 	propertyId: string;
 	subCategoryId: string;
 	categoryId: string;
+	initialRecos?: PlaceRecommendation[];
 }) => {
 	const t = useTranslations();
 	const locale = useLocale();
@@ -91,10 +97,16 @@ const AddPlaceForm = ({
 		},
 	});
 
+	const RECO_UI_ENABLED =
+		process.env.NEXT_PUBLIC_RECOMMENDATIONS_ENABLED === 'true';
+
+	const [recos] = useState<PlaceRecommendation[]>(initialRecos);
+	const [selectedRecoId, setSelectedRecoId] = useState<string | null>(null);
+	const [modalOpen, setModalOpen] = useState(false);
+
 	const featuredValue = watch('featured');
 	const mustVisitValue = watch('must_visit');
 
-	// ✅ coords now come from PlaceAutocomplete selection
 	const [coords, setCoords] = useState<SelectedPlace | null>(null);
 
 	const handleSelectAddress = (p: SelectedPlace) => {
@@ -111,6 +123,9 @@ const AddPlaceForm = ({
 
 	const clearSelection = () => {
 		setCoords(null);
+		setSelectedRecoId(null);
+
+		setValue('address', '', { shouldDirty: true, shouldValidate: true });
 		setValue('latitude', '', { shouldDirty: true, shouldValidate: true });
 		setValue('longitude', '', { shouldDirty: true, shouldValidate: true });
 	};
@@ -209,6 +224,26 @@ const AddPlaceForm = ({
 		setCoords(null);
 	};
 
+	const applyRecommendation = (r: PlaceRecommendation) => {
+		setSelectedRecoId(r.id);
+
+		setValue('name', r.name, {
+			shouldDirty: true,
+			shouldTouch: true,
+			shouldValidate: true,
+		});
+
+		handleSelectAddress({
+			formattedAddress: r.address,
+			lat: r.latitude,
+			lng: r.longitude,
+		} as SelectedPlace);
+	};
+
+	const teaserReco =
+		(selectedRecoId ? recos.find((r) => r.id === selectedRecoId) : null) ??
+		recos[0];
+
 	return (
 		<div className="bg-white p-2 rounded-xl max-w-[400px] w-full shadow-xs">
 			{alert && (
@@ -236,6 +271,77 @@ const AddPlaceForm = ({
 				onSubmit={handleSubmit(onSubmit)}
 				className="flex flex-col gap-4 p-2 w-full"
 			>
+				{RECO_UI_ENABLED && recos.length > 0 && (
+					<>
+						<Modal
+							title={t('recommendations.title')}
+							open={modalOpen}
+							onClose={() => {
+								setModalOpen(false);
+							}}
+							secondaryButtonAction={() => setModalOpen(false)}
+							secondaryButtonLabel="Cancel"
+							size="max-w-md"
+						>
+							<div className="flex flex-col gap-3 items-center">
+								<FancyIcon
+									color="gradient"
+									icon={<IconLocationOn color="white" />}
+								/>
+								<Typography>
+									{t('recommendations.subtitle')}
+								</Typography>
+								<div className="flex flex-col gap-1 w-full">
+									{recos.map((r) => {
+										const selected =
+											selectedRecoId === r.id;
+										return (
+											<RecomendationCard
+												key={r.id}
+												id={r.id}
+												name={r.name}
+												address={r.address}
+												rating={r.rating}
+												selected={selected}
+												applyRecommendation={() => {
+													applyRecommendation(r);
+													setModalOpen(false);
+												}}
+											/>
+										);
+									})}
+								</div>
+							</div>
+						</Modal>
+						<fieldset className="flex flex-col gap-2">
+							<Typography weight="medium" size="sm">
+								{t('recommendations.title')}
+							</Typography>
+							<div className="bg-gray-200 p-1 rounded-b-3xl rounded-t-2xl flex flex-col gap-1">
+								{teaserReco && (
+									<RecomendationCard
+										id={teaserReco.id}
+										name={teaserReco.name}
+										address={teaserReco.address}
+										rating={teaserReco.rating}
+										selected={
+											selectedRecoId === teaserReco.id
+										}
+										applyRecommendation={() =>
+											applyRecommendation(teaserReco)
+										}
+									/>
+								)}
+
+								<Button
+									color="white"
+									onClick={() => setModalOpen(true)}
+									label={t('recommendations.cta')}
+								/>
+							</div>
+						</fieldset>
+					</>
+				)}
 				<TextField
 					label={t('Nombre del sitio *')}
 					placeholder={t('Sitio nombre ejemplo')}
@@ -258,9 +364,10 @@ const AddPlaceForm = ({
 					helperTextError={t('addressHelperError')}
 					onSelect={handleSelectAddress}
 					onClearSelection={clearSelection}
+					isSelected={!!coords}
+					selectedValue={watch('address')}
 				/>
 
-				{/* RHF: registramos address aunque el input visible lo gestione Google */}
 				<input
 					type="hidden"
 					{...register('address', {
@@ -324,14 +431,6 @@ const AddPlaceForm = ({
 								}}
 							/>
 						</div>
-					</div>
-					<div className="p-4 bg-sky-100 rounded-md">
-						<p className="text-xs text-sky-900 mb-2">
-							{t('favoriteExplained')}
-						</p>
-						<p className="text-xs text-sky-900">
-							{t('mustSeeExplained')}
-						</p>
 					</div>
 				</fieldset>
 

@@ -699,5 +699,14 @@
 	"lastActivity": {
 		"title": "Dernière activité",
 		"edited": "Vous avez modifié \"{property}\" {time}"
+	},
+	"recommendations": {
+		"title": "Recommandations de l’application",
+		"subtitle": "Nous avons sélectionné quelques lieux intéressants près de votre logement.",
+		"description": "Gagnez du temps en découvrant des options appréciées par les voyageurs. Vous pouvez en utiliser une comme base ou ajouter la vôtre.",
+		"cta": "Voir plus de recommandations",
+		"helper": "Basé sur l’emplacement de votre logement",
+		"use": "Utiliser ce lieu",
+		"selected": "Sélectionné"
 	}
 }

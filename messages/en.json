@@ -694,5 +694,14 @@
 	"lastActivity": {
 		"title": "Last activity",
 		"edited": "You edited \"{property}\" {time}"
+	},
+	"recommendations": {
+		"title": "App recommendations",
+		"subtitle": "We’ve picked a few interesting places near your accommodation.",
+		"description": "Save time by exploring options that guests usually enjoy. Use one as a starting point or ignore them and add your own.",
+		"cta": "View more recommendations",
+		"helper": "Based on your accommodation’s location",
+		"use": "Use this place",
+		"selected": "Selected"
 	}
 }
