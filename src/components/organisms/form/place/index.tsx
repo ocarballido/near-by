@@ -283,12 +283,12 @@ const AddPlaceForm = ({
 							secondaryButtonLabel="Cancel"
 							size="max-w-md"
 						>
-							<div className="flex flex-col gap-3 text-left items-center">
+							<div className="flex flex-col gap-3 items-center">
 								<FancyIcon
 									color="gradient"
 									icon={<IconLocationOn color="white" />}
 								/>
-								<Typography component="h5">
+								<Typography>
 									{t('recommendations.subtitle')}
 								</Typography>
 								<div className="flex flex-col gap-1 w-full">
