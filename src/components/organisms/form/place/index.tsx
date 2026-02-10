@@ -316,10 +316,11 @@ const AddPlaceForm = ({
 						</Modal>
 						<fieldset className="flex flex-col gap-2 text-center">
 							<Typography
-								// weight="medium"
 								size="base"
 								component="h3"
+								className="flex items-center justify-center gap-1"
 							>
+								<IconLocationOn color="primary" />
 								{t('recommendations.title')}
 							</Typography>
 							<div className="bg-gray-200 p-1 rounded-b-3xl rounded-t-2xl flex flex-col gap-1">
