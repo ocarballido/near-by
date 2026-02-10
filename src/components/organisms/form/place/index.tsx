@@ -32,6 +32,7 @@ import RecomendationCard from '../../recomendation-card';
 import PlaceAutocompleteField from '@/components/molecules/place-autocomplete';
 import { SelectedPlace } from '@/components/molecules/place-autocomplete';
 import IconLocationOn from '@/components/atoms/icon/location-on';
+import IconOpenInNew from '@/components/atoms/icon/open-in-new';
 
 type FormValues = {
 	property_id: string;
@@ -313,8 +314,13 @@ const AddPlaceForm = ({
 								</div>
 							</div>
 						</Modal>
-						<fieldset className="flex flex-col gap-2">
-							<Typography weight="medium" size="sm">
+						<fieldset className="flex flex-col gap-2 text-center">
+							<Typography
+								size="base"
+								component="h3"
+								className="flex items-center justify-center gap-1"
+							>
+								<IconLocationOn color="primary" />
 								{t('recommendations.title')}
 							</Typography>
 							<div className="bg-gray-200 p-1 rounded-b-3xl rounded-t-2xl flex flex-col gap-1">
@@ -334,9 +340,10 @@ const AddPlaceForm = ({
 								)}
 
 								<Button
-									color="white"
+									color="secondary"
 									onClick={() => setModalOpen(true)}
 									label={t('recommendations.cta')}
+									iconLeft={<IconOpenInNew />}
 								/>
 							</div>
 						</fieldset>
