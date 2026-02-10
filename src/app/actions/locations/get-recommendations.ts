@@ -19,7 +19,7 @@ const Schema = z.object({
 });
 
 export type PlaceRecommendation = {
-	id: string; // estable para UI (place_id si existe, si no name+lat+lng)
+	id: string;
 	name: string;
 	address: string;
 	latitude: number;
@@ -29,8 +29,48 @@ export type PlaceRecommendation = {
 };
 
 const MAX_RESULTS = 5;
-const RADIUS_METERS = 2000;
 const RANKBY = 'prominence' as const;
+
+function radiusFor(subCategoryId: string): number {
+	// Icónicos / “merece la pena moverse”
+	if (
+		subCategoryId ===
+			CATEGORIES_SUB_CATEGORIES.ARTS_AND_CULTURE.SUB_CATEGORIES.MUSEUMS
+				.id ||
+		subCategoryId ===
+			CATEGORIES_SUB_CATEGORIES.PARKS_AND_NATURE.SUB_CATEGORIES
+				.URBAN_PARKS.id ||
+		subCategoryId ===
+			CATEGORIES_SUB_CATEGORIES.PARKS_AND_NATURE.SUB_CATEGORIES.BEACHES.id
+	) {
+		return 8000; // 8 km: suele capturar “Prado” vs 2 km no
+	}
+
+	// Utilidad / lo quieres cercano
+	if (
+		subCategoryId ===
+			CATEGORIES_SUB_CATEGORIES.HEALTH_AND_WELLNESS.SUB_CATEGORIES
+				.PHARMACIES.id ||
+		subCategoryId ===
+			CATEGORIES_SUB_CATEGORIES.SHOPPING.SUB_CATEGORIES.SUPERMARKETS.id ||
+		subCategoryId ===
+			CATEGORIES_SUB_CATEGORIES.TRANSPORTATION.SUB_CATEGORIES
+				.METRO_STATIONS.id
+	) {
+		return 2500;
+	}
+
+	// Parking: puede estar un poco más lejos (centros suelen tener parkings grandes)
+	if (
+		subCategoryId ===
+		CATEGORIES_SUB_CATEGORIES.SERVICES.SUB_CATEGORIES.PARKINGS.id
+	) {
+		return 3500;
+	}
+
+	// Comida y bebida: medio (no solo lo de la esquina)
+	return 4500;
+}
 
 const ENABLED = new Set<string>([
 	CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.SUB_CATEGORIES.RESTAURANTS.id,
@@ -43,7 +83,6 @@ const ENABLED = new Set<string>([
 	CATEGORIES_SUB_CATEGORIES.PARKS_AND_NATURE.SUB_CATEGORIES.URBAN_PARKS.id,
 	CATEGORIES_SUB_CATEGORIES.PARKS_AND_NATURE.SUB_CATEGORIES.BEACHES.id,
 	CATEGORIES_SUB_CATEGORIES.ARTS_AND_CULTURE.SUB_CATEGORIES.MUSEUMS.id,
-	CATEGORIES_SUB_CATEGORIES.ARTS_AND_CULTURE.SUB_CATEGORIES.HISTORIC_SITES.id,
 ]);
 
 const SUBCAT_TO_GOOGLE: Record<
@@ -53,44 +92,44 @@ const SUBCAT_TO_GOOGLE: Record<
 	[CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.SUB_CATEGORIES.RESTAURANTS.id]: {
 		placeType: 'restaurant',
 	},
-	[CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.SUB_CATEGORIES.BARS.id]: {
-		placeType: 'bar',
-	},
 	[CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.SUB_CATEGORIES.CAFES.id]: {
 		placeType: 'cafe',
 	},
+	[CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.SUB_CATEGORIES.BARS.id]: {
+		placeType: 'bar',
+	},
+
 	[CATEGORIES_SUB_CATEGORIES.SHOPPING.SUB_CATEGORIES.SUPERMARKETS.id]: {
 		placeType: 'supermarket',
 	},
+
 	[CATEGORIES_SUB_CATEGORIES.SERVICES.SUB_CATEGORIES.PARKINGS.id]: {
 		placeType: 'parking',
-		keywords: [
-			'parking',
-			'aparcamiento',
-			'estacionamiento',
-			'parking garage',
-		],
+		keywords: ['parking', 'aparcamiento', 'parking garage', 'parking lot'],
+		// parking a veces viene como POI/establishment
+		fallbackPlaceTypes: ['point_of_interest'],
 	},
+
 	[CATEGORIES_SUB_CATEGORIES.TRANSPORTATION.SUB_CATEGORIES.METRO_STATIONS.id]:
 		{
-			placeType: 'transit_station',
-			keywords: ['metro', 'subway', 'underground', 'estación de metro'],
-			fallbackPlaceTypes: ['subway_station', 'train_station'],
+			placeType: 'subway_station',
+			// en algunas ciudades/subzonas, transit_station da mejores resultados
+			fallbackPlaceTypes: ['transit_station'],
 		},
+
 	[CATEGORIES_SUB_CATEGORIES.HEALTH_AND_WELLNESS.SUB_CATEGORIES.PHARMACIES
 		.id]: {
 		placeType: 'pharmacy',
 	},
+
 	[CATEGORIES_SUB_CATEGORIES.PARKS_AND_NATURE.SUB_CATEGORIES.URBAN_PARKS.id]:
 		{
 			placeType: 'park',
-			keywords: ['park', 'parque', 'jardín', 'jardines'],
 		},
 	[CATEGORIES_SUB_CATEGORIES.PARKS_AND_NATURE.SUB_CATEGORIES.BEACHES.id]: {
 		placeType: 'beach',
-		keywords: ['beach', 'playa'],
-		fallbackPlaceTypes: ['tourist_attraction'],
 	},
+
 	[CATEGORIES_SUB_CATEGORIES.ARTS_AND_CULTURE.SUB_CATEGORIES.MUSEUMS.id]: {
 		placeType: 'museum',
 	},
@@ -129,19 +168,24 @@ export async function getPlaceRecommendations(
 	data: PlaceRecommendation[];
 	message?: string;
 }> {
+	const language = locale ? locale.split('-')[0] : undefined;
+
 	// Kill switch backend (corta gasto)
 	if (process.env.RECOMMENDATIONS_GOOGLE_ENABLED !== 'true') {
 		return { success: true, data: [] };
 	}
 
-	const parsed = Schema.safeParse({ propertyId, subCategoryId, locale });
+	const parsed = Schema.safeParse({ propertyId, subCategoryId, language });
 	if (!parsed.success)
 		return { success: false, data: [], message: 'Datos inválidos.' };
 
 	if (!ENABLED.has(subCategoryId)) return { success: true, data: [] };
 
 	const cfg = SUBCAT_TO_GOOGLE[subCategoryId];
-	if (!cfg) return { success: true, data: [] };
+	if (!cfg) {
+		console.log('No mapping for subCategoryId:', subCategoryId);
+		return { success: true, data: [] };
+	}
 
 	const ssrClient = await createSSRClient();
 	const {
@@ -176,6 +220,7 @@ export async function getPlaceRecommendations(
 		return { success: true, data: [] };
 
 	const { placeType, keywords, fallbackPlaceTypes } = cfg;
+	const radius = radiusFor(subCategoryId);
 
 	let results: GooglePlaceNearbyResult[] = [];
 
@@ -185,10 +230,10 @@ export async function getPlaceRecommendations(
 		lat: prop.latitude,
 		lng: prop.longitude,
 		type: placeType,
-		radius: RADIUS_METERS,
+		radius,
 		rankby: RANKBY,
 		keyword: keywords?.[0],
-		language: locale, // si pasas 'es', 'en', etc.
+		language,
 	});
 
 	// intento 2 keywords
@@ -199,10 +244,10 @@ export async function getPlaceRecommendations(
 				lat: prop.latitude,
 				lng: prop.longitude,
 				type: placeType,
-				radius: RADIUS_METERS,
+				radius,
 				rankby: RANKBY,
 				keyword: keywords[i],
-				language: locale,
+				language,
 			});
 			if (fb?.length) {
 				results = fb;
@@ -219,9 +264,9 @@ export async function getPlaceRecommendations(
 				lat: prop.latitude,
 				lng: prop.longitude,
 				type: fbType,
-				radius: RADIUS_METERS,
+				radius,
 				rankby: RANKBY,
-				language: locale,
+				language,
 			});
 			if (fb?.length) {
 				results = fb;
