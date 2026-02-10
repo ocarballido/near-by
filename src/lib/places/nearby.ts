@@ -58,14 +58,9 @@ export async function googlePlacesNearbySearch(params: {
 
 	const { controller, cancel } = withTimeout(timeoutMs);
 	try {
-		// const res = await fetch(url.toString(), {
-		// 	signal: controller.signal,
-		// 	next: { revalidate: 86400 },
-		// });
 		const res = await fetch(url.toString(), {
 			signal: controller.signal,
-			// next: { revalidate: 86400 },
-			cache: 'no-store',
+			next: { revalidate: 86400 },
 		});
 
 		if (!res.ok) throw new Error(`Google Places HTTP ${res.status}`);
