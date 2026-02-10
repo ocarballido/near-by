@@ -4,7 +4,6 @@ import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { createSSRClient } from '@/lib/supabase/server';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
-import { CATEGORIES_SUB_CATEGORIES } from '@/config/config-constants';
 import { touchPropertyUpdatedAt } from '@/lib/properties/touch-property';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
@@ -12,12 +11,9 @@ import type { Database, TablesInsert } from '@/lib/types';
 
 import { updatePropertyProgressAndTrack } from '@/lib/updatePropertyProgress';
 
-import {
-	googlePlacesNearbySearch,
-	type GooglePlaceNearbyResult,
-} from '@/lib/places/nearby';
+import { runPlacesSearch } from '@/lib/places/places-engine';
 
-type GooglePlaceResult = GooglePlaceNearbyResult;
+import { findCategoryIdBySubCategoryId } from '@/lib/places/place-search-plan';
 
 const Schema = z.object({
 	propertyId: z.string().uuid(),
@@ -32,72 +28,7 @@ export type GenerateAutoLocationsState = {
 };
 
 const RADIUS_METERS = 2000;
-const MAX_RESULTS = 2;
-const RANKBY = 'prominence'; // ✅ compatible con radius
-
-// Mapping: sub_category_id -> { category_id, googlePlacesType, keyword(s) opcional }
-const SUBCAT_TO_GOOGLE: Record<
-	string,
-	{
-		categoryId: string;
-		placeType: string;
-		keywords?: string[];
-		fallbackPlaceTypes?: string[];
-	}
-> = {
-	// Health & Wellness
-	[CATEGORIES_SUB_CATEGORIES.HEALTH_AND_WELLNESS.SUB_CATEGORIES.PHARMACIES
-		.id]: {
-		categoryId: CATEGORIES_SUB_CATEGORIES.HEALTH_AND_WELLNESS.id,
-		placeType: 'pharmacy',
-	},
-	[CATEGORIES_SUB_CATEGORIES.HEALTH_AND_WELLNESS.SUB_CATEGORIES.EMERGENCY.id]:
-		{
-			categoryId: CATEGORIES_SUB_CATEGORIES.HEALTH_AND_WELLNESS.id,
-			placeType: 'hospital',
-			keywords: ['urgencias', 'emergency', 'emergency room'],
-		},
-
-	// Shopping
-	[CATEGORIES_SUB_CATEGORIES.SHOPPING.SUB_CATEGORIES.SUPERMARKETS.id]: {
-		categoryId: CATEGORIES_SUB_CATEGORIES.SHOPPING.id,
-		placeType: 'supermarket',
-	},
-	// Food & Drink
-	[CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.SUB_CATEGORIES.RESTAURANTS.id]: {
-		categoryId: CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.id,
-		placeType: 'restaurant',
-	},
-	[CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.SUB_CATEGORIES.CAFES.id]: {
-		categoryId: CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.id,
-		placeType: 'cafe',
-	},
-	[CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.SUB_CATEGORIES.BARS.id]: {
-		categoryId: CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.id,
-		placeType: 'bar',
-	},
-	// Security & Emergencies
-	[CATEGORIES_SUB_CATEGORIES.SECURITY_AND_EMERGENCIES.SUB_CATEGORIES
-		.POLICE_STATIONS.id]: {
-		categoryId: CATEGORIES_SUB_CATEGORIES.SECURITY_AND_EMERGENCIES.id,
-		placeType: 'police',
-		keywords: ['police station', 'comisaría', 'comisaria'],
-	},
-	// Services
-	[CATEGORIES_SUB_CATEGORIES.SERVICES.SUB_CATEGORIES.PARKINGS.id]: {
-		categoryId: CATEGORIES_SUB_CATEGORIES.SERVICES.id,
-		placeType: 'parking',
-		keywords: [
-			'parking',
-			'aparcamiento',
-			'estacionamiento',
-			'parking público',
-			'parking publico',
-			'parking garage',
-			'parking lot',
-		],
-	},
-};
+const MAX_RESULTS_PER_SUBCAT = 2;
 
 // Concurrencia limitada (sin librerías)
 async function mapLimit<T, R>(
@@ -121,22 +52,8 @@ async function mapLimit<T, R>(
 	return results;
 }
 
-// type guard para eliminar nulls con tipado correcto
 function notNull<T>(v: T | null): v is T {
 	return v !== null;
-}
-
-function keywordMatch(place: GooglePlaceResult, keywords?: string[]) {
-	if (!keywords?.length) return false;
-	const haystack = `${place.name ?? ''} ${place.vicinity ?? ''} ${
-		place.formatted_address ?? ''
-	}`.toLowerCase();
-	return keywords.some((k) => haystack.includes(k.toLowerCase()));
-}
-
-function shouldStrictTypeFilter(placeType: string) {
-	// Mantén estricto donde hay más ruido si no filtras
-	return ['police'].includes(placeType);
 }
 
 export async function generateAutoLocations(
@@ -145,8 +62,9 @@ export async function generateAutoLocations(
 ): Promise<GenerateAutoLocationsState> {
 	try {
 		const parsed = Schema.safeParse({ propertyId, subCategoryIds });
-		if (!parsed.success)
+		if (!parsed.success) {
 			return { errors: { server: ['Datos inválidos.'] } };
+		}
 
 		const ssrClient = await createSSRClient();
 		const {
@@ -206,7 +124,14 @@ export async function generateAutoLocations(
 			};
 		}
 
-		const supported = subCategoryIds.filter((id) => SUBCAT_TO_GOOGLE[id]);
+		// ✅ filtramos subcats que realmente tienen categoryId conocido
+		const supported = subCategoryIds
+			.map((subCategoryId) => {
+				const categoryId = findCategoryIdBySubCategoryId(subCategoryId);
+				return categoryId ? { subCategoryId, categoryId } : null;
+			})
+			.filter(notNull);
+
 		if (supported.length === 0) {
 			return {
 				errors: {
@@ -219,120 +144,50 @@ export async function generateAutoLocations(
 
 		const now = new Date().toISOString();
 
-		const placesLists = await mapLimit(supported, 3, async (subCatId) => {
-			const { placeType, keywords, fallbackPlaceTypes } =
-				SUBCAT_TO_GOOGLE[subCatId];
-
-			let results: GooglePlaceResult[] = [];
-
-			// 1) Intento principal: type + (primer keyword si existe)
-			if (keywords?.length) {
-				results = await googlePlacesNearbySearch({
+		// ✅ Motor único: para cada subcategoría buscamos lugares
+		// NOTA: usamos mode 'magic' y el motor:
+		// - si está curada, aplica plan curado (y filtros anti-hoteles)
+		// - si no, usa keyword por nombre subcategoría
+		const lists = await mapLimit(
+			supported,
+			3,
+			async ({ subCategoryId }) => {
+				const found = await runPlacesSearch({
 					apiKey,
 					lat: prop.latitude!,
 					lng: prop.longitude!,
-					type: placeType,
-					keyword: keywords[0],
+					subCategoryId,
+					mode: 'magic',
 					radius: RADIUS_METERS,
-					rankby: RANKBY,
+					language: undefined, // aquí no tienes locale; si quieres, lo añadimos como param opcional
+					debugTag: undefined, // evita logs en prod
 				});
-			} else {
-				results = await googlePlacesNearbySearch({
-					apiKey,
-					lat: prop.latitude!,
-					lng: prop.longitude!,
-					type: placeType,
-					radius: RADIUS_METERS,
-					rankby: RANKBY,
-				});
-			}
 
-			// 2) Si hay más keywords, probarlas hasta encontrar algo decente
-			if ((!results || results.length === 0) && keywords?.length) {
-				for (let i = 1; i < keywords.length; i++) {
-					const fb = await googlePlacesNearbySearch({
-						apiKey,
-						lat: prop.latitude!,
-						lng: prop.longitude!,
-						type: placeType,
-						keyword: keywords[i],
-						radius: RADIUS_METERS,
-						rankby: RANKBY,
-					});
-					if (fb?.length) {
-						results = fb;
-						break;
-					}
-				}
-			}
+				return found.slice(0, MAX_RESULTS_PER_SUBCAT).map((p) => ({
+					subCategoryId,
+					place: p,
+				}));
+			},
+		);
 
-			// 3) Fallback place types si no hay resultados
-			if (
-				(!results || results.length === 0) &&
-				fallbackPlaceTypes?.length
-			) {
-				for (const fbType of fallbackPlaceTypes) {
-					const fbResults = await googlePlacesNearbySearch({
-						apiKey,
-						lat: prop.latitude!,
-						lng: prop.longitude!,
-						type: fbType,
-						radius: RADIUS_METERS,
-						rankby: RANKBY,
-					});
-					if (fbResults?.length) {
-						results = fbResults;
-						break;
-					}
-				}
-			}
-
-			// ✅ FILTRO DURO por types cuando usamos un type concreto
-			const strict = shouldStrictTypeFilter(placeType);
-
-			const filtered = (results ?? []).filter((p) => {
-				// 1) Si trae types y coincide, perfecto
-				if (p.types?.includes(placeType)) return true;
-
-				// 2) Para parking y otros no-estrictos, aceptamos si matchea keyword
-				if (!strict && keywordMatch(p, keywords)) return true;
-
-				return false;
-			});
-
-			const finalResults = (filtered.length ? filtered : (results ?? []))
-				.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))
-				.slice(0, MAX_RESULTS)
-				.map((p) => ({ subCatId, place: p }));
-
-			return finalResults;
-		});
-
-		const flattened = placesLists.flat();
+		const flattened = lists.flat();
 
 		const insertables: TablesInsert<'property_data'>[] = flattened
-			.map(({ subCatId, place }) => {
-				const latitude = place.geometry?.location?.lat;
-				const longitude = place.geometry?.location?.lng;
-				const name = place.name?.trim();
-				const address =
-					place.vicinity?.trim() || place.formatted_address?.trim();
-
-				if (!latitude || !longitude || !name || !address) return null;
-
-				const { categoryId } = SUBCAT_TO_GOOGLE[subCatId];
+			.map(({ subCategoryId, place }) => {
+				const categoryId = findCategoryIdBySubCategoryId(subCategoryId);
+				if (!categoryId) return null;
 
 				return {
 					user_id: user.id,
 					property_id: propertyId,
 					category_id: categoryId,
-					sub_category_id: subCatId,
+					sub_category_id: subCategoryId,
 					type: 'location',
-					name,
-					address,
+					name: place.name,
+					address: place.address,
 					description: '',
-					latitude,
-					longitude,
+					latitude: place.latitude,
+					longitude: place.longitude,
 					image_url: null,
 					featured: false,
 					created_at: now,
@@ -365,7 +220,6 @@ export async function generateAutoLocations(
 			};
 		}
 
-		// Marcar última actividad de la propiedad (dashboard)
 		await touchPropertyUpdatedAt(supabase, propertyId);
 
 		await updatePropertyProgressAndTrack({

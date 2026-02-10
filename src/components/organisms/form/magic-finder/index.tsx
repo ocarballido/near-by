@@ -1,15 +1,14 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useLoading } from '@/lib/context/LoadingContext';
 
 import { discoverNearbyPlaces } from '@/app/actions/magic-search/magic-search';
 
 import {
-	MAGIC_FINDER_SELECT,
 	MAX_MAGIC_FINDER_LOCATIONS,
 	RADIUS_OPTIONS,
 } from '@/config/config-constants';
@@ -24,7 +23,6 @@ import FancyIcon from '@/components/atoms/icon/fancy-icon';
 import IconSearch from '@/components/atoms/icon/search';
 
 type FormValues = {
-	type: string;
 	quantity: string;
 	radius: string;
 };
@@ -51,17 +49,9 @@ const MagicFinderForm = ({
 	lng: string;
 }) => {
 	const t = useTranslations();
+	const locale = useLocale();
 
 	const router = useRouter();
-
-	const options = useMemo(() => {
-		return MAGIC_FINDER_SELECT.map((option) => {
-			return {
-				...option,
-				label: t(option.label),
-			};
-		});
-	}, [t]);
 
 	const [alert, setAlert] = useState<{
 		type: 'error' | 'success';
@@ -76,14 +66,9 @@ const MagicFinderForm = ({
 		formState: { errors, isSubmitting },
 		setError,
 	} = useForm<FormValues>({
-		defaultValues: {
-			type: '',
-			quantity: '',
-			radius: '',
-		},
+		defaultValues: { quantity: '', radius: '' },
 	});
 	const onSubmit: SubmitHandler<FormValues> = async ({
-		type,
 		quantity,
 		radius,
 	}) => {
@@ -93,9 +78,9 @@ const MagicFinderForm = ({
 		fd.append('category_id', categoryId);
 		fd.append('lat', lat);
 		fd.append('lng', lng);
-		fd.append('type', type);
 		fd.append('max', quantity);
 		fd.append('radius', radius);
+		fd.append('locale', locale);
 
 		openLoading();
 		const result = await discoverNearbyPlaces(fd);
@@ -103,13 +88,6 @@ const MagicFinderForm = ({
 
 		if (result.errors) {
 			if (result.errors) {
-				if (result.errors.type) {
-					setError('type', {
-						type: 'manual',
-						message: result.errors.type[0],
-					});
-				}
-
 				if (result.errors.max) {
 					setError('quantity', {
 						type: 'manual',
@@ -186,25 +164,6 @@ const MagicFinderForm = ({
 				onSubmit={handleSubmit(onSubmit)}
 				className="flex flex-col gap-6 max-w-md p-2"
 			>
-				<Controller
-					name="type"
-					control={control}
-					rules={{ required: t('El tipo de lugar es obligatorio') }}
-					render={({ field }) => (
-						<Select
-							label={t('Categoría')}
-							options={options}
-							className="w-full"
-							value={field.value}
-							onChange={field.onChange}
-							name="type"
-							error={!!errors.type}
-							helperText={errors.type?.message}
-							placeholder={t('Selecciona un tipo de lugar')}
-						/>
-					)}
-				/>
-
 				<Controller
 					name="radius"
 					control={control}

@@ -1,5 +1,3 @@
-'use server';
-
 export type GooglePlaceNearbyResult = {
 	place_id?: string;
 	name: string;
@@ -27,12 +25,13 @@ export async function googlePlacesNearbySearch(params: {
 	apiKey: string;
 	lat: number;
 	lng: number;
-	type: string;
+	type?: string; // ✅ optional
 	keyword?: string;
 	radius?: number;
 	rankby?: 'prominence';
 	timeoutMs?: number;
 	language?: string;
+	debug?: boolean;
 }) {
 	const {
 		apiKey,
@@ -51,24 +50,29 @@ export async function googlePlacesNearbySearch(params: {
 	);
 	url.searchParams.set('location', `${lat},${lng}`);
 	url.searchParams.set('radius', String(radius));
-	url.searchParams.set('type', type);
 	url.searchParams.set('rankby', rankby);
+	if (type) url.searchParams.set('type', type);
 	if (keyword) url.searchParams.set('keyword', keyword);
 	if (language) url.searchParams.set('language', language);
 	url.searchParams.set('key', apiKey);
 
 	const { controller, cancel } = withTimeout(timeoutMs);
 	try {
+		// const res = await fetch(url.toString(), {
+		// 	signal: controller.signal,
+		// 	next: { revalidate: 86400 },
+		// });
 		const res = await fetch(url.toString(), {
 			signal: controller.signal,
-			next: { revalidate: 86400 },
+			// next: { revalidate: 86400 },
+			cache: 'no-store',
 		});
 
 		if (!res.ok) throw new Error(`Google Places HTTP ${res.status}`);
 
 		const json = (await res.json()) as NearbySearchResponse;
-		if (!json || !Array.isArray(json.results)) return [];
 
+		if (!json || !Array.isArray(json.results)) return [];
 		return json.results;
 	} finally {
 		cancel();
