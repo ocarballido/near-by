@@ -50,24 +50,15 @@ export class SassClient {
 		return { data, error: null };
 	}
 
-	// async signInWithMagicLink(email: string) {
-	// 	const { data, error } = await this.client.auth.signInWithOtp({
-	// 		email,
-	// 		options: {
-	// 			emailRedirectTo: `${
-	// 				typeof window !== 'undefined' ? window.location.origin : ''
-	// 			}/auth/callback?redirect=/app`,
-	// 		},
-	// 	});
-
-	// 	return { data, error };
-	// }
-
 	async signInWithMagicLink(email: string, locale: string = 'en') {
 		const origin =
 			typeof window !== 'undefined' ? window.location.origin : '';
 
-		const redirectUrl = `${origin}/auth/callback?redirect=/app?fromAuth=1&locale=${locale}`;
+		// El parámetro redirect debe ir codificado para que sus propios "?" o "&" no rompan la URL principal
+		const innerRedirect = encodeURIComponent(
+			`/app?fromAuth=1&locale=${locale}`,
+		);
+		const redirectUrl = `${origin}/auth/callback?redirect=${innerRedirect}`;
 
 		const { data, error } = await this.client.auth.signInWithOtp({
 			email,
