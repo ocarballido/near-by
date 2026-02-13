@@ -65,7 +65,7 @@ export default function LandingAuthButton() {
 			{isAuthenticated ? (
 				<ButtonLink
 					label={t('Ir al panel')}
-					href="/app"
+					href="/app?fromAuth=1"
 					iconLeft={<IconHome color="white" />}
 				/>
 			) : (

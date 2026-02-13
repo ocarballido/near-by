@@ -703,5 +703,11 @@
 		"helper": "Based on your accommodation’s location",
 		"use": "Use this place",
 		"selected": "Selected"
+	},
+	"firstPropertyBanner": {
+		"title": "Your first property in 2 minutes",
+		"description": "Add it now and we’ll guide you step by step to complete it and share it with your guests.",
+		"primaryButton": "Create my first property",
+		"secondaryButton": "Go to dashboard"
 	}
 }
