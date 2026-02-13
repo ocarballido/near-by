@@ -1,7 +1,5 @@
 import Image from 'next/image';
 
-import Script from 'next/script';
-
 import loginRegister from '../../../../public/static/img/login-register-2x.webp';
 import logo from '../../../../public/static/img/logo-color.webp';
 import PlaceTooltip from '@/components/atoms/place-tooltip';
@@ -13,10 +11,6 @@ type LayoutProps = {
 const LoginRegisterLayout = ({ children }: LayoutProps) => {
 	return (
 		<>
-			<Script
-				src={`https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
-				strategy="afterInteractive"
-			/>
 			<div className="flex flex-col lg:flex-row w-full min-h-screen align bg-gradient-to-tr from-[#FF6B06] to-[#31C48D]">
 				<div className="w-full justify-center items-center hidden md:flex relative">
 					<div className="w-full hidden lg:flex items-center justify-center relative">
