@@ -21,6 +21,10 @@ import { CATEGORIES_SUB_CATEGORIES } from '@/config/config-constants';
 import { formatRelativeDays } from '@/utils/format-relative-days';
 import IconArrowRightAlt from '@/components/atoms/icon/arrow-right-alt';
 
+type Props = {
+	shouldForceFirstProperty: boolean;
+};
+
 type PropertyRow = {
 	id: string;
 	name: string;
@@ -28,7 +32,7 @@ type PropertyRow = {
 	property_data: { type: string | null }[] | null;
 };
 
-const PropertyNumber = async () => {
+const PropertyNumber = async ({ shouldForceFirstProperty }: Props) => {
 	const t = await getTranslations();
 	const locale = await getLocale();
 
@@ -42,6 +46,23 @@ const PropertyNumber = async () => {
 
 	const supabase = await createServerAdminClient();
 
+	// Query rápida: ¿tiene al menos 1 propiedad?
+	const { data: anyProperty, error: anyPropErr } = await supabase
+		.from('properties')
+		.select('id')
+		.eq('user_id', user.id)
+		.limit(1)
+		.maybeSingle();
+
+	if (anyPropErr)
+		throw new Error('Error comprobando propiedades: ' + anyPropErr.message);
+
+	// ✅ Sólo redirigimos si viene de login/registro
+	if (shouldForceFirstProperty && !anyProperty) {
+		redirect('/app/properties/new?fromAuth=1');
+	}
+
+	// ✅ Query completa (la que ya tenías) para poder calcular estados, última editada, etc.
 	const { data, error } = await supabase
 		.from('properties')
 		.select(
@@ -120,32 +141,30 @@ const PropertyNumber = async () => {
 				<Typography component="h3" size="lg">
 					{n === 1 ? t('Propiedad') : t('Propiedades')}
 				</Typography>
-				{n > 0 ? (
-					<div className="flex items-center justify-center gap-1 w-full">
-						<BadgeCheck
-							checkedColor="primary"
-							checked
-							className="w-full"
-							label={`${t('propertiesStatus.completed')}: ${completedCount}`}
-						/>
-						<BadgeCheck
-							checkedColor="error"
-							className="w-full"
-							checked
-							iconChecked={<IconError color="error" size={20} />}
-							label={`${t('propertiesStatus.inProgress')}: ${incompleteCount}`}
-						/>
-					</div>
-				) : null}
-				{n > 0 ? (
-					<ButtonLink
-						label={t('Mis propiedades')}
-						href="/app/properties"
-						iconLeft={<IconApartment />}
-						color="secondary"
+
+				<div className="flex items-center justify-center gap-1 w-full">
+					<BadgeCheck
+						checkedColor="primary"
+						checked
 						className="w-full"
+						label={`${t('propertiesStatus.completed')}: ${completedCount}`}
 					/>
-				) : null}
+					<BadgeCheck
+						checkedColor="error"
+						className="w-full"
+						checked
+						iconChecked={<IconError color="error" size={20} />}
+						label={`${t('propertiesStatus.inProgress')}: ${incompleteCount}`}
+					/>
+				</div>
+
+				<ButtonLink
+					label={t('Mis propiedades')}
+					href="/app/properties"
+					iconLeft={<IconApartment />}
+					color="secondary"
+					className="w-full"
+				/>
 			</div>
 
 			<div className="flex flex-col justify-center items-center gap-1 grow-0 p-1 bg-gray-200 rounded-3xl w-full max-w-xs">
@@ -153,11 +172,7 @@ const PropertyNumber = async () => {
 					href="/app/properties/new"
 					link={
 						<ButtonLink
-							label={
-								n > 0
-									? t('Nueva propiedad')
-									: t('Añadir propiedad')
-							}
+							label={t('Nueva propiedad')}
 							href="/app/properties/new"
 							iconLeft={<IconAdd />}
 							className="w-full flex"
@@ -165,11 +180,7 @@ const PropertyNumber = async () => {
 					}
 					action={
 						<Button
-							label={
-								n > 0
-									? t('Nueva propiedad')
-									: t('Añadir propiedad')
-							}
+							label={t('Nueva propiedad')}
 							iconLeft={<IconAdd />}
 							className="w-full flex"
 						/>
@@ -184,6 +195,7 @@ const PropertyNumber = async () => {
 					target="_blank"
 				/>
 			</div>
+
 			{lastEdited?.updated_at ? (
 				<div className="flex flex-col items-center text-center">
 					<Typography component="h3" size="lg" className="mb-1">
@@ -203,6 +215,7 @@ const PropertyNumber = async () => {
 					/>
 				</div>
 			) : null}
+
 			<div className="flex flex-col items-center">
 				<Typography component="h3" size="lg">
 					{t('shareButtonTitle')}

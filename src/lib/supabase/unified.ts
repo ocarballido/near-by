@@ -67,7 +67,7 @@ export class SassClient {
 		const origin =
 			typeof window !== 'undefined' ? window.location.origin : '';
 
-		const redirectUrl = `${origin}/auth/callback?redirect=/app&locale=${locale}`;
+		const redirectUrl = `${origin}/auth/callback?redirect=/app?fromAuth=1&locale=${locale}`;
 
 		const { data, error } = await this.client.auth.signInWithOtp({
 			email,
@@ -119,7 +119,7 @@ export class SassClient {
 		myId: string,
 		filename: string,
 		timeInSec: number,
-		forDownload: boolean = false
+		forDownload: boolean = false,
 	) {
 		filename = myId + '/' + filename;
 		return this.client.storage

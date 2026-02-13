@@ -708,5 +708,11 @@
 		"helper": "Basé sur l’emplacement de votre logement",
 		"use": "Utiliser ce lieu",
 		"selected": "Sélectionné"
+	},
+	"firstPropertyBanner": {
+		"title": "Votre première propriété en 2 minutes",
+		"description": "Ajoutez-la maintenant et nous vous guiderons étape par étape pour la compléter et la partager avec vos voyageurs.",
+		"primaryButton": "Créer ma première propriété",
+		"secondaryButton": "Aller au tableau de bord"
 	}
 }
