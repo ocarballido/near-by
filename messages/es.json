@@ -714,5 +714,11 @@
 		"description": "Añádela ahora y te guiaremos paso a paso para completarla y compartirla con tus huéspedes.",
 		"primaryButton": "Crear mi primera propiedad",
 		"secondaryButton": "Ir al inicio"
+	},
+	"PublicPageBanner": {
+		"messageExample": "Esta es la vista de ejemplo: así verán tus inquilinos una propiedad.",
+		"messageTenant": "¿Eres propietario? Crea una cuenta y comparte una página como esta con tus inquilinos.",
+		"cta": "Entrar o crear cuenta",
+		"closeAriaLabel": "Cerrar banner"
 	}
 }

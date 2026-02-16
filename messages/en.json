@@ -709,5 +709,11 @@
 		"description": "Add it now and we’ll guide you step by step to complete it and share it with your guests.",
 		"primaryButton": "Create my first property",
 		"secondaryButton": "Go to dashboard"
+	},
+	"PublicPageBanner": {
+		"messageExample": "This is the demo view — this is how tenants will see a property.",
+		"messageTenant": "Are you a landlord? Create an account and share a page like this with your tenants.",
+		"cta": "Log in or sign up",
+		"closeAriaLabel": "Close banner"
 	}
 }
