@@ -714,5 +714,11 @@
 		"description": "Ajoutez-la maintenant et nous vous guiderons étape par étape pour la compléter et la partager avec vos voyageurs.",
 		"primaryButton": "Créer ma première propriété",
 		"secondaryButton": "Aller au tableau de bord"
+	},
+	"PublicPageBanner": {
+		"messageExample": "Ceci est une vue de démonstration — voici comment vos locataires verront un logement.",
+		"messageTenant": "Vous êtes propriétaire ? Créez un compte et partagez une page comme celle-ci avec vos locataires.",
+		"cta": "Se connecter ou s’inscrire",
+		"closeAriaLabel": "Fermer la bannière"
 	}
 }
