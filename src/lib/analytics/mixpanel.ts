@@ -15,7 +15,10 @@ export type EventName =
 	| 'feedback_opened'
 	| 'feedback_submitted'
 	| 'feedback_cancelled'
-	| 'feedback_submit_failed';
+	| 'feedback_submit_failed'
+	| 'create_property_submit_clicked'
+	| 'create_property_address_selected'
+	| 'create_property_blocked_no_address_selection';
 
 type TrackInput = {
 	event: EventName;

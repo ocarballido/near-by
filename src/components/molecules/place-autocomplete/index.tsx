@@ -44,7 +44,7 @@ export default function PlaceAutocompleteField({
 	label,
 	placeholder,
 	locale,
-	countryCodes = ['es'],
+	countryCodes,
 	error,
 	helperTextIdle,
 	helperTextSelected,
@@ -97,8 +97,16 @@ export default function PlaceAutocompleteField({
 
 			if (cancelled || !hostRef.current) return;
 
+			const regionCodes = (countryCodes ?? [])
+				.map((c) =>
+					typeof c === 'string' ? c.trim().toUpperCase() : '',
+				)
+				.filter(Boolean);
+
 			const el = new google.maps.places.PlaceAutocompleteElement({
-				includedRegionCodes: countryCodes,
+				includedRegionCodes: regionCodes.length
+					? regionCodes
+					: undefined,
 				requestedLanguage: locale,
 				placeholder,
 			});
@@ -154,6 +162,11 @@ export default function PlaceAutocompleteField({
 
 			el.addEventListener('gmp-select', onGmpSelect);
 			el.addEventListener('gmp-error', onGmpError);
+
+			return () => {
+				el.removeEventListener('gmp-select', onGmpSelect);
+				el.removeEventListener('gmp-error', onGmpError);
+			};
 		};
 
 		init();

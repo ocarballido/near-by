@@ -145,16 +145,45 @@ const AddPropertyForm = () => {
 		});
 
 		clearErrors('address');
+
+		if (distinctId) {
+			trackClientEvent({
+				event: 'create_property_address_selected',
+				distinctId,
+			});
+		}
 	};
 
 	const clearSelection = () => {
 		setCoords(null);
+		setValue('address', '', { shouldDirty: true, shouldValidate: true });
 		setValue('latitude', '', { shouldDirty: true });
 		setValue('longitude', '', { shouldDirty: true });
 	};
 
 	const onSubmit: SubmitHandler<FormValues> = async (data) => {
+		if (distinctId) {
+			trackClientEvent({
+				event: 'create_property_submit_clicked',
+				distinctId,
+				props: {
+					has_name: Boolean(data.name?.trim()),
+					has_selected_address: Boolean(coords),
+				},
+			});
+		}
+
 		if (!coords) {
+			if (distinctId) {
+				trackClientEvent({
+					event: 'create_property_blocked_no_address_selection',
+					distinctId,
+					props: {
+						has_name: Boolean(data.name?.trim()),
+					},
+				});
+			}
+
 			setError('address', {
 				type: 'manual',
 				message: t('Selecciona una dirección sugerida para continuar'),
@@ -373,7 +402,6 @@ const AddPropertyForm = () => {
 					label={t('Dirección *')}
 					placeholder={t('Dirección ejemplo')}
 					locale={locale}
-					countryCodes={['es']}
 					error={Boolean(errors.address)}
 					helperTextIdle={t('addressHelperIdle')}
 					helperTextSelected={t('addressHelperSelected')}

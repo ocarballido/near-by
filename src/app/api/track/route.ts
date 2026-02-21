@@ -17,6 +17,9 @@ const ALLOWED_EVENTS: ReadonlySet<EventName> = new Set([
 	'feedback_submitted',
 	'feedback_cancelled',
 	'feedback_submit_failed',
+	'create_property_submit_clicked',
+	'create_property_address_selected',
+	'create_property_blocked_no_address_selection',
 	// (si más adelante quieres)
 	// 'feedback_abandoned',
 ]);
