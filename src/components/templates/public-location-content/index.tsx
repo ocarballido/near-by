@@ -5,10 +5,12 @@ import { PropertyDataItem } from '../property-data-public';
 
 const PublicLocationContent = ({
 	sub_category_name,
+	categoryId,
 	locations = [],
 }: {
 	locations: PropertyDataItem[];
 	sub_category_name?: string;
+	categoryId?: string;
 }) => {
 	return (
 		<div className="flex flex-col gap-3">
@@ -22,6 +24,7 @@ const PublicLocationContent = ({
 					<PlacePublic
 						key={loc.id}
 						name={loc.name}
+						categoryId={categoryId}
 						description={loc.description}
 						latitude={loc.latitude}
 						longitude={loc.longitude}

@@ -8,8 +8,68 @@ import ButtonIcon from '@/components/atoms/button-icon';
 import IconFavorite from '@/components/atoms/icon/favorite';
 import IconModeHeat from '@/components/atoms/icon/mode-heat';
 
+import { CATEGORIES_SUB_CATEGORIES } from '@/config/config-constants';
+
+type CategoryKey = keyof typeof CATEGORIES_SUB_CATEGORIES;
+type CategoryId = (typeof CATEGORIES_SUB_CATEGORIES)[CategoryKey]['id'];
+
+const {
+	HEALTH_AND_WELLNESS,
+	FOOD_AND_DRINK,
+	ARTS_AND_CULTURE,
+	PARKS_AND_NATURE,
+	SHOPPING,
+	SERVICES,
+	TRANSPORTATION,
+	ENTERTAINMENT_AND_NIGHTLIFE,
+	ATTRACTIONS_AND_TOURISM,
+	SECURITY_AND_EMERGENCIES,
+	FAMILY_AND_KIDS,
+	PETS,
+} = CATEGORIES_SUB_CATEGORIES;
+
+const DEFAULT_PLACEHOLDER =
+	'/static/img/place-placeholder/place_placeholder_01.webp';
+
+const CATEGORY_PLACEHOLDER = {
+	[HEALTH_AND_WELLNESS.id]:
+		'/static/img/place-placeholder/place_placeholder_01.webp',
+	[FOOD_AND_DRINK.id]:
+		'/static/img/place-placeholder/place_placeholder_09.webp',
+	[ARTS_AND_CULTURE.id]:
+		'/static/img/place-placeholder/place_placeholder_04.webp',
+	[PARKS_AND_NATURE.id]:
+		'/static/img/place-placeholder/place_placeholder_08.webp',
+	[SHOPPING.id]: '/static/img/place-placeholder/place_placeholder_12.webp',
+	[SERVICES.id]: '/static/img/place-placeholder/place_placeholder_05.webp',
+	[TRANSPORTATION.id]:
+		'/static/img/place-placeholder/place_placeholder_11.webp',
+	[ENTERTAINMENT_AND_NIGHTLIFE.id]:
+		'/static/img/place-placeholder/place_placeholder_07.webp',
+	[ATTRACTIONS_AND_TOURISM.id]:
+		'/static/img/place-placeholder/place_placeholder_06.webp',
+	[SECURITY_AND_EMERGENCIES.id]:
+		'/static/img/place-placeholder/place_placeholder_01.webp',
+	[FAMILY_AND_KIDS.id]:
+		'/static/img/place-placeholder/place_placeholder_08.webp',
+	[PETS.id]: '/static/img/place-placeholder/place_placeholder_10.webp',
+} satisfies Record<CategoryId, string>;
+
+// Type guard: convierte string -> CategoryId cuando corresponde
+const isCategoryId = (value: string): value is CategoryId => {
+	return Object.prototype.hasOwnProperty.call(CATEGORY_PLACEHOLDER, value);
+};
+
+const getPlaceholderImage = (categoryId?: string): string => {
+	if (categoryId && isCategoryId(categoryId)) {
+		return CATEGORY_PLACEHOLDER[categoryId];
+	}
+	return DEFAULT_PLACEHOLDER;
+};
+
 type PlaceProps = {
 	address: string;
+	categoryId?: string;
 	description?: string;
 	className?: string;
 	editeable?: boolean;
@@ -17,7 +77,7 @@ type PlaceProps = {
 	handleEdit?: () => void;
 	handleFeatured?: () => void;
 	handleMustVisit?: () => void;
-	image?: string;
+	image?: string | null;
 	name: string;
 	featured?: boolean;
 	mustVisit?: boolean;
@@ -25,6 +85,7 @@ type PlaceProps = {
 
 const Place = ({
 	address,
+	categoryId,
 	description,
 	className,
 	editeable = false,
@@ -35,7 +96,7 @@ const Place = ({
 	name,
 	featured,
 	mustVisit,
-	image = '/static/img/place-placeholder/place_placeholder_01.webp',
+	image,
 }: PlaceProps) => {
 	const t = useTranslations();
 
@@ -43,6 +104,8 @@ const Place = ({
 	const grayDataUrl = `data:image/svg+xml;base64,${Buffer.from(
 		graySvg,
 	).toString('base64')}`;
+
+	const src = image ?? getPlaceholderImage(categoryId);
 
 	return (
 		<div
@@ -55,11 +118,7 @@ const Place = ({
 						className="object-cover z-0 "
 						placeholder="blur"
 						blurDataURL={grayDataUrl}
-						src={
-							image === null
-								? '/static/img/place-placeholder/place_placeholder_01.webp'
-								: image
-						}
+						src={src}
 						fill
 					/>
 				</div>

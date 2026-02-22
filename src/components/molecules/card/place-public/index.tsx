@@ -11,8 +11,68 @@ import IconModeHeat from '@/components/atoms/icon/mode-heat';
 import IconFavorite from '@/components/atoms/icon/favorite';
 import IconInfo from '@/components/atoms/icon/info';
 
+import { CATEGORIES_SUB_CATEGORIES } from '@/config/config-constants';
+
+type CategoryKey = keyof typeof CATEGORIES_SUB_CATEGORIES;
+type CategoryId = (typeof CATEGORIES_SUB_CATEGORIES)[CategoryKey]['id'];
+
+const {
+	HEALTH_AND_WELLNESS,
+	FOOD_AND_DRINK,
+	ARTS_AND_CULTURE,
+	PARKS_AND_NATURE,
+	SHOPPING,
+	SERVICES,
+	TRANSPORTATION,
+	ENTERTAINMENT_AND_NIGHTLIFE,
+	ATTRACTIONS_AND_TOURISM,
+	SECURITY_AND_EMERGENCIES,
+	FAMILY_AND_KIDS,
+	PETS,
+} = CATEGORIES_SUB_CATEGORIES;
+
+const DEFAULT_PLACEHOLDER =
+	'/static/img/place-placeholder/place_placeholder_01.webp';
+
+const CATEGORY_PLACEHOLDER = {
+	[HEALTH_AND_WELLNESS.id]:
+		'/static/img/place-placeholder/place_placeholder_01.webp',
+	[FOOD_AND_DRINK.id]:
+		'/static/img/place-placeholder/place_placeholder_09.webp',
+	[ARTS_AND_CULTURE.id]:
+		'/static/img/place-placeholder/place_placeholder_04.webp',
+	[PARKS_AND_NATURE.id]:
+		'/static/img/place-placeholder/place_placeholder_08.webp',
+	[SHOPPING.id]: '/static/img/place-placeholder/place_placeholder_12.webp',
+	[SERVICES.id]: '/static/img/place-placeholder/place_placeholder_05.webp',
+	[TRANSPORTATION.id]:
+		'/static/img/place-placeholder/place_placeholder_11.webp',
+	[ENTERTAINMENT_AND_NIGHTLIFE.id]:
+		'/static/img/place-placeholder/place_placeholder_07.webp',
+	[ATTRACTIONS_AND_TOURISM.id]:
+		'/static/img/place-placeholder/place_placeholder_06.webp',
+	[SECURITY_AND_EMERGENCIES.id]:
+		'/static/img/place-placeholder/place_placeholder_01.webp',
+	[FAMILY_AND_KIDS.id]:
+		'/static/img/place-placeholder/place_placeholder_08.webp',
+	[PETS.id]: '/static/img/place-placeholder/place_placeholder_10.webp',
+} satisfies Record<CategoryId, string>;
+
+// Type guard: convierte string -> CategoryId cuando corresponde
+const isCategoryId = (value: string): value is CategoryId => {
+	return Object.prototype.hasOwnProperty.call(CATEGORY_PLACEHOLDER, value);
+};
+
+const getPlaceholderImage = (categoryId?: string): string => {
+	if (categoryId && isCategoryId(categoryId)) {
+		return CATEGORY_PLACEHOLDER[categoryId];
+	}
+	return DEFAULT_PLACEHOLDER;
+};
+
 type PlacePublicProps = {
 	address: string;
+	categoryId?: string;
 	description?: string;
 	latitude?: number;
 	longitude?: number;
@@ -24,13 +84,14 @@ type PlacePublicProps = {
 
 const PlacePublic = ({
 	address,
+	categoryId,
 	description,
 	latitude,
 	longitude,
 	featured,
 	mustSee,
 	name,
-	image = '/static/img/place-placeholder/place_placeholder_01.webp',
+	image,
 }: PlacePublicProps) => {
 	const t = useTranslations();
 
@@ -39,9 +100,11 @@ const PlacePublic = ({
 		graySvg,
 	).toString('base64')}`;
 
+	const src = image ?? getPlaceholderImage(categoryId);
+
 	return (
 		<div
-			className={`flex items-end rounded-xl overflow-hidden p-2 relative h-[350px] transition-all [&>.content]:p-3 [&>.content]:rounded-lg shadow-xs hover:p-0 hover:[&>.content]:p-5 hover:[&>.content]:rounded-none bg-gradient-to-tr from-[#ffa263] to-[#6cffc9]`}
+			className={`flex items-end rounded-xl overflow-hidden px-2 pb-2 pt-[180px] relative min-h-[350px] transition-all [&>.content]:p-3 [&>.content]:rounded-lg shadow-xs hover:px-0 hover:pb-0 hover:pt-[172px] hover:[&>.content]:p-5 hover:[&>.content]:rounded-none bg-gradient-to-tr from-[#ffa263] to-[#6cffc9]`}
 		>
 			{(mustSee || featured) && (
 				<div className="flex p-1 items-center absolute z-1 rounded-full right-2 top-2 gap-1">
@@ -92,11 +155,7 @@ const PlacePublic = ({
 			</div>
 			<Image
 				className="object-cover z-0"
-				src={
-					image === null
-						? '/static/img/default-property-2x.webp'
-						: image
-				}
+				src={src}
 				fill={true}
 				placeholder="blur"
 				blurDataURL={grayDataUrl}
