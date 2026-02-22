@@ -27,6 +27,7 @@ export default async function SubcategorySection({
 			propertyData={data.propertyData}
 			type={data.categoryType?.type ?? 'location'}
 			lat={lat}
+			categoryId={categoryId}
 			lng={lng}
 			sub_category_name={data.subCategory?.name}
 		/>
