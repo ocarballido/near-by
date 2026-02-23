@@ -41,12 +41,12 @@ const House = ({
 
 	const graySvg = `<svg xmlns="http://www.w3.org/2000/svg" width="4" height="4"><rect width="4" height="4" fill="#a3e7d0" /></svg>`;
 	const grayDataUrl = `data:image/svg+xml;base64,${Buffer.from(
-		graySvg
+		graySvg,
 	).toString('base64')}`;
 
 	return (
 		<div
-			className={`flex items-end rounded-xl overflow-hidden p-2 relative h-[400px] transition-all [&>.content]:p-3 [&>.content]:rounded-lg hover:shadow-2xl hover:p-0 hover:[&>.content]:p-5 hover:[&>.content]:rounded-none ${className}`}
+			className={`flex items-end rounded-xl overflow-hidden px-2 pb-2 pt-[180px] relative min-h-[400px] transition-all [&>.content]:p-3 [&>.content]:rounded-lg hover:shadow-2xl hover:px-0 hover:pb-0 hover:pt-[172px] hover:[&>.content]:p-5 hover:[&>.content]:rounded-none ${className}`}
 		>
 			<ButtonLink
 				className="w-fit absolute z-6 top-2 right-2 rounded-full !pr-2 pl-2"
@@ -58,13 +58,18 @@ const House = ({
 			/>
 			<div className="content transition-all flex justify-end gap-2 flex-col relative w-full bg-white z-5">
 				<div className="flex gap-2">
-					<IconApartment />
+					<span className="grow-0">
+						<IconApartment />
+					</span>
+
 					<h5 className="font-heading font-bold text-md mt-0.5">
 						{name}
 					</h5>
 				</div>
 				<div className="flex gap-2 mb-2">
-					<IconLocationOn />
+					<span className="grow-0">
+						<IconLocationOn />
+					</span>
 					<p className="font-body font-medium text-md mt-0.5">
 						{address}
 					</p>
