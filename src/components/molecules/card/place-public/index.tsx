@@ -32,7 +32,7 @@ const {
 } = CATEGORIES_SUB_CATEGORIES;
 
 const DEFAULT_PLACEHOLDER =
-	'/static/img/place-placeholder/place_placeholder_01.webp';
+	'/static/img/place-placeholder/place_placeholder_04.webp';
 
 const CATEGORY_PLACEHOLDER = {
 	[HEALTH_AND_WELLNESS.id]:
@@ -104,7 +104,7 @@ const PlacePublic = ({
 
 	return (
 		<div
-			className={`flex items-end rounded-xl overflow-hidden px-2 pb-2 pt-[180px] relative min-h-[350px] transition-all [&>.content]:p-3 [&>.content]:rounded-lg shadow-xs hover:px-0 hover:pb-0 hover:pt-[172px] hover:[&>.content]:p-5 hover:[&>.content]:rounded-none bg-gradient-to-tr from-[#ffa263] to-[#6cffc9]`}
+			className={`flex items-end rounded-xl overflow-hidden px-2 pb-2 pt-[180px] relative min-h-[400px] transition-all [&>.content]:p-3 [&>.content]:rounded-lg shadow-xs hover:px-0 hover:pb-0 hover:pt-[172px] hover:[&>.content]:p-5 hover:[&>.content]:rounded-none bg-gradient-to-tr from-[#ffa263] to-[#6cffc9]`}
 		>
 			{(mustSee || featured) && (
 				<div className="flex p-1 items-center absolute z-1 rounded-full right-2 top-2 gap-1">
@@ -124,16 +124,16 @@ const PlacePublic = ({
 				<div className="flex gap-2">
 					<Typography component="h5">{name}</Typography>
 				</div>
-				<div className="flex gap-1">
+				<div className="flex gap-1.5">
 					<span className="grow-0">
-						<IconLocationOn size={20} color="primary" />
+						<IconLocationOn color="primary" />
 					</span>
 					<Typography weight="medium">{address}</Typography>
 				</div>
 				{description && (
-					<div className="flex gap-1">
+					<div className="flex gap-1.5">
 						<span className="grow-0">
-							<IconInfo size={20} color="primary" />
+							<IconInfo color="primary" />
 						</span>
 						<Typography
 							weight="normal"

@@ -144,7 +144,8 @@ values
   ('81214844-8e80-45bf-a082-b0c72413dff2', 'f97d7e65-87f5-471e-a120-c04c26394b54', 'Lavanderías', 'location'::public.property_data_type, 4),
   ('7257be95-7d6e-43aa-b919-8005c2443f63', 'f97d7e65-87f5-471e-a120-c04c26394b54', 'Peluquerías y Barberías', 'location'::public.property_data_type, 5),
   ('47a64cae-136b-4e93-8752-882c583d3e30', 'f97d7e65-87f5-471e-a120-c04c26394b54', 'Centros de impresión y copiado', 'location'::public.property_data_type, 6),
-  ('9e2a6f5d-7c42-4f8c-b7ef-6c4c3e4c2a71', 'f97d7e65-87f5-471e-a120-c04c26394b54', 'Aparcamientos', 'location'::public.property_data_type, 7)
+  ('9e2a6f5d-7c42-4f8c-b7ef-6c4c3e4c2a71', 'f97d7e65-87f5-471e-a120-c04c26394b54', 'Aparcamientos', 'location'::public.property_data_type, 7),
+  ('2d77f5a2-83e8-4d1e-a4f8-1f4c9f2bd7a1', 'f97d7e65-87f5-471e-a120-c04c26394b54', 'Taquillas', 'location'::public.property_data_type, 8)
 on conflict (id) do update
 set
   category_id = excluded.category_id,
