@@ -233,6 +233,10 @@ export type Database = {
       properties: {
         Row: {
           address: string
+          check_in_date: string | null
+          check_in_time: string | null
+          check_out_date: string | null
+          check_out_time: string | null
           created_at: string | null
           description: string | null
           id: string
@@ -247,6 +251,10 @@ export type Database = {
         }
         Insert: {
           address: string
+          check_in_date?: string | null
+          check_in_time?: string | null
+          check_out_date?: string | null
+          check_out_time?: string | null
           created_at?: string | null
           description?: string | null
           id?: string
@@ -261,6 +269,10 @@ export type Database = {
         }
         Update: {
           address?: string
+          check_in_date?: string | null
+          check_in_time?: string | null
+          check_out_date?: string | null
+          check_out_time?: string | null
           created_at?: string | null
           description?: string | null
           id?: string
