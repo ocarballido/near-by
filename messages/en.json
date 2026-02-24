@@ -726,7 +726,9 @@
 		"currentImage": "Current image",
 		"currentImageAlt": "Current property image",
 		"changeImageHelper": "You can select a new image to replace it.",
-		"formEditTitle": "Edit property"
+		"formEditTitle": "Edit property",
+		"dateAndTime": "Date & time",
+		"onlyTime": "Time only"
 	},
 	"Guardar cambios": "Save changes",
 	"Imagen actual": "Current image"

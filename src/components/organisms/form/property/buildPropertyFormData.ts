@@ -1,7 +1,10 @@
+import { DateTimeMode } from '.';
+
 type BuildArgs = {
 	isEdit: boolean;
 	locale: string;
 	selectedSeedInfoIds: string[];
+	dateTimeMode?: DateTimeMode;
 
 	data: {
 		name: string;
@@ -20,6 +23,7 @@ export function buildPropertyFormData({
 	isEdit,
 	locale,
 	selectedSeedInfoIds,
+	dateTimeMode = 'isDateAndTime',
 	data,
 }: BuildArgs): FormData {
 	const fd = new FormData();
@@ -35,10 +39,15 @@ export function buildPropertyFormData({
 		fd.append('seedInfoIds', JSON.stringify(selectedSeedInfoIds));
 	}
 
+	const checkInDateToSend =
+		dateTimeMode === 'isOnlyTime' ? '' : (data.checkInDate ?? '');
+	const checkOutDateToSend =
+		dateTimeMode === 'isOnlyTime' ? '' : (data.checkOutDate ?? '');
+
 	// Fechas/horas (si vienen vacías, mandamos '')
-	fd.append('check_in_date', data.checkInDate ?? '');
+	fd.append('check_in_date', checkInDateToSend);
 	fd.append('check_in_time', data.checkInTime ?? '');
-	fd.append('check_out_date', data.checkOutDate ?? '');
+	fd.append('check_out_date', checkOutDateToSend);
 	fd.append('check_out_time', data.checkOutTime ?? '');
 
 	const file = data.image?.[0];

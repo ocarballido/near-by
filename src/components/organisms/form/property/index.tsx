@@ -31,6 +31,7 @@ import { SelectedPlace } from '@/components/molecules/place-autocomplete';
 import { trackClientEvent } from '@/lib/analytics/trackClient';
 import { getPropertyFormDefaultValues } from './getPropertyFormDefaultValues';
 import { buildPropertyFormData } from './buildPropertyFormData';
+import Button from '@/components/molecules/button';
 
 type FormValues = {
 	name: string;
@@ -55,6 +56,8 @@ export type EditInitialValues = {
 	check_out_date: string | null;
 	check_out_time: string | null;
 };
+
+export type DateTimeMode = 'isDateAndTime' | 'isOnlyTime';
 
 // ✅ NEW: props simples (sin union complicada)
 type Props = {
@@ -153,6 +156,12 @@ const AddPropertyForm = ({ propertyId, initialValues }: Props) => {
 		message: string;
 	} | null>(null);
 
+	const [dateTimeMode, setDateTimeMode] = useState<DateTimeMode>(
+		initialValues?.check_in_date && initialValues?.check_in_time
+			? 'isDateAndTime'
+			: 'isOnlyTime',
+	);
+
 	const [selectedSeedInfoIds, setSelectedSeedInfoIds] = useState<string[]>(
 		() => [...DEFAULT_SEED_INFO_IDS],
 	);
@@ -183,6 +192,7 @@ const AddPropertyForm = ({ propertyId, initialValues }: Props) => {
 		formState: { errors, isSubmitting },
 	} = useForm<FormValues>({
 		defaultValues,
+		shouldUnregister: false,
 	});
 
 	const [coords, setCoords] = useState<SelectedPlace | null>(null);
@@ -261,6 +271,7 @@ const AddPropertyForm = ({ propertyId, initialValues }: Props) => {
 			isEdit,
 			locale,
 			selectedSeedInfoIds,
+			dateTimeMode,
 			data,
 		});
 
@@ -433,20 +444,54 @@ const AddPropertyForm = ({ propertyId, initialValues }: Props) => {
 					lngRegisterProps={register('longitude')}
 				/>
 
+				<div className="flex gap-1 p-1 rounded-full bg-gray-200 -mb-1">
+					<Button
+						label={t('propertyForm.dateAndTime')}
+						className="w-full"
+						color={
+							dateTimeMode === 'isDateAndTime'
+								? 'white'
+								: 'secondary'
+						}
+						onClick={() => {
+							if (dateTimeMode === 'isDateAndTime') return;
+							setDateTimeMode('isDateAndTime');
+						}}
+					/>
+					<Button
+						label={t('propertyForm.onlyTime')}
+						className="w-full"
+						color={
+							dateTimeMode === 'isOnlyTime'
+								? 'white'
+								: 'secondary'
+						}
+						onClick={() => {
+							if (dateTimeMode === 'isOnlyTime') return;
+							setDateTimeMode('isOnlyTime');
+
+							// opcional: limpiar errores para que no aparezcan si el campo está oculto
+							clearErrors(['checkInDate', 'checkOutDate']);
+						}}
+					/>
+				</div>
+
 				<fieldset className="flex flex-col gap-1">
 					<div className="flex gap-2 flex-col sm:flex-row">
-						<div className="w-full">
-							<TextField
-								label={`${t('propertyForm.checkIn')}/${t('propertyForm.date')}`}
-								id="checkInDate"
-								type="date"
-								{...register('checkInDate')}
-								error={Boolean(errors.checkInDate)}
-								helperText={
-									errors.checkInDate?.message as string
-								}
-							/>
-						</div>
+						{dateTimeMode === 'isDateAndTime' && (
+							<div className="w-full">
+								<TextField
+									label={`${t('propertyForm.checkIn')}/${t('propertyForm.date')}`}
+									id="checkInDate"
+									type="date"
+									{...register('checkInDate')}
+									error={Boolean(errors.checkInDate)}
+									helperText={
+										errors.checkInDate?.message as string
+									}
+								/>
+							</div>
+						)}
 
 						<div className="w-full">
 							<TextField
@@ -466,18 +511,20 @@ const AddPropertyForm = ({ propertyId, initialValues }: Props) => {
 
 				<fieldset className="flex flex-col gap-1">
 					<div className="flex gap-2 flex-col sm:flex-row">
-						<div className="flex-1">
-							<TextField
-								label={`${t('propertyForm.checkOut')}/${t('propertyForm.date')}`}
-								id="checkOutDate"
-								type="date"
-								{...register('checkOutDate')}
-								error={Boolean(errors.checkOutDate)}
-								helperText={
-									errors.checkOutDate?.message as string
-								}
-							/>
-						</div>
+						{dateTimeMode === 'isDateAndTime' && (
+							<div className="flex-1">
+								<TextField
+									label={`${t('propertyForm.checkOut')}/${t('propertyForm.date')}`}
+									id="checkOutDate"
+									type="date"
+									{...register('checkOutDate')}
+									error={Boolean(errors.checkOutDate)}
+									helperText={
+										errors.checkOutDate?.message as string
+									}
+								/>
+							</div>
+						)}
 
 						<div className="flex-1">
 							<TextField
