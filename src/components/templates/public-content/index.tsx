@@ -15,6 +15,10 @@ type PublicContentTemplateProps = {
 	categoryId?: string;
 	subCategoryId?: string;
 	propertyId?: string;
+	checkInDate?: string;
+	checkInTime?: string;
+	checkOutDate?: string;
+	checkOutTime?: string;
 };
 
 const PublicContentTemplate = ({
@@ -27,7 +31,12 @@ const PublicContentTemplate = ({
 	categoryId,
 	subCategoryId,
 	propertyId,
+	checkInDate,
+	checkInTime,
+	checkOutDate,
+	checkOutTime,
 }: PublicContentTemplateProps) => {
+	console.log(checkInDate);
 	return (
 		<SidebarProvider>
 			<HousePublic
@@ -36,6 +45,10 @@ const PublicContentTemplate = ({
 				longitude={longitude}
 				name={name}
 				image={image}
+				checkInDate={checkInDate}
+				checkInTime={checkInTime}
+				checkOutDate={checkOutDate}
+				checkOutTime={checkOutTime}
 				className="block md:hidden"
 			/>
 			<div className="flex flex-col gap-2 items-stretch w-full font-body overflow-hidden grow">
@@ -51,6 +64,10 @@ const PublicContentTemplate = ({
 						image={image}
 						latitude={latitude}
 						longitude={longitude}
+						checkInDate={checkInDate}
+						checkInTime={checkInTime}
+						checkOutDate={checkOutDate}
+						checkOutTime={checkOutTime}
 					/>
 					<Content>{children}</Content>
 				</div>

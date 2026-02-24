@@ -57,6 +57,10 @@ type PublicSidebarProps = {
 	latitude: number;
 	longitude: number;
 	name: string;
+	checkInDate?: string;
+	checkInTime?: string;
+	checkOutDate?: string;
+	checkOutTime?: string;
 };
 
 const PublicSidebar = ({
@@ -67,6 +71,10 @@ const PublicSidebar = ({
 	latitude,
 	longitude,
 	name,
+	checkInDate,
+	checkInTime,
+	checkOutDate,
+	checkOutTime,
 	image = '/static/img/default-property-2x.webp',
 }: PublicSidebarProps) => {
 	const t = useTranslations();
@@ -93,6 +101,10 @@ const PublicSidebar = ({
 					longitude={longitude}
 					name={name}
 					image={image}
+					checkInDate={checkInDate}
+					checkInTime={checkInTime}
+					checkOutDate={checkOutDate}
+					checkOutTime={checkOutTime}
 					className="hidden md:flex"
 				/>
 				<div className="flex gap-2 items-center md:hidden">

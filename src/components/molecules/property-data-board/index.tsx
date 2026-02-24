@@ -87,14 +87,14 @@ const PropertyDataBoard = ({
 			</div>
 			<div className="flex flex-col lg:flex-row gap-1 relative z-1">
 				<ButtonLink
-					label={t('Editar')}
-					href={`/app/properties/edit/${propertyId}`}
-					color="white"
+					label={t('Mis Propiedades')}
+					href="/app/properties"
+					color="primary"
 					className="w-full"
 				/>
 				<ButtonLink
-					label={t('Mis Propiedades')}
-					href="/app/properties"
+					label={t('Editar')}
+					href={`/app/properties/edit/${propertyId}`}
 					color="white"
 					className="w-full"
 				/>
