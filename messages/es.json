@@ -730,7 +730,8 @@
 		"optional": "Opcional",
 		"currentImage": "Imagen actual",
 		"currentImageAlt": "Imagen actual de la propiedad",
-		"changeImageHelper": "Puedes seleccionar otra imagen para reemplazarla."
+		"changeImageHelper": "Puedes seleccionar otra imagen para reemplazarla.",
+		"formEditTitle": "Editar propiedad"
 	},
 	"Guardar cambios": "Guardar cambios",
 	"Imagen actual": "Imagen actual"

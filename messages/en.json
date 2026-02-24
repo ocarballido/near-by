@@ -725,7 +725,8 @@
 		"optional": "Optional",
 		"currentImage": "Current image",
 		"currentImageAlt": "Current property image",
-		"changeImageHelper": "You can select a new image to replace it."
+		"changeImageHelper": "You can select a new image to replace it.",
+		"formEditTitle": "Edit property"
 	},
 	"Guardar cambios": "Save changes",
 	"Imagen actual": "Current image"

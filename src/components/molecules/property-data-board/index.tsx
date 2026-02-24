@@ -65,7 +65,7 @@ const PropertyDataBoard = ({
 					/>
 					{(propertyCheckInDate || propertyCheckInTime) && (
 						<BadgeCheck
-							label={`${propertyCheckInDate ?? formatDate(propertyCheckInDate, locale)} ${propertyCheckInTime ? ': ' + formatTime(propertyCheckInTime, locale) : null}`}
+							label={`${propertyCheckInDate ? formatDate(propertyCheckInDate, locale) + ' | ' : ''} ${propertyCheckInTime ? formatTime(propertyCheckInTime, locale) : ''}`}
 							checked
 							checkedColor="secondary"
 							iconChecked={
@@ -75,7 +75,7 @@ const PropertyDataBoard = ({
 					)}
 					{(propertyCheckOutDate || propertyCheckOutTime) && (
 						<BadgeCheck
-							label={`${propertyCheckOutDate ?? formatDate(propertyCheckOutDate, locale)} ${propertyCheckOutTime ? ': ' + formatTime(propertyCheckOutTime, locale) : null}`}
+							label={`${propertyCheckOutDate ? formatDate(propertyCheckOutDate, locale) + ' | ' : ''} ${propertyCheckOutTime ? formatTime(propertyCheckOutTime, locale) : ''}`}
 							checked
 							checkedColor="secondary"
 							iconChecked={

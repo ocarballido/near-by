@@ -730,7 +730,8 @@
 		"optional": "Facultatif",
 		"currentImage": "Image actuelle",
 		"currentImageAlt": "Image actuelle du logement",
-		"changeImageHelper": "Vous pouvez sélectionner une nouvelle image pour la remplacer."
+		"changeImageHelper": "Vous pouvez sélectionner une nouvelle image pour la remplacer.",
+		"formEditTitle": "Modifier la propriété"
 	},
 	"Guardar cambios": "Enregistrer les modifications",
 	"Imagen actual": "Image actuelle"
