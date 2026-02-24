@@ -8,7 +8,11 @@ import AppContentTemplate from '@/components/templates/app-content';
 type PropertyWithData = {
 	id: string;
 	name: string;
-	slug: string;
+	slug: string | null;
+	check_in_date: string | null;
+	check_in_time: string | null;
+	check_out_date: string | null;
+	check_out_time: string | null;
 	address: string | null;
 	image_url: string | null;
 	property_data: { type: string | null }[] | null;
@@ -21,9 +25,7 @@ export default async function Properties() {
 		error: authError,
 	} = await ssrClient.auth.getUser();
 
-	if (authError || !user) {
-		redirect('/auth/login');
-	}
+	if (authError || !user) redirect('/auth/login');
 
 	const supabase = await createServerAdminClient();
 
@@ -31,34 +33,42 @@ export default async function Properties() {
 		.from('properties')
 		.select(
 			`
-				id,
-				name,
-				slug,
-				address,
-				image_url,
-				property_data ( type )
-			`,
+      id,
+      name,
+      slug,
+      address,
+      image_url,
+      check_in_date,
+      check_in_time,
+      check_out_date,
+      check_out_time,
+      property_data ( type )
+    `,
 		)
 		.eq('user_id', user.id)
 		.overrideTypes<PropertyWithData[], { merge: false }>();
 
-	if (error) {
-		throw new Error('Error cargando propiedades: ' + error.message);
-	}
+	if (error) throw new Error('Error cargando propiedades: ' + error.message);
 
 	const properties = (data ?? []).map((p) => {
-		const types = (p.property_data ?? []).map((x) =>
-			(x?.type ?? '').toString().trim().toLowerCase(),
+		const types = new Set(
+			(p.property_data ?? [])
+				.map((x) => (x?.type ?? '').toString().trim().toLowerCase())
+				.filter(Boolean),
 		);
 
 		return {
 			id: p.id,
 			name: p.name,
-			slug: p.slug,
+			slug: p.slug ?? '',
 			address: p.address ?? '',
+			checkInDate: p.check_in_date ?? '',
+			checkInTime: p.check_in_time ?? '',
+			checkOutDate: p.check_out_date ?? '',
+			checkOutTime: p.check_out_time ?? '',
 			image_url: p.image_url ?? undefined,
-			hasLocation: types.includes('location'),
-			hasInfo: types.includes('info'),
+			hasLocation: types.has('location'),
+			hasInfo: types.has('info'),
 		};
 	});
 

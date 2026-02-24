@@ -96,9 +96,9 @@ const BadgeCheck = ({
 			aria-pressed={checked}
 		>
 			{checked ? (
-				iconChecked
+				<div className="shrink-0">{iconChecked}</div>
 			) : (
-				<div className="opacity-50">{iconUnchecked}</div>
+				<div className="opacity-50 shrink-0">{iconUnchecked}</div>
 			)}
 			<span>{label}</span>
 		</div>

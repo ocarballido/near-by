@@ -47,6 +47,8 @@ export default async function Property({ params }: PageProps) {
 
 	const mode = getMode(categoryId);
 
+	console.log(property);
+
 	return (
 		<EditPublicMenuProvider initialData={sidebarData}>
 			<PublicContentTemplate
@@ -57,6 +59,10 @@ export default async function Property({ params }: PageProps) {
 				name={property.name}
 				latitude={lat}
 				longitude={lng}
+				checkInDate={property.check_in_date ?? ''}
+				checkInTime={property.check_in_time ?? ''}
+				checkOutDate={property.check_out_date ?? ''}
+				checkOutTime={property.check_out_time ?? ''}
 				image={property.image_url}
 			>
 				<div className="p-4 font-roboto flex flex-col grow gap-4 rounded-lg overflow-hidden">

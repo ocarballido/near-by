@@ -721,5 +721,20 @@
 		"cta": "Entrar o crear cuenta",
 		"closeAriaLabel": "Cerrar banner"
 	},
-	"Taquillas": "Taquillas"
+	"Taquillas": "Taquillas",
+	"propertyForm": {
+		"checkIn": "Check-in",
+		"checkOut": "Check-out",
+		"date": "Fecha",
+		"time": "Hora",
+		"optional": "Opcional",
+		"currentImage": "Imagen actual",
+		"currentImageAlt": "Imagen actual de la propiedad",
+		"changeImageHelper": "Puedes seleccionar otra imagen para reemplazarla.",
+		"formEditTitle": "Editar propiedad",
+		"dateAndTime": "Fecha y hora",
+		"onlyTime": "Solo hora"
+	},
+	"Guardar cambios": "Guardar cambios",
+	"Imagen actual": "Imagen actual"
 }

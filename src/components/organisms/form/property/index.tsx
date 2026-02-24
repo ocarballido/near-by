@@ -6,11 +6,12 @@ import { useTranslations, useLocale } from 'next-intl';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { usePaywall } from '@/lib/context/PaywallContext';
 import { useRouter } from 'next/navigation';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useLoading } from '@/lib/context/LoadingContext';
 import { useGlobal } from '@/lib/context/GlobalContext';
 
 import { createProperty } from '@/app/actions/properties/add-property';
+import { updateProperty } from '@/app/actions/properties/update-property';
 
 import {
 	MAX_IMAGE_SIZE,
@@ -19,24 +20,18 @@ import {
 } from '@/config/config-constants';
 
 import TextField from '@/components/molecules/text-field';
-import InputFile from '@/components/molecules/input-file';
-import Button from '@/components/molecules/button';
-import ButtonLink from '@/components/molecules/button-link';
 import Alert from '@/components/molecules/alert';
-import BadgeCheck from '@/components/atoms/BadgeCheck';
-import Typography from '@/components/atoms/typography';
-import IconAdd from '@/components/atoms/icon/add';
-import FancyIcon from '@/components/atoms/icon/fancy-icon';
-import Modal from '../../modal';
-
-// ✅ New Places widget field
-import PlaceAutocompleteField from '@/components/molecules/place-autocomplete';
+import SeedOptions from './seed-options';
+import PropertyFormHeader from './form-header';
+import ImageSection from './image-section';
+import FormActions from './form-actions';
+import AddressSection from './address-section';
 import { SelectedPlace } from '@/components/molecules/place-autocomplete';
 
 import { trackClientEvent } from '@/lib/analytics/trackClient';
-import IconHelp from '@/components/atoms/icon/help';
-import ButtonIcon from '@/components/atoms/button-icon';
-import IconInfo from '@/components/atoms/icon/info';
+import { getPropertyFormDefaultValues } from './getPropertyFormDefaultValues';
+import { buildPropertyFormData } from './buildPropertyFormData';
+import Button from '@/components/molecules/button';
 
 type FormValues = {
 	name: string;
@@ -44,12 +39,44 @@ type FormValues = {
 	latitude: string;
 	longitude: string;
 	image?: FileList;
+	checkInDate: string;
+	checkInTime: string;
+	checkOutDate: string;
+	checkOutTime: string;
 };
 
-const AddPropertyForm = () => {
+export type EditInitialValues = {
+	name: string;
+	address: string;
+	latitude: number | null;
+	longitude: number | null;
+	image_url: string | null;
+	check_in_date: string | null;
+	check_in_time: string | null;
+	check_out_date: string | null;
+	check_out_time: string | null;
+};
+
+export type DateTimeMode = 'isDateAndTime' | 'isOnlyTime';
+
+// ✅ NEW: props simples (sin union complicada)
+type Props = {
+	// si vienen ambos => modo edición
+	propertyId?: string;
+	initialValues?: EditInitialValues;
+};
+
+const DEFAULT_SEED_INFO_IDS = [
+	CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.MANUAL.id,
+	CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.RULES.id,
+	CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.SCHEDULE.id,
+	CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.RECYCLE.id,
+	CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.WIFI.id,
+] as const;
+
+const AddPropertyForm = ({ propertyId, initialValues }: Props) => {
 	const t = useTranslations();
 	const locale = useLocale();
-
 	const router = useRouter();
 
 	const { incrementPropertyCount } = usePaywall();
@@ -57,57 +84,86 @@ const AddPropertyForm = () => {
 	const { user } = useGlobal();
 	const distinctId = user?.id;
 
-	// Para saber si completó y evitar “abandoned” tras success
+	const isEdit = Boolean(propertyId && initialValues);
+
 	const didCompleteRef = useRef(false);
 
-	// Para medir abandono con algo útil
 	const formOpenedAtRef = useRef<number>(Date.now());
 
-	const INFO_SEED_OPTIONS = [
-		{
-			id: CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.MANUAL.id,
-			labelKey: t(
-				CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.MANUAL.name,
-			),
-			tKey: 'manual',
-		},
-		{
-			id: CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.RULES.id,
-			labelKey: t(
-				CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.RULES.name,
-			),
-			tKey: 'rules',
-		},
-		{
-			id: CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.SCHEDULE.id,
-			labelKey: t(
-				CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.SCHEDULE.name,
-			),
-			tKey: 'schedule',
-		},
-		{
-			id: CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.RECYCLE.id,
-			labelKey: t(
-				CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.RECYCLE.name,
-			),
-			tKey: 'recycling',
-		},
-		{
-			id: CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.WIFI.id,
-			labelKey: t(
-				CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.WIFI.name,
-			),
-			tKey: 'wifi',
-		},
-	] as const;
+	const INFO_SEED_OPTIONS = useMemo(
+		() =>
+			[
+				{
+					id: CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.MANUAL
+						.id,
+					labelKey: t(
+						CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.MANUAL
+							.name,
+					),
+					tKey: 'manual',
+				},
+				{
+					id: CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.RULES
+						.id,
+					labelKey: t(
+						CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.RULES
+							.name,
+					),
+					tKey: 'rules',
+				},
+				{
+					id: CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES
+						.SCHEDULE.id,
+					labelKey: t(
+						CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES
+							.SCHEDULE.name,
+					),
+					tKey: 'schedule',
+				},
+				{
+					id: CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.RECYCLE
+						.id,
+					labelKey: t(
+						CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.RECYCLE
+							.name,
+					),
+					tKey: 'recycling',
+				},
+				{
+					id: CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.WIFI
+						.id,
+					labelKey: t(
+						CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.WIFI
+							.name,
+					),
+					tKey: 'wifi',
+				},
+			] as const,
+		[t],
+	);
+
+	const seedOptions = useMemo(
+		() =>
+			INFO_SEED_OPTIONS.map((opt) => ({
+				id: opt.id,
+				label: opt.labelKey,
+			})),
+		[INFO_SEED_OPTIONS],
+	);
 
 	const [alert, setAlert] = useState<{
 		type: 'error' | 'success';
 		message: string;
 	} | null>(null);
 
+	const [dateTimeMode, setDateTimeMode] = useState<DateTimeMode>(
+		initialValues?.check_in_date && initialValues?.check_in_time
+			? 'isDateAndTime'
+			: 'isOnlyTime',
+	);
+
 	const [selectedSeedInfoIds, setSelectedSeedInfoIds] = useState<string[]>(
-		() => INFO_SEED_OPTIONS.map((x) => x.id),
+		() => [...DEFAULT_SEED_INFO_IDS],
 	);
 
 	const [isOpen, setIsOpen] = useState(false);
@@ -120,6 +176,11 @@ const AddPropertyForm = () => {
 
 	const { openLoading, closeLoading } = useLoading();
 
+	const defaultValues = useMemo(
+		() => getPropertyFormDefaultValues(isEdit, initialValues),
+		[isEdit, initialValues],
+	);
+
 	const {
 		register,
 		handleSubmit,
@@ -130,10 +191,10 @@ const AddPropertyForm = () => {
 		reset,
 		formState: { errors, isSubmitting },
 	} = useForm<FormValues>({
-		defaultValues: { name: '', address: '', latitude: '', longitude: '' },
+		defaultValues,
+		shouldUnregister: false,
 	});
 
-	// ✅ coords now come from PlaceAutocompleteElement selection
 	const [coords, setCoords] = useState<SelectedPlace | null>(null);
 
 	const handleSelectAddress = (p: SelectedPlace) => {
@@ -162,7 +223,7 @@ const AddPropertyForm = () => {
 	};
 
 	const onSubmit: SubmitHandler<FormValues> = async (data) => {
-		if (distinctId) {
+		if (!isEdit && distinctId) {
 			trackClientEvent({
 				event: 'create_property_submit_clicked',
 				distinctId,
@@ -173,7 +234,7 @@ const AddPropertyForm = () => {
 			});
 		}
 
-		if (!coords) {
+		if (!isEdit && !coords) {
 			if (distinctId) {
 				trackClientEvent({
 					event: 'create_property_blocked_no_address_selection',
@@ -206,21 +267,21 @@ const AddPropertyForm = () => {
 			return;
 		}
 
-		const fd = new FormData();
-		fd.append('name', data.name);
-		fd.append('address', data.address);
-		fd.append('latitude', data.latitude);
-		fd.append('longitude', data.longitude);
-		fd.append('locale', locale);
-		fd.append('seedInfoIds', JSON.stringify(selectedSeedInfoIds));
-		if (file) fd.append('image', file);
+		const fd = buildPropertyFormData({
+			isEdit,
+			locale,
+			selectedSeedInfoIds,
+			dateTimeMode,
+			data,
+		});
 
 		openLoading();
 
-		const result = await createProperty(fd);
+		const result = isEdit
+			? await updateProperty(propertyId as string, fd)
+			: await createProperty(fd);
 
 		if (result.errors) {
-			// Track: create_property_failed
 			if (distinctId) {
 				const errorFields = Object.keys(result.errors);
 				trackClientEvent({
@@ -239,7 +300,7 @@ const AddPropertyForm = () => {
 					type: 'manual',
 					message: result.errors.name[0],
 				});
-			if (result.errors.address)
+			if (!isEdit && result.errors.address)
 				setError('address', {
 					type: 'manual',
 					message: result.errors.address[0],
@@ -258,7 +319,7 @@ const AddPropertyForm = () => {
 
 		closeLoading();
 
-		incrementPropertyCount();
+		if (!isEdit) incrementPropertyCount();
 
 		setAlert({
 			type: 'success',
@@ -269,18 +330,23 @@ const AddPropertyForm = () => {
 			router.push(result.redirectTo);
 		}
 
-		reset();
-		setCoords(null);
+		if (!isEdit) {
+			reset();
+			setCoords(null);
+		}
 	};
 
 	useEffect(() => {
+		if (isEdit) return;
 		if (coords) {
 			setValue('latitude', String(coords.lat), { shouldDirty: true });
 			setValue('longitude', String(coords.lng), { shouldDirty: true });
 		}
-	}, [coords, setValue]);
+	}, [coords, setValue, isEdit]);
 
 	useEffect(() => {
+		if (isEdit) return;
+
 		const openedAt = formOpenedAtRef.current;
 
 		return () => {
@@ -288,7 +354,6 @@ const AddPropertyForm = () => {
 			if (!distinctId) return;
 
 			const timeOnFormMs = Date.now() - openedAt;
-
 			const hasName = Boolean(getValues('name')?.trim());
 			const hasSelectedAddress = Boolean(coords);
 
@@ -302,7 +367,7 @@ const AddPropertyForm = () => {
 				},
 			});
 		};
-	}, [distinctId, getValues, coords]);
+	}, [distinctId, getValues, coords, isEdit]);
 
 	return (
 		<div className="bg-white p-2 rounded-xl w-full max-w-[400px] shadow-xs">
@@ -317,70 +382,30 @@ const AddPropertyForm = () => {
 				/>
 			)}
 
-			<Modal
-				title={t('createPropertyTipsModal.title')}
-				// description={t('createPropertyTipsModal.description')}
-				open={isOpen}
-				onClose={() => {
-					setIsOpen(false);
-				}}
-				primaryButtonAction={() => {
-					setIsOpen(false);
-				}}
+			<PropertyFormHeader
+				isEdit={isEdit}
+				title={
+					isEdit
+						? t('propertyForm.formEditTitle')
+						: t('Nuevo Alojamiento')
+				}
+				modalTitle={t('createPropertyTipsModal.title')}
 				primaryButtonLabel="Cancel"
-				size="max-w-3xl"
-			>
-				<div className="flex flex-wrap max-w-[1000px]">
-					{TIPS.map((tip) => (
-						<div
-							key={tip.id}
-							className="flex flex-col w-full md:w-full lg:w-1/2 xl:w-1/3 gap-1 p-4 items-center text-center"
-						>
-							<div className="flex justify-center items-center w-14 h-14 rounded-full bg-gradient-to-tr from-[#FF6B06]/10 to-[#31C48D]/10">
-								<span className="flex justify-center items-center w-9 h-9 rounded-full bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] font-bold text-white text-base">
-									{tip.id}
-								</span>
-							</div>
-							<Typography component="h3" size="base">
-								{t(tip.title)}
-							</Typography>
-							<Typography size="sm">{t(tip.subtitle)}</Typography>
-						</div>
-					))}
-				</div>
-			</Modal>
+				isOpen={isOpen}
+				onOpen={() => setIsOpen(true)}
+				onClose={() => setIsOpen(false)}
+				tips={TIPS}
+				t={t}
+			/>
 
-			<div className="rounded-lg p-3 pt-0 flex flex-col gap-2 items-center text-center">
-				<FancyIcon icon={<IconAdd color="white" />} color="gradient" />
-				<Typography
-					component="h2"
-					size="lg"
-					className="flex items-center gap-1"
-				>
-					{t('Nuevo Alojamiento')}
-					<ButtonIcon
-						size="small"
-						icon={<IconInfo />}
-						onClick={() => setIsOpen(true)}
-					/>
-				</Typography>
-			</div>
-
-			<fieldset className="w-full p-2">
-				<label className="font-bold text-sm mb-2 block">
-					{t('Contenido generado automáticamente')}
-				</label>
-				<div className="flex gap-1 flex-wrap mb-2">
-					{INFO_SEED_OPTIONS.map((opt) => (
-						<BadgeCheck
-							key={opt.id}
-							label={opt.labelKey}
-							checked={selectedSeedInfoIds.includes(opt.id)}
-							onToggle={() => toggleSeed(opt.id)}
-						/>
-					))}
-				</div>
-			</fieldset>
+			{!isEdit && (
+				<SeedOptions
+					title={t('Contenido generado automáticamente')}
+					options={seedOptions}
+					selectedIds={selectedSeedInfoIds}
+					onToggle={toggleSeed}
+				/>
+			)}
 
 			<form
 				onSubmit={handleSubmit(onSubmit)}
@@ -397,69 +422,158 @@ const AddPropertyForm = () => {
 					helperText={errors.name?.message}
 				/>
 
-				{/* ✅ New widget-based address input */}
-				<PlaceAutocompleteField
-					label={t('Dirección *')}
-					placeholder={t('Dirección ejemplo')}
+				<AddressSection
+					t={t}
 					locale={locale}
+					isEdit={isEdit}
 					error={Boolean(errors.address)}
 					helperTextIdle={t('addressHelperIdle')}
 					helperTextSelected={t('addressHelperSelected')}
 					helperTextError={t('addressHelperError')}
 					onSelect={handleSelectAddress}
 					onClearSelection={clearSelection}
+					addressValue={getValues('address')}
+					addressRegisterProps={
+						isEdit
+							? register('address')
+							: register('address', {
+									required: t('La dirección es obligatoria'),
+								})
+					}
+					latRegisterProps={register('latitude')}
+					lngRegisterProps={register('longitude')}
 				/>
 
-				{/* ✅ RHF needs the fields registered; the visible input is managed by Google */}
-				<input
-					type="hidden"
-					{...register('address', {
-						required: t('La dirección es obligatoria'),
-					})}
-				/>
-				<input type="hidden" {...register('latitude')} />
-				<input type="hidden" {...register('longitude')} />
+				<div className="flex gap-1 p-1 rounded-full bg-gray-200 -mb-1">
+					<Button
+						label={t('propertyForm.dateAndTime')}
+						className="w-full"
+						color={
+							dateTimeMode === 'isDateAndTime'
+								? 'white'
+								: 'secondary'
+						}
+						onClick={() => {
+							if (dateTimeMode === 'isDateAndTime') return;
+							setDateTimeMode('isDateAndTime');
+						}}
+					/>
+					<Button
+						label={t('propertyForm.onlyTime')}
+						className="w-full"
+						color={
+							dateTimeMode === 'isOnlyTime'
+								? 'white'
+								: 'secondary'
+						}
+						onClick={() => {
+							if (dateTimeMode === 'isOnlyTime') return;
+							setDateTimeMode('isOnlyTime');
 
-				<InputFile
+							// opcional: limpiar errores para que no aparezcan si el campo está oculto
+							clearErrors(['checkInDate', 'checkOutDate']);
+						}}
+					/>
+				</div>
+
+				<fieldset className="flex flex-col gap-1">
+					<div className="flex gap-2 flex-col sm:flex-row">
+						{dateTimeMode === 'isDateAndTime' && (
+							<div className="w-full">
+								<TextField
+									label={`${t('propertyForm.checkIn')}/${t('propertyForm.date')}`}
+									id="checkInDate"
+									type="date"
+									{...register('checkInDate')}
+									error={Boolean(errors.checkInDate)}
+									helperText={
+										errors.checkInDate?.message as string
+									}
+								/>
+							</div>
+						)}
+
+						<div className="w-full">
+							<TextField
+								label={`${t('propertyForm.checkIn')}/${t('propertyForm.time')}`}
+								id="checkInTime"
+								type="time"
+								step={60}
+								{...register('checkInTime')}
+								error={Boolean(errors.checkInTime)}
+								helperText={
+									errors.checkInTime?.message as string
+								}
+							/>
+						</div>
+					</div>
+				</fieldset>
+
+				<fieldset className="flex flex-col gap-1">
+					<div className="flex gap-2 flex-col sm:flex-row">
+						{dateTimeMode === 'isDateAndTime' && (
+							<div className="flex-1">
+								<TextField
+									label={`${t('propertyForm.checkOut')}/${t('propertyForm.date')}`}
+									id="checkOutDate"
+									type="date"
+									{...register('checkOutDate')}
+									error={Boolean(errors.checkOutDate)}
+									helperText={
+										errors.checkOutDate?.message as string
+									}
+								/>
+							</div>
+						)}
+
+						<div className="flex-1">
+							<TextField
+								label={`${t('propertyForm.checkOut')}/${t('propertyForm.time')}`}
+								id="checkOutTime"
+								type="time"
+								step={60}
+								{...register('checkOutTime')}
+								error={Boolean(errors.checkOutTime)}
+								helperText={
+									errors.checkOutTime?.message as string
+								}
+							/>
+						</div>
+					</div>
+				</fieldset>
+
+				<ImageSection
+					t={t}
+					isEdit={isEdit}
+					imageUrl={initialValues?.image_url ?? null}
 					label={t('Imagen')}
-					error={Boolean(errors.image)}
-					helperText={errors.image?.message as string}
-					{...register('image', {
+					error={errors.image}
+					registerProps={register('image', {
 						validate: (files) => {
 							const file = files?.[0];
 							if (!file) return true;
 							if (file.size <= MAX_IMAGE_SIZE) return true;
 							return `La imagen no debe superar ${(
 								MAX_IMAGE_SIZE / 1024
-							).toFixed(0)} KB (tienes ${(
-								file.size / 1024
-							).toFixed(0)} KB)`;
+							).toFixed(
+								0,
+							)} KB (tienes ${(file.size / 1024).toFixed(0)} KB)`;
 						},
 					})}
 				/>
 
-				<div className="flex flex-col gap-2">
-					<Button
-						type="submit"
-						label={t('Añadir propiedad')}
-						className="w-full"
-						disabled={isSubmitting}
-					/>
-					<ButtonLink
-						label={t('Cancelar')}
-						color="secondary"
-						href="/app/properties"
-						className="w-full"
-					/>
-
-					<ButtonLink
-						label={t('feedback.cta')}
-						href="/app/feedback/create_property?returnTo=/app/properties/new"
-						color="white"
-						className="w-full"
-						iconLeft={<IconHelp />}
-					/>
-				</div>
+				<FormActions
+					isEdit={isEdit}
+					isSubmitting={isSubmitting}
+					onCancel={() => router.back()}
+					submitLabel={
+						isEdit ? t('Guardar cambios') : t('Añadir propiedad')
+					}
+					cancelLabel={t('Cancelar')}
+					showFeedback={!isEdit}
+					feedbackLabel={t('feedback.cta')}
+					feedbackHref="/app/feedback/create_property?returnTo=/app/properties/new"
+				/>
 			</form>
 		</div>
 	);

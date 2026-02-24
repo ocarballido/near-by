@@ -716,5 +716,20 @@
 		"cta": "Log in or sign up",
 		"closeAriaLabel": "Close banner"
 	},
-	"Taquillas": "Lockers"
+	"Taquillas": "Lockers",
+	"propertyForm": {
+		"checkIn": "Check-in",
+		"checkOut": "Check-out",
+		"date": "Date",
+		"time": "Time",
+		"optional": "Optional",
+		"currentImage": "Current image",
+		"currentImageAlt": "Current property image",
+		"changeImageHelper": "You can select a new image to replace it.",
+		"formEditTitle": "Edit property",
+		"dateAndTime": "Date & time",
+		"onlyTime": "Time only"
+	},
+	"Guardar cambios": "Save changes",
+	"Imagen actual": "Current image"
 }

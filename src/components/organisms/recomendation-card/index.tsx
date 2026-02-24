@@ -45,7 +45,7 @@ const RecomendationCard = ({
 			key={id}
 			type="button"
 			onClick={applyRecommendation}
-			className={`w-full text-left rounded-xl  p-3 hover:cursor-pointer transition-all ${buttonStyles}`}
+			className={`w-full text-left rounded-xl p-3 hover:cursor-pointer transition-all ${buttonStyles}`}
 		>
 			<div className="flex items-start justify-between gap-2">
 				<div className="flex flex-col gap-1 w-full">

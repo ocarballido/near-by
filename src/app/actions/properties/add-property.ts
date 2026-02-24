@@ -18,6 +18,12 @@ import type { Database, TablesInsert } from '@/lib/types';
 import { uploadPropertyImage } from '@/lib/uploadPropertyImage';
 import { seedLodgingContent } from '@/lib/seedLodgingContent';
 
+const emptyToNull = (v: unknown) => {
+	if (typeof v !== 'string') return null;
+	const s = v.trim();
+	return s.length ? s : null;
+};
+
 // Esquema de validación con Zod
 const PropertySchema = z.object({
 	name: z.string().nonempty('El nombre de la propiedad es obligatorio'),
@@ -34,6 +40,10 @@ const PropertySchema = z.object({
 		(v) => (v ? Number(v) : null),
 		z.number().nullable(),
 	),
+	check_in_date: z.preprocess(emptyToNull, z.string().nullable()),
+	check_in_time: z.preprocess(emptyToNull, z.string().nullable()),
+	check_out_date: z.preprocess(emptyToNull, z.string().nullable()),
+	check_out_time: z.preprocess(emptyToNull, z.string().nullable()),
 });
 
 // Tipo para los errores de validación
@@ -82,6 +92,10 @@ export async function createProperty(formData: FormData): Promise<FormState> {
 			address: formData.get('address'),
 			latitude: formData.get('latitude'),
 			longitude: formData.get('longitude'),
+			check_in_date: formData.get('check_in_date'),
+			check_in_time: formData.get('check_in_time'),
+			check_out_date: formData.get('check_out_date'),
+			check_out_time: formData.get('check_out_time'),
 		};
 
 		// 4. Validar con Zod
@@ -124,6 +138,10 @@ export async function createProperty(formData: FormData): Promise<FormState> {
 			latitude: validated.latitude,
 			longitude: validated.longitude,
 			image_url: imageUrl,
+			check_in_date: validated.check_in_date,
+			check_in_time: validated.check_in_time,
+			check_out_date: validated.check_out_date,
+			check_out_time: validated.check_out_time,
 		};
 
 		const { data, error: insertError } = await db

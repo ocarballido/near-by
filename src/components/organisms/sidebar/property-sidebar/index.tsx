@@ -20,9 +20,7 @@ import IconPets from '@/components/atoms/icon/pets';
 import IconInterests from '@/components/atoms/icon/interests';
 import IconShoppingBag from '@/components/atoms/icon/shopping-bag';
 import CategoryAccordion from '@/components/molecules/category-accordion';
-import ButtonLink from '@/components/molecules/button-link';
 import GroupItem from '@/components/molecules/group-item';
-import IconHelp from '@/components/atoms/icon/help';
 
 const ICON_COMPONENTS = {
 	IconHealing,
@@ -63,19 +61,6 @@ const PropertySidebar = ({
 
 	return (
 		<>
-			<ButtonLink
-				label={t('Mis Propiedades')}
-				href="/app/properties"
-				iconLeft={<IconApartment />}
-				className="hidden md:flex w-full"
-			/>
-			<ButtonLink
-				label={t('feedback.cta')}
-				href={`/app/feedback/dashboard/property/${propertyId}?returnTo=/app/properties/${propertyId}/${categoryId}/${subCategoryId}`}
-				color="secondary"
-				className="w-full"
-				iconLeft={<IconHelp />}
-			/>
 			{sidebarData &&
 				sidebarData.map((category) => {
 					const iconName = category.icon as IconName;
