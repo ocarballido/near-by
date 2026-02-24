@@ -1,7 +1,7 @@
 import Typography from '../typography';
 
 type PropertyNameTitleProps = {
-	propertyName: string;
+	propertyName?: string;
 	subCategoryName?: string;
 };
 
@@ -12,7 +12,8 @@ const PropertyNameTitle = ({
 	return (
 		<div className="flex gap-1">
 			<Typography component="h3" size="lg">
-				{propertyName}: {subCategoryName}
+				{propertyName ? `${propertyName}: ` : null}
+				{subCategoryName}
 			</Typography>
 		</div>
 	);

@@ -8,6 +8,7 @@ import { createSSRClient } from '@/lib/supabase/server';
 import PropertyNameTitle from '@/components/atoms/property-name-title';
 
 import type { Tables } from '@/lib/types';
+import PropertyDataBoard from '@/components/molecules/property-data-board';
 
 type FullProperty = Tables<'properties'>;
 type FullSubcategories = Tables<'sub_categories'>;
@@ -37,7 +38,9 @@ export default async function Property({ params }: PageProps) {
 
 	const { data: property, error: propErr } = await supabase
 		.from('properties')
-		.select('id,name,slug,image_url,address,latitude,longitude')
+		.select(
+			'id,name,slug,image_url,address,latitude,longitude,check_in_date,check_in_time,check_out_date,check_out_time',
+		)
 		.eq('id', propertyId)
 		.single()
 		.overrideTypes<FullProperty, { merge: false }>();
@@ -84,11 +87,19 @@ export default async function Property({ params }: PageProps) {
 			subcategoryGroupId={subCategoryId}
 			propertyId={propertyId}
 		>
+			<PropertyDataBoard
+				propertyName={property.name}
+				propertyAddress={property.address}
+				propertyCheckInDate={property.check_in_date ?? ''}
+				propertyCheckInTime={property.check_in_time ?? ''}
+				propertyCheckOutDate={property.check_out_date ?? ''}
+				propertyCheckOutTime={property.check_out_time ?? ''}
+				propertyId={propertyId}
+				categoryId={categoryId}
+				subCategoryId={subCategoryId}
+			/>
 			<div className="p-4 font-roboto flex flex-col grow gap-4 rounded-lg overflow-hidden">
-				<PropertyNameTitle
-					propertyName={property.name}
-					subCategoryName={subCategoryName?.name}
-				/>
+				<PropertyNameTitle subCategoryName={subCategoryName?.name} />
 				<PropertyDataBySubCategory
 					propertyId={propertyId}
 					subCategoryId={subCategoryId}

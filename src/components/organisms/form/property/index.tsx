@@ -6,11 +6,12 @@ import { useTranslations, useLocale } from 'next-intl';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { usePaywall } from '@/lib/context/PaywallContext';
 import { useRouter } from 'next/navigation';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useLoading } from '@/lib/context/LoadingContext';
 import { useGlobal } from '@/lib/context/GlobalContext';
 
 import { createProperty } from '@/app/actions/properties/add-property';
+import { updateProperty } from '@/app/actions/properties/update-property';
 
 import {
 	MAX_IMAGE_SIZE,
@@ -37,6 +38,7 @@ import { trackClientEvent } from '@/lib/analytics/trackClient';
 import IconHelp from '@/components/atoms/icon/help';
 import ButtonIcon from '@/components/atoms/button-icon';
 import IconInfo from '@/components/atoms/icon/info';
+import Image from 'next/image';
 
 type FormValues = {
 	name: string;
@@ -44,18 +46,43 @@ type FormValues = {
 	latitude: string;
 	longitude: string;
 	image?: FileList;
+	checkInDate: string; // YYYY-MM-DD o ''
+	checkInTime: string; // HH:mm o ''
+	checkOutDate: string;
+	checkOutTime: string;
 };
 
-const AddPropertyForm = () => {
+export type EditInitialValues = {
+	name: string;
+	address: string;
+	latitude: number | null;
+	longitude: number | null;
+	image_url: string | null;
+
+	check_in_date: string | null; // YYYY-MM-DD
+	check_in_time: string | null; // HH:mm:ss o HH:mm
+	check_out_date: string | null;
+	check_out_time: string | null;
+};
+
+// ✅ NEW: props simples (sin union complicada)
+type Props = {
+	// si vienen ambos => modo edición
+	propertyId?: string;
+	initialValues?: EditInitialValues;
+};
+
+const AddPropertyForm = ({ propertyId, initialValues }: Props) => {
 	const t = useTranslations();
 	const locale = useLocale();
-
 	const router = useRouter();
 
 	const { incrementPropertyCount } = usePaywall();
 
 	const { user } = useGlobal();
 	const distinctId = user?.id;
+
+	const isEdit = Boolean(propertyId && initialValues);
 
 	// Para saber si completó y evitar “abandoned” tras success
 	const didCompleteRef = useRef(false);
@@ -120,6 +147,40 @@ const AddPropertyForm = () => {
 
 	const { openLoading, closeLoading } = useLoading();
 
+	const defaultValues = useMemo<FormValues>(() => {
+		if (!isEdit || !initialValues) {
+			return {
+				name: '',
+				address: '',
+				latitude: '',
+				longitude: '',
+				checkInDate: '',
+				checkInTime: '',
+				checkOutDate: '',
+				checkOutTime: '',
+			};
+		}
+
+		return {
+			name: initialValues.name ?? '',
+			address: initialValues.address ?? '',
+			latitude:
+				initialValues.latitude !== null &&
+				initialValues.latitude !== undefined
+					? String(initialValues.latitude)
+					: '',
+			longitude:
+				initialValues.longitude !== null &&
+				initialValues.longitude !== undefined
+					? String(initialValues.longitude)
+					: '',
+			checkInDate: initialValues.check_in_date ?? '',
+			checkInTime: (initialValues.check_in_time ?? '').slice(0, 5), // HH:mm:ss -> HH:mm
+			checkOutDate: initialValues.check_out_date ?? '',
+			checkOutTime: (initialValues.check_out_time ?? '').slice(0, 5),
+		};
+	}, [isEdit, initialValues]);
+
 	const {
 		register,
 		handleSubmit,
@@ -130,7 +191,7 @@ const AddPropertyForm = () => {
 		reset,
 		formState: { errors, isSubmitting },
 	} = useForm<FormValues>({
-		defaultValues: { name: '', address: '', latitude: '', longitude: '' },
+		defaultValues,
 	});
 
 	// ✅ coords now come from PlaceAutocompleteElement selection
@@ -162,7 +223,7 @@ const AddPropertyForm = () => {
 	};
 
 	const onSubmit: SubmitHandler<FormValues> = async (data) => {
-		if (distinctId) {
+		if (!isEdit && distinctId) {
 			trackClientEvent({
 				event: 'create_property_submit_clicked',
 				distinctId,
@@ -173,7 +234,7 @@ const AddPropertyForm = () => {
 			});
 		}
 
-		if (!coords) {
+		if (!isEdit && !coords) {
 			if (distinctId) {
 				trackClientEvent({
 					event: 'create_property_blocked_no_address_selection',
@@ -208,16 +269,26 @@ const AddPropertyForm = () => {
 
 		const fd = new FormData();
 		fd.append('name', data.name);
-		fd.append('address', data.address);
-		fd.append('latitude', data.latitude);
-		fd.append('longitude', data.longitude);
-		fd.append('locale', locale);
-		fd.append('seedInfoIds', JSON.stringify(selectedSeedInfoIds));
+		if (!isEdit) {
+			fd.append('address', data.address);
+			fd.append('latitude', data.latitude);
+			fd.append('longitude', data.longitude);
+			fd.append('locale', locale);
+			fd.append('seedInfoIds', JSON.stringify(selectedSeedInfoIds));
+		}
+		fd.append('check_in_date', data.checkInDate ?? '');
+		fd.append('check_in_time', data.checkInTime ?? '');
+		fd.append('check_out_date', data.checkOutDate ?? '');
+		fd.append('check_out_time', data.checkOutTime ?? '');
 		if (file) fd.append('image', file);
 
 		openLoading();
 
-		const result = await createProperty(fd);
+		const result = isEdit
+			? await updateProperty(propertyId as string, fd)
+			: await createProperty(fd);
+
+		// const result = await createProperty(fd);
 
 		if (result.errors) {
 			// Track: create_property_failed
@@ -239,7 +310,7 @@ const AddPropertyForm = () => {
 					type: 'manual',
 					message: result.errors.name[0],
 				});
-			if (result.errors.address)
+			if (!isEdit && result.errors.address)
 				setError('address', {
 					type: 'manual',
 					message: result.errors.address[0],
@@ -258,7 +329,7 @@ const AddPropertyForm = () => {
 
 		closeLoading();
 
-		incrementPropertyCount();
+		if (!isEdit) incrementPropertyCount();
 
 		setAlert({
 			type: 'success',
@@ -269,18 +340,23 @@ const AddPropertyForm = () => {
 			router.push(result.redirectTo);
 		}
 
-		reset();
-		setCoords(null);
+		if (!isEdit) {
+			reset();
+			setCoords(null);
+		}
 	};
 
 	useEffect(() => {
+		if (isEdit) return;
 		if (coords) {
 			setValue('latitude', String(coords.lat), { shouldDirty: true });
 			setValue('longitude', String(coords.lng), { shouldDirty: true });
 		}
-	}, [coords, setValue]);
+	}, [coords, setValue, isEdit]);
 
 	useEffect(() => {
+		if (isEdit) return;
+
 		const openedAt = formOpenedAtRef.current;
 
 		return () => {
@@ -288,7 +364,6 @@ const AddPropertyForm = () => {
 			if (!distinctId) return;
 
 			const timeOnFormMs = Date.now() - openedAt;
-
 			const hasName = Boolean(getValues('name')?.trim());
 			const hasSelectedAddress = Boolean(coords);
 
@@ -302,7 +377,7 @@ const AddPropertyForm = () => {
 				},
 			});
 		};
-	}, [distinctId, getValues, coords]);
+	}, [distinctId, getValues, coords, isEdit]);
 
 	return (
 		<div className="bg-white p-2 rounded-xl w-full max-w-[400px] shadow-xs">
@@ -317,38 +392,41 @@ const AddPropertyForm = () => {
 				/>
 			)}
 
-			<Modal
-				title={t('createPropertyTipsModal.title')}
-				// description={t('createPropertyTipsModal.description')}
-				open={isOpen}
-				onClose={() => {
-					setIsOpen(false);
-				}}
-				primaryButtonAction={() => {
-					setIsOpen(false);
-				}}
-				primaryButtonLabel="Cancel"
-				size="max-w-3xl"
-			>
-				<div className="flex flex-wrap max-w-[1000px]">
-					{TIPS.map((tip) => (
-						<div
-							key={tip.id}
-							className="flex flex-col w-full md:w-full lg:w-1/2 xl:w-1/3 gap-1 p-4 items-center text-center"
-						>
-							<div className="flex justify-center items-center w-14 h-14 rounded-full bg-gradient-to-tr from-[#FF6B06]/10 to-[#31C48D]/10">
-								<span className="flex justify-center items-center w-9 h-9 rounded-full bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] font-bold text-white text-base">
-									{tip.id}
-								</span>
+			{!isEdit && (
+				<Modal
+					title={t('createPropertyTipsModal.title')}
+					open={isOpen}
+					onClose={() => {
+						setIsOpen(false);
+					}}
+					primaryButtonAction={() => {
+						setIsOpen(false);
+					}}
+					primaryButtonLabel="Cancel"
+					size="max-w-3xl"
+				>
+					<div className="flex flex-wrap max-w-[1000px]">
+						{TIPS.map((tip) => (
+							<div
+								key={tip.id}
+								className="flex flex-col w-full md:w-full lg:w-1/2 xl:w-1/3 gap-1 p-4 items-center text-center"
+							>
+								<div className="flex justify-center items-center w-14 h-14 rounded-full bg-gradient-to-tr from-[#FF6B06]/10 to-[#31C48D]/10">
+									<span className="flex justify-center items-center w-9 h-9 rounded-full bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] font-bold text-white text-base">
+										{tip.id}
+									</span>
+								</div>
+								<Typography component="h3" size="base">
+									{t(tip.title)}
+								</Typography>
+								<Typography size="sm">
+									{t(tip.subtitle)}
+								</Typography>
 							</div>
-							<Typography component="h3" size="base">
-								{t(tip.title)}
-							</Typography>
-							<Typography size="sm">{t(tip.subtitle)}</Typography>
-						</div>
-					))}
-				</div>
-			</Modal>
+						))}
+					</div>
+				</Modal>
+			)}
 
 			<div className="rounded-lg p-3 pt-0 flex flex-col gap-2 items-center text-center">
 				<FancyIcon icon={<IconAdd color="white" />} color="gradient" />
@@ -366,21 +444,23 @@ const AddPropertyForm = () => {
 				</Typography>
 			</div>
 
-			<fieldset className="w-full p-2">
-				<label className="font-bold text-sm mb-2 block">
-					{t('Contenido generado automáticamente')}
-				</label>
-				<div className="flex gap-1 flex-wrap mb-2">
-					{INFO_SEED_OPTIONS.map((opt) => (
-						<BadgeCheck
-							key={opt.id}
-							label={opt.labelKey}
-							checked={selectedSeedInfoIds.includes(opt.id)}
-							onToggle={() => toggleSeed(opt.id)}
-						/>
-					))}
-				</div>
-			</fieldset>
+			{!isEdit && (
+				<fieldset className="w-full p-2">
+					<label className="font-bold text-sm mb-2 block">
+						{t('Contenido generado automáticamente')}
+					</label>
+					<div className="flex gap-1 flex-wrap mb-2">
+						{INFO_SEED_OPTIONS.map((opt) => (
+							<BadgeCheck
+								key={opt.id}
+								label={opt.labelKey}
+								checked={selectedSeedInfoIds.includes(opt.id)}
+								onToggle={() => toggleSeed(opt.id)}
+							/>
+						))}
+					</div>
+				</fieldset>
+			)}
 
 			<form
 				onSubmit={handleSubmit(onSubmit)}
@@ -398,27 +478,140 @@ const AddPropertyForm = () => {
 				/>
 
 				{/* ✅ New widget-based address input */}
-				<PlaceAutocompleteField
-					label={t('Dirección *')}
-					placeholder={t('Dirección ejemplo')}
-					locale={locale}
-					error={Boolean(errors.address)}
-					helperTextIdle={t('addressHelperIdle')}
-					helperTextSelected={t('addressHelperSelected')}
-					helperTextError={t('addressHelperError')}
-					onSelect={handleSelectAddress}
-					onClearSelection={clearSelection}
-				/>
+				{isEdit ? (
+					<>
+						<TextField
+							label={t('Dirección *')}
+							id="address_display"
+							value={getValues('address')}
+							disabled
+						/>
+						<input type="hidden" {...register('address')} />
+						<input type="hidden" {...register('latitude')} />
+						<input type="hidden" {...register('longitude')} />
+					</>
+				) : (
+					<>
+						<PlaceAutocompleteField
+							label={t('Dirección *')}
+							placeholder={t('Dirección ejemplo')}
+							locale={locale}
+							error={Boolean(errors.address)}
+							helperTextIdle={t('addressHelperIdle')}
+							helperTextSelected={t('addressHelperSelected')}
+							helperTextError={t('addressHelperError')}
+							onSelect={handleSelectAddress}
+							onClearSelection={clearSelection}
+						/>
 
-				{/* ✅ RHF needs the fields registered; the visible input is managed by Google */}
-				<input
-					type="hidden"
-					{...register('address', {
-						required: t('La dirección es obligatoria'),
-					})}
-				/>
-				<input type="hidden" {...register('latitude')} />
-				<input type="hidden" {...register('longitude')} />
+						<input
+							type="hidden"
+							{...register('address', {
+								required: t('La dirección es obligatoria'),
+							})}
+						/>
+						<input type="hidden" {...register('latitude')} />
+						<input type="hidden" {...register('longitude')} />
+					</>
+				)}
+
+				<fieldset className="flex flex-col gap-1">
+					<Typography size="base" component="h3" fontFamily="base">
+						{t('propertyForm.checkIn')}{' '}
+						<span className="opacity-70 text-primary-500 text-sm">
+							({t('propertyForm.optional')})
+						</span>
+					</Typography>
+
+					<div className="flex gap-2 flex-col sm:flex-row">
+						<div className="w-full">
+							<TextField
+								label={t('propertyForm.date')}
+								id="checkInDate"
+								type="date"
+								{...register('checkInDate')}
+								error={Boolean(errors.checkInDate)}
+								helperText={
+									errors.checkInDate?.message as string
+								}
+							/>
+						</div>
+
+						<div className="w-full">
+							<TextField
+								label={t('propertyForm.time')}
+								id="checkInTime"
+								type="time"
+								step={60}
+								{...register('checkInTime')}
+								error={Boolean(errors.checkInTime)}
+								helperText={
+									errors.checkInTime?.message as string
+								}
+							/>
+						</div>
+					</div>
+				</fieldset>
+
+				<fieldset className="flex flex-col gap-1">
+					<Typography size="base" component="h3" fontFamily="base">
+						{t('propertyForm.checkOut')}{' '}
+						<span className="opacity-70 text-primary-500 text-sm">
+							({t('propertyForm.optional')})
+						</span>
+					</Typography>
+
+					<div className="flex gap-2 flex-col sm:flex-row">
+						<div className="flex-1">
+							<TextField
+								label={t('propertyForm.date')}
+								id="checkOutDate"
+								type="date"
+								{...register('checkOutDate')}
+								error={Boolean(errors.checkOutDate)}
+								helperText={
+									errors.checkOutDate?.message as string
+								}
+							/>
+						</div>
+
+						<div className="flex-1">
+							<TextField
+								label={t('propertyForm.time')}
+								id="checkOutTime"
+								type="time"
+								step={60}
+								{...register('checkOutTime')}
+								error={Boolean(errors.checkOutTime)}
+								helperText={
+									errors.checkOutTime?.message as string
+								}
+							/>
+						</div>
+					</div>
+				</fieldset>
+
+				{isEdit && initialValues?.image_url && (
+					<div className="flex flex-col gap-2">
+						<label className="font-medium text-sm">
+							{t('propertyForm.currentImage')}
+						</label>
+
+						<div className="w-full overflow-hidden rounded-lg relative h-[200px]">
+							<Image
+								src={initialValues.image_url}
+								fill
+								priority
+								alt={t('propertyForm.currentImageAlt')}
+								className="w-full h-40 object-cover"
+							/>
+						</div>
+
+						<Typography size="sm" className="opacity-70">
+							{t('propertyForm.changeImageHelper')}
+						</Typography>
+					</div>
+				)}
 
 				<InputFile
 					label={t('Imagen')}
@@ -441,24 +634,31 @@ const AddPropertyForm = () => {
 				<div className="flex flex-col gap-2">
 					<Button
 						type="submit"
-						label={t('Añadir propiedad')}
+						label={
+							isEdit
+								? t('Guardar cambios')
+								: t('Añadir propiedad')
+						}
 						className="w-full"
 						disabled={isSubmitting}
 					/>
-					<ButtonLink
+					<Button
 						label={t('Cancelar')}
-						color="secondary"
-						href="/app/properties"
 						className="w-full"
+						color="secondary"
+						onClick={() => router.back()}
 					/>
 
-					<ButtonLink
-						label={t('feedback.cta')}
-						href="/app/feedback/create_property?returnTo=/app/properties/new"
-						color="white"
-						className="w-full"
-						iconLeft={<IconHelp />}
-					/>
+					{/* feedback link: solo create (si quieres también en edit lo habilitamos) */}
+					{!isEdit && (
+						<ButtonLink
+							label={t('feedback.cta')}
+							href="/app/feedback/create_property?returnTo=/app/properties/new"
+							color="white"
+							className="w-full"
+							iconLeft={<IconHelp />}
+						/>
+					)}
 				</div>
 			</form>
 		</div>

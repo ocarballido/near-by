@@ -721,5 +721,17 @@
 		"cta": "Se connecter ou s’inscrire",
 		"closeAriaLabel": "Fermer la bannière"
 	},
-	"Taquillas": "Casiers"
+	"Taquillas": "Casiers",
+	"propertyForm": {
+		"checkIn": "Arrivée",
+		"checkOut": "Départ",
+		"date": "Date",
+		"time": "Heure",
+		"optional": "Facultatif",
+		"currentImage": "Image actuelle",
+		"currentImageAlt": "Image actuelle du logement",
+		"changeImageHelper": "Vous pouvez sélectionner une nouvelle image pour la remplacer."
+	},
+	"Guardar cambios": "Enregistrer les modifications",
+	"Imagen actual": "Image actuelle"
 }
