@@ -23,6 +23,10 @@ type Property = {
 	id: string;
 	hasLocation: boolean;
 	hasInfo: boolean;
+	checkInDate?: string;
+	checkInTime?: string;
+	checkOutDate?: string;
+	checkOutTime?: string;
 };
 
 type PropertiesContentProps = {
@@ -36,6 +40,7 @@ type AlertState = {
 
 const PropertiesContent = ({ properties }: PropertiesContentProps) => {
 	const t = useTranslations();
+	console.log(properties);
 
 	const { decrementPropertyCount } = usePaywall();
 
@@ -116,6 +121,10 @@ const PropertiesContent = ({ properties }: PropertiesContentProps) => {
 						setIsOpen(true);
 						setSelectedProperty(property?.id);
 					}}
+					checkInDate={property?.checkInDate}
+					checkInTime={property?.checkInTime}
+					checkOutDate={property?.checkOutDate}
+					checkOutTime={property?.checkOutTime}
 				/>
 			))}
 			<NewPropertyCard />

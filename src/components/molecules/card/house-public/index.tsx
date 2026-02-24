@@ -61,12 +61,12 @@ const HousePublic = ({
 				<div className="flex p-1 items-center absolute z-1 rounded-full right-2 top-2 gap-1">
 					{mustSee && (
 						<div className="p-1.5 rounded-full w-fit h-fit bg-white shadow-xs">
-							<IconModeHeat color="error" size={20} />
+							<IconModeHeat color="error" size={18} />
 						</div>
 					)}
 					{featured && (
 						<div className="p-1.5 rounded-full w-fit h-fit bg-white shadow-xs">
-							<IconFavorite color="primary" size={20} />
+							<IconFavorite color="primary" size={18} />
 						</div>
 					)}
 				</div>
@@ -75,9 +75,9 @@ const HousePublic = ({
 				<div className="flex gap-2">
 					<Typography component="h5">{name}</Typography>
 				</div>
-				<div className="flex gap-1">
-					<span className="grow-0">
-						<IconLocationOn size={20} />
+				<div className="flex gap-2 items-center">
+					<span className="grow-0 p-1.5 bg-primary-100 rounded-full h-fit">
+						<IconLocationOn size={18} color="primary" />
 					</span>
 					<Typography size="sm" weight="medium" color="text-gray-600">
 						{address}
@@ -89,27 +89,49 @@ const HousePublic = ({
 					checkInTime) && (
 					<div className="flex gap-2 flex-wrap">
 						{(checkInDate || checkInTime) && (
-							<div className="flex gap-1 flex-1">
-								<span className="grow-0">
-									<IconCheckIn size={20} />
+							<div className="flex gap-2 flex-1 items-center">
+								<span className="grow-0 p-1.5 bg-primary-100 rounded-full h-fit">
+									<IconCheckIn size={18} color="primary" />
 								</span>
 								<Typography
 									size="sm"
 									color="text-gray-600"
 									weight="medium"
-								>{`${checkInDate ? formatDate(checkInDate, locale) + ' | ' : ''} ${checkInTime ? formatTime(checkInTime, locale) : ''}`}</Typography>
+								>
+									{checkInDate && (
+										<span className="mr-2">
+											{formatDate(checkInDate, locale)}
+										</span>
+									)}
+									{checkInTime && (
+										<span>
+											{formatTime(checkInTime, locale)}
+										</span>
+									)}
+								</Typography>
 							</div>
 						)}
 						{(checkOutDate || checkInTime) && (
-							<div className="flex gap-1 flex-1">
-								<span className="grow-0">
-									<IconCheckOut size={20} />
+							<div className="flex gap-2 flex-1 items-center">
+								<span className="grow-0 p-1.5 bg-primary-100 rounded-full h-fit">
+									<IconCheckOut size={18} color="primary" />
 								</span>
 								<Typography
 									size="sm"
 									weight="medium"
 									color="text-gray-600"
-								>{`${checkOutDate ? formatDate(checkOutDate, locale) + ' | ' : ''} ${checkOutTime ? formatTime(checkOutTime, locale) : ''}`}</Typography>
+								>
+									{checkOutDate && (
+										<span className="mr-2">
+											{formatDate(checkOutDate, locale)}
+										</span>
+									)}
+									{checkOutTime && (
+										<span>
+											{formatTime(checkOutTime, locale)}
+										</span>
+									)}
+								</Typography>
 							</div>
 						)}
 					</div>

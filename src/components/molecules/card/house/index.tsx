@@ -1,14 +1,19 @@
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 
 import Image from 'next/image';
 import IconApartment from '@/components/atoms/icon/apartment';
 import IconLocationOn from '@/components/atoms/icon/location-on';
 import IconDelete from '@/components/atoms/icon/delete';
 import IconEdit from '@/components/atoms/icon/edit';
+import IconCheckIn from '@/components/atoms/icon/check-in';
+import IconCheckOut from '@/components/atoms/icon/check-out';
 import Button from '../../button';
 import ButtonLink from '../../button-link';
 import IconOpenInNew from '@/components/atoms/icon/open-in-new';
 import PropertySteps from '../../property-steps';
+import Typography from '@/components/atoms/typography';
+
+import { formatDate, formatTime } from '@/utils/format-date-time';
 
 type HouseProps = {
 	address: string;
@@ -22,6 +27,10 @@ type HouseProps = {
 	editeable?: boolean;
 	hasLocation?: boolean;
 	hasInfo?: boolean;
+	checkInDate?: string;
+	checkInTime?: string;
+	checkOutDate?: string;
+	checkOutTime?: string;
 };
 
 const House = ({
@@ -35,9 +44,14 @@ const House = ({
 	editeable = true,
 	hasLocation,
 	hasInfo,
+	checkInDate,
+	checkInTime,
+	checkOutDate,
+	checkOutTime,
 	image = '/static/img/default-property-2x.webp',
 }: HouseProps) => {
 	const t = useTranslations();
+	const locale = useLocale();
 
 	const graySvg = `<svg xmlns="http://www.w3.org/2000/svg" width="4" height="4"><rect width="4" height="4" fill="#a3e7d0" /></svg>`;
 	const grayDataUrl = `data:image/svg+xml;base64,${Buffer.from(
@@ -57,23 +71,73 @@ const House = ({
 				target="_blank"
 			/>
 			<div className="content transition-all flex justify-end gap-2 flex-col relative w-full bg-white z-5">
-				<div className="flex gap-2">
-					<span className="grow-0">
-						<IconApartment />
+				<div className="flex gap-2 items-center">
+					<span className="grow-0 p-1.5 bg-primary-100 rounded-full h-fit">
+						<IconApartment color="primary" size={18} />
 					</span>
-
-					<h5 className="font-heading font-bold text-md mt-0.5">
-						{name}
-					</h5>
+					<Typography component="h5">{name}</Typography>
 				</div>
-				<div className="flex gap-2 mb-2">
-					<span className="grow-0">
-						<IconLocationOn />
+				<div className="flex gap-2  items-center">
+					<span className="grow-0 p-1.5 bg-primary-100 rounded-full h-fit">
+						<IconLocationOn color="primary" size={18} />
 					</span>
-					<p className="font-body font-medium text-md mt-0.5">
+					<Typography size="sm" weight="medium" color="text-gray-600">
 						{address}
-					</p>
+					</Typography>
 				</div>
+				{(checkInDate ||
+					checkInTime ||
+					checkOutDate ||
+					checkInTime) && (
+					<div className="flex gap-2 flex-wrap">
+						{(checkInDate || checkInTime) && (
+							<div className="flex gap-2 flex-1 items-center">
+								<span className="grow-0 p-1.5 bg-primary-100 rounded-full h-fit">
+									<IconCheckIn size={18} color="primary" />
+								</span>
+								<Typography
+									size="sm"
+									color="text-gray-600"
+									weight="medium"
+								>
+									{checkInDate && (
+										<span className="mr-2">
+											{formatDate(checkInDate, locale)}
+										</span>
+									)}
+									{checkInTime && (
+										<span>
+											{formatTime(checkInTime, locale)}
+										</span>
+									)}
+								</Typography>
+							</div>
+						)}
+						{(checkOutDate || checkInTime) && (
+							<div className="flex gap-2 flex-1 items-center">
+								<span className="grow-0 p-1.5 bg-primary-100 rounded-full h-fit">
+									<IconCheckOut size={18} color="primary" />
+								</span>
+								<Typography
+									size="sm"
+									weight="medium"
+									color="text-gray-600"
+								>
+									{checkOutDate && (
+										<span className="mr-2">
+											{formatDate(checkOutDate, locale)}
+										</span>
+									)}
+									{checkOutTime && (
+										<span>
+											{formatTime(checkOutTime, locale)}
+										</span>
+									)}
+								</Typography>
+							</div>
+						)}
+					</div>
+				)}
 				{(!hasInfo || !hasLocation) && (
 					<PropertySteps
 						hasLocation={hasLocation || false}

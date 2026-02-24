@@ -124,16 +124,18 @@ const PlacePublic = ({
 				<div className="flex gap-2">
 					<Typography component="h5">{name}</Typography>
 				</div>
-				<div className="flex gap-1.5">
-					<span className="grow-0">
-						<IconLocationOn color="primary" />
+				<div className="flex gap-1.5 items-center">
+					<span className="grow-0 p-1.5 bg-primary-100 rounded-full h-fit">
+						<IconLocationOn color="primary" size={18} />
 					</span>
-					<Typography weight="medium">{address}</Typography>
+					<Typography size="sm" weight="medium" color="text-gray-600">
+						{address}
+					</Typography>
 				</div>
 				{description && (
 					<div className="flex gap-1.5">
-						<span className="grow-0">
-							<IconInfo color="primary" />
+						<span className="grow-0 p-1.5 bg-primary-100 rounded-full h-fit">
+							<IconInfo color="primary" size={18} />
 						</span>
 						<Typography
 							weight="normal"
