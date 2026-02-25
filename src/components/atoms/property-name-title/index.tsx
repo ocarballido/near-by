@@ -1,3 +1,5 @@
+import { useTranslations } from 'next-intl';
+
 import Typography from '../typography';
 
 type PropertyNameTitleProps = {
@@ -9,11 +11,13 @@ const PropertyNameTitle = ({
 	propertyName,
 	subCategoryName,
 }: PropertyNameTitleProps) => {
+	const t = useTranslations();
+
 	return (
 		<div className="flex gap-1">
 			<Typography component="h3" size="lg">
 				{propertyName ? `${propertyName}: ` : null}
-				{subCategoryName}
+				{subCategoryName && t(subCategoryName)}
 			</Typography>
 		</div>
 	);
