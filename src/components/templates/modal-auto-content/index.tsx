@@ -145,7 +145,7 @@ const ModalAutoContent = ({ propertyId, initialHasLocations }: Props) => {
 	const [selectedSubCategoryIds, setSelectedSubCategoryIds] = useState<
 		string[]
 	>(() =>
-		OPTIONS.filter((x) => x.defaultChecked).map((x) => x.subCategoryId)
+		OPTIONS.filter((x) => x.defaultChecked).map((x) => x.subCategoryId),
 	);
 
 	// seguridad por hidratación/render order
@@ -153,7 +153,7 @@ const ModalAutoContent = ({ propertyId, initialHasLocations }: Props) => {
 		setSelectedSubCategoryIds((prev) => {
 			if (prev.length) return prev;
 			return OPTIONS.filter((x) => x.defaultChecked).map(
-				(x) => x.subCategoryId
+				(x) => x.subCategoryId,
 			);
 		});
 	}, [OPTIONS]);
@@ -162,7 +162,7 @@ const ModalAutoContent = ({ propertyId, initialHasLocations }: Props) => {
 		setSelectedSubCategoryIds((prev) =>
 			prev.includes(subCategoryId)
 				? prev.filter((id) => id !== subCategoryId)
-				: [...prev, subCategoryId]
+				: [...prev, subCategoryId],
 		);
 	};
 
@@ -177,7 +177,7 @@ const ModalAutoContent = ({ propertyId, initialHasLocations }: Props) => {
 
 		const res = await generateAutoLocations(
 			propertyId,
-			selectedSubCategoryIds
+			selectedSubCategoryIds,
 		);
 
 		closeLoading();
@@ -230,7 +230,7 @@ const ModalAutoContent = ({ propertyId, initialHasLocations }: Props) => {
 						dismiss();
 					}}
 					secondaryButtonLabel={t(
-						'auto-modal-secondary-button-label'
+						'auto-modal-secondary-button-label',
 					)}
 					primaryButtonLabel={
 						isGenerating
@@ -261,9 +261,9 @@ const ModalAutoContent = ({ propertyId, initialHasLocations }: Props) => {
 							{OPTIONS.map((opt) => (
 								<BadgeCheck
 									key={opt.subCategoryId}
-									label={opt.name}
+									label={t(opt.name)}
 									checked={selectedSubCategoryIds.includes(
-										opt.subCategoryId
+										opt.subCategoryId,
 									)}
 									onToggle={() => toggle(opt.subCategoryId)}
 								/>

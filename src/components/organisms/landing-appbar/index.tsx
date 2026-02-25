@@ -14,7 +14,7 @@ const LandingAppBar = ({ className = '' }: LandingAppBarProps) => {
 		>
 			<Link href="/" className="flex items-center">
 				<Image
-					src="/static/img/icon-gradient.webp"
+					src="/static/img/symbol_shadow_colored@2x.webp"
 					width={40}
 					height={40}
 					alt="Icon Logo"

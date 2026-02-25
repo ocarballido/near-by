@@ -48,7 +48,7 @@ const House = ({
 	checkInTime,
 	checkOutDate,
 	checkOutTime,
-	image = '/static/img/default-property-2x.webp',
+	image = '/static/img/header-trimed-2x.webp',
 }: HouseProps) => {
 	const t = useTranslations();
 	const locale = useLocale();
@@ -60,7 +60,7 @@ const House = ({
 
 	return (
 		<div
-			className={`flex items-end rounded-xl overflow-hidden px-2 pb-2 pt-[180px] relative min-h-[400px] transition-all [&>.content]:p-3 [&>.content]:rounded-lg hover:shadow-2xl hover:px-0 hover:pb-0 hover:pt-[172px] hover:[&>.content]:p-5 hover:[&>.content]:rounded-none ${className}`}
+			className={`flex items-end rounded-xl overflow-hidden px-2 pb-2 pt-[180px] relative min-h-[400px] transition-all [&>.content]:p-3 [&>.content]:rounded-lg hover:shadow-2xl hover:px-0 hover:pb-0 hover:pt-[172px] hover:[&>.content]:p-5 hover:[&>.content]:rounded-none bg-gradient-to-tr from-[#ffa263] to-[#6cffc9] ${className}`}
 		>
 			<ButtonLink
 				className="w-fit absolute z-6 top-2 right-2 rounded-full !pr-2 pl-2"
@@ -167,9 +167,7 @@ const House = ({
 			<Image
 				className="object-cover z-0"
 				src={
-					image === null
-						? '/static/img/default-property-2x.webp'
-						: image
+					image === null ? '/static/img/header-trimed-2x.webp' : image
 				}
 				fill={true}
 				placeholder="blur"

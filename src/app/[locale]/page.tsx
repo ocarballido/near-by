@@ -17,7 +17,7 @@ import publicUi from '../../../public/static/img/public-ui-2x.webp';
 import testimony01 from '../../../public/static/img/testimony-01.webp';
 import testimony02 from '../../../public/static/img/testimony-02.webp';
 import testimony03 from '../../../public/static/img/testimony-03.webp';
-import logo from '../../../public/static/img/logo-color-2x.webp';
+import logo from '../../../public/static/img/brand_colored.webp';
 
 import LandingAppBar from '@/components/organisms/landing-appbar';
 import Link from 'next/link';
@@ -26,7 +26,6 @@ import PlaceTooltip from '@/components/atoms/place-tooltip';
 import IconAccountCircle from '@/components/atoms/icon/account-circle';
 import FilterCategories from '@/components/templates/filter-categories';
 import ChimneyEffect from '@/components/atoms/chimney';
-import ModalVideo from '@/components/templates/modal-video';
 
 import IconChatBubble from '@/components/atoms/icon/chat-bubble';
 import IconStarShine from '@/components/atoms/icon/star-shine';
@@ -79,7 +78,6 @@ export default function Home() {
 								className="w-full"
 								target="_blank"
 							/>
-							<ModalVideo />
 						</div>
 					</div>
 					<div className="relative w-full">
@@ -703,8 +701,8 @@ export default function Home() {
 					</div>
 					<Image
 						src={logo}
-						width={200}
-						height={64}
+						width={300}
+						height={48}
 						alt="BNBexplorer logo"
 						className="mb-4"
 					/>
