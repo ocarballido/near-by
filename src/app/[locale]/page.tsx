@@ -19,7 +19,6 @@ import testimony02 from '../../../public/static/img/testimony-02.webp';
 import testimony03 from '../../../public/static/img/testimony-03.webp';
 
 import LandingAppBar from '@/components/organisms/landing-appbar';
-import Link from 'next/link';
 import ButtonLink from '@/components/molecules/button-link';
 import PlaceTooltip from '@/components/atoms/place-tooltip';
 import IconAccountCircle from '@/components/atoms/icon/account-circle';
@@ -36,10 +35,8 @@ import Feature from '@/components/molecules/card/feature';
 import ListItem from '@/components/molecules/list-item';
 import FancyBadge from '@/components/atoms/fancy-badge';
 import BadgeCheck from '@/components/atoms/BadgeCheck';
-import { ShareMenu } from '@/components/molecules/button-share';
 import IconCancel from '@/components/atoms/icon/cancel';
 import Quote from '@/components/molecules/quote';
-import Typography from '@/components/atoms/typography';
 
 import styles from './page.module.css';
 
