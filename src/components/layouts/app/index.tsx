@@ -6,6 +6,7 @@ import { useMemo } from 'react';
 import { usePathname } from 'next/navigation';
 
 import Spinner from '@/components/atoms/spinner';
+import { SpinnerPortal } from '@/components/atoms/spinner/spinner-portal';
 import AppBar from '@/components/organisms/appbar';
 import PaywallModal from '@/components/templates/paywall-modal';
 
@@ -37,7 +38,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
 	return (
 		<>
-			{loading && <Spinner />}
+			{loading && (
+				<SpinnerPortal>
+					<Spinner position="fixed" />
+				</SpinnerPortal>
+			)}
 			<div className="p-2 flex flex-col gap-2 items-stretch w-full min-h-screen bg-[#EFEFEF] font-body overflow-hidden">
 				<PaywallModal />
 				<AppBar

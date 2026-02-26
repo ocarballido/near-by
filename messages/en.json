@@ -732,5 +732,6 @@
 	},
 	"Guardar cambios": "Save changes",
 	"Imagen actual": "Current image",
-	"Eliminar todos": "Delete all"
+	"Eliminar todos": "Delete all",
+	"description-characters": "The description cannot exceed {n} characters"
 }
