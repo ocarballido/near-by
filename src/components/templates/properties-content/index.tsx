@@ -40,7 +40,6 @@ type AlertState = {
 
 const PropertiesContent = ({ properties }: PropertiesContentProps) => {
 	const t = useTranslations();
-	console.log(properties);
 
 	const { decrementPropertyCount } = usePaywall();
 
