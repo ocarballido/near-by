@@ -268,7 +268,7 @@ export function LocationsContent({
 			{locations.length > 1 && (
 				<Button
 					className="w-full lg:w-max ml-auto"
-					label="Eliminar todos"
+					label={t('Eliminar todos')}
 					color="error"
 					iconLeft={<IconDelete color="error" />}
 					onClick={() => {

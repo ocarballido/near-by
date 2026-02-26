@@ -731,5 +731,6 @@
 		"onlyTime": "Time only"
 	},
 	"Guardar cambios": "Save changes",
-	"Imagen actual": "Current image"
+	"Imagen actual": "Current image",
+	"Eliminar todos": "Delete all"
 }
