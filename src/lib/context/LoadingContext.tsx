@@ -14,7 +14,7 @@ interface LoadingProviderProps {
 }
 
 const LoadingContext = createContext<LoadingContextProps | undefined>(
-	undefined
+	undefined,
 );
 
 export const LoadingProvider: React.FC<LoadingProviderProps> = ({
