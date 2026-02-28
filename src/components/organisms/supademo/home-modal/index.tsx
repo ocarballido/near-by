@@ -7,7 +7,15 @@ import Button from '@/components/molecules/button';
 import SimpleModal from '../../simple-modal';
 import SupademoDemoViewer, { SupademoDemoViewerProps } from '../viewer';
 
-const DemoHomeModal = ({ demos, defaultDemoId }: SupademoDemoViewerProps) => {
+type Props = SupademoDemoViewerProps & {
+	buttonColor?: 'white' | 'primary' | 'secondary' | 'error' | undefined;
+};
+
+const DemoHomeModal = ({
+	demos,
+	defaultDemoId,
+	buttonColor = 'white',
+}: Props) => {
 	const t = useTranslations();
 	const [modalOpen, setModalOpen] = useState(false);
 
@@ -16,7 +24,7 @@ const DemoHomeModal = ({ demos, defaultDemoId }: SupademoDemoViewerProps) => {
 			<Button
 				label={t('page_home.section_hero.tourButton')}
 				onClick={() => setModalOpen(true)}
-				color="white"
+				color={buttonColor}
 			/>
 			<SimpleModal
 				title={t('recommendations.title')}
@@ -29,7 +37,10 @@ const DemoHomeModal = ({ demos, defaultDemoId }: SupademoDemoViewerProps) => {
 				size="max-w-full"
 			>
 				<div className="flex flex-col gap-2 p-3 mb-0">
-					<SupademoDemoViewer demos={demos} />
+					<SupademoDemoViewer
+						demos={demos}
+						defaultDemoId={defaultDemoId}
+					/>
 				</div>
 			</SimpleModal>
 		</>

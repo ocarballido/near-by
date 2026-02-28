@@ -12,6 +12,9 @@ import SidebarMenuItem from '@/components/molecules/sidebar-menu-item';
 import ButtonLink from '@/components/molecules/button-link';
 import IconHelp from '@/components/atoms/icon/help';
 import CreatePropertyEntry from '@/components/molecules/property-entry';
+import DemoHomeModal from '../../supademo/home-modal';
+
+import { DEMOS } from '@/config/config-constants';
 
 const ICON_COMPONENTS = {
 	IconHome,
@@ -75,6 +78,7 @@ const AppSidebar = () => {
 				className="w-full"
 				iconLeft={<IconHelp />}
 			/>
+			<DemoHomeModal demos={DEMOS} buttonColor="secondary" />
 		</>
 	);
 };
