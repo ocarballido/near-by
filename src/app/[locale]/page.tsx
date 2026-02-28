@@ -63,13 +63,13 @@ export default function Home() {
 					<h3 className="font-heading font-medium text-xl md:text-2xl max-w-[800px] ml-auto mr-auto px-4 text-white">
 						{t('page_home.section_hero.subtitle')}
 					</h3>
-					<div className="px-4 flex flex-col gap-2">
+					<div className="px-4 flex flex-col gap-1">
 						<ButtonLink
 							label={t('page_home.mainAction')}
 							href="/app"
 							color="primary"
 						/>
-						<div className="flex gap-1">
+						<div className="flex flex-col md:flex-row gap-1">
 							<ButtonLink
 								label={t('page_home.pilotHouseAction')}
 								href="https://www.bnbexplorer.com/es/public/37a03a95-cd39-4d40-a22b-7628cbb50245/welcome/highlights"
