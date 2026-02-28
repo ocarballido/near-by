@@ -1,5 +1,6 @@
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import FeedbackForm from '@/components/organisms/form/feedback';
+import { createSSRClient } from '@/lib/supabase/server';
 
 const SOURCE_AREAS = [
 	'create_property',
@@ -30,7 +31,6 @@ export default async function FeedbackPage({
 	searchParams,
 }: PageProps) {
 	const { feedbackSlug } = await params;
-
 	const { returnTo } = (await searchParams) ?? {};
 
 	if (!feedbackSlug || feedbackSlug.length < 1) return notFound();
@@ -57,6 +57,27 @@ export default async function FeedbackPage({
 
 	if (contextId && (!contextType || contextType === 'none'))
 		return notFound();
+
+	// ✅ Auth guard (minimal, consistent with other /app pages)
+	const supabase = await createSSRClient();
+	const {
+		data: { user },
+		error: authError,
+	} = await supabase.auth.getUser();
+
+	if (authError || !user) redirect('/auth/login');
+
+	// ✅ Minimal ownership guard: only when context is a property
+	if (contextType === 'property' && contextId) {
+		const { data: property, error: propErr } = await supabase
+			.from('properties')
+			.select('id')
+			.eq('id', contextId)
+			.single()
+			.overrideTypes<{ id: string }, { merge: false }>();
+
+		if (propErr || !property?.id) return notFound();
+	}
 
 	return (
 		<FeedbackForm
