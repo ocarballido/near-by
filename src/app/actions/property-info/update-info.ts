@@ -3,13 +3,11 @@
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { createSSRClient } from '@/lib/supabase/server';
-import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 import { touchPropertyUpdatedAt } from '@/lib/properties/touch-property';
+import { updatePropertyProgressAndTrack } from '@/lib/updatePropertyProgress';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database, Tables, TablesUpdate } from '@/lib/types';
-
-import { updatePropertyProgressAndTrack } from '@/lib/updatePropertyProgress';
 
 const CreateInfoSchema = z.object({
 	property_id: z.string().uuid(),
@@ -35,11 +33,14 @@ export type CreateInfoState = {
 
 export async function updateInfo(formData: FormData): Promise<CreateInfoState> {
 	try {
-		const ssrClient = await createSSRClient();
+		// ✅ SSR client => RLS applies
+		const ssr = await createSSRClient();
+		const db = ssr as unknown as SupabaseClient<Database>;
+
 		const {
 			data: { user },
 			error: authError,
-		} = await ssrClient.auth.getUser();
+		} = await db.auth.getUser();
 
 		if (authError || !user) {
 			return {
@@ -48,9 +49,6 @@ export async function updateInfo(formData: FormData): Promise<CreateInfoState> {
 				},
 			};
 		}
-
-		const supabase = await createServerAdminClient();
-		const db = supabase as unknown as SupabaseClient<Database>;
 
 		const raw = {
 			property_id: formData.get('property_id'),
@@ -76,16 +74,18 @@ export async function updateInfo(formData: FormData): Promise<CreateInfoState> {
 
 		type IdOnly = Pick<Tables<'property_data'>, 'id'>;
 
+		// ✅ IMPORTANT: do NOT filter by property_data.user_id here.
+		// Ownership is enforced by RLS via properties.user_id.
 		const { data: existing, error: findError } = await db
 			.from('property_data')
 			.select('id')
-			.eq('user_id', user.id)
 			.eq('property_id', property_id)
 			.eq('sub_category_id', sub_category_id)
 			.eq('type', type)
 			.single()
 			.overrideTypes<IdOnly, { merge: false }>();
 
+		// none exists => PGRST116 OK
 		if (findError && findError.code !== 'PGRST116') {
 			console.error('Error buscando info existente:', findError);
 			return {
@@ -97,10 +97,10 @@ export async function updateInfo(formData: FormData): Promise<CreateInfoState> {
 			};
 		}
 
-		let dbError = null;
+		let dbError: any = null;
 		let didMutate = false;
 
-		// Si el usuario deja vacío: borrar si existe, y si no existe, no hacer nada.
+		// Empty => delete if exists
 		if (content === null) {
 			if (existing) {
 				const { error } = await db
@@ -112,7 +112,6 @@ export async function updateInfo(formData: FormData): Promise<CreateInfoState> {
 				didMutate = !error;
 			}
 		} else {
-			// Hay contenido: update/insert como antes
 			if (existing) {
 				const payload: TablesUpdate<'property_data'> = {
 					description: content,
@@ -128,7 +127,7 @@ export async function updateInfo(formData: FormData): Promise<CreateInfoState> {
 				didMutate = !error;
 			} else {
 				const { error } = await db.from('property_data').insert({
-					user_id: user.id,
+					user_id: user.id, // keep if your schema uses it
 					property_id,
 					category_id,
 					sub_category_id,
@@ -138,7 +137,7 @@ export async function updateInfo(formData: FormData): Promise<CreateInfoState> {
 				});
 
 				dbError = error;
-				didMutate = true;
+				didMutate = !error; // ✅ fix
 			}
 		}
 
@@ -155,7 +154,6 @@ export async function updateInfo(formData: FormData): Promise<CreateInfoState> {
 			await touchPropertyUpdatedAt(db, property_id);
 		}
 
-		// Mixpanel
 		await updatePropertyProgressAndTrack({
 			db,
 			userId: user.id,
@@ -170,7 +168,7 @@ export async function updateInfo(formData: FormData): Promise<CreateInfoState> {
 			redirectTo: `/app/properties`,
 		};
 	} catch (err) {
-		console.error('Error inesperado en createInfo:', err);
+		console.error('Error inesperado en updateInfo:', err);
 		return {
 			errors: {
 				server: ['Error interno del servidor'],
