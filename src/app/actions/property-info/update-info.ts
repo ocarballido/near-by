@@ -1,4 +1,3 @@
-// app/actions/properties/create-info.ts
 'use server';
 
 import { z } from 'zod';

@@ -15,12 +15,11 @@ type PageProps = {
 export default async function InfoPage({ params }: PageProps) {
 	const { infoSlug } = await params;
 
-	// Basic param guards first
+	// Guards
 	if (!infoSlug || infoSlug.length < 3 || infoSlug.length > 4)
 		return notFound();
 
 	const [propertyId, categoryId, subCategoryId] = infoSlug;
-
 	if (!propertyId || !categoryId || !subCategoryId) return notFound();
 
 	// Auth (cookie-based)
@@ -32,7 +31,7 @@ export default async function InfoPage({ params }: PageProps) {
 
 	if (authError || !user) redirect('/auth/login');
 
-	// Queries (SSR client so RLS applies)
+	// property_data "info" may NOT exist yet -> maybeSingle
 	const infoPromise = supabase
 		.from('property_data')
 		.select('name,description')
@@ -40,9 +39,13 @@ export default async function InfoPage({ params }: PageProps) {
 		.eq('category_id', categoryId)
 		.eq('sub_category_id', subCategoryId)
 		.eq('type', 'info')
-		.single()
-		.overrideTypes<Pick<PD, 'name' | 'description'>, { merge: false }>();
+		.maybeSingle()
+		.overrideTypes<
+			Pick<PD, 'name' | 'description'> | null,
+			{ merge: false }
+		>();
 
+	// subcategory must exist
 	const subCategoryPromise = supabase
 		.from('sub_categories')
 		.select('name')
@@ -55,8 +58,8 @@ export default async function InfoPage({ params }: PageProps) {
 		{ data: subcategory, error: subcatErr },
 	] = await Promise.all([infoPromise, subCategoryPromise]);
 
-	// If you can't read the property_data row because it's not yours, RLS will return 0 rows => notFound
-	if (infoErr || !info) return notFound();
+	// If RLS blocks or any real error happens => notFound
+	if (infoErr) return notFound();
 	if (subcatErr || !subcategory) return notFound();
 
 	return (
@@ -65,7 +68,7 @@ export default async function InfoPage({ params }: PageProps) {
 			categoryId={categoryId}
 			subCategoryId={subCategoryId}
 			name={subcategory.name ?? null}
-			initialContent={info.description ?? ''}
+			initialContent={info?.description ?? ''}
 		/>
 	);
 }

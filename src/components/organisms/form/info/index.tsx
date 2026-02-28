@@ -4,7 +4,7 @@
 import { useTranslations } from 'next-intl';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useLoading } from '@/lib/context/LoadingContext';
 import { useAIUsage } from '@/lib/context/AIUsageContext';
 
@@ -67,6 +67,11 @@ const UpdateInfoForm = ({
 
 	const { openLoading, closeLoading } = useLoading();
 	const { remaining, reloadUsage } = useAIUsage();
+
+	useEffect(() => {
+		// load remaining AI usage when this screen mounts
+		void reloadUsage();
+	}, [reloadUsage]);
 
 	const {
 		register,

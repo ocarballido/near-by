@@ -50,7 +50,7 @@ const NotFoundTemplate = () => {
 							color="secondary"
 							onClick={() => router.back()}
 						/>
-						<ButtonLink label={t('Volver al inicio')} href="/" />
+						<ButtonLink label={t('Volver al inicio')} href="/app" />
 					</div>
 				</div>
 			</section>
