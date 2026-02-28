@@ -540,7 +540,8 @@
 			"tooltip3": "Hospital",
 			"tooltip4": "Emergencias",
 			"tooltip5": "Embajada",
-			"tooltip6": "Cafetería"
+			"tooltip6": "Cafetería",
+			"tourButton": "Haz el tour"
 		},
 		"section_why": {
 			"title": "¿Por qué BNB Explorer?",
@@ -604,6 +605,10 @@
 			"positive5": "Estancias más fluidas y sin fricciones",
 			"positive6": "Más tiempo libre para ti",
 			"positive7": "Mejores valoraciones y reseñas 5 Estrellas"
+		},
+		"section_demo": {
+			"title": "Descubre cómo funciona BNB Explorer",
+			"subtitle": "Explora paso a paso cómo crear tu guía digital, personalizar recomendaciones y ofrecer una experiencia única a tus huéspedes."
 		},
 		"section_quotes": {
 			"title": "Antes respondía siempre lo mismo. Ahora solo comparto el enlace.",
@@ -737,5 +742,27 @@
 	},
 	"Guardar cambios": "Guardar cambios",
 	"Imagen actual": "Imagen actual",
-	"Eliminar todos": "Eliminar todos"
+	"Eliminar todos": "Eliminar todos",
+	"demo": {
+		"mobileNotice": {
+			"title": "Abrir demo en pantalla completa",
+			"description": "Para una mejor experiencia, recomendamos visualizar esta demo interactiva desde un ordenador. Puedes abrir la versión completa en una nueva pestaña para explorar todas las funcionalidades cómodamente.",
+			"button": "Abrir demo completa"
+		},
+		"navigation": {
+			"dashboard": "Navegar al Panel",
+			"addProperty": "Añadir propiedad",
+			"myProperties": "Mis propiedades",
+			"editProperties": "Editar propiedades",
+			"editPropertDetails": "Editar detalles de propiedad",
+			"editPropertyInfo": "Editar info de propiedad",
+			"addLocation": "Añadir lolcalización",
+			"favoritesMustSee": "Favoritos y Visita obligatoria",
+			"addMultipleLocations": "Añadir múltiples localizaciones",
+			"deleteLocation": "Borrar localización",
+			"deleteProperty": "Borrar propiedad",
+			"accessPublicProperty": "Navegar a vista pública",
+			"publicProperty": "Vista pública de propiedad"
+		}
+	}
 }

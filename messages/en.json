@@ -535,7 +535,8 @@
 			"tooltip3": "Hospital",
 			"tooltip4": "Emergencies",
 			"tooltip5": "Embassy",
-			"tooltip6": "Café"
+			"tooltip6": "Café",
+			"tourButton": "Take the tour"
 		},
 		"section_why": {
 			"title": "Why BNB Explorer?",
@@ -599,6 +600,10 @@
 			"positive5": "Smoother, friction-free stays",
 			"positive6": "More free time for you",
 			"positive7": "Better ratings and 5-star reviews"
+		},
+		"section_demo": {
+			"title": "Discover how BNB Explorer works",
+			"subtitle": "Explore step by step how to create your digital guide, personalize recommendations, and deliver a unique guest experience."
 		},
 		"section_quotes": {
 			"title": "I used to answer the same questions all the time. Now I just share the link.",
@@ -733,5 +738,27 @@
 	"Guardar cambios": "Save changes",
 	"Imagen actual": "Current image",
 	"Eliminar todos": "Delete all",
-	"description-characters": "The description cannot exceed {n} characters"
+	"description-characters": "The description cannot exceed {n} characters",
+	"demo": {
+		"mobileNotice": {
+			"title": "Open demo in full screen",
+			"description": "For the best experience, we recommend viewing this interactive demo on a desktop device. You can open the full version in a new tab to explore all features comfortably.",
+			"button": "Open full demo"
+		},
+		"navigation": {
+			"dashboard": "Navigate to the Panel",
+			"addProperty": "Add property",
+			"myProperties": "My properties",
+			"editProperties": "Edit properties",
+			"editPropertDetails": "Edit property details",
+			"editPropertyInfo": "Edit property info",
+			"addLocation": "Add location",
+			"favoritesMustSee": "Favorites and Must-see",
+			"addMultipleLocations": "Add multiple locations",
+			"deleteLocation": "Delete location",
+			"deleteProperty": "Delete property",
+			"accessPublicProperty": "Navigate to public view",
+			"publicProperty": "Public view of property"
+		}
+	}
 }

@@ -213,11 +213,11 @@ export function LocationsContent({
 					setDeleteTarget(null);
 				}}
 				destructiveButtonAction={() => handleDelete(selectedLocation)}
-				destructiveButtonLabel="Eliminar"
+				destructiveButtonLabel={t('Eliminar')}
 				primaryButtonAction={() => {
 					setIsOpen(false);
 				}}
-				primaryButtonLabel="Cancel"
+				primaryButtonLabel={t('Cancelar')}
 				icon={<IconDelete color="error" />}
 			/>
 			<div className="flex flex-col lg:flex-row gap-2">

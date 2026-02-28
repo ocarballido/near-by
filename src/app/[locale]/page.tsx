@@ -37,6 +37,9 @@ import FancyBadge from '@/components/atoms/fancy-badge';
 import BadgeCheck from '@/components/atoms/BadgeCheck';
 import IconCancel from '@/components/atoms/icon/cancel';
 import Quote from '@/components/molecules/quote';
+import DemoHomeModal from '@/components/organisms/supademo/home-modal';
+
+import { DEMOS } from '@/config/config-constants';
 
 import styles from './page.module.css';
 
@@ -71,9 +74,10 @@ export default function Home() {
 								label={t('page_home.pilotHouseAction')}
 								href="https://www.bnbexplorer.com/es/public/37a03a95-cd39-4d40-a22b-7628cbb50245/welcome/highlights"
 								color="white"
-								className="w-full"
+								className="w-fit"
 								target="_blank"
 							/>
+							<DemoHomeModal demos={DEMOS} />
 						</div>
 					</div>
 					<div className="relative w-full">

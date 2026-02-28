@@ -1009,3 +1009,112 @@ export const RADIUS_OPTIONS = [
 ];
 
 export const DAILY_AI_USAGE_LIMMIT = 10;
+
+export const DEMOS = [
+	{
+		id: 'dashboard',
+		label: 'dashboard',
+		embedUrl:
+			'https://app.supademo.com/embed/cmm3vtqhb0sy7dtfh7rz6i52n?embed_v=2&utm_source=embed',
+		publicUrl: 'https://app.supademo.com/demo/cmm3vtqhb0sy7dtfh7rz6i52n',
+	},
+	{
+		id: 'add-property',
+		label: 'addProperty',
+		embedUrl:
+			'https://app.supademo.com/embed/cmm4sqa9w272ydtfhzz8rjhvc?embed_v=2&utm_source=embed',
+		publicUrl:
+			'https://app.supademo.com/demo/cmm4sqa9w272ydtfhzz8rjhvc?utm_source=link',
+	},
+	{
+		id: 'my-properties',
+		label: 'myProperties',
+		embedUrl:
+			'https://app.supademo.com/embed/cmm3wjcoq0u3idtfhtv2idlrk?embed_v=2&utm_source=embed',
+		publicUrl:
+			'https://app.supademo.com/demo/cmm3wjcoq0u3idtfhtv2idlrk?utm_source=link',
+	},
+	{
+		id: 'edit-properties',
+		label: 'editProperties',
+		embedUrl:
+			'https://app.supademo.com/embed/cmm3x6aao0uy5dtfhz5tj67t3?embed_v=2&utm_source=embed',
+		publicUrl:
+			'https://app.supademo.com/demo/cmm3x6aao0uy5dtfhz5tj67t3?utm_source=link',
+	},
+	{
+		id: 'edit-property-details',
+		label: 'editPropertDetails',
+		embedUrl:
+			'https://app.supademo.com/embed/cmm4wj2rg2drndtfhvgm858hr?embed_v=2&utm_source=embed',
+		publicUrl:
+			'https://app.supademo.com/demo/cmm4wj2rg2drndtfhvgm858hr?utm_source=link',
+	},
+	{
+		id: 'edit-property-info',
+		label: 'editPropertyInfo',
+		embedUrl:
+			'https://app.supademo.com/embed/cmm4rcg6b23g5dtfh7u2kdzn0?embed_v=2&utm_source=embed',
+		publicUrl:
+			'https://app.supademo.com/demo/cmm4rcg6b23g5dtfh7u2kdzn0?utm_source=link',
+	},
+	{
+		id: 'add-location',
+		label: 'addLocation',
+		embedUrl:
+			'https://app.supademo.com/embed/cmm4ry8ng25txdtfh72jw1p8u?embed_v=2&utm_source=embed',
+		publicUrl:
+			'https://app.supademo.com/demo/cmm4ry8ng25txdtfh72jw1p8u?utm_source=link',
+	},
+	{
+		id: 'favorites-must-see',
+		label: 'favoritesMustSee',
+		embedUrl:
+			'https://app.supademo.com/embed/cmm50p1dd2mdjdtfhhst9yfx3?embed_v=2&utm_source=embed',
+		publicUrl:
+			'https://app.supademo.com/demo/cmm50p1dd2mdjdtfhhst9yfx3?utm_source=link',
+	},
+	{
+		id: 'add-multiple-locations',
+		label: 'addMultipleLocations',
+		embedUrl:
+			'https://app.supademo.com/embed/cmm4vze4o2d3cdtfhafzau4o4?embed_v=2&utm_source=embed',
+		publicUrl:
+			'https://app.supademo.com/demo/cmm4vze4o2d3cdtfhafzau4o4?utm_source=link',
+	},
+	{
+		id: 'delete-locations',
+		label: 'deleteLocation',
+		embedUrl:
+			'https://app.supademo.com/embed/cmm4w8e0d2dcadtfh7rgmu7ao?embed_v=2&utm_source=embed',
+		publicUrl:
+			'https://app.supademo.com/demo/cmm4w8e0d2dcadtfh7rgmu7ao?utm_source=link',
+	},
+	{
+		id: 'delete-property',
+		label: 'deleteProperty',
+		embedUrl:
+			'https://app.supademo.com/embed/cmm4vrw9g2cwedtfho4o5yt1s?embed_v=2&utm_source=embed',
+		publicUrl:
+			'https://app.supademo.com/demo/cmm4vrw9g2cwedtfho4o5yt1s?utm_source=link',
+	},
+	{
+		id: 'access-public-page',
+		label: 'accessPublicProperty',
+		embedUrl:
+			'https://app.supademo.com/embed/cmm515aug2njpdtfh107t7orm?embed_v=2&utm_source=embed',
+		publicUrl:
+			'https://app.supademo.com/demo/cmm515aug2njpdtfh107t7orm?utm_source=link',
+	},
+	{
+		id: 'public-page',
+		label: 'publicProperty',
+		embedUrl:
+			'https://app.supademo.com/embed/cmm51r4jg2ozrdtfh35obkoem?embed_v=2&utm_source=embed',
+		publicUrl:
+			'https://app.supademo.com/demo/cmm51r4jg2ozrdtfh35obkoem?utm_source=link',
+	},
+];
+
+export const DEFAULT_EMBED_SRC =
+	'https://app.supademo.com/showcase/embed/cmm52w6xp000gyk0ipaibjzah?embed_v=2&utm_source=embed';
