@@ -20,6 +20,11 @@ export const PAGES = {
 
 export const USER_MENU_OPTIONS = [
 	{
+		label: 'Dashboard',
+		url: PAGES.dashboard,
+		icon: 'IconHome',
+	},
+	{
 		label: 'Mi Perfil',
 		url: PAGES.profile,
 		icon: 'IconAccountCircle',
