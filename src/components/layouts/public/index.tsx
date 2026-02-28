@@ -3,6 +3,7 @@
 import { useLoading } from '@/lib/context/LoadingContext';
 
 import Spinner from '@/components/atoms/spinner';
+import { SpinnerPortal } from '@/components/atoms/spinner/spinner-portal';
 import PublicPageBanner from '@/components/molecules/public-page-banner';
 
 export default function PublicLayout({
@@ -16,7 +17,11 @@ export default function PublicLayout({
 
 	return (
 		<>
-			{loading && <Spinner />}
+			{loading && (
+				<SpinnerPortal>
+					<Spinner position="fixed" />
+				</SpinnerPortal>
+			)}
 			<PublicPageBanner
 				authHref="/auth/magic-link"
 				isLoggedIn={isLoggedIn}

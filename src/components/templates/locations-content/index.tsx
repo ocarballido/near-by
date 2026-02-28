@@ -213,11 +213,11 @@ export function LocationsContent({
 					setDeleteTarget(null);
 				}}
 				destructiveButtonAction={() => handleDelete(selectedLocation)}
-				destructiveButtonLabel="Eliminar"
+				destructiveButtonLabel={t('Eliminar')}
 				primaryButtonAction={() => {
 					setIsOpen(false);
 				}}
-				primaryButtonLabel="Cancel"
+				primaryButtonLabel={t('Cancelar')}
 				icon={<IconDelete color="error" />}
 			/>
 			<div className="flex flex-col lg:flex-row gap-2">
@@ -268,7 +268,7 @@ export function LocationsContent({
 			{locations.length > 1 && (
 				<Button
 					className="w-full lg:w-max ml-auto"
-					label="Eliminar todos"
+					label={t('Eliminar todos')}
 					color="error"
 					iconLeft={<IconDelete color="error" />}
 					onClick={() => {

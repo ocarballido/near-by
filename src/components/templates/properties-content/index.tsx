@@ -40,7 +40,6 @@ type AlertState = {
 
 const PropertiesContent = ({ properties }: PropertiesContentProps) => {
 	const t = useTranslations();
-	console.log(properties);
 
 	const { decrementPropertyCount } = usePaywall();
 
@@ -102,9 +101,9 @@ const PropertiesContent = ({ properties }: PropertiesContentProps) => {
 					setSelectedProperty('');
 				}}
 				destructiveButtonAction={() => handleDelete(selectedProperty)}
-				destructiveButtonLabel="Eliminar"
+				destructiveButtonLabel={t('Eliminar')}
 				primaryButtonAction={() => setIsOpen(false)}
-				primaryButtonLabel="Cancel"
+				primaryButtonLabel={t('Cancelar')}
 				icon={<IconDelete color="error" />}
 			/>
 			{properties.map((property) => (

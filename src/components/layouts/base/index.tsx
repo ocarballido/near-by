@@ -7,6 +7,7 @@ import CookieConsent from '@/components/Cookies';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { AnalyticsTracker } from '@/components/analytics';
 import GoogleMapsScript from '@/components/providers/GoogleMapsScript';
+import Footer from '@/components/templates/footer';
 
 import '@/app/globals.css';
 
@@ -31,6 +32,7 @@ const BaseLayout: React.FC<BaseProps> = async ({ children, locale }) => {
 					<CookieConsent />
 					{gaID && <GoogleAnalytics gaId={gaID} />}
 					<AnalyticsTracker />
+					<Footer />
 				</body>
 			</html>
 		</NextIntlClientProvider>

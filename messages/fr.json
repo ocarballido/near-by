@@ -540,7 +540,8 @@
 			"tooltip3": "Hôpital",
 			"tooltip4": "Urgences",
 			"tooltip5": "Ambassade",
-			"tooltip6": "Café"
+			"tooltip6": "Café",
+			"tourButton": "Faites la visite"
 		},
 		"section_why": {
 			"title": "Pourquoi BNB Explorer ?",
@@ -604,6 +605,10 @@
 			"positive5": "Séjours plus fluides et sans frictions",
 			"positive6": "Plus de temps libre pour vous",
 			"positive7": "De meilleures évaluations et avis 5 étoiles"
+		},
+		"section_demo": {
+			"title": "Découvrez comment fonctionne BNB Explorer",
+			"subtitle": "Explorez étape par étape comment créer votre guide digital, personnaliser vos recommandations et offrir une expérience unique à vos voyageurs."
 		},
 		"section_quotes": {
 			"title": "Avant, je répondais toujours aux mêmes questions. Maintenant, je partage simplement le lien.",
@@ -736,5 +741,28 @@
 		"onlyTime": "Heure uniquement"
 	},
 	"Guardar cambios": "Enregistrer les modifications",
-	"Imagen actual": "Image actuelle"
+	"Imagen actual": "Image actuelle",
+	"Eliminar todos": "Supprimer tout",
+	"demo": {
+		"mobileNotice": {
+			"title": "Ouvrir la démo en plein écran",
+			"description": "Pour une meilleure expérience, nous recommandons de consulter cette démo interactive depuis un ordinateur. Vous pouvez ouvrir la version complète dans un nouvel onglet afin d’explorer toutes les fonctionnalités confortablement.",
+			"button": "Ouvrir la démo complète"
+		},
+		"navigation": {
+			"dashboard": "Accédez au panneau",
+			"addProperty": "Ajouter une propriété",
+			"myProperties": "Mes propriétés",
+			"editProperties": "Modifier les propriétés",
+			"editPropertDetails": "Modifier les détails de la propriété",
+			"editPropertyInfo": "Modifier les informations sur la propriété",
+			"addLocation": "Ajouter l'emplacement",
+			"favoritesMustSee": "Coups de cœur et incontournables",
+			"addMultipleLocations": "Ajouter plusieurs emplacements",
+			"deleteLocation": "Supprimer l'emplacement",
+			"deleteProperty": "Supprimer la propriété",
+			"accessPublicProperty": "Accéder à la vue publique",
+			"publicProperty": "Vue du public sur la propriété"
+		}
+	}
 }

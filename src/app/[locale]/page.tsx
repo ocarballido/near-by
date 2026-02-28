@@ -17,10 +17,8 @@ import publicUi from '../../../public/static/img/public-ui-2x.webp';
 import testimony01 from '../../../public/static/img/testimony-01.webp';
 import testimony02 from '../../../public/static/img/testimony-02.webp';
 import testimony03 from '../../../public/static/img/testimony-03.webp';
-import logo from '../../../public/static/img/brand_colored.webp';
 
 import LandingAppBar from '@/components/organisms/landing-appbar';
-import Link from 'next/link';
 import ButtonLink from '@/components/molecules/button-link';
 import PlaceTooltip from '@/components/atoms/place-tooltip';
 import IconAccountCircle from '@/components/atoms/icon/account-circle';
@@ -37,10 +35,11 @@ import Feature from '@/components/molecules/card/feature';
 import ListItem from '@/components/molecules/list-item';
 import FancyBadge from '@/components/atoms/fancy-badge';
 import BadgeCheck from '@/components/atoms/BadgeCheck';
-import { ShareMenu } from '@/components/molecules/button-share';
 import IconCancel from '@/components/atoms/icon/cancel';
 import Quote from '@/components/molecules/quote';
-import Typography from '@/components/atoms/typography';
+import DemoHomeModal from '@/components/organisms/supademo/home-modal';
+
+import { DEMOS } from '@/config/config-constants';
 
 import styles from './page.module.css';
 
@@ -48,7 +47,7 @@ export default function Home() {
 	const t = useTranslations();
 
 	return (
-		<div className="min-h-screen roboto p-4">
+		<div className="roboto p-4">
 			<LandingAppBar />
 			<section
 				aria-labelledby="BNB-explorer"
@@ -64,20 +63,21 @@ export default function Home() {
 					<h3 className="font-heading font-medium text-xl md:text-2xl max-w-[800px] ml-auto mr-auto px-4 text-white">
 						{t('page_home.section_hero.subtitle')}
 					</h3>
-					<div className="px-4 flex flex-col gap-2">
+					<div className="px-4 flex flex-col gap-1">
 						<ButtonLink
 							label={t('page_home.mainAction')}
 							href="/app"
 							color="primary"
 						/>
-						<div className="flex gap-1">
+						<div className="flex flex-col md:flex-row gap-1">
 							<ButtonLink
 								label={t('page_home.pilotHouseAction')}
 								href="https://www.bnbexplorer.com/es/public/37a03a95-cd39-4d40-a22b-7628cbb50245/welcome/highlights"
 								color="white"
-								className="w-full"
+								className="w-fit"
 								target="_blank"
 							/>
+							<DemoHomeModal demos={DEMOS} />
 						</div>
 					</div>
 					<div className="relative w-full">
@@ -110,6 +110,7 @@ export default function Home() {
 							className="hidden sm:block"
 							src={headerImage}
 							sizes="100vw"
+							priority
 							style={{
 								width: '80%',
 								height: 'auto',
@@ -684,40 +685,6 @@ export default function Home() {
 							</div>
 						</div>
 					</div>
-				</div>
-				<div className="text-center pt-24 pb-4 px-4 flex flex-col gap-4 items-center">
-					<div className="flex flex-col items-center mb-12">
-						<Typography component="h3" size="lg">
-							{t('shareButtonTitle')}
-						</Typography>
-						<Typography className="mb-2">
-							{t('shareButtonText')}
-						</Typography>
-						<ShareMenu
-							url="https://bnbexplorer.com"
-							surface="landing_header"
-							distinctId="anon-missing"
-						/>
-					</div>
-					<Image
-						src={logo}
-						width={300}
-						height={48}
-						alt="BNBexplorer logo"
-						className="mb-4"
-					/>
-					<div className="px-4 flex flex-col md:flex-row gap-4 font-body text-sm underline opacity-50">
-						<Link href="/legal/conditions">
-							{t('Términos y Condiciones')}
-						</Link>
-						<Link href="/legal/privacy">
-							{t('Política de privacidad')}
-						</Link>
-						<Link href="/legal/content">{t('Contenido')}</Link>
-					</div>
-					<p className="font-medium font-body text-sm opacity-50">
-						BNBexplorer &#169; {new Date().getFullYear()}
-					</p>
 				</div>
 			</section>
 		</div>

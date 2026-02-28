@@ -15,7 +15,7 @@ const NotFoundTemplate = () => {
 	const router = useRouter();
 
 	return (
-		<div className="min-h-screen roboto p-4 flex justify-center items-center font-body">
+		<div className="roboto p-4 flex justify-center items-center font-body">
 			<section
 				aria-labelledby="not-found"
 				className="flex flex-col gap-4 p-2 items-center max-w-[800px] ml-auto mr-auto bg-white rounded-lg"
@@ -41,7 +41,7 @@ const NotFoundTemplate = () => {
 					</h1>
 					<p className="font-medium text-gray-600">
 						{t(
-							'Lo sentimos, la página que buscas no existe o ha sido movida'
+							'Lo sentimos, la página que buscas no existe o ha sido movida',
 						)}
 					</p>
 					<div className="flex flex-col md:flex-row gap-2">

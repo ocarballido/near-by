@@ -39,7 +39,7 @@ const PropertyDataBoard = ({
 	const locale = useLocale();
 
 	return (
-		<div className="bg-gray-300 p-3 flex gap-3 flex-col mx-1 mt-1 rounded-md md:mx-0 md:mt-0 md:rounded-none relative overflow-hidden">
+		<div className="bg-primary-900 p-3 flex gap-3 flex-col mx-1 mt-1 rounded-md md:mx-0 md:mt-0 md:rounded-none relative overflow-hidden">
 			<Image
 				src="/static/img/home/blur.webp"
 				fill={true}

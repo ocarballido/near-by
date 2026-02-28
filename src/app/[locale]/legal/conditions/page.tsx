@@ -10,7 +10,7 @@ export default function CondicionesPage() {
 	const t = useTranslations();
 
 	return (
-		<div className="min-h-screen roboto p-4">
+		<div className="roboto p-4">
 			<LandingAppBar />
 			<div className="max-w-[900px] mt-4 rounded-lg p-4 ml-auto mr-auto font-body">
 				<h1 className="text-2xl font-bold mb-4 font-heading">
@@ -18,7 +18,7 @@ export default function CondicionesPage() {
 				</h1>
 				<p className="mb-4">
 					{t(
-						'Al registrarte en esta plataforma, aceptas utilizarla de forma responsable y respetuosa'
+						'Al registrarte en esta plataforma, aceptas utilizarla de forma responsable y respetuosa',
 					)}
 				</p>
 				<p className="mb-4">
@@ -26,29 +26,8 @@ export default function CondicionesPage() {
 				</p>
 				<p className="text-sm text-gray-500">
 					{t(
-						'Estos términos podrán actualizarse si el proyecto evoluciona a un servicio comercial'
+						'Estos términos podrán actualizarse si el proyecto evoluciona a un servicio comercial',
 					)}
-				</p>
-			</div>
-			<div className="text-center pt-32 pb-4 px-4 flex flex-col gap-4 items-center">
-				<Image
-					src={logo}
-					width={200}
-					height={64}
-					alt="BNBexplorer logo"
-					className="mb-4"
-				/>
-				<div className="px-4 flex flex-col md:flex-row gap-4 font-body text-sm underline opacity-50">
-					<Link href="/legal/conditions">
-						{t('Términos y Condiciones')}
-					</Link>
-					<Link href="/legal/privacy">
-						{t('Política de privacidad')}
-					</Link>
-					<Link href="/legal/content">{t('Contenido')}</Link>
-				</div>
-				<p className="font-medium font-body text-sm opacity-50">
-					BNBexplorer &#169; {new Date().getFullYear()}
 				</p>
 			</div>
 		</div>
