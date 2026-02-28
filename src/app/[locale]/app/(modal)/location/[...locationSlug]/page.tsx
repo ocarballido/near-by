@@ -1,12 +1,9 @@
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { getLocale } from 'next-intl/server';
 
 import AddPlaceForm from '@/components/organisms/form/place';
 import { getPlaceRecommendations } from '@/app/actions/locations/get-recommendations';
-
-type PageProps = {
-	params: Promise<{ locationSlug: string[] }>;
-};
+import { createSSRClient } from '@/lib/supabase/server';
 
 export default async function LocationPage({ params }: PageProps) {
 	const { locationSlug } = await params;
@@ -20,6 +17,25 @@ export default async function LocationPage({ params }: PageProps) {
 		return notFound();
 	}
 
+	// Auth (cookie-based)
+	const supabase = await createSSRClient();
+	const {
+		data: { user },
+		error: authError,
+	} = await supabase.auth.getUser();
+
+	if (authError || !user) redirect('/auth/login');
+
+	// Ownership guard (RLS must allow reading ONLY your own properties)
+	const { data: property, error: propErr } = await supabase
+		.from('properties')
+		.select('id')
+		.eq('id', propertyId)
+		.single()
+		.overrideTypes<{ id: string }, { merge: false }>();
+
+	if (propErr || !property?.id) return notFound();
+
 	const locale = await getLocale();
 
 	const recoRes = await getPlaceRecommendations(
@@ -30,13 +46,15 @@ export default async function LocationPage({ params }: PageProps) {
 	const initialRecos = recoRes?.success ? recoRes.data : [];
 
 	return (
-		<>
-			<AddPlaceForm
-				propertyId={propertyId}
-				categoryId={categoryId}
-				subCategoryId={subCategoryId}
-				initialRecos={initialRecos}
-			/>
-		</>
+		<AddPlaceForm
+			propertyId={propertyId}
+			categoryId={categoryId}
+			subCategoryId={subCategoryId}
+			initialRecos={initialRecos}
+		/>
 	);
 }
+
+type PageProps = {
+	params: Promise<{ locationSlug: string[] }>;
+};

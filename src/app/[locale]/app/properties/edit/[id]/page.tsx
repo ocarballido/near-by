@@ -2,8 +2,6 @@ import { notFound, redirect } from 'next/navigation';
 import AddPropertyForm from '@/components/organisms/form/property';
 
 import { createSSRClient } from '@/lib/supabase/server';
-import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
-
 import type { Tables } from '@/lib/types';
 
 type FullProperty = Tables<'properties'>;
@@ -18,19 +16,17 @@ export default async function EditProperty({ params }: PageProps) {
 	const { id: propertyId } = await params;
 
 	// 1) Auth (SSR client)
-	const ssrClient = await createSSRClient();
+	const supabase = await createSSRClient();
 	const {
 		data: { user },
 		error: authError,
-	} = await ssrClient.auth.getUser();
+	} = await supabase.auth.getUser();
 
 	if (authError || !user) {
 		redirect('/auth/login');
 	}
 
-	// 2) Query property (Admin client, igual que ya haces)
-	const supabase = await createServerAdminClient();
-
+	// 2) Query property (SSR client => RLS applies)
 	const { data: property, error: propErr } = await supabase
 		.from('properties')
 		.select(
@@ -38,17 +34,15 @@ export default async function EditProperty({ params }: PageProps) {
 		)
 		.eq('id', propertyId)
 		.single()
-		// ✅ Tipado EXACTO como en tu otra página
 		.overrideTypes<FullProperty, { merge: false }>();
 
+	// With RLS, if it's not yours you'll get 0 rows => notFound
 	if (propErr || !property?.id) notFound();
 
-	// 3) Ownership guard (extra)
-	if (property.user_id !== user.id) {
-		redirect('/app/properties');
-	}
+	// (Optional) extra guard, harmless, but no longer required for security
+	// if (property.user_id !== user.id) redirect('/app/properties');
 
-	// 4) initialValues para el form (nombres que espera AddPropertyForm)
+	// 3) initialValues para el form
 	const initialValues = {
 		name: property.name ?? '',
 		address: property.address ?? '',

@@ -1,5 +1,4 @@
 import { redirect } from 'next/navigation';
-import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 import { createSSRClient } from '@/lib/supabase/server';
 
 import PropertiesContent from '@/components/templates/properties-content';
@@ -19,16 +18,15 @@ type PropertyWithData = {
 };
 
 export default async function Properties() {
-	const ssrClient = await createSSRClient();
+	const supabase = await createSSRClient();
 	const {
 		data: { user },
 		error: authError,
-	} = await ssrClient.auth.getUser();
+	} = await supabase.auth.getUser();
 
 	if (authError || !user) redirect('/auth/login');
 
-	const supabase = await createServerAdminClient();
-
+	// ✅ Use SSR client so RLS applies (no admin client here)
 	const { data, error } = await supabase
 		.from('properties')
 		.select(
@@ -45,6 +43,7 @@ export default async function Properties() {
       property_data ( type )
     `,
 		)
+		// Puedes dejar este filtro (no hace daño), pero con RLS no es “necesario”
 		.eq('user_id', user.id)
 		.overrideTypes<PropertyWithData[], { merge: false }>();
 
