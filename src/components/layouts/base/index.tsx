@@ -2,10 +2,9 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { ROBOTO } from '@/config/fonts';
 import { OUTFIT } from '@/config/fonts';
-// import { Analytics } from '@vercel/analytics/next';
 import CookieConsent from '@/components/Cookies';
-import { GoogleAnalytics } from '@next/third-parties/google';
-import { AnalyticsTracker } from '@/components/analytics';
+import { GoogleTagManager } from '@next/third-parties/google';
+import { GtmTracker } from '@/components/analytics/gtm-tracker';
 import GoogleMapsScript from '@/components/providers/GoogleMapsScript';
 import Footer from '@/components/templates/footer';
 
@@ -18,7 +17,7 @@ type BaseProps = {
 
 const BaseLayout: React.FC<BaseProps> = async ({ children, locale }) => {
 	const messages = await getMessages();
-	const gaID = process.env.NEXT_PUBLIC_GOOGLE_TAG;
+	const gtmID = process.env.NEXT_PUBLIC_GTM_ID;
 
 	return (
 		<NextIntlClientProvider messages={messages} locale={locale}>
@@ -26,12 +25,11 @@ const BaseLayout: React.FC<BaseProps> = async ({ children, locale }) => {
 				<body
 					className={`${OUTFIT.className} ${ROBOTO.className} antialiased`}
 				>
+					{gtmID && <GoogleTagManager gtmId={gtmID} />}
 					<GoogleMapsScript />
 					{children}
-					{/* <Analytics /> */}
 					<CookieConsent />
-					{gaID && <GoogleAnalytics gaId={gaID} />}
-					<AnalyticsTracker />
+					<GtmTracker />
 					<Footer />
 				</body>
 			</html>
