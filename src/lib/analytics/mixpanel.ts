@@ -77,9 +77,16 @@ export async function trackEvent({
 			normalizeCountryCode(requestHeaders.get('x-geo-country'));
 
 		// ── Client IP (best-effort, for Mixpanel geo enrichment)
-		const forwardedFor = requestHeaders.get('x-forwarded-for');
-		const clientIp = forwardedFor
-			? extractClientIpFromForwardedHeader(forwardedFor)
+		const xForwardedFor = requestHeaders.get('x-forwarded-for');
+		const xVercelForwardedFor = requestHeaders.get(
+			'x-vercel-forwarded-for',
+		);
+		const xRealIp = requestHeaders.get('x-real-ip');
+
+		const rawIpHeader = xForwardedFor ?? xVercelForwardedFor ?? xRealIp;
+
+		const clientIp = rawIpHeader
+			? extractClientIpFromForwardedHeader(rawIpHeader)
 			: null;
 
 		const eventPayload = [
@@ -89,7 +96,10 @@ export async function trackEvent({
 					token: mixpanelToken,
 					distinct_id: distinctId,
 
-					...(clientIp ? { ip: clientIp } : {}),
+					// If we have a real client IP, pass it to Mixpanel for geo enrichment.
+					// Otherwise, ask Mixpanel to use the request IP ("1").
+					...(clientIp ? { ip: clientIp } : { ip: '1' }),
+
 					...(userCountry ? { user_country: userCountry } : {}),
 
 					...props,
