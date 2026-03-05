@@ -7,7 +7,6 @@ import Image from 'next/image';
 import ButtonLink from '../button-link';
 import Button from '../button';
 import IconAdd from '@/components/atoms/icon/add';
-import { trackEvent } from '@/lib/analytics/mixpanel';
 import { ShareMenu } from '../button-share';
 import CreatePropertyEntry from '../property-entry';
 import BadgeCheck from '@/components/atoms/BadgeCheck';
@@ -113,16 +112,6 @@ const PropertyNumber = async ({ shouldForceFirstProperty }: Props) => {
 
 	const n = rows.length;
 	const incompleteCount = n - completedCount;
-
-	try {
-		await trackEvent({
-			event: 'onboarding_start',
-			distinctId: user.id,
-			props: { page: 'dashboard_home' },
-		});
-	} catch (e) {
-		console.warn('trackEvent failed:', e);
-	}
 
 	return (
 		<>
