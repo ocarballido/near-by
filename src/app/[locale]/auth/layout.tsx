@@ -1,7 +1,7 @@
 import Image from 'next/image';
 
 import loginRegister from '../../../../public/static/img/login-register-2x.webp';
-import logo from '../../../../public/static/img/logo-color.webp';
+import logo from '../../../../public/static/img/brand_colored.webp';
 import PlaceTooltip from '@/components/atoms/place-tooltip';
 
 type LayoutProps = {
@@ -39,7 +39,7 @@ const LoginRegisterLayout = ({ children }: LayoutProps) => {
 							className="absolute -translate-[50%] right-[25%] top-[80%]"
 						/>
 						<Image
-							alt="Mountains"
+							alt="BNBexplorer Logo"
 							src={loginRegister}
 							sizes="100vw"
 							style={{
@@ -53,7 +53,7 @@ const LoginRegisterLayout = ({ children }: LayoutProps) => {
 					<div className="flex flex-col grow bg-white rounded-xl p-4 justify-center items-center">
 						<div className="mb-12">
 							<Image
-								alt="Mountains"
+								alt="BNBexplorer Mountains"
 								src={logo}
 								width={300}
 								height={96}
