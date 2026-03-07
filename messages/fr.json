@@ -377,17 +377,6 @@
 	"Aceptar": "Accepter",
 	"Rechazar": "Refuser",
 	"Términos y Condiciones de Uso": "Conditions d’utilisation",
-	"Al registrarte en esta plataforma, aceptas utilizarla de forma responsable y respetuosa": "En vous inscrivant sur cette plateforme, vous acceptez de l’utiliser de manière responsable et respectueuse. Il est interdit d’utiliser l’application à des fins illégales, de diffuser du contenu offensant ou portant atteinte aux droits de tiers.",
-	"El uso de esta herramienta es gratuito y personal": "L’utilisation de cet outil est gratuite et personnelle. Le créateur de la plateforme se réserve le droit de modifier, suspendre ou supprimer le service à tout moment, sans préavis.",
-	"Estos términos podrán actualizarse si el proyecto evoluciona a un servicio comercial": "Ces conditions pourront être mises à jour si le projet évolue vers un service commercial.",
-	"Aviso sobre Contenidos Subidos por el Usuario": "Avis concernant les contenus téléversés par l’utilisateur",
-	"Los usuarios son los únicos responsables de los textos e imágenes que suben a la plataforma": "Les utilisateurs sont seuls responsables des textes et images qu’ils téléversent sur la plateforme. Ils doivent s’assurer de disposer des droits nécessaires pour publier ces contenus.",
-	"La aplicación no revisa ni valida los contenidos, por lo que cualquier uso indebido será responsabilidad directa del usuario": "L’application ne vérifie ni ne valide les contenus ; toute utilisation abusive relèvera donc de la responsabilité directe de l’utilisateur.",
-	"Si detectas algún contenido inapropiado o que vulnera derechos, puedes reportarlo al correo indicado en la plataforma para que sea revisado": "Si vous détectez un contenu inapproprié ou portant atteinte à des droits, vous pouvez le signaler à l’adresse e-mail indiquée sur la plateforme afin qu’il soit examiné.",
-	"Actualmente, esta aplicación es un proyecto personal y sin fines comerciales": "Actuellement, cette application est un projet personnel, sans but commercial. Toutefois, si elle évolue à l’avenir vers un service payant ou avec des fonctionnalités commerciales, les utilisateurs en seront informés et les conditions/politiques applicables seront mises à jour.",
-	"Los datos introducidos por los usuarios se utilizan exclusivamente para el funcionamiento de la aplicación": "Les données saisies par les utilisateurs sont utilisées exclusivement pour le fonctionnement de l’application. Elles ne seront en aucun cas cédées à des tiers.",
-	"El responsable del tratamiento de los datos es el creador de la aplicación, que actúa a título personal": "Le responsable du traitement des données est le créateur de l’application, agissant à titre personnel. Vous pouvez demander la suppression de vos données en écrivant à l’adresse e-mail indiquée sur la plateforme.",
-	"Esta política podrá actualizarse en el futuro si el proyecto evoluciona a una versión comercial": "Cette politique pourra être mise à jour à l’avenir si le projet évolue vers une version commerciale.",
 	"¡Uy! Página no encontrada": "Oups ! Page introuvable",
 	"Lo sentimos, la página que buscas no existe o ha sido movida": "Désolé, la page que vous cherchez n’existe pas ou a été déplacée.",
 	"Buscador mágico": "Recherche magique",
@@ -763,6 +752,143 @@
 			"deleteProperty": "Supprimer la propriété",
 			"accessPublicProperty": "Accéder à la vue publique",
 			"publicProperty": "Vue du public sur la propriété"
+		}
+	},
+	"privacyPolicy": {
+		"title": "POLITIQUE DE CONFIDENTIALITÉ DE BNB EXPLORER",
+		"lastUpdate": "Dernière mise à jour : 7-3-2026",
+		"intro": "La présente Politique de Confidentialité décrit comment les données personnelles des utilisateurs (« Hôtes ») et des visiteurs (« Invités ») du site <link>www.bnbexplorer.com</link> (« l’App » ou « le Site ») sont collectées, utilisées et protégées.",
+		"sections": {
+			"controller": {
+				"title": "1. RESPONSABLE DU TRAITEMENT",
+				"identity": "Identité : Óscar Carballido (« le Titulaire »).",
+				"email": "Email de contact : contact@bnbexplorer.com",
+				"activity": "Activité : Plateforme de création de guides numériques pour les hébergements touristiques."
+			},
+			"dataCollection": {
+				"title": "2. DONNÉES COLLECTÉES ET FINALITÉ",
+				"intro": "BNB Explorer traite différents types de données selon le profil d’utilisateur :",
+				"hosts": {
+					"title": "A. Données des Hôtes (utilisateurs enregistrés) :",
+					"data": "Données collectées : adresse email et mot de passe.",
+					"purpose": "Finalité : gestion du compte utilisateur, création et modification de guides personnalisés et maintien de la relation technique.",
+					"communications": "Communications commerciales : le Titulaire peut envoyer des emails concernant les nouveautés, mises à jour ou informations pertinentes sur l’App. L’Hôte peut se désinscrire à tout moment."
+				},
+				"guests": {
+					"title": "B. Données des Invités (visiteurs des guides) :",
+					"data": "Données collectées : les invités accèdent aux guides de manière anonyme via un lien partagé par l’Hôte. Aucun enregistrement n’est requis. Cependant, des données techniques de navigation (adresse IP, type de navigateur) peuvent être collectées à des fins statistiques et de sécurité."
+				},
+				"content": {
+					"title": "C. Contenu des guides :",
+					"text": "L’Hôte est seul responsable des informations, images et documents qu’il téléverse sur la plateforme. BNB Explorer agit uniquement comme prestataire d’hébergement de ces informations."
+				}
+			},
+			"legalBasis": {
+				"title": "3. BASE LÉGALE DU TRAITEMENT",
+				"intro": "La base légale du traitement de vos données est :",
+				"consent": "Consentement : en créant un compte, l’Hôte consent expressément au traitement de ses données.",
+				"service": "Exécution du service : le traitement est nécessaire pour fournir le service demandé (création de guides)."
+			},
+			"recipients": {
+				"title": "4. DESTINATAIRES ET OUTILS TIERS",
+				"intro": "Pour le bon fonctionnement de l’App, les outils suivants peuvent traiter des données :",
+				"ga": "Google Analytics : outil d’analyse web pour comprendre l’utilisation du site. <link>Google Privacy Policy</link>",
+				"mixpanel": "Mixpanel : outil d’analyse du comportement des utilisateurs afin d’améliorer l’expérience dans l’App. <link>Politique de confidentialité de Mixpanel</link>.",
+				"hosting": "Hébergement : les données et contenus sont stockés sur des serveurs sécurisés contractés par le Titulaire (<link>Vercel</link>).",
+				"authorities": "Autorités : les données peuvent être communiquées en cas d’obligation légale."
+			},
+			"retention": {
+				"title": "5. CONSERVATION DES DONNÉES",
+				"text": "Les données personnelles seront conservées tant que l’utilisateur restera inscrit ou jusqu’à ce qu’il demande leur suppression. En cas de résiliation du compte, les données peuvent être conservées sous forme bloquée pendant les délais légaux."
+			},
+			"rights": {
+				"title": "6. DROITS DE L’UTILISATEUR",
+				"intro": "En tant qu’utilisateur, vous pouvez exercer les droits suivants :",
+				"access": "Accès, rectification et suppression de vos données.",
+				"limitation": "Limitation et opposition au traitement.",
+				"portability": "Portabilité des données.",
+				"contact": "Pour exercer ces droits, envoyez un email à contact@bnbexplorer.com en indiquant votre demande."
+			},
+			"hostResponsibility": {
+				"title": "7. RESPONSABILITÉ DE L’HÔTE",
+				"text": "L’Hôte garantit qu’il dispose des droits nécessaires sur les images et textes inclus dans ses guides et qu’il ne porte pas atteinte à la vie privée de tiers. L’Hôte s’engage à ne pas inclure de données personnelles de tiers sans le consentement approprié."
+			},
+			"security": {
+				"title": "8. SÉCURITÉ",
+				"text": "BNB Explorer met en œuvre les mesures techniques nécessaires pour garantir la sécurité des données et éviter leur altération, perte ou accès non autorisé."
+			},
+			"changes": {
+				"title": "9. MODIFICATIONS",
+				"text": "Le Titulaire se réserve le droit de modifier cette politique afin de l’adapter aux évolutions législatives ou techniques."
+			}
+		}
+	},
+	"legalNotice": {
+		"title": "MENTIONS LÉGALES",
+		"lastUpdate": "Dernière mise à jour : 7-3-2026",
+		"identification": {
+			"title": "1. INFORMATIONS D’IDENTIFICATION",
+			"intro": "Conformément à l’obligation d’information prévue par la loi 34/2002 du 11 juillet relative aux services de la société de l’information et au commerce électronique, les informations suivantes sont fournies :",
+			"owner": "Titulaire : <link>Óscar Carballido</link>.",
+			"email": "Email de contact : <email>contact@bnbexplorer.com</email>",
+			"website": "Site web : <link>www.bnbexplorer.com</link>"
+		},
+		"users": {
+			"title": "2. UTILISATEURS",
+			"text": "L’accès et/ou l’utilisation de ce portail confère la qualité d’UTILISATEUR (Hôtes et Invités), qui accepte les conditions générales d’utilisation décrites ici."
+		},
+		"ip": {
+			"title": "3. PROPRIÉTÉ INTELLECTUELLE ET INDUSTRIELLE",
+			"text": "Óscar Carballido détient tous les droits de propriété intellectuelle et industrielle de ce site web ainsi que des éléments qui y sont contenus (titre, logiciel, logos, combinaisons de couleurs, structure et conception). Toute reproduction, distribution ou communication publique de tout ou partie du contenu de ce site web à des fins commerciales est interdite sans l’autorisation du titulaire."
+		}
+	},
+	"terms": {
+		"title": "CONDITIONS GÉNÉRALES D’UTILISATION",
+		"lastUpdate": "Dernière mise à jour : 7-3-2026",
+		"object": {
+			"title": "1. OBJET",
+			"text": "BNB Explorer est une plateforme technologique permettant aux hôtes de créer des guides numériques interactifs pour leurs hébergements touristiques. Le service est actuellement fourni gratuitement et « tel quel » (as is)."
+		},
+		"account": {
+			"title": "2. INSCRIPTION ET RESPONSABILITÉ DU COMPTE",
+			"intro": "Pour créer des guides, l’hôte doit s’inscrire. Il est de sa responsabilité de :",
+			"password": "Maintenir la confidentialité de son mot de passe.",
+			"info": "S’assurer que les informations fournies dans les guides sont exactes et à jour.",
+			"images": "Disposer des droits nécessaires sur les photographies téléchargées sur la plateforme."
+		},
+		"liability": {
+			"title": "3. EXCLUSION DE GARANTIES ET RESPONSABILITÉ",
+			"intro": "Óscar Carballido ne pourra être tenu responsable des dommages pouvant résulter de :",
+			"content": "Contenus : erreurs ou omissions dans les informations fournies par les hôtes dans leurs guides.",
+			"availability": "Disponibilité : interruptions temporaires du site web ou perte de données due à des pannes de serveur.",
+			"guest": "Utilisation par l’invité : tout incident résultant de l’interprétation du guide par l’invité."
+		},
+		"conduct": {
+			"title": "4. COMPORTEMENT DE L’UTILISATEUR",
+			"text": "Il est interdit d’utiliser BNB Explorer pour héberger du contenu illégal, offensant ou diffamatoire, ou qui viole la vie privée de tiers."
+		},
+		"changes": {
+			"title": "5. MODIFICATIONS DU SERVICE",
+			"text": "Le titulaire se réserve le droit de modifier l’App à tout moment sans préavis, y compris en modifiant, supprimant ou ajoutant des contenus et services."
+		},
+		"law": {
+			"title": "6. DROIT APPLICABLE ET JURIDICTION",
+			"text": "La relation entre Óscar Carballido et l’utilisateur sera régie par la législation espagnole et tout litige sera soumis aux tribunaux de Madrid, Espagne."
+		}
+	},
+	"Aviso Legal": "Avis juridique",
+	"guestGuideNotices": {
+		"lastUpdate": "Dernière mise à jour : 7-3-2026",
+		"title": "Contenu",
+		"disclaimer": {
+			"title": "01. Avis de non-responsabilité",
+			"text": "Ce guide numérique est un outil informatif fourni par l’Hôte afin d’améliorer votre séjour. Bien que tout ait été mis en œuvre pour garantir l’exactitude des informations (instructions, recommandations, règles), l’Hôte ne saurait être tenu responsable des changements externes, des erreurs typographiques ou de l’utilisation inappropriée des installations par l’invité. BNB Explorer (<link>www.bnbexplorer.com</link>) agit uniquement en tant que plateforme technologique de support et n’assume aucune responsabilité quant au contenu de ce guide ni quant à la relation entre l’hôte et l’invité. L’utilisation de ces informations se fait sous votre propre responsabilité."
+		},
+		"userContent": {
+			"title": "02. Avis concernant les contenus téléchargés par l’utilisateur",
+			"text1": "Les utilisateurs sont seuls responsables des textes et images qu’ils téléchargent sur la plateforme. Ils doivent s’assurer qu’ils disposent des droits nécessaires pour publier ce contenu.",
+			"text2": "L’application ne vérifie ni ne valide les contenus, de sorte que tout usage inapproprié relèvera de la responsabilité directe de l’utilisateur.",
+			"text3": "Si vous détectez un contenu inapproprié ou portant atteinte à des droits, vous pouvez le signaler à l’adresse email indiquée sur la plateforme afin qu’il soit examiné."
 		}
 	}
 }

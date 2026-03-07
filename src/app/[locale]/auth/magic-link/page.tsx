@@ -15,6 +15,8 @@ import ButtonLink from '@/components/molecules/button-link';
 import Alert from '@/components/molecules/alert';
 import Spinner from '@/components/atoms/spinner';
 import IconCheckCircle from '@/components/atoms/icon/check-circle';
+import Typography from '@/components/atoms/typography';
+import FancyIcon from '@/components/atoms/icon/fancy-icon';
 
 type MagicLinkFormInputs = {
 	email: string;
@@ -112,46 +114,59 @@ export default function MagicLinkPage() {
 					<div className="relative max-w-96 w-full text-center font-body">
 						<div className="rounded-lg p-6 mb-6">
 							<p className="flex  justify-center">
-								<IconCheckCircle color="success" size={48} />
+								<FancyIcon
+									icon={<IconCheckCircle color="white" />}
+									color="gradient"
+								/>
 							</p>
 
-							<h2 className="text-xl font-heading font-bold text-green-700 mb-4">
+							<Typography
+								component="h1"
+								size="lg"
+								className="text-center"
+							>
 								{t('¡Enlace enviado!')}
-							</h2>
+							</Typography>
 
-							<p className="mb-1">
+							<Typography className="text-center">
 								{t('Hemos enviado un enlace mágico a')}
-							</p>
+							</Typography>
 
-							<p className="text-sm text-gray-600 mb-6">
+							<Typography className="text-center" weight="bold">
 								{userEmail}
-							</p>
+							</Typography>
 
-							<div className="mb-6">
-								<p>
+							<div className="my-6">
+								<Typography className="text-center">
 									{t(
 										'Revisa tu bandeja de entrada y haz clic en el enlace para iniciar sesión',
 									)}
-								</p>
-								<p className="mt-2 font-medium">
+								</Typography>
+								<Typography
+									className="text-center"
+									weight="bold"
+								>
 									{t('El enlace expirará en 24 horas')}
-								</p>
+								</Typography>
 							</div>
 
 							<div className="mb-6">
-								<h3 className="font-medium text-gray-700 mb-2">
+								<Typography
+									component="h2"
+									size="base"
+									className="text-center"
+								>
 									{t('¿No has recibido el enlace?')}
-								</h3>
-								<p className="text-sm text-gray-600">
+								</Typography>
+								<Typography className="text-center">
 									{t(
 										'Verifica tu carpeta de spam o correo no deseado',
 									)}
-								</p>
-								<p className="text-sm text-gray-600">
+									.{' '}
 									{t(
 										'Asegúrate de que la dirección de correo sea correcta',
 									)}
-								</p>
+								</Typography>
 							</div>
 
 							<Button
@@ -188,15 +203,28 @@ export default function MagicLinkPage() {
 						onSubmit={handleSubmit(onSubmit)}
 						className="flex flex-col items-center gap-4 max-w-96 w-full"
 					>
-						<h2 className="text-xl font-bold text-center w-full">
+						<Typography
+							component="h1"
+							size="lg"
+							className="text-center"
+						>
 							{t('Accede sin contraseña')}
-						</h2>
+						</Typography>
 
-						<p className="text-sm text-gray-600 text-center mb-2">
+						<Typography className="text-center">
 							{t(
 								'Introduce tu email y te enviaremos un enlace mágico para iniciar sesión',
 							)}
-						</p>
+						</Typography>
+						{/* <h2 className="text-xl font-bold text-center w-full">
+							{t('Accede sin contraseña')}
+						</h2> */}
+
+						{/* <p className="text-sm text-gray-600 text-center mb-2">
+							{t(
+								'Introduce tu email y te enviaremos un enlace mágico para iniciar sesión',
+							)}
+						</p> */}
 
 						<TextField
 							className="w-full"
@@ -236,7 +264,7 @@ export default function MagicLinkPage() {
 									{t.rich('policyTerms', {
 										terms: (chunks) => (
 											<Link
-												href="/legal/terms"
+												href="/legal/conditions"
 												className="font-medium text-primary-600 hover:text-primary-500"
 												target="_blank"
 											>

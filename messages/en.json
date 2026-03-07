@@ -373,17 +373,6 @@
 	"Aceptar": "Accept",
 	"Rechazar": "Decline",
 	"Términos y Condiciones de Uso": "Terms and Conditions of Use",
-	"Al registrarte en esta plataforma, aceptas utilizarla de forma responsable y respetuosa": "By registering on this platform, you agree to use it responsibly and respectfully. You are prohibited from using the app for illegal purposes, to distribute offensive content, or to infringe the rights of third parties.",
-	"El uso de esta herramienta es gratuito y personal": "Use of this tool is free and personal. The platform creator reserves the right to modify, suspend, or eliminate the service at any time without prior notice.",
-	"Estos términos podrán actualizarse si el proyecto evoluciona a un servicio comercial": "These terms may be updated if the project evolves into a commercial service.",
-	"Aviso sobre Contenidos Subidos por el Usuario": "Notice Regarding User-Uploaded Content",
-	"Los usuarios son los únicos responsables de los textos e imágenes que suben a la plataforma": "Users are solely responsible for the text and images they upload to the platform. They must ensure they have the necessary rights to publish such content.",
-	"La aplicación no revisa ni valida los contenidos, por lo que cualquier uso indebido será responsabilidad directa del usuario": "The application does not review or validate the content, so any misuse will be the direct responsibility of the user.",
-	"Si detectas algún contenido inapropiado o que vulnera derechos, puedes reportarlo al correo indicado en la plataforma para que sea revisado": "If you detect any inappropriate content or content that violates rights, you can report it to the email address provided on the platform for review.",
-	"Actualmente, esta aplicación es un proyecto personal y sin fines comerciales": "Currently, this application is a personal, non-commercial project. However, should it evolve into a paid service or one with commercial features in the future, users will be informed accordingly, and the applicable terms and policies will be updated.",
-	"Los datos introducidos por los usuarios se utilizan exclusivamente para el funcionamiento de la aplicación": "The data entered by users is used exclusively for the operation of the application. Under no circumstances will it be shared with third parties.",
-	"El responsable del tratamiento de los datos es el creador de la aplicación, que actúa a título personal": "The data controller is the creator of the application, acting in a personal capacity. You can request the deletion of your data by writing to the email address provided on the platform.",
-	"Esta política podrá actualizarse en el futuro si el proyecto evoluciona a una versión comercial": "This policy may be updated in the future if the project evolves to a commercial version.",
 	"¡Uy! Página no encontrada": "Oops! Page not found",
 	"Lo sentimos, la página que buscas no existe o ha sido movida": "Sorry, the page you're looking for doesn't exist or has been moved.",
 	"Buscador mágico": "Magic finder",
@@ -759,6 +748,143 @@
 			"deleteProperty": "Delete property",
 			"accessPublicProperty": "Navigate to public view",
 			"publicProperty": "Public view of property"
+		}
+	},
+	"privacyPolicy": {
+		"title": "BNB EXPLORER PRIVACY POLICY",
+		"lastUpdate": "Last updated: 7-3-2026",
+		"intro": "This Privacy Policy describes how personal data of users (\"Hosts\") and visitors (\"Guests\") of the website <link>www.bnbexplorer.com</link> (\"the App\" or \"the Site\") is collected, used, and protected.",
+		"sections": {
+			"controller": {
+				"title": "1. DATA CONTROLLER",
+				"identity": "Identity: Óscar Carballido (\"the Owner\").",
+				"email": "Contact email: contact@bnbexplorer.com",
+				"activity": "Activity: Platform for creating digital guides for vacation accommodations."
+			},
+			"dataCollection": {
+				"title": "2. DATA COLLECTED AND PURPOSE",
+				"intro": "BNB Explorer processes different types of data depending on the user profile:",
+				"hosts": {
+					"title": "A. Host Data (Registered users):",
+					"data": "Data collected: Email address and password.",
+					"purpose": "Purpose: Managing the user account, allowing the creation and editing of personalized guides, and maintaining the technical relationship.",
+					"communications": "Commercial communications: The Owner may send emails about updates, new features, or relevant information about the App. Hosts can unsubscribe at any time."
+				},
+				"guests": {
+					"title": "B. Guest Data (Guide visitors):",
+					"data": "Data collected: Guests access the guides anonymously through a link shared by the Host. Registration is not required. However, technical browsing data (IP address, browser type) may be collected for statistical and security purposes."
+				},
+				"content": {
+					"title": "C. Guide Content:",
+					"text": "The Host is solely responsible for the information, images, and documents uploaded to the platform. BNB Explorer acts only as a hosting service provider for such information."
+				}
+			},
+			"legalBasis": {
+				"title": "3. LEGAL BASIS FOR PROCESSING",
+				"intro": "The legal basis for processing your data is:",
+				"consent": "Consent: By creating an account, the Host expressly consents to the processing of their data.",
+				"service": "Service execution: Processing is necessary to provide the requested service (guide creation)."
+			},
+			"recipients": {
+				"title": "4. RECIPIENTS AND THIRD-PARTY TOOLS",
+				"intro": "To ensure the proper functioning of the App, the following tools may process data:",
+				"ga": "Google Analytics: Web analytics tool used to understand how the site is used. <link>Google Privacy Policy</link>",
+				"mixpanel": "Mixpanel: User behavior analytics tool used to improve the experience in the App. <link>Mixpanel Privacy Policy</link>.",
+				"hosting": "Hosting: Data and content are stored on secure servers contracted by the Owner (<link>Vercel</link>).",
+				"authorities": "Authorities: Data may be disclosed when legally required."
+			},
+			"retention": {
+				"title": "5. DATA RETENTION",
+				"text": "Personal data will be retained as long as the user remains registered or until deletion is requested. In case of account cancellation, data may be retained in a blocked state for the legally required period."
+			},
+			"rights": {
+				"title": "6. USER RIGHTS",
+				"intro": "As a user, you may exercise the following rights:",
+				"access": "Access, rectification, and deletion of your data.",
+				"limitation": "Restriction and objection to processing.",
+				"portability": "Data portability.",
+				"contact": "To exercise these rights, send an email to contact@bnbexplorer.com indicating your request."
+			},
+			"hostResponsibility": {
+				"title": "7. HOST RESPONSIBILITY",
+				"text": "The Host guarantees that they have the necessary rights over the images and texts included in their guides and that they do not violate the privacy of third parties. The Host agrees not to include personal data of third parties (such as names of previous guests or sensitive data) without the appropriate consent."
+			},
+			"security": {
+				"title": "8. SECURITY",
+				"text": "BNB Explorer implements the necessary technical measures to ensure data security and prevent alteration, loss, or unauthorized access, in accordance with the current state of technology."
+			},
+			"changes": {
+				"title": "9. MODIFICATIONS",
+				"text": "The Owner reserves the right to modify this policy to adapt it to legislative or technical developments."
+			}
+		}
+	},
+	"legalNotice": {
+		"title": "LEGAL NOTICE",
+		"lastUpdate": "Last updated: 7-3-2026",
+		"identification": {
+			"title": "1. IDENTIFYING INFORMATION",
+			"intro": "In compliance with the duty of information established by Law 34/2002 of July 11 on Information Society Services and Electronic Commerce (LSSI-CE), the following data is provided:",
+			"owner": "Owner: <link>Óscar Carballido</link>.",
+			"email": "Contact email: <email>contact@bnbexplorer.com</email>",
+			"website": "Website: <link>www.bnbexplorer.com</link>"
+		},
+		"users": {
+			"title": "2. USERS",
+			"text": "Access and/or use of this portal attributes the condition of USER (Hosts and Guests), who accepts, from said access and/or use, the General Conditions of Use reflected herein."
+		},
+		"ip": {
+			"title": "3. INTELLECTUAL AND INDUSTRIAL PROPERTY",
+			"text": "Óscar Carballido owns all intellectual and industrial property rights of this website, as well as the elements contained therein (title, software, logos, color combinations, structure and design). The reproduction, distribution or public communication of all or part of the contents of this website for commercial purposes, in any medium and by any technical means, without the authorization of the owner, is prohibited."
+		}
+	},
+	"terms": {
+		"title": "TERMS AND CONDITIONS OF USE",
+		"lastUpdate": "Last updated: 7-3-2026",
+		"object": {
+			"title": "1. OBJECT",
+			"text": "BNB Explorer is a technological platform that allows Hosts to create interactive digital guides for their vacation rentals. The service is currently provided free of charge and on an \"as is\" basis."
+		},
+		"account": {
+			"title": "2. REGISTRATION AND ACCOUNT RESPONSIBILITY",
+			"intro": "To create guides, the Host must register. It is the Host's responsibility to:",
+			"password": "Maintain the confidentiality of their password.",
+			"info": "Ensure that the information provided in the guides is accurate and up to date.",
+			"images": "Hold the necessary image rights for any photographs uploaded to the platform."
+		},
+		"liability": {
+			"title": "3. EXCLUSION OF WARRANTIES AND LIABILITY",
+			"intro": "Óscar Carballido shall not be held liable, under any circumstances, for damages of any nature that may arise from:",
+			"content": "Content: Errors or omissions in the information provided by Hosts in their guides.",
+			"availability": "Availability: Temporary website downtime or data loss due to server failures or maintenance.",
+			"guest": "Guest Use: Any incident occurring at the accommodation resulting from the guest's interpretation of the guide."
+		},
+		"conduct": {
+			"title": "4. USER CONDUCT",
+			"text": "It is prohibited to use BNB Explorer to host illegal, offensive, defamatory content, or content that violates the privacy of third parties. The owner reserves the right to remove any content or cancel accounts that breach these rules without prior notice."
+		},
+		"changes": {
+			"title": "5. MODIFICATIONS TO THE SERVICE",
+			"text": "As this is a personal project, the owner reserves the right to make any modifications deemed appropriate to the App without prior notice, including changing, deleting or adding content and services."
+		},
+		"law": {
+			"title": "6. APPLICABLE LAW AND JURISDICTION",
+			"text": "The relationship between Óscar Carballido and the User shall be governed by Spanish law, and any dispute shall be submitted to the Courts and Tribunals of the city of Madrid, Spain."
+		}
+	},
+	"Aviso Legal": "Legal Notice",
+	"guestGuideNotices": {
+		"lastUpdate": "Last updated: 7-3-2026",
+		"title": "Content",
+		"disclaimer": {
+			"title": "01. Disclaimer Notice",
+			"text": "This digital guide is an informational tool provided by the Host to improve your stay. Although every effort has been made to ensure the accuracy of the information (instructions, recommendations, house rules), the Host is not responsible for external changes, typographical errors, or improper use of the facilities by the guest. BNB Explorer (<link>www.bnbexplorer.com</link>) acts solely as a technological support platform and assumes no responsibility whatsoever for the content of this guide or for the relationship between host and guest. Use of this information is at your own risk."
+		},
+		"userContent": {
+			"title": "02. Notice Regarding User-Uploaded Content",
+			"text1": "Users are solely responsible for the texts and images they upload to the platform. They must ensure that they hold the necessary rights to publish such content.",
+			"text2": "The application does not review or validate content, so any improper use will be the direct responsibility of the user.",
+			"text3": "If you detect any inappropriate content or content that infringes rights, you may report it to the email address indicated on the platform so it can be reviewed."
 		}
 	}
 }

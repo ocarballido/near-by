@@ -1,9 +1,8 @@
 import { useTranslations } from 'next-intl';
 
-import logo from '../../../../../public/static/img/logo-color-2x.webp';
-
 import Link from 'next/link';
-import Image from 'next/image';
+import Typography from '@/components/atoms/typography';
+import Badge from '@/components/atoms/badge';
 import LandingAppBar from '@/components/organisms/landing-appbar';
 
 export default function ContenidoPage() {
@@ -13,24 +12,46 @@ export default function ContenidoPage() {
 		<div className="roboto p-4">
 			<LandingAppBar />
 			<div className="max-w-[900px] mt-4 rounded-lg p-4 ml-auto mr-auto font-body">
-				<h1 className="text-2xl font-bold mb-4 font-heading">
-					{t('Aviso sobre Contenidos Subidos por el Usuario')}
-				</h1>
-				<p className="mb-4">
-					{t(
-						'Los usuarios son los únicos responsables de los textos e imágenes que suben a la plataforma',
-					)}
-				</p>
-				<p className="mb-4">
-					{t(
-						'La aplicación no revisa ni valida los contenidos, por lo que cualquier uso indebido será responsabilidad directa del usuario',
-					)}
-				</p>
-				<p className="mb-4">
-					{t(
-						'Si detectas algún contenido inapropiado o que vulnera derechos, puedes reportarlo al correo indicado en la plataforma para que sea revisado',
-					)}
-				</p>
+				<Typography component="h1" size="xl" className="uppercase">
+					{t('guestGuideNotices.title')}
+				</Typography>
+
+				<Badge label={t('guestGuideNotices.lastUpdate')} />
+
+				<Typography className="mt-4 mb-3" component="h2" size="lg">
+					{t('guestGuideNotices.disclaimer.title')}
+				</Typography>
+
+				<Typography className="mb-3">
+					{t.rich('guestGuideNotices.disclaimer.text', {
+						link: (chunks) => (
+							<Link
+								href="https://www.bnbexplorer.com/"
+								target="_blank"
+								rel="noopener noreferrer"
+								className="underline text-primary-500 font-medium"
+							>
+								{chunks}
+							</Link>
+						),
+					})}
+				</Typography>
+
+				<Typography className="mt-4 mb-3" component="h2" size="lg">
+					{t('guestGuideNotices.userContent.title')}
+				</Typography>
+
+				<Typography className="mb-3">
+					{t('guestGuideNotices.userContent.text1')}
+				</Typography>
+
+				<Typography className="mb-3">
+					{t('guestGuideNotices.userContent.text2')}
+				</Typography>
+
+				<Typography className="mb-3">
+					{t('guestGuideNotices.userContent.text3')}
+				</Typography>
 			</div>
 		</div>
 	);
