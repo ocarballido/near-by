@@ -890,5 +890,9 @@
 			"text2": "L’application ne vérifie ni ne valide les contenus, de sorte que tout usage inapproprié relèvera de la responsabilité directe de l’utilisateur.",
 			"text3": "Si vous détectez un contenu inapproprié ou portant atteinte à des droits, vous pouvez le signaler à l’adresse email indiquée sur la plateforme afin qu’il soit examiné."
 		}
+	},
+	"fiveStarReviews": {
+		"title": "Obtenez des avis 5 étoiles",
+		"description": "Les guides personnalisés ont 82 % de chances en plus de recevoir des avis 5 étoiles. Modifiez votre guide numérique et améliorez l’expérience de vos voyageurs."
 	}
 }

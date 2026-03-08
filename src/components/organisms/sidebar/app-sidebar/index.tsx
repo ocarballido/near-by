@@ -15,6 +15,7 @@ import CreatePropertyEntry from '@/components/molecules/property-entry';
 import DemoHomeModal from '../../supademo/home-modal';
 
 import { DEMOS } from '@/config/config-constants';
+import Feature from '@/components/molecules/card/feature';
 
 const ICON_COMPONENTS = {
 	IconHome,
@@ -71,14 +72,30 @@ const AppSidebar = () => {
 					);
 				}
 			})}
-			<ButtonLink
+			<SidebarMenuItem
+				icon={<IconHelp />}
+				href="/app/feedback/dashboard"
 				label={t('feedback.cta')}
-				href={`/app/feedback/dashboard`}
-				color="secondary"
-				className="w-full"
-				iconLeft={<IconHelp />}
 			/>
 			<DemoHomeModal demos={DEMOS} buttonColor="secondary" />
+			<Feature
+				color="gradient"
+				icon={<IconHome color="white" />}
+				title={t('fiveStarReviews.title')}
+				body={t('fiveStarReviews.description')}
+				className="md:row-span-2"
+				isFeatured
+				image="/static/img/5-stars.webp"
+				imageMinHeight="250px"
+			>
+				<ButtonLink
+					label={t('Mis propiedades')}
+					href={`/app/properties`}
+					color="secondary"
+					className="w-full"
+					iconLeft={<IconApartment />}
+				/>
+			</Feature>
 		</>
 	);
 };

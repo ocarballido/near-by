@@ -886,5 +886,9 @@
 			"text2": "The application does not review or validate content, so any improper use will be the direct responsibility of the user.",
 			"text3": "If you detect any inappropriate content or content that infringes rights, you may report it to the email address indicated on the platform so it can be reviewed."
 		}
+	},
+	"fiveStarReviews": {
+		"title": "Get 5-star reviews",
+		"description": "Personalized guides have an 82% higher chance of receiving 5-star reviews. Edit your digital guide and improve your guests' experience."
 	}
 }

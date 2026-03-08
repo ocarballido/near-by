@@ -890,5 +890,9 @@
 			"text2": "La aplicación no revisa ni valida los contenidos, por lo que cualquier uso indebido será responsabilidad directa del usuario.",
 			"text3": "Si detectas algún contenido inapropiado o que vulnera derechos, puedes reportarlo al correo indicado en la plataforma para que sea revisado."
 		}
+	},
+	"fiveStarReviews": {
+		"title": "Obtén valoraciones 5 estrellas",
+		"description": "Las guías personalizadas tienen un 82% más de probabilidades de recibir reseñas de 5 estrellas. Edita tu guía digital y mejora la experiencia de tus huéspedes."
 	}
 }
