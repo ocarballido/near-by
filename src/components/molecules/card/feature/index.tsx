@@ -1,5 +1,7 @@
 import Image from 'next/image';
 import FancyIcon from '@/components/atoms/icon/fancy-icon';
+import { ReactNode } from 'react';
+import Typography from '@/components/atoms/typography';
 
 type FeaturePropType = {
 	icon?: React.ReactNode;
@@ -10,6 +12,8 @@ type FeaturePropType = {
 	body?: string;
 	className?: string;
 	image?: string;
+	imageMinHeight?: string;
+	children?: ReactNode;
 };
 
 const Feature = ({
@@ -21,6 +25,8 @@ const Feature = ({
 	body,
 	className,
 	image = '',
+	imageMinHeight = '400px',
+	children,
 }: FeaturePropType) => {
 	return (
 		<div
@@ -33,7 +39,10 @@ const Feature = ({
 				number={number}
 			/>
 			{isFeatured && (
-				<div className="relative grow min-h-[400px] h-full w-full rounded-md overflow-hidden">
+				<div
+					className="relative grow h-full w-full rounded-md overflow-hidden bg-gradient-to-tr from-[#ffa263] to-[#6cffc9]"
+					style={{ minHeight: imageMinHeight }}
+				>
 					<Image
 						alt="Mountains"
 						src={image}
@@ -43,9 +52,14 @@ const Feature = ({
 					/>
 				</div>
 			)}
-			<div className="p-6">
-				<h3 className="text-2xl font-bold mb-2">{title}</h3>
-				<p className="font-body font-medium opacity-70">{body}</p>
+			<div className="p-6 flex flex-col gap-2">
+				<Typography component="h3" size="lg">
+					{title}
+				</Typography>
+				<Typography className="opacity-70" weight="medium">
+					{body}
+				</Typography>
+				{children}
 			</div>
 		</div>
 	);
