@@ -894,5 +894,15 @@
 	"fiveStarReviews": {
 		"title": "Obtenez des avis 5 étoiles",
 		"description": "Les guides personnalisés ont 82 % de chances en plus de recevoir des avis 5 étoiles. Modifiez votre guide numérique et améliorez l’expérience de vos voyageurs."
+	},
+	"unsubscribe": {
+		"loading": "Traitement de votre demande...",
+		"successTitle": "Vous vous êtes désabonné avec succès.",
+		"successBody": "Vous ne recevrez plus d'e-mails de BNBexplorer. Si vous changez d'avis, vous pouvez les réactiver depuis votre profil.",
+		"errorTitle": "Quelque chose a mal fonctionné.",
+		"errorBody": "Nous n'avons pas pu traiter votre demande. Veuillez réessayer ou nous contacter.",
+		"invalidTitle": "Lien invalide",
+		"invalidBody": "Ce lien de désabonnement est invalide ou a expiré.",
+		"backHome": "Retour en haut de page"
 	}
 }

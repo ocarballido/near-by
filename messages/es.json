@@ -894,5 +894,15 @@
 	"fiveStarReviews": {
 		"title": "Obtén valoraciones 5 estrellas",
 		"description": "Las guías personalizadas tienen un 82% más de probabilidades de recibir reseñas de 5 estrellas. Edita tu guía digital y mejora la experiencia de tus huéspedes."
+	},
+	"unsubscribe": {
+		"loading": "Procesando tu solicitud...",
+		"successTitle": "Te has dado de baja correctamente",
+		"successBody": "Ya no recibirás más emails de BNBexplorer. Si cambias de opinión, puedes volver a activarlos desde tu perfil.",
+		"errorTitle": "Algo salió mal",
+		"errorBody": "No hemos podido procesar tu solicitud. Por favor inténtalo de nuevo o contacta con nosotros.",
+		"invalidTitle": "Enlace no válido",
+		"invalidBody": "Este enlace de baja no es válido o ha expirado.",
+		"backHome": "Volver al inicio"
 	}
 }

@@ -1,0 +1,1 @@
+DELETE FROM email_sequence_log;
