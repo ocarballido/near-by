@@ -1,0 +1,9 @@
+{
+	"imports": {
+		"./templates/a1-no-property-day2": "./templates/a1-no-property-day2.ts",
+		"./templates/a2-no-property-day7": "./templates/a2-no-property-day7.ts",
+		"./templates/b1-incomplete-day3": "./templates/b1-incomplete-day3.ts",
+		"./templates/b2-incomplete-day14": "./templates/b2-incomplete-day14.ts",
+		"./templates/c1-no-featured-day5": "./templates/c1-no-featured-day5.ts"
+	}
+}

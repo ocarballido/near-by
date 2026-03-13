@@ -890,5 +890,15 @@
 	"fiveStarReviews": {
 		"title": "Get 5-star reviews",
 		"description": "Personalized guides have an 82% higher chance of receiving 5-star reviews. Edit your digital guide and improve your guests' experience."
+	},
+	"unsubscribe": {
+		"loading": "Processing your request...",
+		"successTitle": "You have successfully unsubscribed",
+		"successBody": "You will no longer receive emails from BNBexplorer. If you change your mind, you can reactivate them from your profile.",
+		"errorTitle": "Something went wrong.",
+		"errorBody": "We were unable to process your request. Please try again or contact us.",
+		"invalidTitle": "Invalid link",
+		"invalidBody": "This unsubscribe link is invalid or has expired.",
+		"backHome": "Back to homepage"
 	}
 }
