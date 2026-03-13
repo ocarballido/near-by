@@ -1017,13 +1017,6 @@ export const DAILY_AI_USAGE_LIMMIT = 10;
 
 export const DEMOS = [
 	{
-		id: 'dashboard',
-		label: 'dashboard',
-		embedUrl:
-			'https://app.supademo.com/embed/cmm3vtqhb0sy7dtfh7rz6i52n?embed_v=2&utm_source=embed',
-		publicUrl: 'https://app.supademo.com/demo/cmm3vtqhb0sy7dtfh7rz6i52n',
-	},
-	{
 		id: 'add-property',
 		label: 'addProperty',
 		embedUrl:
