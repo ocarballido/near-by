@@ -33,7 +33,7 @@ Deno.serve(async (req: Request) => {
 	try {
 		const payload = await req.text();
 		const headers = headersToObject(
-			req.headers as unknown as HeadersWithForEach
+			req.headers as unknown as HeadersWithForEach,
 		);
 
 		const wh = new Webhook(hookSecret);
@@ -71,9 +71,9 @@ Deno.serve(async (req: Request) => {
 		// Magic link: seguir exactamente el patrón oficial del send-email hook
 		// /auth/v1/verify se encarga de validar el token y luego redirigir a redirect_to
 		const magicLink = `${supabaseUrl}/auth/v1/verify?token=${encodeURIComponent(
-			email_data.token_hash
+			email_data.token_hash,
 		)}&type=${encodeURIComponent(
-			email_data.email_action_type
+			email_data.email_action_type,
 		)}&redirect_to=${encodeURIComponent(email_data.redirect_to)}`;
 
 		const { subject, html } = renderMagicLinkEmail({
@@ -82,9 +82,11 @@ Deno.serve(async (req: Request) => {
 			productName: 'BNBexplorer',
 			appUrl: 'https://bnbexplorer.com',
 			heroUrl: 'https://bnbexplorer.com/static/img/mail/hero.png',
-			logoSymbolUrl: 'https://bnbexplorer.com/static/img/mail/symbol.png',
+			logoSymbolUrl:
+				'https://bnbexplorer.com/static/img/mail/symbol_shadow_colored.png',
 			videoImageUrl: 'https://bnbexplorer.com/static/img/mail/video.png',
-			footerLogoUrl: 'https://bnbexplorer.com/static/img/mail/logo.png',
+			footerLogoUrl:
+				'https://bnbexplorer.com/static/img/mail/brand_colored.png',
 		});
 
 		const { error } = await resend.emails.send({

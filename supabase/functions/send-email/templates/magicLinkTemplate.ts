@@ -399,7 +399,7 @@ export function renderMagicLinkEmail({
                               <p>${copy.intro}</p>
                               <p>${copy.text1}</p>
                               <p>${copy.text2}</p>
-                              <a target="_blank" href="https://www.youtube.com/watch?v=yPqXtdHK8MM" style="text-decoration: none; display: block;">
+                              <a target="_blank" href="https://app.supademo.com/showcase/cmm52w6xp000gyk0ipaibjzah?utm_source=link" style="text-decoration: none; display: block;">
                                 <img class="img" src="${videoImageUrl}" alt="Play video tutorial" />
                               </a>
                             </td>

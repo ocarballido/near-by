@@ -12,8 +12,11 @@ type DenoEnv = {
 declare const Deno: DenoEnv;
 
 const APP_URL = 'https://bnbexplorer.com';
-const LOGO_SYMBOL_URL = 'https://bnbexplorer.com/static/img/mail/symbol.png';
-const FOOTER_LOGO_URL = 'https://bnbexplorer.com/static/img/mail/logo.png';
+const LOGO_SYMBOL_URL =
+	'https://bnbexplorer.com/static/img/mail/symbol_shadow_colored.png';
+const FOOTER_LOGO_URL =
+	'https://bnbexplorer.com/static/img/mail/brand_colored.png';
+const HERO_URL = 'https://bnbexplorer.com/static/img/mail/hero.png';
 
 export type SendSequenceEmailPayload = {
 	type: string;
@@ -72,6 +75,7 @@ export async function sendSequenceEmail(
 	const templateParams = {
 		locale,
 		appUrl: APP_URL,
+		heroUrl: HERO_URL,
 		logoSymbolUrl: LOGO_SYMBOL_URL,
 		footerLogoUrl: FOOTER_LOGO_URL,
 		unsubscribeUrl,
