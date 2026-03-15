@@ -16,7 +16,12 @@ const LOGO_SYMBOL_URL =
 	'https://bnbexplorer.com/static/img/mail/symbol_shadow_colored.png';
 const FOOTER_LOGO_URL =
 	'https://bnbexplorer.com/static/img/mail/brand_colored.png';
-const HERO_URL = 'https://bnbexplorer.com/static/img/mail/hero.png';
+const HERO_NO_PROPERTY_URL =
+	'https://bnbexplorer.com/static/img/mail/hero_no_property.png';
+const HERO_UNCOMPLETE_URL =
+	'https://bnbexplorer.com/static/img/mail/hero_uncomplite.png';
+const HERO_NO_FAVORITES_URL =
+	'https://bnbexplorer.com/static/img/mail/hero_no_favorites.png';
 
 export type SendSequenceEmailPayload = {
 	type: string;
@@ -75,7 +80,6 @@ export async function sendSequenceEmail(
 	const templateParams = {
 		locale,
 		appUrl: APP_URL,
-		heroUrl: HERO_URL,
 		logoSymbolUrl: LOGO_SYMBOL_URL,
 		footerLogoUrl: FOOTER_LOGO_URL,
 		unsubscribeUrl,
@@ -86,14 +90,21 @@ export async function sendSequenceEmail(
 	let html: string;
 
 	if (type === 'no_property' && step === 1) {
-		({ subject, html } = renderA1NoPropertyDay2(templateParams));
+		({ subject, html } = renderA1NoPropertyDay2({
+			...templateParams,
+			heroUrl: HERO_NO_PROPERTY_URL,
+		}));
 	} else if (type === 'no_property' && step === 2) {
-		({ subject, html } = renderA2NoPropertyDay7(templateParams));
+		({ subject, html } = renderA2NoPropertyDay7({
+			...templateParams,
+			heroUrl: HERO_NO_PROPERTY_URL,
+		}));
 	} else if (type === 'incomplete_property' && step === 1) {
 		if (!propertyId || !propertyName)
 			return { error: 'propertyId and propertyName required' };
 		({ subject, html } = renderB1IncompleteDay3({
 			...templateParams,
+			heroUrl: HERO_UNCOMPLETE_URL,
 			propertyId,
 			propertyName,
 		}));
@@ -102,6 +113,7 @@ export async function sendSequenceEmail(
 			return { error: 'propertyId and propertyName required' };
 		({ subject, html } = renderB2IncompleteDay14({
 			...templateParams,
+			heroUrl: HERO_UNCOMPLETE_URL,
 			propertyId,
 			propertyName,
 		}));
@@ -110,6 +122,7 @@ export async function sendSequenceEmail(
 			return { error: 'propertyId and propertyName required' };
 		({ subject, html } = renderC1NoFeaturedDay5({
 			...templateParams,
+			heroUrl: HERO_NO_FAVORITES_URL,
 			propertyId,
 			propertyName,
 		}));

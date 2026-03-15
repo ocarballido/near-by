@@ -6,6 +6,9 @@ type Copy = {
 	title: string;
 	body1: string;
 	body2: string;
+	list1: string;
+	list2: string;
+	tip: string;
 	buttonLabel: string;
 	footerUnsubscribe: string;
 	footerIgnore: string;
@@ -15,34 +18,43 @@ const MESSAGES: Record<Locale, Copy> = {
 	es: {
 		subject: '¿Cuáles son tus lugares favoritos?',
 		preheader: 'Destaca los mejores lugares para tus inquilinos.',
-		title: 'Tus inquilinos no saben por dónde empezar',
-		body1: 'Tienes localizaciones añadidas en tu guía, pero ninguna está etiquetada como Destacada o Visita obligatoria. Estos son los primeros lugares que ven tus inquilinos al abrir la guía.',
-		body2: 'Etiqueta tus lugares favoritos o imprescindibles y dale a tus inquilinos un punto de partida claro desde el primer momento.',
-		buttonLabel: 'Etiquetar mis lugares favoritos',
+		title: 'Aún puedes mejorar la experiencia de tus huéspedes',
+		body1: 'Has añadido localizaciones en tu guía, pero ninguna está etiquetada como Favorita o Visita Obligatoria. Cuando las etiquetes, esos serán los primeros lugares que verán tus inquilinos al abrir la guía. Así podrás ofrecer a tus huéspedes una experiencia personalizada, ayudándoles a sacar el máximo partido a su estancia en base a tu experiencia.',
+		body2: 'Recuerda que tienes dos maneras de etiquetar las localizaciones:',
+		list1: 'Destacado → Sitios guays en los alrededores.',
+		list2: 'Visita obligatoria → ¡Los musts!. Esos lugares que no se pueden perder.',
+		buttonLabel: 'Etiqueta tus lugares favoritos',
 		footerUnsubscribe: 'No quiero recibir más emails',
 		footerIgnore: 'Si no reconoces este email, puedes ignorarlo.',
+		tip: '💡 Destacado → lugares que recomiendas especialmente.<br/>⭐ Visita obligatoria → lugares que no se pueden perder.',
 	},
 	en: {
 		subject: 'Which are your favourite places?',
 		preheader: 'Highlight the best places for your guests.',
-		title: "Your guests don't know where to start",
-		body1: 'You have locations added to your guide, but none of them are tagged as Featured or Must Visit. These are the first places your guests see when they open the guide.',
-		body2: 'Tag your favourite or must-see places and give your guests a clear starting point from the very first moment.',
-		buttonLabel: 'Tag my favourite places',
+		title: "You can still improve your guests' experience",
+		body1: "You've added locations to your guide, but none are tagged as a Favorite or Must-Visit. When you tag them, those will be the first places your guests see when they open the guide. This way, you can offer your guests a personalized experience, helping them make the most of their stay based on your expertise.",
+		body2: 'Remember that you have two ways to tag locations:',
+		list1: 'Featured → Cool spots in the area.',
+		list2: 'Must-Visit → The must-sees! Those places you can’t miss.',
+		buttonLabel: 'Tag your favorite places',
 		footerUnsubscribe: 'Unsubscribe from these emails',
 		footerIgnore: "If you don't recognise this email, you can ignore it.",
+		tip: '💡 Featured → places you especially recommend.<br/>⭐ Must Visit → places they cannot miss.',
 	},
 	fr: {
 		subject: 'Quels sont vos endroits préférés?',
 		preheader:
 			'Mettez en avant les meilleurs endroits pour vos locataires.',
-		title: 'Vos locataires ne savent pas par où commencer',
-		body1: "Vous avez des lieux ajoutés dans votre guide, mais aucun n'est étiqueté comme En vedette ou À ne pas manquer. Ce sont les premiers lieux que vos locataires voient en ouvrant le guide.",
-		body2: 'Étiquetez vos lieux favoris ou incontournables et donnez à vos locataires un point de départ clair dès le premier instant.',
-		buttonLabel: 'Étiqueter mes lieux préférés',
+		title: 'Vous pouvez encore améliorer l’expérience de vos voyageurs',
+		body1: 'Vous avez ajouté des lieux dans votre guide, mais aucun n’est étiqueté comme Favori ou Incontournable. Lorsque vous les étiqueterez, ce seront les premiers endroits que vos locataires verront en ouvrant le guide. Vous pourrez ainsi offrir à vos voyageurs une expérience personnalisée et les aider à profiter au maximum de leur séjour grâce à votre expérience.',
+		body2: 'N’oubliez pas que vous avez deux façons d’étiqueter les lieux :',
+		list1: 'À la une → Des endroits sympas dans les environs.',
+		list2: 'Incontournable → Les musts ! Les lieux à ne surtout pas manquer.',
+		buttonLabel: 'Étiquetez vos lieux favoris',
 		footerUnsubscribe: 'Se désabonner de ces emails',
 		footerIgnore:
 			"Si vous ne reconnaissez pas cet email, vous pouvez l'ignorer.",
+		tip: '💡 En vedette → lieux que vous recommandez particulièrement.<br/>⭐ À ne pas manquer → lieux incontournables.',
 	},
 };
 
@@ -164,13 +176,17 @@ export function renderC1NoFeaturedDay5({
 
                               <p style="margin-top: 16px;">${copy.body1}</p>
                               <p>${copy.body2}</p>
+                              <ul>
+                                <li>${copy.list1}</li>
+                                <li>${copy.list2}</li>
+                              </ul>
 
                               <!-- Tip box -->
                               <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                                 <tbody>
                                   <tr>
                                     <td style="padding: 16px; background-color: #ECFDF5; border-radius: 8px; margin-bottom: 16px;">
-                                      <p style="color: #065F46; font-size: 14px; margin: 0;">💡 Destacado → lugares que recomiendas especialmente.<br/>⭐ Visita obligatoria → lugares que no se pueden perder.</p>
+                                      <p style="color: #065F46; font-size: 14px; margin: 0;">${copy.tip}</p>
                                     </td>
                                   </tr>
                                 </tbody>
