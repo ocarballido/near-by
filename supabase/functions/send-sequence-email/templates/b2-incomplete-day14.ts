@@ -6,6 +6,8 @@ type Copy = {
 	title: string;
 	body1: string;
 	body2: string;
+	body3: string;
+	body4: string;
 	buttonLabel: string;
 	footerUnsubscribe: string;
 	footerIgnore: string;
@@ -15,9 +17,11 @@ const MESSAGES: Record<Locale, Copy> = {
 	es: {
 		subject: 'Tus inquilinos merecen la mejor guía',
 		preheader: 'Tu alojamiento lleva 2 semanas sin completarse.',
-		title: 'Una guía completa marca la diferencia',
-		body1: 'Tu alojamiento en BNBexplorer lleva más de dos semanas sin completarse. Los propietarios con guías completas reciben mejores valoraciones y menos preguntas de sus inquilinos.',
-		body2: 'No hace falta que sea perfecta desde el primer día. Con añadir información básica y unos pocos lugares cercanos ya tendrás una guía útil para tus inquilinos.',
+		title: 'Estás a sólo 3 minutos de convertirte en un mejor anfitrión',
+		body1: 'Siguen pasando los días y aún no has completado la guía digital de tu alojamiento en BNBexplorer. ¡Es gratis y no te llevará más de 3 minutos!',
+		body2: '¿Sabías que los anfitriones que han completado sus guías en nuestra plataforma han conseguido mejorar sus valoraciones en un 87%?',
+		body3: 'Empieza por añadir la información básica sobre la casa, las normas y horarios y unos pocos lugares cercanos. Nuestra plataforma te ofrecerá sugerencias para hacer el proceso más rápido y sencillo. En cuestión de segundos dispondrás de una web profesional para compartir con tus huéspedes.',
+		body4: 'Convertirte en un anfitrión 5 estrellas es mucho más fácil de lo que crees.',
 		buttonLabel: 'Completar mi alojamiento ahora',
 		footerUnsubscribe: 'No quiero recibir más emails',
 		footerIgnore: 'Si no reconoces este email, puedes ignorarlo.',
@@ -25,9 +29,11 @@ const MESSAGES: Record<Locale, Copy> = {
 	en: {
 		subject: 'Your guests deserve the best guide',
 		preheader: 'Your property has been incomplete for 2 weeks.',
-		title: 'A complete guide makes the difference',
-		body1: 'Your property on BNBexplorer has been incomplete for over two weeks. Hosts with complete guides receive better reviews and fewer questions from their guests.',
-		body2: "It doesn't need to be perfect from day one. Adding basic information and a few nearby places will already give your guests a useful guide.",
+		title: 'You’re just 3 minutes away from becoming a better host',
+		body1: 'The days keep passing, and you still haven’t completed your property’s digital guide on BNBexplorer. It’s free and won’t take more than 3 minutes!',
+		body2: 'Did you know that hosts who have completed their guides on our platform have seen their ratings improve by 87%?',
+		body3: 'Start by adding basic information about the house, the rules and schedules, and a few nearby places. Our platform will offer suggestions to make the process faster and easier. In a matter of seconds, you’ll have a professional website to share with your guests.',
+		body4: 'Becoming a 5-star host is much easier than you think.',
 		buttonLabel: 'Complete my property now',
 		footerUnsubscribe: 'Unsubscribe from these emails',
 		footerIgnore: "If you don't recognise this email, you can ignore it.",
@@ -35,9 +41,11 @@ const MESSAGES: Record<Locale, Copy> = {
 	fr: {
 		subject: 'Vos locataires méritent le meilleur guide',
 		preheader: 'Votre hébergement est incomplet depuis 2 semaines.',
-		title: 'Un guide complet fait la différence',
-		body1: 'Votre hébergement sur BNBexplorer est incomplet depuis plus de deux semaines. Les hôtes avec des guides complets reçoivent de meilleures évaluations et moins de questions.',
-		body2: "Il n'a pas besoin d'être parfait dès le premier jour. Ajouter des informations de base et quelques lieux à proximité suffira pour avoir un guide utile.",
+		title: 'Vous n’êtes plus qu’à 3 minutes de devenir un meilleur hôte',
+		body1: 'Les jours passent et vous n’avez toujours pas terminé le guide numérique de votre logement sur BNBexplorer. C’est gratuit et cela ne vous prendra pas plus de 3 minutes !',
+		body2: 'Saviez-vous que les hôtes qui ont complété leur guide sur notre plateforme ont vu leurs notes s’améliorer de 87 % ?',
+		body3: 'Commencez par ajouter les informations de base sur le logement, les règles et les horaires, ainsi que quelques lieux à proximité. Notre plateforme vous proposera des suggestions pour rendre le processus plus rapide et plus simple. En quelques secondes, vous aurez un site web professionnel à partager avec vos voyageurs.',
+		body4: 'Devenir un hôte 5 étoiles est beaucoup plus facile que vous ne le pensez.',
 		buttonLabel: 'Compléter mon hébergement maintenant',
 		footerUnsubscribe: 'Se désabonner de ces emails',
 		footerIgnore:
@@ -163,6 +171,8 @@ export function renderB2IncompleteDay14({
 
                               <p style="margin-top: 16px;">${copy.body1}</p>
                               <p>${copy.body2}</p>
+                              <p><b>${copy.body3}</b></p>
+                              <p>${copy.body4}</p>
 
                               <!-- CTA Button -->
                               <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
