@@ -904,5 +904,19 @@
 		"invalidTitle": "Lien invalide",
 		"invalidBody": "Ce lien de désabonnement est invalide ou a expiré.",
 		"backHome": "Retour en haut de page"
+	},
+	"billboard": {
+		"tip1": {
+			"title": "Personnalisez votre guide pour améliorer vos avis",
+			"description": "Les guides d’hébergement personnalisés ont plus de chances d’obtenir des avis 5 étoiles. Personnalisez les informations, les règles et les services de votre logement pour améliorer l’expérience de vos voyageurs."
+		},
+		"tip2": {
+			"title": "Plus d’informations = de meilleurs avis",
+			"description": "Plus vous ajoutez d’informations sur votre logement, moins vous recevrez de questions et meilleure sera l’expérience de vos voyageurs. Ajoutez règles, horaires, wifi et recommandations proches."
+		},
+		"tip3": {
+			"title": "Une expérience personnalisée pour vos voyageurs",
+			"description": "Étiquetez les lieux importants autour de votre logement comme Favoris ou Incontournables afin d’aider vos voyageurs à repérer facilement les endroits à ne pas manquer pendant leur séjour."
+		}
 	}
 }
