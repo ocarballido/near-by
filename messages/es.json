@@ -904,5 +904,19 @@
 		"invalidTitle": "Enlace no válido",
 		"invalidBody": "Este enlace de baja no es válido o ha expirado.",
 		"backHome": "Volver al inicio"
+	},
+	"billboard": {
+		"tip1": {
+			"title": "Personaliza tu guía para mejorar tus valoraciones",
+			"description": "Las guías de alojamientos personalizadas tienen más probabilidades de obtener valoraciones de 5 estrellas. Personaliza la información, reglas y servicios de tu alojamiento y mejora la experiencia de tus huéspedes con BNB Explorer."
+		},
+		"tip2": {
+			"title": "Más información = Mejores reviews",
+			"description": "Cuanta más información incluyas sobre tu alojamiento, menos consultas recibirás y mejor será la experiencia de tus huéspedes. Añade normas, horarios, wifi y recomendaciones cercanas como restaurantes, farmacias o museos."
+		},
+		"tip3": {
+			"title": "Una experiencia personalizada para tus inquilinos",
+			"description": "Etiqueta los lugares más importantes cerca de tu alojamiento como Favoritos o Visita Obligada y ayuda a tus huéspedes a descubrir los sitios que no se pueden perder para que aprovechen al máximo su estancia."
+		}
 	}
 }

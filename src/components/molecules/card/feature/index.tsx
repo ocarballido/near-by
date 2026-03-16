@@ -52,7 +52,7 @@ const Feature = ({
 					/>
 				</div>
 			)}
-			<div className="p-6 flex flex-col gap-2">
+			<div className="p-6 flex flex-col gap-2 w-full">
 				<Typography component="h3" size="lg">
 					{title}
 				</Typography>

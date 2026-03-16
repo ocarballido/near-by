@@ -900,5 +900,19 @@
 		"invalidTitle": "Invalid link",
 		"invalidBody": "This unsubscribe link is invalid or has expired.",
 		"backHome": "Back to homepage"
+	},
+	"billboard": {
+		"tip1": {
+			"title": "Customize your guide to improve your ratings",
+			"description": "Personalized accommodation guides are more likely to receive 5-star reviews. Customize the information, rules, and services of your property to improve your guests’ experience with BNB Explorer."
+		},
+		"tip2": {
+			"title": "More information = Better reviews",
+			"description": "The more information you include about your accommodation, the fewer questions you will receive and the better your guests’ experience will be. Add rules, schedules, Wi-Fi details, and nearby recommendations."
+		},
+		"tip3": {
+			"title": "A personalized experience for your guests",
+			"description": "Tag the most important places around your accommodation as Favorites or Must-Visit to help your guests easily discover the spots they should not miss and enjoy the best possible stay."
+		}
 	}
 }

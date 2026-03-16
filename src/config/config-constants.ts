@@ -1116,3 +1116,21 @@ export const DEMOS = [
 
 export const DEFAULT_EMBED_SRC =
 	'https://app.supademo.com/showcase/embed/cmm52w6xp000gyk0ipaibjzah?embed_v=2&utm_source=embed';
+
+export const BILLBOARD_CAROUSEL = [
+	{
+		title: 'billboard.tip1.title',
+		description: 'billboard.tip1.description',
+		link: '/app/properties',
+	},
+	{
+		title: 'billboard.tip2.title',
+		description: 'billboard.tip2.description',
+		link: '/app/properties',
+	},
+	{
+		title: 'billboard.tip3.title',
+		description: 'billboard.tip3.description',
+		link: '/app/properties',
+	},
+] as const;
