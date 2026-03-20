@@ -1,6 +1,5 @@
 import { getTranslations } from 'next-intl/server';
 
-import FeaturedMustVisit from '@/components/templates/featured-must-visit';
 import { fetchWelcomeHighlightsTabsData } from './_data';
 import WelcomeTabs from '@/components/templates/welcome-tabs';
 
