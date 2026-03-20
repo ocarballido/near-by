@@ -1,7 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 
-import FeaturedMustVisit from '@/components/templates/featured-must-visit';
 import { fetchWelcomeHighlightsTabsData } from './_data';
+import WelcomeTabs from '@/components/templates/welcome-tabs';
 
 type Props = {
 	propertyId: string;
@@ -27,7 +27,7 @@ export default async function WelcomeSection({ propertyId, lat, lng }: Props) {
 				)}
 			</p>
 
-			<FeaturedMustVisit
+			<WelcomeTabs
 				lat={lat}
 				lng={lng}
 				featuredGroups={featuredGroups}
@@ -35,6 +35,7 @@ export default async function WelcomeSection({ propertyId, lat, lng }: Props) {
 				labels={{
 					featuredTab: t('favorites'),
 					mustVisitTab: t('mustSees'),
+					eventsTab: t('events'),
 					featuredHeading: t('favoriteExplained'),
 					mustVisitHeading: t('mustSeeExplained'),
 				}}

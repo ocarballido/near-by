@@ -918,5 +918,15 @@
 			"title": "Une expérience personnalisée pour vos voyageurs",
 			"description": "Étiquetez les lieux importants autour de votre logement comme Favoris ou Incontournables afin d’aider vos voyageurs à repérer facilement les endroits à ne pas manquer pendant leur séjour."
 		}
-	}
+	},
+	"events": "Événements",
+	"eventsTitle": "Événements près de chez vous",
+	"eventsSubtitle": "Découvrez ce qui se passe à proximité pendant votre séjour",
+	"eventsError": "Impossible de charger les événements. Veuillez réessayer.",
+	"eventsEmpty": "Aucun événement de ce type dans un rayon de {radius} km.",
+	"eventsShowMore": "Voir plus d'événements ({count} de plus)",
+	"chipsAll": "Tous",
+	"chipsMusic": "Musique",
+	"chipsSports": "Sports",
+	"chipsTheatre": "Théâtre"
 }
