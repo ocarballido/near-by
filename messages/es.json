@@ -924,5 +924,9 @@
 	"eventsSubtitle": "Descubre qué está pasando cerca durante tu estancia",
 	"eventsError": "No hemos podido cargar los eventos. Inténtalo de nuevo.",
 	"eventsEmpty": "No hay eventos de este tipo en un radio de {radius} km.",
-	"eventsShowMore": "Ver más eventos ({count} más)"
+	"eventsShowMore": "Ver más eventos ({count} más)",
+	"chipsAll": "Todos",
+	"chipsMusic": "Música",
+	"chipsSports": "Deportes",
+	"chipsTheatre": "Teatro"
 }

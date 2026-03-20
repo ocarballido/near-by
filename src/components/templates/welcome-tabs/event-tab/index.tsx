@@ -18,13 +18,6 @@ const DEFAULT_VISIBLE = 8;
 
 type CategoryChip = 'all' | 'Music' | 'Sports' | 'Arts & Theatre';
 
-const CHIPS: { key: CategoryChip; label: string }[] = [
-	{ key: 'all', label: 'Todos' },
-	{ key: 'Music', label: 'Música' },
-	{ key: 'Sports', label: 'Deportes' },
-	{ key: 'Arts & Theatre', label: 'Teatro' },
-];
-
 type Props = {
 	lat: number;
 	lng: number;
@@ -32,6 +25,13 @@ type Props = {
 
 export default function EventsTab({ lat, lng }: Props) {
 	const t = useTranslations();
+
+	const CHIPS: { key: CategoryChip; label: string }[] = [
+		{ key: 'all', label: t('chipsAll') },
+		{ key: 'Music', label: t('chipsMusic') },
+		{ key: 'Sports', label: t('chipsSports') },
+		{ key: 'Arts & Theatre', label: t('chipsTheatre') },
+	];
 
 	const {
 		events,

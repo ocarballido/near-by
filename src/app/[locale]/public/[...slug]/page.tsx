@@ -10,6 +10,7 @@ import { trackEvent } from '@/lib/analytics/mixpanel';
 import { fetchPropertyBase } from './_data';
 import WelcomeSection from './WelcomeSection';
 import SubcategorySection from './SubcategorySection';
+import PublicAppBar from '@/components/organisms/public-appbar';
 
 type PageMode = 'welcome' | 'custom-plans' | 'subcategory';
 
@@ -49,6 +50,7 @@ export default async function Property({ params }: PageProps) {
 
 	return (
 		<EditPublicMenuProvider initialData={sidebarData}>
+			<PublicAppBar />
 			<PublicContentTemplate
 				address={property.address}
 				propertyId={propertyId}

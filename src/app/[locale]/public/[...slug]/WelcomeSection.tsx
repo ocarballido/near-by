@@ -41,19 +41,6 @@ export default async function WelcomeSection({ propertyId, lat, lng }: Props) {
 					mustVisitHeading: t('mustSeeExplained'),
 				}}
 			/>
-
-			{/* <FeaturedMustVisit
-				lat={lat}
-				lng={lng}
-				featuredGroups={featuredGroups}
-				mustVisitGroups={mustVisitGroups}
-				labels={{
-					featuredTab: t('favorites'),
-					mustVisitTab: t('mustSees'),
-					featuredHeading: t('favoriteExplained'),
-					mustVisitHeading: t('mustSeeExplained'),
-				}}
-			/> */}
 		</>
 	);
 }
