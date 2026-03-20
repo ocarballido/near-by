@@ -47,8 +47,6 @@ export default async function Property({ params }: PageProps) {
 
 	const mode = getMode(categoryId);
 
-	console.log(property);
-
 	return (
 		<EditPublicMenuProvider initialData={sidebarData}>
 			<PublicContentTemplate

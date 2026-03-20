@@ -914,5 +914,11 @@
 			"title": "A personalized experience for your guests",
 			"description": "Tag the most important places around your accommodation as Favorites or Must-Visit to help your guests easily discover the spots they should not miss and enjoy the best possible stay."
 		}
-	}
+	},
+	"events": "Events",
+	"eventsTitle": "Events near you",
+	"eventsSubtitle": "Discover what's happening nearby during your stay",
+	"eventsError": "We couldn't load the events. Please try again.",
+	"eventsEmpty": "No events of this type within {radius} km.",
+	"eventsShowMore": "Show more events ({count} more)"
 }

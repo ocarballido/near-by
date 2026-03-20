@@ -918,5 +918,11 @@
 			"title": "Una experiencia personalizada para tus inquilinos",
 			"description": "Etiqueta los lugares más importantes cerca de tu alojamiento como Favoritos o Visita Obligada y ayuda a tus huéspedes a descubrir los sitios que no se pueden perder para que aprovechen al máximo su estancia."
 		}
-	}
+	},
+	"events": "Eventos",
+	"eventsTitle": "Eventos en tu zona",
+	"eventsSubtitle": "Descubre qué está pasando cerca durante tu estancia",
+	"eventsError": "No hemos podido cargar los eventos. Inténtalo de nuevo.",
+	"eventsEmpty": "No hay eventos de este tipo en un radio de {radius} km.",
+	"eventsShowMore": "Ver más eventos ({count} más)"
 }
