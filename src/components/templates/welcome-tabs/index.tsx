@@ -51,7 +51,13 @@ export default function WelcomeTabs({
 	const hasFeatured = (featuredGroups?.length ?? 0) > 0;
 	const hasMustVisit = (mustVisitGroups?.length ?? 0) > 0;
 
-	const [tab, setTab] = useState<TabKey>('events');
+	const defaultTab = (): TabKey => {
+		if (hasFeatured) return 'featured';
+		if (hasMustVisit) return 'must_visit';
+		return 'events';
+	};
+
+	const [tab, setTab] = useState<TabKey>(defaultTab);
 
 	const tabs = [
 		hasFeatured

@@ -928,5 +928,14 @@
 	"chipsAll": "Todos",
 	"chipsMusic": "Música",
 	"chipsSports": "Deportes",
-	"chipsTheatre": "Teatro"
+	"chipsTheatre": "Teatro",
+	"weatherToday": "Hoy",
+	"weatherMon": "Lun",
+	"weatherTue": "Mar",
+	"weatherWed": "Mié",
+	"weatherThu": "Jue",
+	"weatherFri": "Vie",
+	"weatherSat": "Sáb",
+	"weatherSun": "Dom",
+	"weatherRainProbability": "🌧️ {probability}% lluvia"
 }
