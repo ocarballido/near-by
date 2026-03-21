@@ -137,38 +137,32 @@ Deno.serve(async (req: Request) => {
 		for (const user of noPropertyUsers ?? []) {
 			if (ctx.emailsSent >= maxEmails) break;
 
+			const sentA1 = await alreadySent(
+				supabase,
+				user.id,
+				'no_property',
+				1,
+				null,
+			);
+
 			// A1 — día 2
-			if (user.days_since_register >= 2) {
-				const sent = await alreadySent(
-					supabase,
-					user.id,
-					'no_property',
-					1,
-					null,
+			if (user.days_since_register >= 2 && !sentA1) {
+				await sendEmail(
+					{
+						type: 'no_property',
+						step: 1,
+						userId: user.id,
+						email: user.email,
+						locale: 'es',
+					},
+					ctx,
 				);
-				if (!sent) {
-					await sendEmail(
-						{
-							type: 'no_property',
-							step: 1,
-							userId: user.id,
-							email: user.email,
-							locale: 'es',
-						},
-						ctx,
-					);
-				}
+				// A1 se acaba de enviar — no procesamos A2 en esta misma ejecución
+				continue;
 			}
 
-			// A2 — día 7, solo si A1 ya fue enviado
-			if (user.days_since_register >= 7) {
-				const sentA1 = await alreadySent(
-					supabase,
-					user.id,
-					'no_property',
-					1,
-					null,
-				);
+			// A2 — día 7, solo si A1 ya fue enviado en una ejecución anterior
+			if (user.days_since_register >= 7 && sentA1) {
 				const sentA2 = await alreadySent(
 					supabase,
 					user.id,
@@ -176,7 +170,7 @@ Deno.serve(async (req: Request) => {
 					2,
 					null,
 				);
-				if (sentA1 && !sentA2) {
+				if (!sentA2) {
 					await sendEmail(
 						{
 							type: 'no_property',
@@ -272,11 +266,25 @@ Deno.serve(async (req: Request) => {
 
 		if (errorC) console.error('Error tipo C:', errorC);
 
+		// Opción B — máximo un C1 por usuario
+		const usersAlreadySentC1 = new Set<string>();
+
 		for (const prop of noFeaturedProperties ?? []) {
 			if (ctx.emailsSent >= maxEmails) break;
 
-			// Opción A — Prioridad: si la propiedad está incompleta, no enviamos C1
-			// Esperamos a que el usuario complete primero la propiedad
+			// Si ya enviamos C1 a este usuario en esta ejecución, saltamos
+			if (usersAlreadySentC1.has(prop.user_id)) {
+				ctx.results.push({
+					skipped: true,
+					reason: 'c1_already_sent_to_user',
+					type: 'no_featured',
+					step: 1,
+					email: prop.email,
+				});
+				continue;
+			}
+
+			// Opción A — Prioridad: si la propiedad está incompleta no enviamos C1
 			const isIncomplete = incompleteProperties?.some(
 				(p: { property_id: string }) =>
 					p.property_id === prop.property_id,
@@ -292,7 +300,7 @@ Deno.serve(async (req: Request) => {
 				continue;
 			}
 
-			// C1 — día 5, una sola vez
+			// C1 — día 5, una sola vez por propiedad
 			if (prop.days_since_created >= 5) {
 				const sent = await alreadySent(
 					supabase,
@@ -314,6 +322,7 @@ Deno.serve(async (req: Request) => {
 						},
 						ctx,
 					);
+					usersAlreadySentC1.add(prop.user_id);
 				}
 			}
 		}

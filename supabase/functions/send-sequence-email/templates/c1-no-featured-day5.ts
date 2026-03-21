@@ -176,10 +176,6 @@ export function renderC1NoFeaturedDay5({
 
                               <p style="margin-top: 16px;">${copy.body1}</p>
                               <p>${copy.body2}</p>
-                              <ul>
-                                <li>${copy.list1}</li>
-                                <li>${copy.list2}</li>
-                              </ul>
 
                               <!-- Tip box -->
                               <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
