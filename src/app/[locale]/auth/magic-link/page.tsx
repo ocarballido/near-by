@@ -113,12 +113,12 @@ export default function MagicLinkPage() {
 				<>
 					<div className="relative max-w-96 w-full text-center font-body">
 						<div className="rounded-lg p-6 mb-6">
-							<p className="flex  justify-center">
+							<div className="flex justify-center">
 								<FancyIcon
 									icon={<IconCheckCircle color="white" />}
 									color="gradient"
 								/>
-							</p>
+							</div>
 
 							<Typography
 								component="h1"
