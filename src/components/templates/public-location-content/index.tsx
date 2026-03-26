@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import PlacePublic from '@/components/molecules/card/place-public';
 import Typography from '@/components/atoms/typography';
 
@@ -12,11 +13,13 @@ const PublicLocationContent = ({
 	sub_category_name?: string;
 	categoryId?: string;
 }) => {
+	const t = useTranslations();
+
 	return (
 		<div className="flex flex-col gap-3">
 			{sub_category_name && (
 				<Typography component="h2" size="lg">
-					{sub_category_name}
+					{t(sub_category_name)}
 				</Typography>
 			)}
 			<div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 auto-rows-min">

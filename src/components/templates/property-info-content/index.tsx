@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { PropertyDataItem } from '../property-data-public';
 import Typography from '@/components/atoms/typography';
 
@@ -23,6 +24,8 @@ export function PropertyInfoContent({
 	infos,
 	sub_category_name,
 }: PropertyInfoProps) {
+	const t = useTranslations();
+
 	let info;
 
 	if (infos) {
@@ -35,7 +38,7 @@ export function PropertyInfoContent({
 				<>
 					{sub_category_name && (
 						<Typography component="h2" size="lg">
-							{sub_category_name}
+							{t(sub_category_name)}
 						</Typography>
 					)}
 					<div className="font-medium whitespace-pre-wrap">
