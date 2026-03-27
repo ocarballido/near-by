@@ -117,7 +117,8 @@ export function ShareMenu({
 
 			<WhatsappShareButton
 				url={shareUrl}
-				title={`${whatsappText} `}
+				title={`${whatsappText}\n\n`}
+				separator=""
 				onClick={() => {
 					void trackShare('whatsapp');
 					return true;
@@ -131,6 +132,7 @@ export function ShareMenu({
 					type="button"
 					color="white"
 					onClick={onCopyLink}
+					className="w-full"
 					label={
 						copyState === 'copied'
 							? t('shareButtonCopiedURL')

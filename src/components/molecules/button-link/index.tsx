@@ -15,6 +15,7 @@ type ButtonLinkProps = {
 	iconLeft?: React.ReactNode;
 	iconRight?: React.ReactNode;
 	label: string;
+	download?: string;
 };
 
 const ButtonLink = ({
@@ -26,6 +27,7 @@ const ButtonLink = ({
 	iconRight,
 	label,
 	target = '_self',
+	download,
 }: ButtonLinkProps) => {
 	const buttonLinkStyles = clsx(
 		{
@@ -67,8 +69,25 @@ const ButtonLink = ({
 		{
 			'bg-primary-100 hover:bg-primary-100 text-primary-500':
 				color === 'white' && active,
-		}
+		},
 	);
+
+	const sharedClassName = `font-medium text-base rounded-full transition-all flex items-center justify-center gap-1 py-2 px-5 hover:cursor-pointer disabled:opacity-30 disabled:pointer-events-none ${buttonLinkStyles} ${className}`;
+
+	if (download) {
+		return (
+			<a
+				className={sharedClassName}
+				href={href}
+				target={target}
+				download={download}
+			>
+				{iconLeft}
+				{label}
+				{iconRight}
+			</a>
+		);
+	}
 
 	return (
 		<Link

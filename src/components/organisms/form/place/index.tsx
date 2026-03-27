@@ -281,7 +281,7 @@ const AddPlaceForm = ({
 								setModalOpen(false);
 							}}
 							secondaryButtonAction={() => setModalOpen(false)}
-							secondaryButtonLabel="Cancel"
+							secondaryButtonLabel={t('Cancelar')}
 							size="max-w-md"
 						>
 							<div className="flex flex-col gap-3 items-center">

@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers';
+import type { Metadata } from 'next';
 
 import PublicContentTemplate from '@/components/templates/public-content';
 import { getPublicSidebarData } from '@/utils/get-public-sidebar-data';
@@ -14,6 +15,10 @@ import PublicAppBar from '@/components/organisms/public-appbar';
 
 type PageMode = 'welcome' | 'custom-plans' | 'subcategory';
 
+interface GenerateMetadataProps {
+	params: Promise<{ locale: string; slug: string[] }>;
+}
+
 const getMode = (categoryId?: string): PageMode => {
 	if (categoryId === 'welcome') return 'welcome';
 	if (categoryId === 'custom-plans') return 'custom-plans';
@@ -22,6 +27,44 @@ const getMode = (categoryId?: string): PageMode => {
 
 interface PageProps {
 	params: Promise<{ locale: string; slug: string[] }>;
+}
+
+export async function generateMetadata({
+	params,
+}: GenerateMetadataProps): Promise<Metadata> {
+	const { slug } = await params;
+	const [propertyId] = slug;
+
+	const { property } = await fetchPropertyBase(propertyId);
+
+	const ogImage =
+		property.image_url ?? '/static/img/default-property-2x.webp';
+
+	return {
+		title: property.name,
+		description: property.address ?? 'Guía de alojamiento',
+		openGraph: {
+			title: property.name,
+			description: property.address ?? 'Guía de alojamiento',
+			url: `https://bnbexplorer.com/public/${propertyId}/welcome/highlights`,
+			siteName: 'BNBexplorer',
+			images: [
+				{
+					url: ogImage,
+					width: 1200,
+					height: 630,
+					alt: property.name,
+				},
+			],
+			type: 'article',
+		},
+		twitter: {
+			card: 'summary_large_image',
+			title: property.name,
+			description: property.address ?? 'Guía de alojamiento',
+			images: [ogImage],
+		},
+	};
 }
 
 export default async function Property({ params }: PageProps) {
