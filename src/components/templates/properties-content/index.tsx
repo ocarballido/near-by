@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useLoading } from '@/lib/context/LoadingContext';
 import { usePaywall } from '@/lib/context/PaywallContext';
 import { useTranslations } from 'use-intl';
+import { useGlobal } from '@/lib/context/GlobalContext';
 
 import { deleteProperty } from '@/app/actions/properties/delete-property';
 
@@ -47,6 +48,7 @@ const PropertiesContent = ({ properties }: PropertiesContentProps) => {
 	const [alert, setAlert] = useState<AlertState | null>(null);
 	const [selectedProperty, setSelectedProperty] = useState<string>('');
 	const { loading, openLoading, closeLoading } = useLoading();
+	const { user } = useGlobal();
 
 	const handleDelete = async (propertyId: string) => {
 		if (loading) return;
@@ -124,6 +126,7 @@ const PropertiesContent = ({ properties }: PropertiesContentProps) => {
 					checkInTime={property?.checkInTime}
 					checkOutDate={property?.checkOutDate}
 					checkOutTime={property?.checkOutTime}
+					distinctId={user?.id ?? ''}
 				/>
 			))}
 			<NewPropertyCard />

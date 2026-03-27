@@ -937,5 +937,8 @@
 	"weatherFri": "Vie",
 	"weatherSat": "Sáb",
 	"weatherSun": "Dom",
-	"weatherRainProbability": "🌧️ {probability}% lluvia"
+	"weatherRainProbability": "🌧️ {probability}% lluvia",
+	"shareWhatsappText": "¡Aquí tienes la guía de tu alojamiento \"{name}\"!",
+	"viewPropertyGuide": "Ver guía del alojamiento",
+	"shareProperty": "Compartir"
 }

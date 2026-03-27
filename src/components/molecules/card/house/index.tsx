@@ -9,9 +9,9 @@ import IconCheckIn from '@/components/atoms/icon/check-in';
 import IconCheckOut from '@/components/atoms/icon/check-out';
 import Button from '../../button';
 import ButtonLink from '../../button-link';
-import IconOpenInNew from '@/components/atoms/icon/open-in-new';
 import PropertySteps from '../../property-steps';
 import Typography from '@/components/atoms/typography';
+import ShareButton from '../../share-property-button';
 
 import { formatDate, formatTime } from '@/utils/format-date-time';
 
@@ -31,6 +31,7 @@ type HouseProps = {
 	checkInTime?: string;
 	checkOutDate?: string;
 	checkOutTime?: string;
+	distinctId?: string;
 };
 
 const House = ({
@@ -48,6 +49,7 @@ const House = ({
 	checkInTime,
 	checkOutDate,
 	checkOutTime,
+	distinctId = '',
 	image = '/static/img/header-trimed-2x.webp',
 }: HouseProps) => {
 	const t = useTranslations();
@@ -62,14 +64,13 @@ const House = ({
 		<div
 			className={`flex items-end rounded-xl overflow-hidden px-2 pb-2 pt-[180px] relative min-h-[400px] transition-all [&>.content]:p-3 [&>.content]:rounded-lg hover:shadow-2xl hover:px-0 hover:pb-0 hover:pt-[172px] hover:[&>.content]:p-5 hover:[&>.content]:rounded-none bg-gradient-to-tr from-[#ffa263] to-[#6cffc9] ${className}`}
 		>
-			<ButtonLink
-				className="w-fit absolute z-6 top-2 right-2 rounded-full !pr-2 pl-2"
-				iconRight={<IconOpenInNew />}
-				label=""
-				color="white"
-				href={`/public/${propertyId}/welcome/highlights`}
-				target="_blank"
-			/>
+			<div className="absolute z-6 top-2 right-2">
+				<ShareButton
+					propertyId={propertyId ?? ''}
+					name={name}
+					distinctId={distinctId}
+				/>
+			</div>
 			<div className="content transition-all flex justify-end gap-2 flex-col relative w-full bg-white z-5">
 				<div className="flex gap-2 items-center">
 					<span className="grow-0 p-1.5 bg-primary-100 rounded-full h-fit">
