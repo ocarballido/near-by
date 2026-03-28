@@ -4,9 +4,12 @@ import type { Metadata } from 'next';
 import PublicContentTemplate from '@/components/templates/public-content';
 import { getPublicSidebarData } from '@/utils/get-public-sidebar-data';
 import { EditPublicMenuProvider } from '@/lib/context/EditPublicMenuContext';
+import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 import ItineraryForm from '@/components/organisms/form/custom-plan';
 
 import { trackEvent } from '@/lib/analytics/mixpanel';
+import type { Database, TablesInsert } from '@/lib/types';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 import { fetchPropertyBase } from './_data';
 import WelcomeSection from './WelcomeSection';
@@ -83,6 +86,20 @@ export default async function Property({ params }: PageProps) {
 		});
 	} catch (e) {
 		console.error('Mixpanel trackEvent failed:', e);
+	}
+
+	// Track visit en Supabase — no bloqueamos render si falla
+	if (process.env.NODE_ENV === 'production') {
+		try {
+			const supabase = await createServerAdminClient();
+			const db = supabase as unknown as SupabaseClient<Database>;
+			const payload: TablesInsert<'property_visits'> = {
+				property_id: propertyId,
+			};
+			await db.from('property_visits').insert(payload);
+		} catch (e) {
+			console.error('property_visits insert failed:', e);
+		}
 	}
 
 	// Shared data

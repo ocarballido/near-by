@@ -29,5 +29,5 @@
 		"actions.ts",
 		".next/types/**/*.ts"
 	],
-	"exclude": ["node_modules", "supabase"]
+	"exclude": ["node_modules", "supabase", "supabase/**/*"]
 }

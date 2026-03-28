@@ -29,7 +29,7 @@
 		"embla-carousel-autoplay": "^8.6.0",
 		"embla-carousel-react": "^8.6.0",
 		"lucide-react": "0.469.0",
-		"next": "15.5.11",
+		"next": "^15.5.14",
 		"next-intl": "4.0.2",
 		"qrcode.react": "4.2.0",
 		"react": "19.0.1",
@@ -62,7 +62,7 @@
 		"knip": "5.58.1",
 		"postcss": "8.5.3",
 		"postcss-import": "16.1.0",
-		"supabase": "2.74.1",
+		"supabase": "^2.84.4",
 		"tailwindcss": "4.1.4",
 		"typescript": "5"
 	}
