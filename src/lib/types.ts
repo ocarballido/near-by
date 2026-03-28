@@ -68,6 +68,33 @@ export type Database = {
         }
         Relationships: []
       }
+      email_sequence_log: {
+        Row: {
+          id: string
+          ref_id: string | null
+          sent_at: string
+          step: number
+          type: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          ref_id?: string | null
+          sent_at?: string
+          step: number
+          type: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          ref_id?: string | null
+          sent_at?: string
+          step?: number
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       feedback_messages: {
         Row: {
           category: string
@@ -229,6 +256,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email_opt_out: boolean
+          full_name: string | null
+          unsubscribe_token: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email_opt_out?: boolean
+          full_name?: string | null
+          unsubscribe_token?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email_opt_out?: boolean
+          full_name?: string | null
+          unsubscribe_token?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       properties: {
         Row: {
@@ -411,6 +465,32 @@ export type Database = {
           },
         ]
       }
+      property_visits: {
+        Row: {
+          id: string
+          property_id: string
+          visited_at: string
+        }
+        Insert: {
+          id?: string
+          property_id: string
+          visited_at?: string
+        }
+        Update: {
+          id?: string
+          property_id?: string
+          visited_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_visits_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sub_categories: {
         Row: {
           category_id: string
@@ -549,7 +629,44 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      delete_old_property_visits: { Args: never; Returns: undefined }
+      get_incomplete_properties: {
+        Args: { days_offset?: number }
+        Returns: {
+          days_since_created: number
+          email: string
+          property_id: string
+          property_name: string
+          user_id: string
+        }[]
+      }
+      get_properties_without_featured: {
+        Args: { days_offset?: number }
+        Returns: {
+          days_since_created: number
+          email: string
+          property_id: string
+          property_name: string
+          user_id: string
+        }[]
+      }
+      get_property_visits_by_user: {
+        Args: { p_user_id: string }
+        Returns: {
+          visit_count: number
+          week_end: string
+          week_label: string
+          week_start: string
+        }[]
+      }
+      get_users_without_property: {
+        Args: { days_offset?: number }
+        Returns: {
+          days_since_register: number
+          email: string
+          id: string
+        }[]
+      }
     }
     Enums: {
       property_data_type: "info" | "location"
