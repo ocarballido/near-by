@@ -4,6 +4,7 @@ import { trackEvent } from '@/lib/analytics/mixpanel';
 
 import AppContentTemplate from '@/components/templates/app-content';
 import PropertyNumber from '@/components/molecules/property-number';
+import PropertyVisitsStats from '@/components/molecules/property-visits-stats';
 
 type PageProps = {
 	searchParams?: Promise<{ fromAuth?: string }>;
@@ -42,6 +43,8 @@ export default async function DashboardContent({ searchParams }: PageProps) {
 				<PropertyNumber
 					shouldForceFirstProperty={shouldForceFirstProperty}
 				/>
+
+				<PropertyVisitsStats />
 			</div>
 		</AppContentTemplate>
 	);
