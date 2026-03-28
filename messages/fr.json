@@ -944,5 +944,6 @@
 	"visitsTitle": "Visites de vos guides",
 	"visitsThisWeek": "Cette semaine",
 	"visitsLastWeek": "Semaine dernière",
-	"visitsTwoWeeksAgo": "Il y a deux semaines"
+	"visitsTwoWeeksAgo": "Il y a deux semaines",
+	"propertiesStatusTitle": "État de vos propriétés"
 }
