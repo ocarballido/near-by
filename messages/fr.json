@@ -940,5 +940,9 @@
 	"weatherRainProbability": "🌧️ {probability}% pluie",
 	"shareWhatsappText": "Voici le guide de votre hébergement \"{name}\" !",
 	"viewPropertyGuide": "Voir le guide du logement",
-	"shareProperty": "Partager"
+	"shareProperty": "Partager",
+	"visitsTitle": "Visites de vos guides",
+	"visitsThisWeek": "Cette semaine",
+	"visitsLastWeek": "Semaine dernière",
+	"visitsTwoWeeksAgo": "Il y a deux semaines"
 }
