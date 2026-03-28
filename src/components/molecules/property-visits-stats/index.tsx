@@ -70,7 +70,7 @@ const PropertyVisitsStats = async () => {
 	};
 
 	return (
-		<div className="flex flex-col gap-3 w-full max-w-xs">
+		<div className="flex flex-col gap-3 w-full p-3">
 			<Typography component="h3" size="lg">
 				{t('visitsTitle')}
 			</Typography>
