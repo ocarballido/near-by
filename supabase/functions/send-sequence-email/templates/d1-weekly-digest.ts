@@ -13,6 +13,7 @@ type Copy = {
 	title: string;
 	body1: string;
 	visitsLabel: string;
+	noVisitsMessage: string;
 	tipTitle: string;
 	buttonLabel: string;
 	footerUnsubscribe: string;
@@ -26,6 +27,8 @@ const MESSAGES: Record<Locale, Copy> = {
 		title: 'Tus guías esta semana',
 		body1: 'Aquí tienes un resumen de las visitas que han recibido tus alojamientos esta semana.',
 		visitsLabel: 'visitas',
+		noVisitsMessage:
+			'Esta semana no has recibido visitas. Comparte tu guía con tus próximos inquilinos.',
 		tipTitle: 'Consejo del mes',
 		buttonLabel: 'Ver mis propiedades',
 		footerUnsubscribe: 'No quiero recibir más emails',
@@ -37,6 +40,8 @@ const MESSAGES: Record<Locale, Copy> = {
 		title: 'Your guides this week',
 		body1: 'Here is a summary of the visits your properties received this week.',
 		visitsLabel: 'visits',
+		noVisitsMessage:
+			'No visits this week. Share your guide with your next guests.',
 		tipTitle: 'Tip of the month',
 		buttonLabel: 'View my properties',
 		footerUnsubscribe: 'Unsubscribe from these emails',
@@ -48,6 +53,8 @@ const MESSAGES: Record<Locale, Copy> = {
 		title: 'Vos guides cette semaine',
 		body1: 'Voici un résumé des visites reçues par vos hébergements cette semaine.',
 		visitsLabel: 'visites',
+		noVisitsMessage:
+			'Aucune visite cette semaine. Partagez votre guide avec vos prochains locataires.',
 		tipTitle: 'Conseil du mois',
 		buttonLabel: 'Voir mes propriétés',
 		footerUnsubscribe: 'Se désabonner de ces emails',
@@ -89,9 +96,11 @@ export function renderD1WeeklyDigest({
 	const copy = getCopy(locale);
 	const ctaUrl = `${appUrl}/${locale}/app/properties`;
 
-	const visitsRows = propertyVisits
-		.map(
-			(p) => `
+	const visitsRows =
+		propertyVisits.length > 0
+			? propertyVisits
+					.map(
+						(p) => `
       <tr>
         <td style="padding: 10px 0; border-bottom: 1px solid #F3F4F6; font-family: sans-serif; font-size: 15px; color: #374151;">
           ${p.property_name}
@@ -100,8 +109,14 @@ export function renderD1WeeklyDigest({
           ${p.visit_count} ${copy.visitsLabel}
         </td>
       </tr>`,
-		)
-		.join('');
+					)
+					.join('')
+			: `
+      <tr>
+        <td colspan="2" style="padding: 16px 0; font-family: sans-serif; font-size: 15px; color: #6B7280; text-align: center;">
+          ${copy.noVisitsMessage}
+        </td>
+      </tr>`;
 
 	const tipBlock = tip
 		? `
