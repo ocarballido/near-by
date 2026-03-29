@@ -1,1 +1,1 @@
-DELETE FROM email_sequence_log;
+select * from get_users_for_weekly_digest();
