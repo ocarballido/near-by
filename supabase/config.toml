@@ -23,6 +23,12 @@ verify_jwt = false
 import_map = "./functions/email-job/deno.json"
 entrypoint = "./functions/email-job/index.ts"
 
+[functions.weekly-digest]
+enabled = true
+verify_jwt = false
+import_map = "./functions/weekly-digest/deno.json"
+entrypoint = "./functions/weekly-digest/index.ts"
+
 [auth]
 site_url = "http://localhost:3000"
 additional_redirect_urls = [

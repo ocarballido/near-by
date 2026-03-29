@@ -5,6 +5,7 @@ import { renderA2NoPropertyDay7 } from '../send-sequence-email/templates/a2-no-p
 import { renderB1IncompleteDay3 } from '../send-sequence-email/templates/b1-incomplete-day3.ts';
 import { renderB2IncompleteDay14 } from '../send-sequence-email/templates/b2-incomplete-day14.ts';
 import { renderC1NoFeaturedDay5 } from '../send-sequence-email/templates/c1-no-featured-day5.ts';
+import { renderD1WeeklyDigest } from '../send-sequence-email/templates/d1-weekly-digest.ts';
 
 type DenoEnv = {
 	env: { get(key: string): string | undefined };
@@ -154,6 +155,104 @@ export async function sendSequenceEmail(
 
 	if (logError) {
 		console.error('Failed to log email:', logError);
+	}
+
+	return { sent: true };
+}
+
+// ─────────────────────────────────────────
+// Weekly digest — función separada
+// ─────────────────────────────────────────
+
+export type PropertyVisit = {
+	property_name: string;
+	visit_count: number;
+};
+
+export type Tip = {
+	emoji: string;
+	title: string;
+	text: string;
+};
+
+export type SendWeeklyDigestPayload = {
+	userId: string;
+	email: string;
+	locale?: string;
+	propertyVisits: PropertyVisit[];
+	tip: Tip | null;
+};
+
+export async function sendWeeklyDigest(
+	payload: SendWeeklyDigestPayload,
+): Promise<{
+	sent?: boolean;
+	skipped?: boolean;
+	reason?: string;
+	error?: string;
+}> {
+	const { userId, email, locale = 'es', propertyVisits, tip } = payload;
+
+	const resend = new Resend(Deno.env.get('RESEND_API_KEY')!);
+
+	const supabase = createClient(
+		Deno.env.get('SUPABASE_URL')!,
+		Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+	);
+
+	// 1. Verificar opt_out y obtener token
+	const { data: profile, error: profileError } = await supabase
+		.from('profiles')
+		.select('email_opt_out, unsubscribe_token')
+		.eq('user_id', userId)
+		.single();
+
+	if (profileError || !profile) {
+		return { error: 'Profile not found' };
+	}
+
+	if (profile.email_opt_out === true) {
+		return { skipped: true, reason: 'User unsubscribed' };
+	}
+
+	// 2. Construir URL de baja
+	const unsubscribeUrl = `${APP_URL}/unsubscribe?token=${profile.unsubscribe_token}`;
+
+	// 3. Renderizar template
+	const { subject, html } = renderD1WeeklyDigest({
+		locale,
+		appUrl: APP_URL,
+		logoSymbolUrl: LOGO_SYMBOL_URL,
+		footerLogoUrl: FOOTER_LOGO_URL,
+		unsubscribeUrl,
+		propertyVisits,
+		tip,
+	});
+
+	// 4. Enviar con Resend
+	const { error: sendError } = await resend.emails.send({
+		from: 'BNBexplorer <no-reply@bnbexplorer.com>',
+		to: [email],
+		subject,
+		html,
+	});
+
+	if (sendError) {
+		return { error: String(sendError) };
+	}
+
+	// 5. Registrar en email_sequence_log
+	const { error: logError } = await supabase
+		.from('email_sequence_log')
+		.insert({
+			user_id: userId,
+			type: 'weekly_digest',
+			step: 1,
+			ref_id: null,
+		});
+
+	if (logError) {
+		console.error('Failed to log weekly digest:', logError);
 	}
 
 	return { sent: true };
