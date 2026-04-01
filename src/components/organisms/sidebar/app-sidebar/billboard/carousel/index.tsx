@@ -17,7 +17,11 @@ const BillboardCarousel = () => {
 			<Carousel
 				options={{ loop: true }}
 				className="min-w-0 -mt-5"
-				autoplay={{ delay: 5000, stopOnInteraction: false }}
+				autoplay={{
+					delay: 5000,
+					stopOnInteraction: false,
+					stopOnMouseEnter: true,
+				}}
 				showPagination={<CarouselPagination className="mt-6" />}
 			>
 				{BILLBOARD_CAROUSEL.map((tip) => (
