@@ -6,6 +6,7 @@ import Autoplay from 'embla-carousel-autoplay';
 import type { EmblaCarouselType, EmblaOptionsType } from 'embla-carousel';
 import type { AutoplayOptionsType } from 'embla-carousel-autoplay';
 import { CarouselContext } from './carousel.context';
+import Fade from 'embla-carousel-fade';
 
 type CarouselProps = {
 	children: React.ReactNode;
@@ -14,23 +15,31 @@ type CarouselProps = {
 	showArrows?: React.ReactNode;
 	showPagination?: React.ReactNode;
 	className?: string;
+	fade?: boolean;
 };
 
 export function Carousel({
 	children,
 	options,
 	autoplay = false,
+	fade = false,
 	showArrows,
 	showPagination,
 	className = '',
 }: CarouselProps) {
 	const plugins = useMemo(() => {
-		if (!autoplay) return [];
-		const opts: AutoplayOptionsType =
-			typeof autoplay === 'object'
-				? autoplay
-				: { delay: 4000, stopOnInteraction: true };
-		return [Autoplay(opts)];
+		const list = [];
+		if (autoplay) {
+			const opts: AutoplayOptionsType =
+				typeof autoplay === 'object'
+					? autoplay
+					: { delay: 4000, stopOnInteraction: true };
+			list.push(Autoplay(opts));
+		}
+		if (fade) {
+			list.push(Fade());
+		}
+		return list;
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	const [emblaRef, emblaApi] = useEmblaCarousel(options ?? {}, plugins);

@@ -25,6 +25,7 @@ const DemoHomeModal = ({
 				label={t('page_home.section_hero.tourButton')}
 				onClick={() => setModalOpen(true)}
 				color={buttonColor}
+				className="shrink-0"
 			/>
 			<SimpleModal
 				title={t('recommendations.title')}
