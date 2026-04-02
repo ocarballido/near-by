@@ -8,7 +8,15 @@ export function CarouselSlide({
 	className = '',
 }: CarouselSlideProps) {
 	return (
-		<div style={{ flex: '0 0 100%', minWidth: 0 }} className={className}>
+		<div
+			style={{
+				position: 'relative',
+				height: '100%',
+				minWidth: '100%',
+				flex: '0 0 100%',
+			}}
+			className={className}
+		>
 			{children}
 		</div>
 	);

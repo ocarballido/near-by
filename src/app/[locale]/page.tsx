@@ -10,6 +10,9 @@ import multyProperty from '../../../public/static/img/multy-property-2x.webp';
 import blur from '../../../public/static/img/home/blur.webp';
 import why from '../../../public/static/img/home/why_bnbexplorer.webp';
 import how from '../../../public/static/img/home/how_bnbexplorer.webp';
+import cave from '../../../public/static/img/home/cave_carousel.webp';
+import celular from '../../../public/static/img/home/celular_carousel.webp';
+import toys from '../../../public/static/img/home/toys_carousel.webp';
 
 import categories from '../../../public/static/img/categories-2x.webp';
 import uiEdit from '../../../public/static/img/ui-edit-2x.webp';
@@ -38,10 +41,12 @@ import BadgeCheck from '@/components/atoms/BadgeCheck';
 import IconCancel from '@/components/atoms/icon/cancel';
 import Quote from '@/components/molecules/quote';
 import DemoHomeModal from '@/components/organisms/supademo/home-modal';
+import HomeCarousel from '@/components/molecules/home-carousel';
 
 import { DEMOS } from '@/config/config-constants';
 
 import styles from './page.module.css';
+import Typography from '@/components/atoms/typography';
 
 export default function Home() {
 	const t = useTranslations();
@@ -51,86 +56,87 @@ export default function Home() {
 			<LandingAppBar />
 			<section
 				aria-labelledby="BNB-explorer"
-				className="bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] rounded-lg mt-2 px-0 pt-12"
+				className="bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] rounded-lg mt-2 px-0 py-12 md:py-18 min-h-[600px] md:min-h-[800px] lg:min-h-[900px] relative flex"
 			>
-				<div className="flex flex-col gap-8 text-center items-center max-w-[1400px] ml-auto mr-auto">
-					<h2
-						id="BNB-explorer"
-						className="font-heading text-4xl md:text-6xl font-bold max-w-[800px] ml-auto mr-auto px-4 text-white"
-					>
-						{t('page_home.section_hero.title')}
-					</h2>
-					<h3 className="font-heading font-medium text-xl md:text-2xl max-w-[800px] ml-auto mr-auto px-4 text-white">
-						{t('page_home.section_hero.subtitle')}
-					</h3>
-					<div className="px-4 flex flex-col gap-1">
+				<div className="absolute inset-0 z-0 rounded-lg overflow-hidden">
+					<HomeCarousel />
+				</div>
+				<div className="absolute inset-0 md:inset-auto md:top-0 md:left-0 md:w-full md:h-[60%] z-0 bg-gradient-to-b from-black/50 to-black/0 rounded-lg" />
+
+				<div className="flex flex-col gap-4 text-center self-stretch justify-between sm:justify-start items-center max-w-[1400px] ml-auto mr-auto z-10 relative">
+					<div>
+						<h2
+							id="BNB-explorer"
+							className="font-heading text-4xl md:text-6xl font-bold max-w-[600px] md:max-w-[800px] ml-auto mr-auto px-4 text-white mb-4"
+						>
+							{t('page_home.section_hero.title')}
+						</h2>
+						<Typography
+							component="h3"
+							size="base"
+							color="text-white"
+							weight="medium"
+							className="max-w-[600px] md:max-w-[800px] md:text-2xl px-4 mx-auto"
+						>
+							{t('page_home.section_hero.subtitle')}
+						</Typography>
+					</div>
+
+					<div className="flex sm:hidden justify-between w-full px-4">
+						<PlaceTooltip
+							label={t('page_home.section_hero.tooltip1')}
+							className=""
+						/>
+						<PlaceTooltip
+							label={t('page_home.section_hero.tooltip6')}
+						/>
+					</div>
+
+					<div className="px-4 flex flex-col gap-1 max-w-[500px]">
 						<ButtonLink
 							label={t('page_home.mainAction')}
 							href="/app"
 							color="primary"
 						/>
-						<div className="flex flex-col md:flex-row gap-1">
+						<div className="flex flex-col sm:flex-row gap-1">
 							<ButtonLink
 								label={t('page_home.pilotHouseAction')}
 								href="https://www.bnbexplorer.com/es/public/37a03a95-cd39-4d40-a22b-7628cbb50245/welcome/highlights"
 								color="white"
-								className="w-fit"
+								className="w-full"
 								target="_blank"
 							/>
 							<DemoHomeModal demos={DEMOS} />
 						</div>
 					</div>
-					<div className="relative w-full">
-						<PlaceTooltip
-							label={t('page_home.section_hero.tooltip1')}
-							className="absolute left-[10%] top-[10%] sm:left-[25%] md:left-[25%] md:top-[20%]"
-						/>
-						<PlaceTooltip
-							label={t('page_home.section_hero.tooltip2')}
-							className="absolute hidden sm:flex left-[2%] top-[30%] md:top-[50%] sm:left-[5%] md:left-[15%]"
-						/>
-						<PlaceTooltip
-							label={t('page_home.section_hero.tooltip3')}
-							className="absolute left-[10%] sm:left-[20%] md:left-[25%] top-[65%] sm:top-[60%] md:top-[80%]"
-						/>
-						<PlaceTooltip
-							label={t('page_home.section_hero.tooltip4')}
-							className="absolute right-[5%] top-[10%] sm:right-[15%] sm:top-[5%] md:right-[20%] md:top-[20%]"
-						/>
-						<PlaceTooltip
-							label={t('page_home.section_hero.tooltip5')}
-							className="hidden sm:flex absolute right-[5%] top-[35%] md:top-[50%] md:right-[15%]"
-						/>
-						<PlaceTooltip
-							label={t('page_home.section_hero.tooltip6')}
-							className="absolute right-[15%] top-[65%] sm:top-[60%] md:top-[80%] sm:right-[30%] md:right-[25%]"
-						/>
-						<Image
-							alt="Explore locations"
-							className="hidden sm:block"
-							src={headerImage}
-							sizes="100vw"
-							priority
-							style={{
-								width: '80%',
-								height: 'auto',
-								marginLeft: 'auto',
-								marginRight: 'auto',
-							}}
-						/>
-						<Image
-							alt="Explore locations"
-							className="block sm:hidden"
-							src={headerImageMobile}
-							sizes="100vw"
-							style={{
-								width: '80%',
-								height: 'auto',
-								marginLeft: 'auto',
-								marginRight: 'auto',
-							}}
-						/>
-					</div>
+				</div>
+				<div className="absolute h-[50%] bottom-12 left-0 right-0">
+					<PlaceTooltip
+						label={t('page_home.section_hero.tooltip1')}
+						className="absolute hidden lg:flex top-[10%] lg:left-[15%] xl:left-[20%] animate-[bounce_1.5s_infinite]"
+					/>
+					<PlaceTooltip
+						label={t('page_home.section_hero.tooltip4')}
+						className="absolute hidden lg:flex top-[10%] lg:right-[15%] xl:right-[15%] animate-[bounce_1.5s_infinite] [animation-delay:1.7s]"
+					/>
+
+					<PlaceTooltip
+						label={t('page_home.section_hero.tooltip2')}
+						className="absolute hidden sm:flex top-[85%] sm:top-[40%] md:top-[50%] left-[2%] sm:left-[5%] md:left-[10%] animate-[bounce_1.5s_infinite] [animation-delay:0.9s]"
+					/>
+					<PlaceTooltip
+						label={t('page_home.section_hero.tooltip5')}
+						className="absolute hidden sm:flex top-[85%] sm:top-[40%] md:top-[50%] right-[2%] sm:right-[5%] md:right-[10%] animate-[bounce_1.5s_infinite] [animation-delay:2.5s]"
+					/>
+
+					<PlaceTooltip
+						label={t('page_home.section_hero.tooltip3')}
+						className="absolute hidden sm:flex top-[85%] sm:top-[75%] md:top-[80%] left-[25%] sm:left-[20%] md:left-[25%] animate-[bounce_1.5s_infinite] [animation-delay:1.1s]"
+					/>
+					<PlaceTooltip
+						label={t('page_home.section_hero.tooltip6')}
+						className="absolute hidden sm:flex top-[85%] sm:top-[75%] md:top-[80%] right-[25%] sm:right-[20%] md:right-[25%] animate-[bounce_1.5s_infinite] [animation-delay:0.2s]"
+					/>
 				</div>
 			</section>
 			<section
