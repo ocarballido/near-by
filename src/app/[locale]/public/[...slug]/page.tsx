@@ -6,6 +6,7 @@ import { getPublicSidebarData } from '@/utils/get-public-sidebar-data';
 import { EditPublicMenuProvider } from '@/lib/context/EditPublicMenuContext';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 import ItineraryForm from '@/components/organisms/form/custom-plan';
+import { getTranslations } from 'next-intl/server';
 
 import { trackEvent } from '@/lib/analytics/mixpanel';
 import type { Database, TablesInsert } from '@/lib/types';
@@ -15,6 +16,7 @@ import { fetchPropertyBase } from './_data';
 import WelcomeSection from './WelcomeSection';
 import SubcategorySection from './SubcategorySection';
 import PublicAppBar from '@/components/organisms/public-appbar';
+import { getDisplayZoneFromString } from '@/utils/get-zone';
 
 type PageMode = 'welcome' | 'custom-plans' | 'subcategory';
 
@@ -35,21 +37,32 @@ interface PageProps {
 export async function generateMetadata({
 	params,
 }: GenerateMetadataProps): Promise<Metadata> {
-	const { slug } = await params;
+	const { slug, locale } = await params;
 	const [propertyId] = slug;
 
+	const t = await getTranslations({ locale, namespace: 'Property' });
 	const { property } = await fetchPropertyBase(propertyId);
 
 	const ogImage =
 		property.image_url ?? '/static/img/default-property-2x.webp';
+	const description = t('meta_description', { name: property.name });
+
+	const localeMap: Record<string, string> = {
+		es: 'es_ES',
+		en: 'en_US',
+		fr: 'fr_FR',
+	};
+
+	const ogLocale = localeMap[locale] ?? `${locale}_${locale.toUpperCase()}`;
 
 	return {
 		title: property.name,
-		description: property.address ?? 'Guía de alojamiento',
+		description,
+		metadataBase: new URL('https://bnbexplorer.com'),
 		openGraph: {
 			title: property.name,
-			description: property.address ?? 'Guía de alojamiento',
-			url: `https://bnbexplorer.com/public/${propertyId}/welcome/highlights`,
+			description,
+			url: `https://bnbexplorer.com/${locale}/public/${propertyId}/welcome/highlights`,
 			siteName: 'BNBexplorer',
 			images: [
 				{
@@ -59,12 +72,13 @@ export async function generateMetadata({
 					alt: property.name,
 				},
 			],
+			locale: ogLocale,
 			type: 'article',
 		},
 		twitter: {
 			card: 'summary_large_image',
 			title: property.name,
-			description: property.address ?? 'Guía de alojamiento',
+			description,
 			images: [ogImage],
 		},
 	};
@@ -112,7 +126,7 @@ export default async function Property({ params }: PageProps) {
 		<EditPublicMenuProvider initialData={sidebarData}>
 			<PublicAppBar />
 			<PublicContentTemplate
-				address={property.address}
+				address={getDisplayZoneFromString(property.address)}
 				propertyId={propertyId}
 				categoryId={categoryId}
 				subCategoryId={subCategoryId}

@@ -367,7 +367,6 @@ const AddPlaceForm = ({
 					countryCodes={['es']}
 					error={Boolean(errors.address)}
 					helperTextIdle={t('addressHelperIdle')}
-					helperTextSelected={t('addressHelperSelected')}
 					helperTextError={t('addressHelperError')}
 					onSelect={handleSelectAddress}
 					onClearSelection={clearSelection}

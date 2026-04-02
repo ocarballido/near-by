@@ -14,16 +14,17 @@ interface GenerateMetadataProps {
 export async function generateMetadata({
 	params,
 }: GenerateMetadataProps): Promise<Metadata> {
-	const t = await getTranslations();
-
 	const { locale } = await params;
+
+	const t = await getTranslations({ locale });
 
 	const localeMap: Record<string, string> = {
 		es: 'es_ES',
 		en: 'en_US',
+		fr: 'fr_FR',
 	};
 
-	const ogLocale = localeMap[locale] || `${locale}_${locale.toUpperCase()}`;
+	const ogLocale = localeMap[locale] ?? `${locale}_${locale.toUpperCase()}`;
 
 	return {
 		title: t('meta title'),
@@ -33,7 +34,7 @@ export async function generateMetadata({
 		openGraph: {
 			title: t('meta title'),
 			description: t('meta description'),
-			url: `/${locale}`,
+			url: `https://bnbexplorer.com/${locale}`,
 			siteName: 'BNBexplorer',
 			images: [
 				{

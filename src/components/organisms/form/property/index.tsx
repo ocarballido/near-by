@@ -428,7 +428,6 @@ const AddPropertyForm = ({ propertyId, initialValues }: Props) => {
 					isEdit={isEdit}
 					error={Boolean(errors.address)}
 					helperTextIdle={t('addressHelperIdle')}
-					helperTextSelected={t('addressHelperSelected')}
 					helperTextError={t('addressHelperError')}
 					onSelect={handleSelectAddress}
 					onClearSelection={clearSelection}
@@ -443,6 +442,10 @@ const AddPropertyForm = ({ propertyId, initialValues }: Props) => {
 					latRegisterProps={register('latitude')}
 					lngRegisterProps={register('longitude')}
 				/>
+
+				<div className="rounded-lg bg-primary-100 p-4 text-sm text-primary-800 font-medium">
+					{t('address_hint')}
+				</div>
 
 				<div className="flex gap-1 p-1 rounded-full bg-gray-200 -mb-1">
 					<Button
