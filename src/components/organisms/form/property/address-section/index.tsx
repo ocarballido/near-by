@@ -15,7 +15,7 @@ type Props = {
 	// Create mode widgets
 	error: boolean;
 	helperTextIdle: string;
-	helperTextSelected: string;
+	helperTextSelected?: string;
 	helperTextError: string;
 
 	onSelect: (p: SelectedPlace) => void;
@@ -36,7 +36,7 @@ export default function AddressSection({
 	isEdit,
 	error,
 	helperTextIdle,
-	helperTextSelected,
+	helperTextSelected = '',
 	helperTextError,
 	onSelect,
 	onClearSelection,

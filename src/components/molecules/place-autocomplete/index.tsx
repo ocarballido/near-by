@@ -20,7 +20,7 @@ type Props = {
 	countryCodes?: string[];
 	error?: boolean;
 	helperTextIdle: string;
-	helperTextSelected: string;
+	helperTextSelected?: string;
 	helperTextError?: string;
 	onSelect: (place: SelectedPlace) => void;
 	onClearSelection?: () => void;

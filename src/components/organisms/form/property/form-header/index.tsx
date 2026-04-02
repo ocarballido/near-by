@@ -58,6 +58,9 @@ export default function PropertyFormHeader({
 					primaryButtonLabel={primaryButtonLabel}
 					size="max-w-3xl"
 				>
+					<div className="rounded-lg bg-primary-100 p-4 text-sm text-primary-800 font-medium text-left">
+						{t('address_hint')}
+					</div>
 					<div className="flex flex-wrap max-w-[1000px]">
 						{tips.map((tip) => (
 							<div

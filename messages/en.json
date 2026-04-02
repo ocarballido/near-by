@@ -941,5 +941,9 @@
 	"visitsThisWeek": "This week",
 	"visitsLastWeek": "Last week",
 	"visitsTwoWeeksAgo": "Two weeks ago",
-	"propertiesStatusTitle": "Your properties status"
+	"propertiesStatusTitle": "Your properties status",
+	"address_hint": "📍 Your exact address is never shown on your public page. We only use it for the 'How to get there' button and to suggest nearby places.",
+	"Property": {
+		"meta_description": "Access the {name} accommodation guide"
+	}
 }
