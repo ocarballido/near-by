@@ -949,5 +949,10 @@
 	"address_hint": "📍 Tu dirección exacta no se muestra en tu página pública. Solo la usamos para el botón 'Cómo llegar' y para sugerirte lugares cercanos.",
 	"Property": {
 		"meta_description": "Accede a la guía de alojamiento de {name}"
+	},
+	"dashboardPropertyTip": {
+		"emoji": "📍 ",
+		"title": "Añade más lugares",
+		"description": "Cuantos más lugares añadas, más valorarán tu propiedad los inquilinos. Gimnasios, transporte, parques, ocio nocturno… ¡cada detalle cuenta!"
 	}
 }

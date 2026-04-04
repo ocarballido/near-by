@@ -7,6 +7,9 @@ import PropertyNameTitle from '@/components/atoms/property-name-title';
 import PropertyDataBoard from '@/components/molecules/property-data-board';
 import { PropertyDataBySubCategory } from '@/components/templates/property-data';
 
+import { getPropertySubCategoryCounts } from '@/utils/get-property-subcategory-counts';
+import PropertyCountsBootstrap from '@/components/providers/PropertyCountsBootstrap';
+
 import type { Tables } from '@/lib/types';
 
 type FullProperty = Tables<'properties'>;
@@ -70,10 +73,17 @@ export default async function Property({ params }: PageProps) {
 		.single()
 		.overrideTypes<SubCategoryForPage, { merge: false }>();
 
+	const countsPromise = getPropertySubCategoryCounts(propertyId);
+
 	const [
 		{ data: propertyData, error: propertyDataErr },
 		{ data: subCategory, error: subCategoryErr },
-	] = await Promise.all([propertyDataPromise, subCategoryPromise]);
+		counts,
+	] = await Promise.all([
+		propertyDataPromise,
+		subCategoryPromise,
+		countsPromise,
+	]);
 
 	if (propertyDataErr || subCategoryErr || !subCategory) notFound();
 
@@ -91,6 +101,7 @@ export default async function Property({ params }: PageProps) {
 			subcategoryGroupId={subCategoryId}
 			propertyId={propertyId}
 		>
+			<PropertyCountsBootstrap counts={counts} />
 			<PropertyDataBoard
 				propertyName={property.name}
 				propertyAddress={property.address}

@@ -11,6 +11,7 @@ type GroupItemProps = {
 	deleatable?: boolean;
 	editeable?: boolean;
 	label: string;
+	count?: number;
 	onClick?: React.MouseEventHandler<HTMLDivElement>;
 	handleEdit?: React.MouseEventHandler<HTMLButtonElement>;
 	handleDelete?: React.MouseEventHandler<HTMLButtonElement>;
@@ -21,6 +22,7 @@ const GroupItem = ({
 	deleatable = false,
 	editeable = false,
 	label,
+	count,
 	onClick,
 	handleEdit,
 	handleDelete,
@@ -34,7 +36,14 @@ const GroupItem = ({
 			className={`rounded-md w-full transition-all flex items-center justify-between hover:bg-[#f3f3f3] hover:cursor-pointer disabled:pointer-events-none font-medium py-2 px-4 min-h-14 ${buttonStyles}`}
 			onClick={onClick}
 		>
-			{label}
+			<span className="flex items-center gap-3 justify-between w-full">
+				{label}
+				{count !== undefined && (
+					<span className="text-xs font-semibold text-primary-600 tabular-nums py-1 px-2 rounded-full bg-primary-100">
+						{count}
+					</span>
+				)}
+			</span>
 			<div className="flex items-center justify-center">
 				{deleatable && (
 					<ButtonIcon

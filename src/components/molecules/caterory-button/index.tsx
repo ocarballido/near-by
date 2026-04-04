@@ -7,6 +7,7 @@ type CategoryButtonProps = {
 	open?: boolean;
 	icon: React.ReactNode;
 	name: string;
+	hasContent?: boolean;
 	onClick?: React.MouseEventHandler<HTMLDivElement>;
 };
 
@@ -14,6 +15,7 @@ const CategoryButton = ({
 	open = false,
 	icon,
 	name,
+	hasContent,
 	onClick,
 }: CategoryButtonProps) => {
 	const buttonStyles = clsx({
@@ -38,6 +40,14 @@ const CategoryButton = ({
 				/>
 				{name}
 			</div>
+			{hasContent !== undefined && (
+				<span
+					className={clsx(
+						'w-1.5 h-1.5 rounded-full mr-2',
+						hasContent ? 'bg-green-500' : 'bg-gray-300',
+					)}
+				/>
+			)}
 			<div className={`transition-all ${arrowStyles}`}>
 				<IconKeyboardArrowDown />
 			</div>
