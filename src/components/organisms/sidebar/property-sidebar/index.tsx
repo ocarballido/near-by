@@ -53,10 +53,8 @@ const PropertySidebar = ({
 	subCategoryId,
 }: PropertySidebarProps) => {
 	const t = useTranslations();
-
-	const { sidebarData } = useSidebarData();
+	const { sidebarData, subCategoryCounts } = useSidebarData();
 	const { closeSidebar } = useSidebar();
-
 	const router = useRouter();
 
 	return (
@@ -66,11 +64,16 @@ const PropertySidebar = ({
 					const iconName = category.icon as IconName;
 					const IconComponent = ICON_COMPONENTS[iconName];
 
+					const hasContent = category.sub_categories.some(
+						(sub) => (subCategoryCounts[sub.id] ?? 0) > 0,
+					);
+
 					return (
 						<CategoryAccordion
 							key={category.name}
 							open={category.id === categoryId}
 							name={t(category.name)}
+							hasContent={hasContent}
 							onClick={() => {
 								closeSidebar();
 								router.push(
@@ -80,10 +83,13 @@ const PropertySidebar = ({
 							icon={<IconComponent />}
 						>
 							{category.sub_categories.map((subcategory) => {
+								const count =
+									subCategoryCounts[subcategory.id] ?? 0;
 								return (
 									<GroupItem
 										key={subcategory.id}
 										label={t(subcategory.name)}
+										count={count}
 										active={
 											subcategory.id === subCategoryId
 										}

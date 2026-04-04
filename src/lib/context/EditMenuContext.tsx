@@ -1,13 +1,6 @@
 'use client';
 
-import {
-	createContext,
-	useContext,
-	useState,
-	// useEffect
-} from 'react';
-// import { usePathname } from 'next/navigation';
-
+import { createContext, useContext, useState } from 'react';
 import { CategoryWithSubCategories } from '@/types/db';
 
 type EditMenuContextType = {
@@ -22,6 +15,10 @@ type EditMenuContextType = {
 	activeSubCategoryName: string | null;
 	setActiveSubCategoryName: (name: string | null) => void;
 	resetSidebarState: () => void;
+	subCategoryCounts: Record<string, number>;
+	setSubCategoryCounts: (counts: Record<string, number>) => void;
+	incrementCount: (subCategoryId: string) => void;
+	decrementCount: (subCategoryId: string) => void;
 };
 
 const EditMenuContext = createContext<EditMenuContextType | undefined>(
@@ -31,12 +28,12 @@ const EditMenuContext = createContext<EditMenuContextType | undefined>(
 export const EditMenuProvider = ({
 	children,
 	initialData,
+	initialCounts = {},
 }: {
 	children: React.ReactNode;
 	initialData: CategoryWithSubCategories[];
+	initialCounts?: Record<string, number>;
 }) => {
-	// const pathname = usePathname();
-
 	const [sidebarData, setSidebarData] = useState(initialData);
 	const [activeCategoryId, setActiveCategoryId] = useState<string | null>(
 		null,
@@ -50,6 +47,8 @@ export const EditMenuProvider = ({
 	const [activeSubCategoryName, setActiveSubCategoryName] = useState<
 		string | null
 	>(null);
+	const [subCategoryCounts, setSubCategoryCounts] =
+		useState<Record<string, number>>(initialCounts);
 
 	const resetSidebarState = () => {
 		setActiveCategoryId(null);
@@ -58,21 +57,19 @@ export const EditMenuProvider = ({
 		setActiveSubCategoryName(null);
 	};
 
-	// useEffect(() => {
-	// 	const allowedPrefixes = [
-	// 		'/app/info/',
-	// 		'/app/location/',
-	// 		'/app/magic-finder/',
-	// 	];
+	const incrementCount = (subCategoryId: string) => {
+		setSubCategoryCounts((prev) => ({
+			...prev,
+			[subCategoryId]: (prev[subCategoryId] ?? 0) + 1,
+		}));
+	};
 
-	// 	const shouldKeepState = allowedPrefixes.some((prefix) =>
-	// 		pathname.includes(prefix)
-	// 	);
-
-	// 	if (!shouldKeepState) {
-	// 		resetSidebarState();
-	// 	}
-	// }, [pathname]);
+	const decrementCount = (subCategoryId: string) => {
+		setSubCategoryCounts((prev) => ({
+			...prev,
+			[subCategoryId]: Math.max(0, (prev[subCategoryId] ?? 0) - 1),
+		}));
+	};
 
 	return (
 		<EditMenuContext.Provider
@@ -88,6 +85,10 @@ export const EditMenuProvider = ({
 				activeSubCategoryName,
 				setActiveSubCategoryName,
 				resetSidebarState,
+				subCategoryCounts,
+				setSubCategoryCounts,
+				incrementCount,
+				decrementCount,
 			}}
 		>
 			{children}

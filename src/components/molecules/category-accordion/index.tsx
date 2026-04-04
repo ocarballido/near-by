@@ -8,6 +8,7 @@ type CategoryAccordionProps = {
 	icon: React.ReactNode;
 	name: string;
 	open: boolean;
+	hasContent?: boolean;
 	href?: string;
 	onClick?: () => void;
 };
@@ -17,6 +18,7 @@ const CategoryAccordion = ({
 	icon,
 	name,
 	open,
+	hasContent,
 	onClick,
 }: CategoryAccordionProps) => {
 	const buttonStyles = clsx(
@@ -34,6 +36,7 @@ const CategoryAccordion = ({
 				name={name}
 				icon={icon}
 				open={open}
+				hasContent={hasContent}
 				onClick={onClick}
 			/>
 			<CategoryBody open={open}>{children}</CategoryBody>
