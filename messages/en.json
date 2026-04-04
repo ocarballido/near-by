@@ -945,5 +945,10 @@
 	"address_hint": "📍 Your exact address is never shown on your public page. We only use it for the 'How to get there' button and to suggest nearby places.",
 	"Property": {
 		"meta_description": "Access the {name} accommodation guide"
+	},
+	"dashboardPropertyTip": {
+		"emoji": "📍 ",
+		"title": "Add more places",
+		"description": "The more places you add, the more guests will appreciate your property. Gyms, transport, parks, nightlife… every detail counts!"
 	}
 }

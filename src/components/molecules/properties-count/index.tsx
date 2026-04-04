@@ -20,12 +20,12 @@ const PropertiesCount = async ({ totalCount }: Props) => {
 			<div className="relative">
 				<Image
 					alt="Add property"
-					src="/static/img/star-white.svg"
+					src="/static/img/star-gradient.svg"
 					height={120}
 					width={120}
 				/>
 				<div className="absolute top-[50%] w-full -translate-y-4 font-bold text-3xl text-primary-400 text-center">
-					<Typography component="h3" size="lg">
+					<Typography component="h3" size="lg" color="text-white">
 						{totalCount}
 					</Typography>
 				</div>
