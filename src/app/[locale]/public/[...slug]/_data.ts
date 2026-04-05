@@ -8,6 +8,11 @@ type FullProperty = Tables<'properties'>;
 type PropertyDataRow = Tables<'property_data'>;
 type CategoryTypeOnly = Pick<Tables<'categories'>, 'type'>;
 type SubcatMini = Pick<Tables<'sub_categories'>, 'id' | 'name'>;
+type SubcatMiniWithOrder = {
+	id: string;
+	name: string;
+	order_index: number | null;
+};
 
 export const PROPERTY_DATA_SELECT =
 	'id, name, description, image_url, type, latitude, longitude, featured, must_visit, address, sub_category_id';
@@ -29,6 +34,18 @@ export type HighlightGroup = {
 	sub_category_id: string;
 	sub_category_name: string;
 	items: ReturnType<typeof toPublicItem>[];
+};
+
+export type InfoGroup = {
+	sub_category_id: string;
+	sub_category_name: string;
+	description: string;
+	order: number;
+};
+
+type InfoRow = {
+	description: string | null;
+	sub_category_id: string | null;
 };
 
 export async function fetchPropertyBase(propertyId: string) {
@@ -183,4 +200,56 @@ export async function fetchWelcomeHighlightsTabsData(
 		featuredGroups: groupBySubcategory(featuredItems, subCategoryMap),
 		mustVisitGroups: groupBySubcategory(mustVisitItems, subCategoryMap),
 	};
+}
+
+export async function fetchInfoSectionsData(
+	propertyId: string,
+): Promise<InfoGroup[]> {
+	const supabase = await createServerAdminClient();
+
+	const { data: items, error } = await supabase
+		.from('property_data')
+		.select('description, sub_category_id')
+		.eq('property_id', propertyId)
+		.eq('type', 'info')
+		.overrideTypes<InfoRow[], { merge: false }>();
+
+	if (error || !items || items.length === 0) return [];
+
+	const validItems = items.filter(
+		(i): i is { description: string; sub_category_id: string } =>
+			typeof i.description === 'string' &&
+			i.description.trim().length > 0 &&
+			typeof i.sub_category_id === 'string' &&
+			i.sub_category_id.length > 0,
+	);
+
+	if (validItems.length === 0) return [];
+
+	const subCategoryIds = validItems.map((i) => i.sub_category_id);
+
+	const { data: subCats, error: subError } = await supabase
+		.from('sub_categories')
+		.select('id, name, order_index')
+		.in('id', subCategoryIds)
+		.overrideTypes<SubcatMiniWithOrder[], { merge: false }>();
+
+	if (subError || !subCats) return [];
+
+	const nameMap: Record<string, string> = Object.fromEntries(
+		subCats.map((s) => [s.id, s.name]),
+	);
+
+	const orderMap: Record<string, number> = Object.fromEntries(
+		subCats.map((s) => [s.id, s.order_index ?? 999]),
+	);
+
+	return validItems
+		.map((i) => ({
+			sub_category_id: i.sub_category_id,
+			sub_category_name: nameMap[i.sub_category_id] ?? '',
+			description: i.description,
+			order: orderMap[i.sub_category_id],
+		}))
+		.sort((a, b) => a.order - b.order);
 }

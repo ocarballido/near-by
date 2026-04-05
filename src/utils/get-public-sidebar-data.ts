@@ -46,8 +46,8 @@ export async function getPublicSidebarData(
 	// 1. Obtener todas las categorías ordenadas
 	const { data: categories, error: catError } = await supabase
 		.from('categories')
-		// ✅ incluimos type porque tu PublicCategory lo exige
 		.select('id, name, icon, order_index, type')
+		.eq('type', 'location')
 		.order('order_index', { ascending: true })
 		.overrideTypes<CategoryLite[], { merge: false }>();
 

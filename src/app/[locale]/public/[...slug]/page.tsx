@@ -12,13 +12,18 @@ import { trackEvent } from '@/lib/analytics/mixpanel';
 import type { Database, TablesInsert } from '@/lib/types';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
-import { fetchPropertyBase } from './_data';
+import { fetchPropertyBase, fetchInfoSectionsData } from './_data';
 import WelcomeSection from './WelcomeSection';
 import SubcategorySection from './SubcategorySection';
 import PublicAppBar from '@/components/organisms/public-appbar';
+import LodgingSection from './LodgingSection';
 import { getDisplayZoneFromString } from '@/utils/get-zone';
+import { CATEGORIES_SUB_CATEGORIES } from '@/config/config-constants';
+import PublicInfoContentBootstrap from '@/components/providers/PublicInfoContentBootstrap';
+import PublicCountsBootstrap from '@/components/providers/PublicCountsBootstrap';
+import { getPropertySubCategoryCounts } from '@/utils/get-property-subcategory-counts';
 
-type PageMode = 'welcome' | 'custom-plans' | 'subcategory';
+type PageMode = 'welcome' | 'custom-plans' | 'subcategory' | 'lodging';
 
 interface GenerateMetadataProps {
 	params: Promise<{ locale: string; slug: string[] }>;
@@ -27,11 +32,13 @@ interface GenerateMetadataProps {
 const getMode = (categoryId?: string): PageMode => {
 	if (categoryId === 'welcome') return 'welcome';
 	if (categoryId === 'custom-plans') return 'custom-plans';
+	if (categoryId === CATEGORIES_SUB_CATEGORIES.LODGING.id) return 'lodging';
 	return 'subcategory';
 };
 
 interface PageProps {
 	params: Promise<{ locale: string; slug: string[] }>;
+	searchParams?: Promise<{ open?: string }>;
 }
 
 export async function generateMetadata({
@@ -84,11 +91,12 @@ export async function generateMetadata({
 	};
 }
 
-export default async function Property({ params }: PageProps) {
+export default async function Property({ params, searchParams }: PageProps) {
 	const cookieStore = await cookies();
 	const anonId = cookieStore.get('be_anon_id')?.value ?? 'anon-missing';
 
 	const { slug, locale } = await params;
+	const { open } = (await searchParams) ?? {};
 	const [propertyId, categoryId, subCategoryId] = slug;
 
 	// Analytics: no bloqueamos render si falla
@@ -116,15 +124,23 @@ export default async function Property({ params }: PageProps) {
 		}
 	}
 
-	// Shared data
-	const sidebarData = await getPublicSidebarData(propertyId);
-	const { property, lat, lng } = await fetchPropertyBase(propertyId);
+	// Shared data — en paralelo
+	const [sidebarData, { property, lat, lng }, infoGroups, counts] =
+		await Promise.all([
+			getPublicSidebarData(propertyId),
+			fetchPropertyBase(propertyId),
+			fetchInfoSectionsData(propertyId),
+			getPropertySubCategoryCounts(propertyId),
+		]);
 
+	const hasInfoContent = infoGroups.length > 0;
 	const mode = getMode(categoryId);
 
 	return (
 		<EditPublicMenuProvider initialData={sidebarData}>
 			<PublicAppBar />
+			<PublicInfoContentBootstrap hasInfoContent={hasInfoContent} />
+			<PublicCountsBootstrap counts={counts} />
 			<PublicContentTemplate
 				address={getDisplayZoneFromString(property.address)}
 				propertyId={propertyId}
@@ -159,6 +175,13 @@ export default async function Property({ params }: PageProps) {
 							subCategoryId={subCategoryId}
 							lat={lat}
 							lng={lng}
+						/>
+					)}
+
+					{mode === 'lodging' && (
+						<LodgingSection
+							propertyId={propertyId}
+							defaultOpenId={open}
 						/>
 					)}
 				</div>

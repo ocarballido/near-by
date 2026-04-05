@@ -30,19 +30,10 @@ export function PropertyDataPublicBySubCategory({
 	lng: number;
 }) {
 	return (
-		<>
-			{type === 'info' ? (
-				<PropertyInfoContent
-					infos={propertyData}
-					sub_category_name={sub_category_name}
-				/>
-			) : (
-				<PublicLocationContent
-					locations={propertyData}
-					categoryId={categoryId}
-					sub_category_name={sub_category_name}
-				/>
-			)}
-		</>
+		<PublicLocationContent
+			locations={propertyData}
+			categoryId={categoryId}
+			sub_category_name={sub_category_name}
+		/>
 	);
 }

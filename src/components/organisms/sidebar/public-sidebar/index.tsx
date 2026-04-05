@@ -29,6 +29,8 @@ import IconHome from '@/components/atoms/icon/home';
 import IconMap from '@/components/atoms/icon/map';
 import HousePublic from '@/components/molecules/card/house-public';
 
+import { CATEGORIES_SUB_CATEGORIES } from '@/config/config-constants';
+
 const ICON_COMPONENTS = {
 	IconHealing,
 	IconForkSpoon,
@@ -88,7 +90,12 @@ const PublicSidebar = ({
 		{ '-translate-x-full': !isOpen },
 	);
 
-	const { sidebarData, setActiveSubCategoryType } = usePublicSidebarData();
+	const {
+		sidebarData,
+		setActiveSubCategoryType,
+		hasInfoContent,
+		subCategoryCounts,
+	} = usePublicSidebarData();
 
 	return (
 		<>
@@ -136,6 +143,37 @@ const PublicSidebar = ({
 						}}
 					/>
 				</CategoryAccordion>
+
+				{hasInfoContent && (
+					<CategoryAccordion
+						open={
+							categoryId === CATEGORIES_SUB_CATEGORIES.LODGING.id
+						}
+						name={t('El Alojamiento')}
+						onClick={() => {
+							closeSidebar();
+							router.push(
+								`/public/${propertyId}/${CATEGORIES_SUB_CATEGORIES.LODGING.id}/info`,
+							);
+						}}
+						icon={<IconApartment />}
+					>
+						<GroupItem
+							label={t('El Alojamiento')}
+							active={
+								categoryId ===
+								CATEGORIES_SUB_CATEGORIES.LODGING.id
+							}
+							onClick={() => {
+								closeSidebar();
+								router.push(
+									`/public/${propertyId}/${CATEGORIES_SUB_CATEGORIES.LODGING.id}/info`,
+								);
+							}}
+						/>
+					</CategoryAccordion>
+				)}
+
 				{sidebarData &&
 					sidebarData.map((category) => {
 						const iconName = category.icon as IconName;
@@ -156,10 +194,13 @@ const PublicSidebar = ({
 								icon={<IconComponent />}
 							>
 								{category.sub_categories.map((subcategory) => {
+									const count =
+										subCategoryCounts[subcategory.id] ?? 0;
 									return (
 										<GroupItem
 											key={subcategory.id}
 											label={t(subcategory.name)}
+											count={count}
 											active={
 												subcategory.id === subCategoryId
 											}
