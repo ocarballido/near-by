@@ -18,6 +18,8 @@ type EditPublicMenuContextType = {
 	resetSidebarState: () => void;
 	hasInfoContent: boolean;
 	setHasInfoContent: (value: boolean) => void;
+	subCategoryCounts: Record<string, number>;
+	setSubCategoryCounts: (counts: Record<string, number>) => void;
 };
 
 const EditPublicMenuContext = createContext<
@@ -45,6 +47,9 @@ export const EditPublicMenuProvider = ({
 		string | null
 	>(null);
 	const [hasInfoContent, setHasInfoContent] = useState(false);
+	const [subCategoryCounts, setSubCategoryCounts] = useState<
+		Record<string, number>
+	>({});
 
 	const resetSidebarState = () => {
 		setActiveCategoryId(null);
@@ -69,6 +74,8 @@ export const EditPublicMenuProvider = ({
 				resetSidebarState,
 				hasInfoContent,
 				setHasInfoContent,
+				subCategoryCounts,
+				setSubCategoryCounts,
 			}}
 		>
 			{children}

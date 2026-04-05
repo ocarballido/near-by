@@ -90,8 +90,12 @@ const PublicSidebar = ({
 		{ '-translate-x-full': !isOpen },
 	);
 
-	const { sidebarData, setActiveSubCategoryType, hasInfoContent } =
-		usePublicSidebarData();
+	const {
+		sidebarData,
+		setActiveSubCategoryType,
+		hasInfoContent,
+		subCategoryCounts,
+	} = usePublicSidebarData();
 
 	return (
 		<>
@@ -190,10 +194,13 @@ const PublicSidebar = ({
 								icon={<IconComponent />}
 							>
 								{category.sub_categories.map((subcategory) => {
+									const count =
+										subCategoryCounts[subcategory.id] ?? 0;
 									return (
 										<GroupItem
 											key={subcategory.id}
 											label={t(subcategory.name)}
+											count={count}
 											active={
 												subcategory.id === subCategoryId
 											}

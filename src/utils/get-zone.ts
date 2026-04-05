@@ -1,6 +1,5 @@
 export function getDisplayZoneFromString(address: string | null): string {
 	if (!address) return '';
-	console.log('// ', address);
 
 	const parts = address.split(',').map((p) => p.trim());
 

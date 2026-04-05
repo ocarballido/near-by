@@ -12,16 +12,16 @@ import { trackEvent } from '@/lib/analytics/mixpanel';
 import type { Database, TablesInsert } from '@/lib/types';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
-import { fetchPropertyBase } from './_data';
+import { fetchPropertyBase, fetchInfoSectionsData } from './_data';
 import WelcomeSection from './WelcomeSection';
 import SubcategorySection from './SubcategorySection';
 import PublicAppBar from '@/components/organisms/public-appbar';
 import LodgingSection from './LodgingSection';
 import { getDisplayZoneFromString } from '@/utils/get-zone';
-
 import { CATEGORIES_SUB_CATEGORIES } from '@/config/config-constants';
-import { fetchInfoSectionsData } from './_data';
 import PublicInfoContentBootstrap from '@/components/providers/PublicInfoContentBootstrap';
+import PublicCountsBootstrap from '@/components/providers/PublicCountsBootstrap';
+import { getPropertySubCategoryCounts } from '@/utils/get-property-subcategory-counts';
 
 type PageMode = 'welcome' | 'custom-plans' | 'subcategory' | 'lodging';
 
@@ -124,19 +124,23 @@ export default async function Property({ params, searchParams }: PageProps) {
 		}
 	}
 
-	// Shared data
-	const sidebarData = await getPublicSidebarData(propertyId);
-	const { property, lat, lng } = await fetchPropertyBase(propertyId);
+	// Shared data — en paralelo
+	const [sidebarData, { property, lat, lng }, infoGroups, counts] =
+		await Promise.all([
+			getPublicSidebarData(propertyId),
+			fetchPropertyBase(propertyId),
+			fetchInfoSectionsData(propertyId),
+			getPropertySubCategoryCounts(propertyId),
+		]);
 
-	const infoGroups = await fetchInfoSectionsData(propertyId);
 	const hasInfoContent = infoGroups.length > 0;
-
 	const mode = getMode(categoryId);
 
 	return (
 		<EditPublicMenuProvider initialData={sidebarData}>
 			<PublicAppBar />
 			<PublicInfoContentBootstrap hasInfoContent={hasInfoContent} />
+			<PublicCountsBootstrap counts={counts} />
 			<PublicContentTemplate
 				address={getDisplayZoneFromString(property.address)}
 				propertyId={propertyId}
