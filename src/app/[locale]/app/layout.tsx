@@ -15,9 +15,12 @@ import { resolvePaywallBehavior } from '@/lib/paywall/resolvePaywallBehavior';
 
 export default async function Layout({
 	children,
+	params,
 }: {
 	children: React.ReactNode;
+	params: Promise<{ locale: string }>;
 }) {
+	const { locale } = await params;
 	const categories = await getSidebarData();
 
 	const ssrClient = await createSSRClient();
@@ -28,6 +31,13 @@ export default async function Layout({
 	if (error || !user) redirect('/auth/login');
 
 	const supabase = await createServerAdminClient();
+
+	// Update silencioso del locale
+	await supabase
+		.from('profiles')
+		.update({ locale } as never)
+		.eq('user_id', user.id);
+
 	const { count } = await supabase
 		.from('properties')
 		.select('*', { count: 'exact', head: true })

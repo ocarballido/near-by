@@ -601,7 +601,12 @@ Deno.serve(async (req: Request) => {
 				visit_count: p.count,
 			}));
 
-			const locale: Locale = 'es';
+			const locale: Locale =
+				user.locale === 'es' ||
+				user.locale === 'en' ||
+				user.locale === 'fr'
+					? user.locale
+					: 'en';
 			const tip = getSeasonalTip(now, locale);
 
 			const result = await sendWeeklyDigest({
