@@ -262,6 +262,7 @@ export type Database = {
           created_at: string
           email_opt_out: boolean
           full_name: string | null
+          locale: string
           unsubscribe_token: string
           updated_at: string
           user_id: string
@@ -270,6 +271,7 @@ export type Database = {
           created_at?: string
           email_opt_out?: boolean
           full_name?: string | null
+          locale?: string
           unsubscribe_token?: string
           updated_at?: string
           user_id: string
@@ -278,6 +280,7 @@ export type Database = {
           created_at?: string
           email_opt_out?: boolean
           full_name?: string | null
+          locale?: string
           unsubscribe_token?: string
           updated_at?: string
           user_id?: string
@@ -635,6 +638,7 @@ export type Database = {
         Returns: {
           days_since_created: number
           email: string
+          locale: string
           property_id: string
           property_name: string
           user_id: string
@@ -645,6 +649,7 @@ export type Database = {
         Returns: {
           days_since_created: number
           email: string
+          locale: string
           property_id: string
           property_name: string
           user_id: string
@@ -659,12 +664,24 @@ export type Database = {
           week_start: string
         }[]
       }
+      get_users_for_weekly_digest: {
+        Args: never
+        Returns: {
+          email: string
+          frequency: string
+          locale: string
+          property_count: number
+          total_visits: number
+          user_id: string
+        }[]
+      }
       get_users_without_property: {
         Args: { days_offset?: number }
         Returns: {
           days_since_register: number
           email: string
           id: string
+          locale: string
         }[]
       }
     }
