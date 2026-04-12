@@ -1,6 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import TextField from '@/components/molecules/text-field';
+import Button from '@/components/molecules/button';
+import Alert from '@/components/molecules/alert';
 
 const DEFAULT_COMPETITORS = ['TouchStay', 'Hostfully', 'Lodgify'];
 
@@ -12,6 +15,7 @@ const FOCUS_OPTIONS = [
 	'Pricing',
 	'Retención inquilinos',
 	'Integraciones AI',
+	'Marketing',
 ];
 
 const DEFAULT_ACTIVE = [
@@ -78,7 +82,10 @@ export default function CompetitiveAgent() {
 	const [depth, setDepth] = useState(2);
 	const [context, setContext] = useState('');
 	const [history, setHistory] = useState<HistoryEntry[]>([]);
-	const [status, setStatus] = useState<'idle' | 'copied' | 'error'>('idle');
+	const [alert, setAlert] = useState<{
+		type: 'error' | 'success';
+		message: string;
+	} | null>(null);
 
 	useEffect(() => {
 		try {
@@ -124,93 +131,126 @@ export default function CompetitiveAgent() {
 	}
 
 	async function runAgent() {
-		if (competitors.length === 0 || activeAreas.length === 0) return;
+		if (competitors.length === 0) {
+			setAlert({
+				type: 'error',
+				message: 'Añade al menos un competidor antes de lanzar.',
+			});
+			return;
+		}
+		if (activeAreas.length === 0) {
+			setAlert({
+				type: 'error',
+				message: 'Selecciona al menos un área de análisis.',
+			});
+			return;
+		}
+
 		const prompt = buildPrompt(competitors, activeAreas, depth, context);
+
 		try {
 			await navigator.clipboard.writeText(prompt);
-			setStatus('copied');
+			setAlert({
+				type: 'success',
+				message:
+					'Prompt copiado. Ábrelo en Claude y pega con Cmd+V / Ctrl+V.',
+			});
 			saveHistory(competitors, activeAreas);
 			window.open('https://claude.ai/new', '_blank');
-			setTimeout(() => setStatus('idle'), 4000);
 		} catch {
-			setStatus('error');
+			setAlert({
+				type: 'error',
+				message:
+					'No se pudo copiar automáticamente. Inténtalo manualmente.',
+			});
 		}
 	}
 
 	return (
-		<div className="min-h-screen bg-stone-50 px-4 py-10">
-			<div className="mx-auto max-w-2xl">
-				{/* Header */}
-				<div className="mb-8">
-					<h1 className="text-xl font-medium text-stone-900">
-						Agente de inteligencia competitiva
+		<div className="flex justify-center items-center p-6">
+			<div className="bg-white p-2 rounded-xl w-full max-w-[700px] shadow-xs">
+				{alert && (
+					<Alert
+						hideTime={4000}
+						open={alert !== null}
+						title={alert.type === 'error' ? 'Error' : 'Listo'}
+						dismissible
+						type={alert.type}
+						message={alert.message}
+					/>
+				)}
+
+				<div className="p-2 mb-2">
+					<h1 className="text-base font-semibold text-gray-900">
+						Agente competitivo
 					</h1>
-					<p className="mt-1 text-sm text-stone-500">
-						Configura el análisis, pulsa lanzar y pega el prompt en
-						Claude con{' '}
-						<kbd className="rounded border border-stone-200 bg-stone-100 px-1.5 py-0.5 text-xs">
-							⌘V
-						</kbd>
-						.
+					<p className="text-sm text-gray-500 mt-0.5">
+						Configura el análisis y lanza el prompt en Claude.
 					</p>
 				</div>
 
-				<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-					{/* Competitors */}
-					<div className="rounded-xl border border-stone-200 bg-white p-4">
-						<p className="mb-3 text-xs text-stone-400">
+				<div className="flex flex-col gap-4 w-full p-2">
+					{/* Competidores */}
+					<div className="flex flex-col gap-2">
+						<p className="text-sm font-medium text-gray-700">
 							Competidores
 						</p>
-						<div className="mb-3 flex flex-wrap gap-1.5">
+						<div className="flex flex-wrap gap-1.5">
 							{competitors.map((c) => (
 								<span
 									key={c}
-									className="flex items-center gap-1.5 rounded-full border border-stone-200 bg-stone-50 px-3 py-1 text-xs text-stone-600"
+									className="flex items-center gap-1.5 rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-xs text-gray-600"
 								>
 									{c}
 									<button
+										type="button"
 										onClick={() => removeCompetitor(c)}
-										className="text-stone-300 hover:text-red-400 transition-colors"
+										className="text-gray-300 hover:text-red-400 transition-colors leading-none"
 									>
 										×
 									</button>
 								</span>
 							))}
 						</div>
-						<div className="flex gap-2">
-							<input
-								type="text"
-								value={newComp}
-								onChange={(e) => setNewComp(e.target.value)}
-								onKeyDown={(e) =>
-									e.key === 'Enter' && addCompetitor()
-								}
-								placeholder="Añadir competidor..."
-								className="flex-1 rounded-lg border border-stone-200 bg-stone-50 px-3 py-1.5 text-xs text-stone-800 placeholder:text-stone-300 focus:outline-none focus:border-stone-400"
-							/>
-							<button
+						<div className="flex gap-2 items-end">
+							<div className="flex-1">
+								<TextField
+									label="Añadir competidor"
+									placeholder="ej. Guesty, Airbnb..."
+									id="newComp"
+									value={newComp}
+									onChange={(e) => setNewComp(e.target.value)}
+									onKeyDown={(e) => {
+										if (e.key === 'Enter') {
+											e.preventDefault();
+											addCompetitor();
+										}
+									}}
+								/>
+							</div>
+							<Button
+								label="+ Añadir"
+								color="secondary"
 								onClick={addCompetitor}
-								className="rounded-lg border border-stone-200 bg-white px-3 py-1.5 text-xs text-stone-600 hover:bg-stone-50 transition-colors"
-							>
-								+ Añadir
-							</button>
+							/>
 						</div>
 					</div>
 
-					{/* Focus areas */}
-					<div className="rounded-xl border border-stone-200 bg-white p-4">
-						<p className="mb-3 text-xs text-stone-400">
+					{/* Áreas */}
+					<div className="flex flex-col gap-2">
+						<p className="text-sm font-medium text-gray-700">
 							Área de análisis
 						</p>
 						<div className="flex flex-wrap gap-1.5">
 							{FOCUS_OPTIONS.map((area) => (
 								<button
 									key={area}
+									type="button"
 									onClick={() => toggleArea(area)}
 									className={`rounded-full border px-3 py-1 text-xs transition-colors ${
 										activeAreas.includes(area)
-											? 'border-transparent bg-blue-50 text-blue-700'
-											: 'border-stone-200 bg-white text-stone-400 hover:text-stone-600'
+											? 'border-transparent bg-primary-100 text-primary-800 font-medium'
+											: 'border-gray-200 bg-white text-gray-400 hover:text-gray-600'
 									}`}
 								>
 									{area}
@@ -218,87 +258,87 @@ export default function CompetitiveAgent() {
 							))}
 						</div>
 					</div>
-				</div>
 
-				{/* Context */}
-				<div className="mt-3 rounded-xl border border-stone-200 bg-white p-4">
-					<p className="mb-2 text-xs text-stone-400">
-						Contexto de tu app (actualiza si algo cambia)
-					</p>
-					<textarea
-						value={context}
-						onChange={(e) => setContext(e.target.value)}
-						placeholder={DEFAULT_CONTEXT}
-						rows={3}
-						className="w-full resize-none rounded-lg border border-stone-200 bg-stone-50 px-3 py-2 text-xs text-stone-800 placeholder:text-stone-300 focus:outline-none focus:border-stone-400"
-					/>
-				</div>
-
-				{/* Depth */}
-				<div className="mt-3 rounded-xl border border-stone-200 bg-white p-4">
-					<p className="mb-3 text-xs text-stone-400">
-						Profundidad del análisis
-					</p>
-					<div className="flex items-center gap-3">
-						<span className="text-xs text-stone-400">Rápido</span>
-						<input
-							type="range"
-							min={1}
-							max={3}
-							step={1}
-							value={depth}
-							onChange={(e) => setDepth(Number(e.target.value))}
-							className="flex-1 accent-blue-600"
+					{/* Contexto */}
+					<div className="flex flex-col gap-1">
+						<label className="text-sm font-medium text-gray-700">
+							Contexto de tu app
+						</label>
+						<textarea
+							value={context}
+							onChange={(e) => setContext(e.target.value)}
+							placeholder={DEFAULT_CONTEXT}
+							rows={8}
+							className="w-full resize-none rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-800 placeholder:text-gray-300 focus:outline-none focus:border-gray-400 focus:bg-white transition-colors"
 						/>
-						<span className="text-xs text-stone-400">
-							Exhaustivo
-						</span>
-						<span className="min-w-[120px] text-right text-xs font-medium text-stone-700">
-							{DEPTH_LABELS[depth]}
-						</span>
 					</div>
-				</div>
 
-				{/* Run button */}
-				<button
-					onClick={runAgent}
-					disabled={
-						competitors.length === 0 || activeAreas.length === 0
-					}
-					className="mt-4 w-full rounded-xl border border-stone-200 bg-white py-3 text-sm font-medium text-stone-800 transition-colors hover:bg-stone-50 disabled:opacity-40 disabled:cursor-not-allowed"
-				>
-					{status === 'copied'
-						? '✓ Copiado — pega en Claude y envía'
-						: status === 'error'
-							? 'Error al copiar — inténtalo manualmente'
-							: '↗ Lanzar análisis en Claude'}
-				</button>
+					{/* Profundidad — mismo patrón que el toggle dateTimeMode */}
+					<div className="flex flex-col gap-2">
+						<div className="flex items-center justify-between">
+							<p className="text-sm font-medium text-gray-700">
+								Profundidad
+							</p>
+							<span className="text-xs text-gray-500">
+								{DEPTH_LABELS[depth]}
+							</span>
+						</div>
+						<div className="flex gap-1 p-1 rounded-full bg-gray-200">
+							{(
+								['Rápido', 'Equilibrado', 'Exhaustivo'] as const
+							).map((label, i) => (
+								<Button
+									key={label}
+									label={label}
+									className="w-full"
+									color={
+										depth === i + 1 ? 'white' : 'secondary'
+									}
+									onClick={() => setDepth(i + 1)}
+								/>
+							))}
+						</div>
+					</div>
 
-				{/* History */}
-				{history.length > 0 && (
-					<div className="mt-8">
-						<p className="mb-3 text-sm font-medium text-stone-500">
-							Análisis anteriores
-						</p>
-						<div className="flex flex-col gap-2">
+					{/* Hint — mismo patrón que address_hint */}
+					<div className="rounded-lg bg-primary-100 p-4 text-sm text-primary-800 font-medium">
+						Al pulsar lanzar, se copiará el prompt y se abrirá
+						Claude. Pega con <kbd className="font-mono">⌘V</kbd> y
+						envía.
+					</div>
+
+					{/* Acción principal */}
+					<Button
+						label="↗ Lanzar análisis en Claude"
+						className="w-full"
+						color="primary"
+						onClick={runAgent}
+					/>
+
+					{/* Historial */}
+					{history.length > 0 && (
+						<div className="flex flex-col gap-2 pt-2 border-t border-gray-100">
+							<p className="text-xs text-gray-400">
+								Análisis anteriores
+							</p>
 							{history.map((h, i) => (
 								<div
 									key={i}
-									className="flex items-center justify-between rounded-xl border border-stone-200 bg-white px-4 py-3"
+									className="flex items-center justify-between rounded-lg border border-gray-100 bg-gray-50 px-3 py-2"
 								>
-									<span className="text-xs text-stone-600">
+									<span className="text-xs text-gray-600 truncate mr-3">
 										{h.competitors.join(', ')} —{' '}
 										{h.focuses.slice(0, 2).join(', ')}
-										{h.focuses.length > 2 && '...'}
+										{h.focuses.length > 2 && '…'}
 									</span>
-									<span className="text-xs text-stone-300">
+									<span className="text-xs text-gray-300 whitespace-nowrap">
 										{h.date}
 									</span>
 								</div>
 							))}
 						</div>
-					</div>
-				)}
+					)}
+				</div>
 			</div>
 		</div>
 	);
