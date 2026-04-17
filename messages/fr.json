@@ -948,7 +948,8 @@
 	"propertiesStatusTitle": "État de vos propriétés",
 	"address_hint": "📍 Votre adresse exacte n'est jamais affichée sur votre page publique. Nous l'utilisons uniquement pour le bouton 'Comment y aller' et pour suggérer des lieux à proximité.",
 	"Property": {
-		"meta_description": "Accédez au guide d'hébergement de {name}"
+		"meta_description": "Guide numérique de {name}}. Tout ce qu'il faut savoir pour votre séjour.",
+		"meta_description_with_zone": "Guide numérique de {name}, à {zone}. Tout ce qu'il faut savoir pour votre séjour."
 	},
 	"dashboardPropertyTip": {
 		"emoji": "📍 ",
