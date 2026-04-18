@@ -52,18 +52,21 @@ export async function generateMetadata({
 
 	const ogImage =
 		property.image_url ?? '/static/img/default-property-2x.webp';
-	const description = t('meta_description', { name: property.name });
+	const zone = getDisplayZoneFromString(property.address);
+
+	const description = zone
+		? t('meta_description_with_zone', { name: property.name, zone })
+		: t('meta_description', { name: property.name });
 
 	const localeMap: Record<string, string> = {
 		es: 'es_ES',
 		en: 'en_US',
 		fr: 'fr_FR',
 	};
-
 	const ogLocale = localeMap[locale] ?? `${locale}_${locale.toUpperCase()}`;
 
 	return {
-		title: property.name,
+		title: `${property.name} · BNBexplorer`,
 		description,
 		metadataBase: new URL('https://bnbexplorer.com'),
 		openGraph: {
@@ -135,6 +138,7 @@ export default async function Property({ params, searchParams }: PageProps) {
 
 	const hasInfoContent = infoGroups.length > 0;
 	const mode = getMode(categoryId);
+	console.log(property);
 
 	return (
 		<EditPublicMenuProvider initialData={sidebarData}>

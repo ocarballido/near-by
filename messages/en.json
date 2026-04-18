@@ -944,7 +944,8 @@
 	"propertiesStatusTitle": "Your properties status",
 	"address_hint": "📍 Your exact address is never shown on your public page. We only use it for the 'How to get there' button and to suggest nearby places.",
 	"Property": {
-		"meta_description": "Access the {name} accommodation guide"
+		"meta_description": "Digital guide for {name}. Everything you need for your stay.",
+		"meta_description_with_zone": "Digital guide for {name} in {zone}. Everything you need for your stay."
 	},
 	"dashboardPropertyTip": {
 		"emoji": "📍 ",
