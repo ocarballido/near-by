@@ -21,11 +21,13 @@ export function PropertyDataPublicBySubCategory({
 	type,
 	sub_category_name,
 	categoryId,
+	subCategoryId,
 }: {
 	propertyData: PropertyDataItem[];
 	type: string;
 	sub_category_name?: string;
 	categoryId?: string;
+	subCategoryId?: string;
 	lat: number;
 	lng: number;
 }) {
@@ -33,6 +35,7 @@ export function PropertyDataPublicBySubCategory({
 		<PublicLocationContent
 			locations={propertyData}
 			categoryId={categoryId}
+			subCategoryId={subCategoryId}
 			sub_category_name={sub_category_name}
 		/>
 	);

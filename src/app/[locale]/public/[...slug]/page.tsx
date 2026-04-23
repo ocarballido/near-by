@@ -138,7 +138,6 @@ export default async function Property({ params, searchParams }: PageProps) {
 
 	const hasInfoContent = infoGroups.length > 0;
 	const mode = getMode(categoryId);
-	console.log(property);
 
 	return (
 		<EditPublicMenuProvider initialData={sidebarData}>
