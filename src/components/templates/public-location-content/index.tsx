@@ -7,13 +7,21 @@ import { PropertyDataItem } from '../property-data-public';
 const PublicLocationContent = ({
 	sub_category_name,
 	categoryId,
+	subCategoryId,
 	locations = [],
 }: {
 	locations: PropertyDataItem[];
 	sub_category_name?: string;
 	categoryId?: string;
+	subCategoryId?: string;
 }) => {
 	const t = useTranslations();
+
+	const seoText = subCategoryId
+		? t.has(`seoSubCategory.${subCategoryId}`)
+			? t(`seoSubCategory.${subCategoryId}`)
+			: null
+		: null;
 
 	return (
 		<div className="flex flex-col gap-3">
@@ -22,6 +30,7 @@ const PublicLocationContent = ({
 					{t(sub_category_name)}
 				</Typography>
 			)}
+			{seoText && <Typography>{seoText}</Typography>}
 			<div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 auto-rows-min">
 				{locations.map((loc) => (
 					<PlacePublic
