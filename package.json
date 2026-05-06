@@ -31,7 +31,7 @@
 		"embla-carousel-react": "^8.6.0",
 		"lucide-react": "0.469.0",
 		"next": "^15.5.14",
-		"next-intl": "4.0.2",
+		"next-intl": "^4.11.0",
 		"qrcode.react": "4.2.0",
 		"react": "19.0.1",
 		"react-dom": "19.0.1",
