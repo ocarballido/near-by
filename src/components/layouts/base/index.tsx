@@ -1,5 +1,4 @@
 import { NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
 import { ROBOTO } from '@/config/fonts';
 import { OUTFIT } from '@/config/fonts';
 import CookieConsent from '@/components/Cookies';
@@ -16,11 +15,10 @@ type BaseProps = {
 };
 
 const BaseLayout: React.FC<BaseProps> = async ({ children, locale }) => {
-	const messages = await getMessages();
 	const gtmID = process.env.NEXT_PUBLIC_GTM_ID;
 
 	return (
-		<NextIntlClientProvider messages={messages} locale={locale}>
+		<NextIntlClientProvider locale={locale}>
 			<html lang={locale}>
 				<body
 					className={`${OUTFIT.className} ${ROBOTO.className} antialiased`}
