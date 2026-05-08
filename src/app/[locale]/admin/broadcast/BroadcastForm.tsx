@@ -43,6 +43,7 @@ export default function BroadcastForm() {
 	const [ctaUrl, setCtaUrl] = useState('');
 	const [emailType, setEmailType] = useState<EmailType>('newsletter');
 	const [loading, setLoading] = useState(false);
+	const [ready, setReady] = useState(false); // ← NUEVO
 	const [result, setResult] = useState<BroadcastResult | null>(null);
 	const [error, setError] = useState<string | null>(null);
 
@@ -56,7 +57,6 @@ export default function BroadcastForm() {
 	const current = content[activeLocale];
 
 	const handleSubmit = async () => {
-		// Validar que ES tiene los campos obligatorios como mínimo
 		if (
 			!content.es.subject ||
 			!content.es.preheader ||
@@ -86,7 +86,6 @@ export default function BroadcastForm() {
 			ctaLabel: c.ctaLabel || undefined,
 		});
 
-		// Si EN o FR están vacíos, usamos ES como fallback
 		const esContent = parseContent(content.es);
 		const enContent = content.en.subject
 			? parseContent(content.en)
@@ -123,6 +122,7 @@ export default function BroadcastForm() {
 				setImageUrl('');
 				setCtaUrl('');
 				setEmailType('newsletter');
+				setReady(false); // ← resetear el checkbox tras envío exitoso
 			}
 		} catch (err) {
 			setError(String(err));
@@ -187,6 +187,7 @@ export default function BroadcastForm() {
 				<div className="flex gap-2 border-b border-gray-200">
 					{(['es', 'en', 'fr'] as Locale[]).map((loc) => (
 						<button
+							type="button" // ← AÑADIDO
 							key={loc}
 							onClick={() => setActiveLocale(loc)}
 							className={`px-4 py-2 text-sm font-semibold transition-colors border-b-2 -mb-px ${
@@ -321,7 +322,6 @@ export default function BroadcastForm() {
 						/>
 					</div>
 
-					{/* CTA URL */}
 					<div className="flex flex-col gap-1">
 						<label className="text-sm font-semibold text-gray-700">
 							CTA URL{' '}
@@ -359,11 +359,25 @@ export default function BroadcastForm() {
 					</div>
 				)}
 
+				{/* ← NUEVO: Checkbox de confirmación */}
+				<label className="flex items-center gap-3 cursor-pointer select-none">
+					<input
+						type="checkbox"
+						checked={ready}
+						onChange={(e) => setReady(e.target.checked)}
+						className="w-4 h-4 rounded border-gray-300 text-primary-500 focus:ring-primary-500 cursor-pointer"
+					/>
+					<span className="text-sm font-semibold text-gray-700">
+						Marcar emails como listos para enviar
+					</span>
+				</label>
+
 				{/* Submit */}
 				<button
+					type="button" // ← AÑADIDO: evita submit con Enter
 					onClick={handleSubmit}
-					disabled={loading}
-					className="bg-primary-500 hover:bg-primary-600 disabled:opacity-50 text-white font-semibold rounded-lg px-6 py-3 text-sm transition-colors"
+					disabled={loading || !ready} // ← MODIFICADO
+					className="bg-primary-500 hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold rounded-lg px-6 py-3 text-sm transition-colors"
 				>
 					{loading ? 'Enviando...' : 'Enviar a todos los usuarios'}
 				</button>
