@@ -3,16 +3,11 @@ import { useTranslations } from 'next-intl';
 
 import Image from 'next/image';
 
-import headerImage from '../../../public/static/img/header-trimed-2x.webp';
-import headerImageMobile from '../../../public/static/img/heroMobile.webp';
 import rooftopCentered from '../../../public/static/img/rooftop-centered.png';
 import multyProperty from '../../../public/static/img/multy-property-2x.webp';
 import blur from '../../../public/static/img/home/blur.webp';
 import why from '../../../public/static/img/home/why_bnbexplorer.webp';
 import how from '../../../public/static/img/home/how_bnbexplorer.webp';
-import cave from '../../../public/static/img/home/cave_carousel.webp';
-import celular from '../../../public/static/img/home/celular_carousel.webp';
-import toys from '../../../public/static/img/home/toys_carousel.webp';
 
 import categories from '../../../public/static/img/categories-2x.webp';
 import uiEdit from '../../../public/static/img/ui-edit-2x.webp';
@@ -56,7 +51,7 @@ export default function Home() {
 			<LandingAppBar />
 			<section
 				aria-labelledby="BNB-explorer"
-				className="bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] rounded-lg mt-2 px-0 py-12 md:py-18 min-h-[600px] md:min-h-[800px] lg:min-h-[900px] relative flex"
+				className="bg-primary-200 rounded-lg mt-2 px-0 py-12 md:py-18 min-h-[600px] md:min-h-[800px] lg:min-h-[900px] relative flex"
 			>
 				<div className="absolute inset-0 z-0 rounded-lg overflow-hidden">
 					<HomeCarousel />
