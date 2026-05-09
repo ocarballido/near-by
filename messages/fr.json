@@ -1035,5 +1035,24 @@
 		"49c9294a-409a-4e28-80a4-da0aa48906c4": "Tout le nécessaire dans les meilleures animaleries du quartier. Trouvez nourriture et accessoires pour vos compagnons de voyage avec ce guide numérique indispensable au tourisme pet-friendly.",
 		"17f95bb5-1a11-45da-9d60-adad0cb6a13d": "Cliniques vétérinaires et services de santé animale près de votre Airbnb. Notre guide d'accueil garantit la sérénité des propriétaires d'animaux en indiquant des soins experts en cas d'urgence.",
 		"5fd95b33-2992-4e8c-88d4-0bb295e93994": "Style et soin dans les meilleurs salons de toilettage locaux. Créateur de guides leader, BNBexplorer recommande les meilleurs toiletteurs pour que votre compagnon soit impeccable pendant le voyage."
+	},
+	"GuestChat": {
+		"header": "Assistant du guide",
+		"closeAriaLabel": "Fermer le chat",
+		"sendAriaLabel": "Envoyer",
+		"inputPlaceholder": "Posez votre question...",
+		"welcomeMessage": "👋 Bonjour, je suis l'assistant de ce guide. Posez-moi des questions sur le WiFi, les horaires, les restaurants, les pharmacies et bien plus.",
+		"networkError": "Une erreur est survenue. Veuillez réessayer.",
+		"missingParams": "Données manquantes dans la requête.",
+		"serverError": "Une erreur est survenue. Veuillez réessayer.",
+		"propertyNotFound": "Propriété introuvable.",
+		"infoNotFound": "L'hôte n'a pas encore ajouté cette information au guide.",
+		"locationsNotFound": "L'hôte n'a pas encore ajouté de recommandations de ce type.",
+		"locationsPrefix": "Voici les recommandations du guide :",
+		"fallback": "Je n'ai pas cette information ici. Vous pouvez la chercher dans le guide ou contacter directement l'hôte.",
+		"scheduleNotFound": "L'hôte n'a pas indiqué les horaires d'arrivée et de départ.",
+		"checkIn": "🧳 Check-in",
+		"checkOut": "🧹 Check-out",
+		"triggerLabel": "Demander à l'assistant"
 	}
 }
