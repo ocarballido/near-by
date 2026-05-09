@@ -1031,5 +1031,24 @@
 		"49c9294a-409a-4e28-80a4-da0aa48906c4": "Everything you need at the best pet stores in the area. Find food and accessories for your travel companions with this digital guide, essential for pet-friendly tourism.",
 		"17f95bb5-1a11-45da-9d60-adad0cb6a13d": "Veterinary clinics and animal health services near your Airbnb. Our guest guide ensures peace of mind for pet owners by providing expert care for any animal medical emergency.",
 		"5fd95b33-2992-4e8c-88d4-0bb295e93994": "Style and care at the best local pet groomers. As a leading travel guide creator, BNBexplorer recommends the top pet groomers so your companion looks flawless during the trip."
+	},
+	"GuestChat": {
+		"header": "Guide assistant",
+		"closeAriaLabel": "Close chat",
+		"sendAriaLabel": "Send",
+		"inputPlaceholder": "Type your question...",
+		"welcomeMessage": "👋 Hi, I'm the assistant for this guide. Ask me about WiFi, schedules, restaurants, pharmacies and more.",
+		"networkError": "An error occurred. Please try again.",
+		"missingParams": "Missing request data.",
+		"serverError": "An error occurred. Please try again.",
+		"propertyNotFound": "Property not found.",
+		"infoNotFound": "The host hasn't added this information to the guide yet.",
+		"locationsNotFound": "The host hasn't added recommendations of this type yet.",
+		"locationsPrefix": "Here are the guide's recommendations:",
+		"fallback": "I don't have that information here. You can look it up in the guide or contact the host directly.",
+		"scheduleNotFound": "The host hasn't specified check-in and check-out times.",
+		"checkIn": "🧳 Check-in",
+		"checkOut": "🧹 Check-out",
+		"triggerLabel": "Ask the assistant"
 	}
 }
