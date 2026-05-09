@@ -22,6 +22,7 @@ import { CATEGORIES_SUB_CATEGORIES } from '@/config/config-constants';
 import PublicInfoContentBootstrap from '@/components/providers/PublicInfoContentBootstrap';
 import PublicCountsBootstrap from '@/components/providers/PublicCountsBootstrap';
 import { getPropertySubCategoryCounts } from '@/utils/get-property-subcategory-counts';
+import GuestChat from '@/components/organisms/guest-chat/GuestChat';
 
 type PageMode = 'welcome' | 'custom-plans' | 'subcategory' | 'lodging';
 
@@ -189,6 +190,7 @@ export default async function Property({ params, searchParams }: PageProps) {
 					)}
 				</div>
 			</PublicContentTemplate>
+			<GuestChat propertyId={propertyId} locale={locale} />
 		</EditPublicMenuProvider>
 	);
 }
