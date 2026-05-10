@@ -6,8 +6,8 @@ import Image from 'next/image';
 import rooftopCentered from '../../../public/static/img/rooftop-centered.png';
 import multyProperty from '../../../public/static/img/multy-property-2x.webp';
 import blur from '../../../public/static/img/home/blur.webp';
-import why from '../../../public/static/img/home/why_bnbexplorer.webp';
 import how from '../../../public/static/img/home/how_bnbexplorer.webp';
+import guestChat from '../../../public/static/img/home/chatbot.webp';
 
 import categories from '../../../public/static/img/categories-2x.webp';
 import uiEdit from '../../../public/static/img/ui-edit-2x.webp';
@@ -161,7 +161,7 @@ export default function Home() {
 						body={t('page_home.section_why.cardSubtitle1')}
 						className="md:row-span-2"
 						isFeatured
-						image={why.src}
+						image={guestChat.src}
 					/>
 					<Feature
 						color="gradient"
@@ -297,6 +297,7 @@ export default function Home() {
 					{t('page_home.section_features.title')}
 				</h2>
 				<div className="flex flex-col gap-4 md:gap-0 max-w-[960px] px-4">
+					{/* FeatureOne: texto izq, imagen der */}
 					<div className="flex flex-col md:flex-row items-stretch">
 						<div className="flex-1 flex flex-col justify-center gap-4 py-8 relative">
 							<h3 className="text-3xl pr-6 pl-4">
@@ -322,23 +323,19 @@ export default function Home() {
 								alt={t('Multi propiedad')}
 								src={multyProperty}
 								sizes="100vw"
-								style={{
-									width: '120%',
-									height: 'auto',
-								}}
+								style={{ width: '120%', height: 'auto' }}
 							/>
 						</div>
 					</div>
+
+					{/* FeatureTwo: imagen izq, texto der */}
 					<div className="flex flex-col md:flex-row items-stretch">
 						<div className="flex-1 flex flex-col justify-center md:min-h-[550px] bg-linear-to-r from-teal-600 to-primary-400 rounded-xl md:rounded-tr-none md:rounded-br-none order-1 md:order-0">
 							<Image
 								alt={t('Categorías')}
 								src={categories}
 								sizes="100vw"
-								style={{
-									width: '120%',
-									height: 'auto',
-								}}
+								style={{ width: '120%', height: 'auto' }}
 							/>
 						</div>
 						<div className="flex-1 flex flex-col justify-center gap-4 py-8 relative">
@@ -366,16 +363,23 @@ export default function Home() {
 							<FilterCategories />
 						</div>
 					</div>
+
+					{/* FeatureChatbot: texto izq, imagen der — NUEVO */}
 					<div className="flex flex-col md:flex-row items-stretch">
 						<div className="flex-1 flex flex-col justify-center gap-4 py-8 relative">
 							<h3 className="text-3xl pr-6 pl-4">
 								{t(
-									'page_home.section_features.titleFeatureThree',
+									'page_home.section_features.titleFeatureChatbot',
 								)}
 							</h3>
 							<p className="font-body font-medium opacity-70 pr-6 pl-4">
 								{t(
-									'page_home.section_features.bodyFeatureThree',
+									'page_home.section_features.bodyFeatureChatbot1',
+								)}
+							</p>
+							<p className="font-body font-medium opacity-70 pr-6 pl-4">
+								{t(
+									'page_home.section_features.bodyFeatureChatbot2',
 								)}
 							</p>
 							<ButtonLink
@@ -393,40 +397,66 @@ export default function Home() {
 						</div>
 						<div className="flex-1 flex flex-col justify-center bg-linear-to-r to-teal-600 from-primary-400 rounded-xl md:rounded-tl-none md:rounded-bl-none md:min-h-[550px]">
 							<Image
-								alt={t('Editar')}
-								src={uiEdit}
+								alt={t(
+									'page_home.section_features.titleFeatureChatbot',
+								)}
+								src={guestChat}
 								sizes="100vw"
-								style={{
-									width: '120%',
-									height: 'auto',
-								}}
+								style={{ width: '120%', height: 'auto' }}
 							/>
 						</div>
 					</div>
+
+					{/* FeatureThree: imagen izq, texto der — orientación invertida */}
 					<div className="flex flex-col md:flex-row items-stretch">
-						<div className="flex-1 flex flex-col justify-center min-h-[550px] bg-linear-to-r from-teal-600 to-primary-400 rounded-xl md:rounded-tr-none order-1 md:order-0">
+						<div className="flex-1 flex flex-col justify-center md:min-h-[550px] bg-linear-to-r from-teal-600 to-primary-400 rounded-xl md:rounded-tr-none md:rounded-br-none order-1 md:order-0">
 							<Image
-								alt={t('Enlace público')}
-								src={publicUi}
+								alt={t('Editar')}
+								src={uiEdit}
 								sizes="100vw"
-								style={{
-									width: '120%',
-									height: 'auto',
-								}}
+								style={{ width: '120%', height: 'auto' }}
 							/>
 						</div>
 						<div className="flex-1 flex flex-col justify-center gap-4 py-8 relative">
 							<h3 className="text-3xl pr-4 pl-6">
 								{t(
-									'page_home.section_features.titleFeatureFour',
+									'page_home.section_features.titleFeatureThree',
 								)}
 							</h3>
 							<p className="font-body font-medium opacity-70 pr-4 pl-6">
 								{t(
+									'page_home.section_features.bodyFeatureThree',
+								)}
+							</p>
+							<ButtonLink
+								label={t('page_home.mainAction')}
+								href="/app"
+								iconLeft={<IconAccountCircle />}
+								className="w-fit ml-6"
+							/>
+							<span className="w-[32px] h-[32px] bg-primary-400 absolute top-0 left-0 hidden md:block">
+								<span className="w-[32px] h-[32px] bg-white rounded-tl-xl block"></span>
+							</span>
+							<span className="w-[32px] h-[32px] bg-primary-400 absolute bottom-0 left-0 hidden md:block">
+								<span className="w-[32px] h-[32px] bg-white rounded-bl-xl block"></span>
+							</span>
+						</div>
+					</div>
+
+					{/* FeatureFour: texto izq, imagen der — orientación invertida */}
+					<div className="flex flex-col md:flex-row items-stretch">
+						<div className="flex-1 flex flex-col justify-center gap-4 py-8 relative">
+							<h3 className="text-3xl pr-6 pl-4">
+								{t(
+									'page_home.section_features.titleFeatureFour',
+								)}
+							</h3>
+							<p className="font-body font-medium opacity-70 pr-6 pl-4">
+								{t(
 									'page_home.section_features.bodyFeatureFour1',
 								)}
 							</p>
-							<p className="font-body font-medium opacity-70 pr-4 pl-6">
+							<p className="font-body font-medium opacity-70 pr-6 pl-4">
 								{t(
 									'page_home.section_features.bodyFeatureFour2',
 								)}
@@ -435,18 +465,29 @@ export default function Home() {
 								label={t('page_home.mainAction')}
 								href="/app"
 								iconLeft={<IconAccountCircle />}
-								className="w-fit ml-6 -mb-3"
+								className="w-fit ml-4 -mb-3"
 							/>
 							<ButtonLink
 								label={t('page_home.pilotHouseAction')}
 								href="https://www.bnbexplorer.com/es/public/37a03a95-cd39-4d40-a22b-7628cbb50245/welcome/highlights"
 								color="secondary"
-								className="w-fit ml-6"
+								className="w-fit ml-4"
 								target="_blank"
 							/>
-							<span className="w-[32px] h-[32px] bg-primary-400 absolute top-0 left-0 hidden md:block">
-								<span className="w-[32px] h-[32px] bg-white rounded-tl-xl block"></span>
+							<span className="w-[32px] h-[32px] bg-primary-400 absolute top-0 right-0 hidden md:block">
+								<span className="w-[32px] h-[32px] bg-white rounded-tr-xl block"></span>
 							</span>
+							{/* <span className="w-[32px] h-[32px] bg-primary-400 absolute bottom-0 right-0 hidden md:block">
+								<span className="w-[32px] h-[32px] bg-white rounded-br-xl block"></span>
+							</span> */}
+						</div>
+						<div className="flex-1 flex flex-col justify-center bg-linear-to-r to-teal-600 from-primary-400 rounded-xl md:rounded-tl-none md:min-h-[550px]">
+							<Image
+								alt={t('Enlace público')}
+								src={publicUi}
+								sizes="100vw"
+								style={{ width: '120%', height: 'auto' }}
+							/>
 						</div>
 					</div>
 				</div>

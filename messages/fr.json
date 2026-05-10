@@ -535,8 +535,8 @@
 		"section_why": {
 			"title": "Pourquoi BNB Explorer ?",
 			"subtitle": "Faites passer votre hospitalité au niveau supérieur grâce aux recommandations locales",
-			"cardTitle1": "Moins de messages répétitifs",
-			"cardSubtitle1": "Vos voyageurs trouvent les réponses sans vous écrire : règles, horaires, WiFi et recommandations au même endroit.",
+			"cardTitle1": "Votre guide répond à votre place",
+			"cardSubtitle1": "L'assistant de chat répond instantanément aux questions sur le WiFi, les horaires, le règlement et les lieux à proximité. Sans WhatsApp. Sans interruptions.",
 			"cardTitle2": "De meilleures évaluations",
 			"cardSubtitle2": "Des voyageurs bien informés = moins de problèmes, une meilleure expérience et plus d’avis 5 étoiles.",
 			"cardTitle3": "Tout en un seul lien",
@@ -569,7 +569,10 @@
 			"bodyFeatureThree": "Tout est généré automatiquement. Vous pouvez le personnaliser… ou ne rien toucher et l’utiliser tel quel.",
 			"titleFeatureFour": "Un seul lien. Toutes les réponses.",
 			"bodyFeatureFour1": "Chaque logement dispose de sa propre URL.",
-			"bodyFeatureFour2": "Envoyez-la par WhatsApp, imprimez-la en QR ou partagez-la comme vous le souhaitez. Vos voyageurs y accèdent sans inscription."
+			"bodyFeatureFour2": "Envoyez-la par WhatsApp, imprimez-la en QR ou partagez-la comme vous le souhaitez. Vos voyageurs y accèdent sans inscription.",
+			"titleFeatureChatbot": "Votre guide parle à vos locataires",
+			"bodyFeatureChatbot1": "Quand un locataire a une question, l'assistant répond immédiatement avec les informations que vous avez déjà ajoutées à votre guide.",
+			"bodyFeatureChatbot2": "WiFi, check-out, restaurants, pharmacies... disponible 24h/24, en espagnol, anglais et français. Sans que vous ayez à répondre."
 		},
 		"section_ai": {
 			"body1": "L’IA crée le contenu pour vous : règles, horaires, tri des déchets et recommandations locales.",
@@ -1053,6 +1056,12 @@
 		"scheduleNotFound": "L'hôte n'a pas indiqué les horaires d'arrivée et de départ.",
 		"checkIn": "🧳 Check-in",
 		"checkOut": "🧹 Check-out",
-		"triggerLabel": "Demander à l'assistant"
+		"triggerLabel": "Demander à l'assistant",
+		"previewWelcome": "👋 Bonjour, je suis l'assistant de ce guide. Comment puis-je vous aider ?",
+		"previewQuestion1": "Quel est le WiFi ?",
+		"previewAnswer1": "Le réseau WiFi est CasaRural5G et le mot de passe est welcome2024 🔑",
+		"previewQuestion2": "À quelle heure est le check-out ?",
+		"previewAnswer2": "🧹 Check-out : 11h00",
+		"previewInputPlaceholder": "Posez votre question..."
 	}
 }
