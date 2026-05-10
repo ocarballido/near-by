@@ -530,8 +530,8 @@
 		"section_why": {
 			"title": "Why BNB Explorer?",
 			"subtitle": "Take your hospitality to the next level with local recommendations",
-			"cardTitle1": "Fewer repeated messages",
-			"cardSubtitle1": "Your guests find answers without messaging you: rules, schedules, WiFi, and recommendations all in one place.",
+			"cardTitle1": "Your guide answers for you",
+			"cardSubtitle1": "The chat assistant instantly answers questions about WiFi, schedules, house rules and nearby places. No WhatsApp. No interruptions.",
 			"cardTitle2": "Better reviews",
 			"cardSubtitle2": "Informed guests = fewer issues, a better experience, and more 5-star reviews.",
 			"cardTitle3": "Everything in one link",
@@ -564,7 +564,10 @@
 			"bodyFeatureThree": "Everything is generated automatically. You can customize it… or leave it as is and use it right away.",
 			"titleFeatureFour": "One link. All the answers.",
 			"bodyFeatureFour1": "Each accommodation gets its own URL.",
-			"bodyFeatureFour2": "Send it via WhatsApp, print it as a QR code, or share it however you prefer. Guests access it without registering."
+			"bodyFeatureFour2": "Send it via WhatsApp, print it as a QR code, or share it however you prefer. Guests access it without registering.",
+			"titleFeatureChatbot": "Your guide talks to your guests",
+			"bodyFeatureChatbot1": "When a guest has a question, the assistant answers instantly with the information you have already added to your guide.",
+			"bodyFeatureChatbot2": "WiFi, check-out, restaurants, pharmacies... available 24/7, in Spanish, English and French. Without you having to reply."
 		},
 		"section_ai": {
 			"body1": "AI creates the content for you: rules, schedules, recycling, and local recommendations.",
@@ -1049,6 +1052,12 @@
 		"scheduleNotFound": "The host hasn't specified check-in and check-out times.",
 		"checkIn": "🧳 Check-in",
 		"checkOut": "🧹 Check-out",
-		"triggerLabel": "Ask the assistant"
+		"triggerLabel": "Ask the assistant",
+		"previewWelcome": "👋 Hi, I'm the guide assistant. How can I help you?",
+		"previewQuestion1": "What's the WiFi?",
+		"previewAnswer1": "The WiFi network is CasaRural5G and the password is welcome2024 🔑",
+		"previewQuestion2": "What time is check-out?",
+		"previewAnswer2": "🧹 Check-out: 11:00",
+		"previewInputPlaceholder": "Type your question..."
 	}
 }
