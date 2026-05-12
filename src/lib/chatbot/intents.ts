@@ -15,7 +15,9 @@ export type IntentType =
 	| 'HOSPITALS'
 	| 'TRANSPORT'
 	| 'PARKS'
-	| 'MUSEUMS';
+	| 'MUSEUMS'
+	| 'FEATURED'
+	| 'MUST_VISIT';
 
 export type IntentKind = 'info' | 'location';
 
@@ -401,6 +403,55 @@ export const INTENTS: Record<IntentType, Intent> = {
 			'art',
 			'culture',
 			'galerie',
+		],
+	},
+	FEATURED: {
+		kind: 'location',
+		subCategoryId: '', // no se usa — query por flag
+		keywords: [
+			// ES
+			'favoritos',
+			'favorito',
+			'destacados',
+			'destacado',
+			'recomendados',
+			'recomendaciones',
+			// EN
+			'favorites',
+			'favourite',
+			'featured',
+			'recommended',
+			'recommendations',
+			// FR
+			'favoris',
+			'favori',
+			'recommandes',
+			'recommandations',
+			'selections',
+		],
+	},
+	MUST_VISIT: {
+		kind: 'location',
+		subCategoryId: '', // no se usa — query por flag
+		keywords: [
+			// ES
+			'imprescindible',
+			'imprescindibles',
+			'visita obligatoria',
+			'no perderse',
+			'must',
+			// EN
+			'must visit',
+			'must see',
+			'essential',
+			'essentials',
+			'not to miss',
+			// FR
+			'incontournable',
+			'incontournables',
+			'essentiel',
+			'essentiels',
+			'a ne pas manquer',
 		],
 	},
 };

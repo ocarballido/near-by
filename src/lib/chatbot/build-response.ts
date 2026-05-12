@@ -6,6 +6,8 @@ export interface PropertyDataRow {
 	name: string | null;
 	type: string;
 	sub_category_id: string;
+	featured?: boolean | null;
+	must_visit?: boolean | null;
 }
 
 export interface PropertySchedule {
@@ -23,6 +25,10 @@ export interface ChatbotMessages {
 	scheduleNotFound: string;
 	checkIn: string;
 	checkOut: string;
+	featuredNotFound: string;
+	mustVisitNotFound: string;
+	featuredPrefix: string;
+	mustVisitPrefix: string;
 }
 
 function buildScheduleResponse(
@@ -38,7 +44,7 @@ function buildScheduleResponse(
 		!check_in_date &&
 		!check_out_date
 	) {
-		return null; // sin datos → cae en property_data
+		return null;
 	}
 
 	const lines: string[] = [];
@@ -83,6 +89,30 @@ function buildLocationResponse(
 	return `${messages.locationsPrefix}\n\n${names}`;
 }
 
+function buildFlaggedLocationResponse(
+	rows: PropertyDataRow[],
+	intentType: 'FEATURED' | 'MUST_VISIT',
+	messages: ChatbotMessages,
+): string {
+	if (rows.length === 0) {
+		return intentType === 'FEATURED'
+			? messages.featuredNotFound
+			: messages.mustVisitNotFound;
+	}
+
+	const prefix =
+		intentType === 'FEATURED'
+			? messages.featuredPrefix
+			: messages.mustVisitPrefix;
+
+	const names = rows
+		.filter((r) => r.name)
+		.map((r) => `• ${r.name}`)
+		.join('\n');
+
+	return `${prefix}\n\n${names}`;
+}
+
 export function buildResponse(
 	intentType: IntentType | null,
 	rows: PropertyDataRow[],
@@ -91,12 +121,15 @@ export function buildResponse(
 ): string {
 	if (intentType === null) return messages.fallback;
 
+	if (intentType === 'FEATURED' || intentType === 'MUST_VISIT') {
+		return buildFlaggedLocationResponse(rows, intentType, messages);
+	}
+
 	const intent = INTENTS[intentType];
 
 	if (intentType === 'SCHEDULE' && schedule) {
 		const scheduleResponse = buildScheduleResponse(schedule, messages);
 		if (scheduleResponse) return scheduleResponse;
-		// sin datos estructurados → cae en property_data
 	}
 
 	if (intent.kind === 'info') return buildInfoResponse(rows, messages);

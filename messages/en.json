@@ -1058,6 +1058,10 @@
 		"previewAnswer1": "The WiFi network is CasaRural5G and the password is welcome2024 🔑",
 		"previewQuestion2": "What time is check-out?",
 		"previewAnswer2": "🧹 Check-out: 11:00",
-		"previewInputPlaceholder": "Type your question..."
+		"previewInputPlaceholder": "Type your question...",
+		"featuredNotFound": "The host hasn't marked any place as a favourite yet.",
+		"mustVisitNotFound": "The host hasn't marked any must-visit place yet.",
+		"featuredPrefix": "⭐ Host's favourite places:",
+		"mustVisitPrefix": "🔥 Must-visit places according to the host:"
 	}
 }
