@@ -1062,6 +1062,10 @@
 		"previewAnswer1": "Le réseau WiFi est CasaRural5G et le mot de passe est welcome2024 🔑",
 		"previewQuestion2": "À quelle heure est le check-out ?",
 		"previewAnswer2": "🧹 Check-out : 11h00",
-		"previewInputPlaceholder": "Posez votre question..."
+		"previewInputPlaceholder": "Posez votre question...",
+		"featuredNotFound": "L'hôte n'a pas encore marqué de lieu comme favori.",
+		"mustVisitNotFound": "L'hôte n'a pas encore marqué de lieu incontournable.",
+		"featuredPrefix": "⭐ Lieux favoris de l'hôte :",
+		"mustVisitPrefix": "🔥 Lieux incontournables selon l'hôte :"
 	}
 }

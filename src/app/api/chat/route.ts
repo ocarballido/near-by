@@ -34,27 +34,52 @@ export async function POST(req: Request) {
 			scheduleNotFound: t('scheduleNotFound'),
 			checkIn: t('checkIn'),
 			checkOut: t('checkOut'),
+			featuredNotFound: t('featuredNotFound'),
+			mustVisitNotFound: t('mustVisitNotFound'),
+			featuredPrefix: t('featuredPrefix'),
+			mustVisitPrefix: t('mustVisitPrefix'),
 		};
 
 		const intent = detectIntent(message);
+		console.log('🤖 intent detectado:', intent);
+		console.log(
+			'🔍 mensaje normalizado:',
+			message
+				.toLowerCase()
+				.normalize('NFD')
+				.replace(/[\u0300-\u036f]/g, '')
+				.replace(/[^a-z0-9 ]/g, ' '),
+		);
 
 		if (intent === null) {
 			return Response.json({ reply: messages.fallback });
 		}
 
+		const isFlagged = intent === 'FEATURED' || intent === 'MUST_VISIT';
 		const { subCategoryId, kind } = INTENTS[intent];
 
 		const supabase = await createServerAdminClient();
 		const db = supabase as unknown as SupabaseClient<Database>;
 
-		// Para SCHEDULE consultamos properties en paralelo
 		const [propertyDataResult, scheduleResult] = await Promise.all([
-			db
-				.from('property_data')
-				.select('name, description, type, sub_category_id')
-				.eq('property_id', propertyId)
-				.eq('sub_category_id', subCategoryId)
-				.eq('type', kind),
+			isFlagged
+				? db
+						.from('property_data')
+						.select(
+							'name, description, type, sub_category_id, featured, must_visit',
+						)
+						.eq('property_id', propertyId)
+						.eq('type', 'location')
+						.eq(
+							intent === 'FEATURED' ? 'featured' : 'must_visit',
+							true,
+						)
+				: db
+						.from('property_data')
+						.select('name, description, type, sub_category_id')
+						.eq('property_id', propertyId)
+						.eq('sub_category_id', subCategoryId)
+						.eq('type', kind),
 			intent === 'SCHEDULE'
 				? db
 						.from('properties')
