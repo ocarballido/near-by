@@ -41,15 +41,6 @@ export async function POST(req: Request) {
 		};
 
 		const intent = detectIntent(message);
-		console.log('🤖 intent detectado:', intent);
-		console.log(
-			'🔍 mensaje normalizado:',
-			message
-				.toLowerCase()
-				.normalize('NFD')
-				.replace(/[\u0300-\u036f]/g, '')
-				.replace(/[^a-z0-9 ]/g, ' '),
-		);
 
 		if (intent === null) {
 			return Response.json({ reply: messages.fallback });
