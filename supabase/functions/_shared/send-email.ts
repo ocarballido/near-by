@@ -284,11 +284,23 @@ export async function sendBroadcast(payload: SendBroadcastPayload): Promise<{
 	);
 
 	// 1. Obtener todos los usuarios de auth
-	const { data: usersData, error: usersError } =
-		await supabase.auth.admin.listUsers();
+	const allUsers = [];
+	let page = 1;
+	const perPage = 1000;
 
-	if (usersError || !usersData) {
-		throw new Error('Failed to fetch users');
+	while (true) {
+		const { data: pageData, error: pageError } =
+			await supabase.auth.admin.listUsers({ page, perPage });
+
+		if (pageError || !pageData) {
+			throw new Error('Failed to fetch users');
+		}
+
+		allUsers.push(...pageData.users);
+
+		if (pageData.users.length < perPage) break;
+
+		page++;
 	}
 
 	// 2. Obtener profiles para cruzar opt_out, unsubscribe_token y locale
@@ -318,7 +330,7 @@ export async function sendBroadcast(payload: SendBroadcastPayload): Promise<{
 	let skipped = 0;
 	let errors = 0;
 
-	for (const authUser of usersData.users) {
+	for (const authUser of allUsers) {
 		const profile = profileMap.get(authUser.id);
 
 		if (!profile) {
