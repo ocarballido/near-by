@@ -1093,6 +1093,9 @@
 		"step4Copied": "Copied!",
 		"step5Title": "You're all set!",
 		"step5Subtitle": "You have everything you need to start your stay.",
-		"step5GuideLink": "View the full guide"
+		"step5GuideLink": "View the full guide",
+		"step1MapsButton": "Open in Google Maps",
+		"step1Transit": "Public transport",
+		"step1TransitText": "View metro, bus and train options from your current location"
 	}
 }

@@ -1097,6 +1097,9 @@
 		"step4Copied": "Copié !",
 		"step5Title": "Tout est prêt !",
 		"step5Subtitle": "Vous avez tout ce qu'il vous faut pour commencer votre séjour.",
-		"step5GuideLink": "Voir le guide complet"
+		"step5GuideLink": "Voir le guide complet",
+		"step1MapsButton": "Ouvrir dans Google Maps",
+		"step1Transit": "Transports en commun",
+		"step1TransitText": "Voir les options de métro, bus et train depuis votre position actuelle"
 	}
 }
