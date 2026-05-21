@@ -12,7 +12,11 @@ import { trackEvent } from '@/lib/analytics/mixpanel';
 import type { Database, TablesInsert } from '@/lib/types';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
-import { fetchPropertyBase, fetchInfoSectionsData } from './_data';
+import {
+	fetchPropertyBase,
+	fetchInfoSectionsData,
+	fetchArrivalGuideData,
+} from './_data';
 import WelcomeSection from './WelcomeSection';
 import SubcategorySection from './SubcategorySection';
 import PublicAppBar from '@/components/organisms/public-appbar';
@@ -23,6 +27,7 @@ import PublicInfoContentBootstrap from '@/components/providers/PublicInfoContent
 import PublicCountsBootstrap from '@/components/providers/PublicCountsBootstrap';
 import { getPropertySubCategoryCounts } from '@/utils/get-property-subcategory-counts';
 import GuestChat from '@/components/organisms/guest-chat/GuestChat';
+import ArrivalGuide from '@/components/organisms/arrival-guide/ArrivalGuide';
 
 type PageMode = 'welcome' | 'custom-plans' | 'subcategory' | 'lodging';
 
@@ -137,6 +142,8 @@ export default async function Property({ params, searchParams }: PageProps) {
 			getPropertySubCategoryCounts(propertyId),
 		]);
 
+	const arrivalGuideData = await fetchArrivalGuideData(propertyId, property);
+
 	const hasInfoContent = infoGroups.length > 0;
 	const mode = getMode(categoryId);
 
@@ -190,6 +197,11 @@ export default async function Property({ params, searchParams }: PageProps) {
 					)}
 				</div>
 			</PublicContentTemplate>
+			<ArrivalGuide
+				data={arrivalGuideData}
+				propertyId={propertyId}
+				address={property.address}
+			/>
 			<GuestChat propertyId={propertyId} locale={locale} />
 		</EditPublicMenuProvider>
 	);

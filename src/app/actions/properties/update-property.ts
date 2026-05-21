@@ -35,6 +35,7 @@ const UpdatePropertySchema = z.object({
 	check_in_time: z.preprocess(emptyToNull, z.string().nullable()),
 	check_out_date: z.preprocess(emptyToNull, z.string().nullable()),
 	check_out_time: z.preprocess(emptyToNull, z.string().nullable()),
+	access_instructions: z.preprocess(emptyToNull, z.string().nullable()),
 });
 
 // Tipo para los errores de validación (reutiliza el mismo FormState)
@@ -115,6 +116,7 @@ export async function updateProperty(
 			check_in_time: formData.get('check_in_time'),
 			check_out_date: formData.get('check_out_date'),
 			check_out_time: formData.get('check_out_time'),
+			access_instructions: formData.get('access_instructions'),
 		};
 
 		const parseResult = UpdatePropertySchema.safeParse(rawData);
@@ -151,7 +153,7 @@ export async function updateProperty(
 		}
 
 		// 6) Update en DB (solo lo editable)
-		const payload: TablesUpdate<'properties'> = {
+		const payload = {
 			name: validated.name,
 			description: validated.description,
 			image_url: imageUrl,
@@ -159,8 +161,9 @@ export async function updateProperty(
 			check_in_time: validated.check_in_time,
 			check_out_date: validated.check_out_date,
 			check_out_time: validated.check_out_time,
-			updated_at: new Date().toISOString(), // opcional; tu tabla ya tiene default, pero en update es útil
-		};
+			access_instructions: validated.access_instructions,
+			updated_at: new Date().toISOString(),
+		} satisfies TablesUpdate<'properties'>;
 
 		const { error: updateError } = await db
 			.from('properties')

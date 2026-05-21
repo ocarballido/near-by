@@ -32,6 +32,7 @@ import { trackClientEvent } from '@/lib/analytics/trackClient';
 import { getPropertyFormDefaultValues } from './getPropertyFormDefaultValues';
 import { buildPropertyFormData } from './buildPropertyFormData';
 import Button from '@/components/molecules/button';
+import TextArea from '@/components/molecules/text-area';
 
 type FormValues = {
 	name: string;
@@ -43,6 +44,7 @@ type FormValues = {
 	checkInTime: string;
 	checkOutDate: string;
 	checkOutTime: string;
+	accessInstructions: string;
 };
 
 export type EditInitialValues = {
@@ -55,6 +57,7 @@ export type EditInitialValues = {
 	check_in_time: string | null;
 	check_out_date: string | null;
 	check_out_time: string | null;
+	access_instructions: string | null;
 };
 
 export type DateTimeMode = 'isDateAndTime' | 'isOnlyTime';
@@ -543,6 +546,18 @@ const AddPropertyForm = ({ propertyId, initialValues }: Props) => {
 							/>
 						</div>
 					</div>
+				</fieldset>
+
+				<fieldset className="flex flex-col gap-1">
+					<TextArea
+						id="accessInstructions"
+						label={t('propertyForm.accessInstructions')}
+						placeholder={t(
+							'propertyForm.accessInstructionsPlaceholder',
+						)}
+						rows={4}
+						{...register('accessInstructions')}
+					/>
 				</fieldset>
 
 				<ImageSection

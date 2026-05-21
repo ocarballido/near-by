@@ -725,7 +725,9 @@
 		"changeImageHelper": "You can select a new image to replace it.",
 		"formEditTitle": "Edit property",
 		"dateAndTime": "Date & time",
-		"onlyTime": "Time only"
+		"onlyTime": "Time only",
+		"accessInstructions": "Access instructions",
+		"accessInstructionsPlaceholder": "E.g. Blue front door, code 4821#. Take the lift to 3rd floor, apartment A. Key in lockbox next to the door, code 7743."
 	},
 	"Guardar cambios": "Save changes",
 	"Imagen actual": "Current image",
@@ -1063,5 +1065,37 @@
 		"mustVisitNotFound": "The host hasn't marked any must-visit place yet.",
 		"featuredPrefix": "⭐ Host's favourite places:",
 		"mustVisitPrefix": "🔥 Must-visit places according to the host:"
+	},
+	"ArrivalGuide": {
+		"triggerLabel": "Arrival guide",
+		"modalTitle": "Arrival guide",
+		"close": "Close",
+		"next": "Next",
+		"back": "Back",
+		"step": "Step {current} of {total}",
+		"step1Title": "How to get here",
+		"step1Taxi": "Taxi / Uber",
+		"step1TaxiText": "Show this address to your driver:",
+		"step1Car": "Own car",
+		"step1CarText": "Enter this address in your GPS:",
+		"step2Title": "Parking",
+		"step2Empty": "The host has not specified any parking options.",
+		"step2MapsLink": "View on Google Maps",
+		"step3Title": "Building access",
+		"step3Empty": "The host will complete the access instructions soon.",
+		"step4Title": "WiFi & essentials",
+		"step4Wifi": "WiFi",
+		"step4WifiEmpty": "The host has not provided WiFi details.",
+		"step4CheckIn": "Check-in",
+		"step4CheckOut": "Check-out",
+		"step4Emergency": "Emergency",
+		"step4Copy": "Copy",
+		"step4Copied": "Copied!",
+		"step5Title": "You're all set!",
+		"step5Subtitle": "You have everything you need to start your stay.",
+		"step5GuideLink": "View the full guide",
+		"step1MapsButton": "Open in Google Maps",
+		"step1Transit": "Public transport",
+		"step1TransitText": "View metro, bus and train options from your current location"
 	}
 }

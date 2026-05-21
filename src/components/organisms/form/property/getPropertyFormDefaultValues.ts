@@ -9,9 +9,9 @@ type FormValues = {
 	checkInTime: string;
 	checkOutDate: string;
 	checkOutTime: string;
+	accessInstructions: string;
 };
 
-// Convierte HH:mm:ss -> HH:mm (si viene vacío/null, devuelve '')
 const toHHmm = (v: string | null) => (v ? v.slice(0, 5) : '');
 
 export function getPropertyFormDefaultValues(
@@ -28,6 +28,7 @@ export function getPropertyFormDefaultValues(
 			checkInTime: '',
 			checkOutDate: '',
 			checkOutTime: '',
+			accessInstructions: '',
 		};
 	}
 
@@ -48,5 +49,6 @@ export function getPropertyFormDefaultValues(
 		checkInTime: toHHmm(initialValues.check_in_time),
 		checkOutDate: initialValues.check_out_date ?? '',
 		checkOutTime: toHHmm(initialValues.check_out_time),
+		accessInstructions: initialValues.access_instructions ?? '',
 	};
 }

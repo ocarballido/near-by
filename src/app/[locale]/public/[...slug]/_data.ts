@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 
 import type { Tables } from '@/lib/types';
+import { CATEGORIES_SUB_CATEGORIES } from '@/config/config-constants';
 
 type FullProperty = Tables<'properties'>;
 type PropertyDataRow = Tables<'property_data'>;
@@ -252,4 +253,129 @@ export async function fetchInfoSectionsData(
 			order: orderMap[i.sub_category_id],
 		}))
 		.sort((a, b) => a.order - b.order);
+}
+
+// ─── Tipos para la guía de llegada ───────────────────────────────────────────
+
+export type ArrivalParking = {
+	id: string;
+	name: string;
+	address: string;
+	latitude: number | null;
+	longitude: number | null;
+};
+
+export type ArrivalGuideData = {
+	wifi: string | null;
+	parkings: ArrivalParking[];
+	access_instructions: string | null;
+	check_in_time: string | null;
+	check_out_time: string | null;
+	emergency_number: string | null;
+};
+
+type WifiRow = {
+	description: string | null;
+};
+
+type ParkingGroupRow = {
+	id: string;
+};
+
+type ParkingLocationRow = {
+	id: string;
+	name: string;
+	address: string;
+	latitude: number | null;
+	longitude: number | null;
+};
+
+type ParkingRow = {
+	id: string;
+	name: string | null;
+	address: string | null;
+};
+
+const EMERGENCY_NUMBERS: Record<string, string> = {
+	españa: '112',
+	france: '112',
+	francia: '112',
+	italy: '112',
+	italia: '112',
+	germany: '112',
+	alemania: '112',
+	'united kingdom': '999',
+	'reino unido': '999',
+	'united states': '911',
+	'estados unidos': '911',
+	'ee. uu.': '911',
+	portugal: '112',
+};
+
+function getEmergencyNumber(address: string): string | null {
+	const last = address.split(',').pop()?.trim().toLowerCase() ?? '';
+	return EMERGENCY_NUMBERS[last] ?? null;
+}
+
+export async function fetchArrivalGuideData(
+	propertyId: string,
+	property: Pick<
+		FullProperty,
+		'check_in_time' | 'check_out_time' | 'address'
+	> & {
+		access_instructions?: string | null;
+	},
+): Promise<ArrivalGuideData> {
+	const supabase = await createServerAdminClient();
+
+	const WIFI_SUB_CAT_ID =
+		CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.WIFI.id;
+	const PARKINGS_SUB_CAT_ID =
+		CATEGORIES_SUB_CATEGORIES.SERVICES.SUB_CATEGORIES.PARKINGS.id;
+
+	const [
+		{ data: wifiData, error: wifiError },
+		{ data: parkingsData, error: parkingsError },
+	] = await Promise.all([
+		supabase
+			.from('property_data')
+			.select('description')
+			.eq('property_id', propertyId)
+			.eq('type', 'info')
+			.eq('sub_category_id', WIFI_SUB_CAT_ID)
+			.maybeSingle(),
+		supabase
+			.from('property_data')
+			.select('id, name, address')
+			.eq('property_id', propertyId)
+			.eq('type', 'location')
+			.eq('sub_category_id', PARKINGS_SUB_CAT_ID)
+			.order('name', { ascending: true })
+			.overrideTypes<ParkingRow[], { merge: false }>(),
+	]);
+
+	if (wifiError) {
+		console.error('[fetchArrivalGuideData] wifi error:', wifiError.message);
+	}
+	if (parkingsError) {
+		console.error(
+			'[fetchArrivalGuideData] parkings error:',
+			parkingsError.message,
+		);
+	}
+
+	return {
+		wifi: (wifiData as WifiRow | null)?.description ?? null,
+		parkings: (parkingsData ?? []).map((p) => ({
+			id: p.id,
+			name: p.name ?? '',
+			address: p.address ?? '',
+			latitude: null,
+			longitude: null,
+		})),
+		access_instructions: property.access_instructions ?? null,
+		check_in_time: property.check_in_time ?? null,
+		check_out_time: property.check_out_time ?? null,
+		emergency_number: getEmergencyNumber(property.address),
+	};
 }
