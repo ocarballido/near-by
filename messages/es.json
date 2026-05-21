@@ -730,7 +730,9 @@
 		"changeImageHelper": "Puedes seleccionar otra imagen para reemplazarla.",
 		"formEditTitle": "Editar propiedad",
 		"dateAndTime": "Fecha y hora",
-		"onlyTime": "Solo hora"
+		"onlyTime": "Solo hora",
+		"accessInstructions": "Instrucciones de acceso",
+		"accessInstructionsPlaceholder": "Ej: Portal azul, código 4821#. Subir al 3º, puerta A. Llave en caja de seguridad junto a la puerta, código 7743."
 	},
 	"Guardar cambios": "Guardar cambios",
 	"Imagen actual": "Imagen actual",
@@ -1067,5 +1069,34 @@
 		"mustVisitNotFound": "El propietario no ha marcado ningún lugar como imprescindible todavía.",
 		"featuredPrefix": "⭐ Lugares favoritos del anfitrión:",
 		"mustVisitPrefix": "🔥 Lugares imprescindibles según el anfitrión:"
+	},
+	"ArrivalGuide": {
+		"triggerLabel": "Guía de llegada",
+		"modalTitle": "Guía de llegada",
+		"close": "Cerrar",
+		"next": "Siguiente",
+		"back": "Atrás",
+		"step": "Paso {current} de {total}",
+		"step1Title": "Cómo llegar",
+		"step1Taxi": "Taxi / Uber",
+		"step1TaxiText": "Muestra esta dirección a tu conductor:",
+		"step1Car": "Coche propio",
+		"step1CarText": "Introduce esta dirección en tu GPS:",
+		"step2Title": "Aparcamiento",
+		"step2Empty": "El propietario no ha especificado aparcamientos.",
+		"step2MapsLink": "Ver en Google Maps",
+		"step3Title": "Acceso al alojamiento",
+		"step3Empty": "El propietario completará pronto las instrucciones de entrada.",
+		"step4Title": "WiFi y datos esenciales",
+		"step4Wifi": "WiFi",
+		"step4WifiEmpty": "El propietario no ha indicado los datos del WiFi.",
+		"step4CheckIn": "Check-in",
+		"step4CheckOut": "Check-out",
+		"step4Emergency": "Emergencias",
+		"step4Copy": "Copiar",
+		"step4Copied": "¡Copiado!",
+		"step5Title": "¡Todo listo!",
+		"step5Subtitle": "Ya tienes todo lo que necesitas para empezar tu estancia.",
+		"step5GuideLink": "Ver la guía completa"
 	}
 }

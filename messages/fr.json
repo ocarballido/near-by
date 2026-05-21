@@ -730,7 +730,9 @@
 		"changeImageHelper": "Vous pouvez sélectionner une nouvelle image pour la remplacer.",
 		"formEditTitle": "Modifier la propriété",
 		"dateAndTime": "Date et heure",
-		"onlyTime": "Heure uniquement"
+		"onlyTime": "Heure uniquement",
+		"accessInstructions": "Instructions d'accès",
+		"accessInstructionsPlaceholder": "Ex : Porte bleue, code 4821#. Monter au 3ème étage, appartement A. Clé dans la boîte à clés près de la porte, code 7743."
 	},
 	"Guardar cambios": "Enregistrer les modifications",
 	"Imagen actual": "Image actuelle",
@@ -1067,5 +1069,34 @@
 		"mustVisitNotFound": "L'hôte n'a pas encore marqué de lieu incontournable.",
 		"featuredPrefix": "⭐ Lieux favoris de l'hôte :",
 		"mustVisitPrefix": "🔥 Lieux incontournables selon l'hôte :"
+	},
+	"ArrivalGuide": {
+		"triggerLabel": "Guide d'arrivée",
+		"modalTitle": "Guide d'arrivée",
+		"close": "Fermer",
+		"next": "Suivant",
+		"back": "Retour",
+		"step": "Étape {current} sur {total}",
+		"step1Title": "Comment arriver",
+		"step1Taxi": "Taxi / Uber",
+		"step1TaxiText": "Montrez cette adresse à votre chauffeur :",
+		"step1Car": "Voiture personnelle",
+		"step1CarText": "Entrez cette adresse dans votre GPS :",
+		"step2Title": "Stationnement",
+		"step2Empty": "L'hôte n'a pas précisé d'options de stationnement.",
+		"step2MapsLink": "Voir sur Google Maps",
+		"step3Title": "Accès au logement",
+		"step3Empty": "L'hôte complétera bientôt les instructions d'accès.",
+		"step4Title": "WiFi et informations essentielles",
+		"step4Wifi": "WiFi",
+		"step4WifiEmpty": "L'hôte n'a pas fourni les informations WiFi.",
+		"step4CheckIn": "Check-in",
+		"step4CheckOut": "Check-out",
+		"step4Emergency": "Urgences",
+		"step4Copy": "Copier",
+		"step4Copied": "Copié !",
+		"step5Title": "Tout est prêt !",
+		"step5Subtitle": "Vous avez tout ce qu'il vous faut pour commencer votre séjour.",
+		"step5GuideLink": "Voir le guide complet"
 	}
 }
