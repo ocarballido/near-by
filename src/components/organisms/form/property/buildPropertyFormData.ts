@@ -5,7 +5,6 @@ type BuildArgs = {
 	locale: string;
 	selectedSeedInfoIds: string[];
 	dateTimeMode?: DateTimeMode;
-
 	data: {
 		name: string;
 		address: string;
@@ -15,6 +14,7 @@ type BuildArgs = {
 		checkInTime: string;
 		checkOutDate: string;
 		checkOutTime: string;
+		accessInstructions: string;
 		image?: FileList;
 	};
 };
@@ -30,7 +30,6 @@ export function buildPropertyFormData({
 
 	fd.append('name', data.name);
 
-	// En create: address + coords + seed + locale
 	if (!isEdit) {
 		fd.append('address', data.address);
 		fd.append('latitude', data.latitude);
@@ -44,11 +43,11 @@ export function buildPropertyFormData({
 	const checkOutDateToSend =
 		dateTimeMode === 'isOnlyTime' ? '' : (data.checkOutDate ?? '');
 
-	// Fechas/horas (si vienen vacías, mandamos '')
 	fd.append('check_in_date', checkInDateToSend);
 	fd.append('check_in_time', data.checkInTime ?? '');
 	fd.append('check_out_date', checkOutDateToSend);
 	fd.append('check_out_time', data.checkOutTime ?? '');
+	fd.append('access_instructions', data.accessInstructions ?? '');
 
 	const file = data.image?.[0];
 	if (file) fd.append('image', file);

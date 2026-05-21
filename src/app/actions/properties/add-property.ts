@@ -44,6 +44,7 @@ const PropertySchema = z.object({
 	check_in_time: z.preprocess(emptyToNull, z.string().nullable()),
 	check_out_date: z.preprocess(emptyToNull, z.string().nullable()),
 	check_out_time: z.preprocess(emptyToNull, z.string().nullable()),
+	access_instructions: z.preprocess(emptyToNull, z.string().nullable()),
 });
 
 // Tipo para los errores de validación
@@ -96,6 +97,7 @@ export async function createProperty(formData: FormData): Promise<FormState> {
 			check_in_time: formData.get('check_in_time'),
 			check_out_date: formData.get('check_out_date'),
 			check_out_time: formData.get('check_out_time'),
+			access_instructions: formData.get('access_instructions'),
 		};
 
 		// 4. Validar con Zod
@@ -130,7 +132,7 @@ export async function createProperty(formData: FormData): Promise<FormState> {
 		// 8. Crear la propiedad en la base de datos
 		type IdSlug = { id: string; slug: string | null };
 
-		const payload: TablesInsert<'properties'> = {
+		const payload = {
 			user_id: userId,
 			name: validated.name,
 			description: validated.description,
@@ -142,7 +144,8 @@ export async function createProperty(formData: FormData): Promise<FormState> {
 			check_in_time: validated.check_in_time,
 			check_out_date: validated.check_out_date,
 			check_out_time: validated.check_out_time,
-		};
+			access_instructions: validated.access_instructions,
+		} satisfies TablesInsert<'properties'>;
 
 		const { data, error: insertError } = await db
 			.from('properties')
