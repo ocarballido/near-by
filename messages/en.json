@@ -1097,5 +1097,6 @@
 		"step1MapsButton": "Open in Google Maps",
 		"step1Transit": "Public transport",
 		"step1TransitText": "View metro, bus and train options from your current location"
-	}
+	},
+	"manage": "Manage"
 }

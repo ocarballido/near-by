@@ -62,6 +62,7 @@ export type FormState = {
 export async function updateProperty(
 	propertyId: string,
 	formData: FormData,
+	redirectAfter?: string,
 ): Promise<FormState> {
 	try {
 		// 1) Auth
@@ -183,7 +184,9 @@ export async function updateProperty(
 
 		revalidatePath('/app');
 
-		const redirectTo = `/app/properties/${propertyId}/${CATEGORIES_SUB_CATEGORIES.LODGING.id}/${CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.MANUAL.id}`;
+		const defaultRedirect = `/app/properties/${propertyId}/${CATEGORIES_SUB_CATEGORIES.LODGING.id}/${CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.MANUAL.id}`;
+
+		const redirectTo = redirectAfter ?? defaultRedirect;
 
 		return {
 			success: true,

@@ -14,6 +14,8 @@ import Typography from '@/components/atoms/typography';
 import ShareButton from '../../share-property-button';
 
 import { formatDate, formatTime } from '@/utils/format-date-time';
+import IconConstruction from '@/components/atoms/icon/construction';
+import ButtonIcon from '@/components/atoms/button-icon';
 
 type HouseProps = {
 	address: string;
@@ -73,9 +75,6 @@ const House = ({
 			</div>
 			<div className="content transition-all flex justify-end gap-2 flex-col relative w-full bg-white z-5">
 				<div className="flex gap-2 items-center">
-					<span className="grow-0 p-1.5 bg-primary-100 rounded-full h-fit">
-						<IconApartment color="primary" size={18} />
-					</span>
 					<Typography component="h5">{name}</Typography>
 				</div>
 				<div className="flex gap-2  items-center">
@@ -145,22 +144,27 @@ const House = ({
 						hasInfo={hasInfo || false}
 					/>
 				)}
-				<div className="flex gap-2 w-full">
+				<div className="flex gap-2 w-full mt-2">
 					{deleatable && (
-						<Button
-							className="w-full button__delete"
-							color="secondary"
-							iconLeft={<IconDelete />}
-							label={t('Eliminar')}
+						<ButtonIcon
+							icon={<IconDelete />}
 							onClick={handleDelete}
+							color="error"
 						/>
 					)}
+					<ButtonLink
+						iconLeft={<IconEdit />}
+						label={t('Editar')}
+						href={`/app/properties/edit/${propertyId}?from=properties`}
+						color="secondary"
+						className="w-full"
+					/>
 					{editeable && href && (
 						<ButtonLink
 							className="w-full"
-							iconLeft={<IconEdit />}
-							label={t('Editar')}
+							label={t('manage')}
 							href={href}
+							iconLeft={<IconConstruction />}
 						/>
 					)}
 				</div>

@@ -11,6 +11,10 @@ import IconLocationOn from '@/components/atoms/icon/location-on';
 import IconCheckIn from '@/components/atoms/icon/check-in';
 import IconCheckOut from '@/components/atoms/icon/check-out';
 import ButtonLink from '../button-link';
+import IconEdit from '@/components/atoms/icon/edit';
+import IconApartment from '@/components/atoms/icon/apartment';
+import IconHelp from '@/components/atoms/icon/help';
+import IconConstruction from '@/components/atoms/icon/construction';
 
 type PropertyDataBoardProps = {
 	propertyId: string;
@@ -85,21 +89,24 @@ const PropertyDataBoard = ({
 			<div className="flex flex-col lg:flex-row gap-1 relative z-1">
 				<ButtonLink
 					label={t('Editar')}
-					href={`/app/properties/edit/${propertyId}`}
+					href={`/app/properties/edit/${propertyId}?from=manage`}
 					color="primary"
 					className="w-full"
+					iconLeft={<IconEdit />}
 				/>
 				<ButtonLink
 					label={t('Mis Propiedades')}
 					href="/app/properties"
 					color="white"
 					className="w-full"
+					iconLeft={<IconApartment />}
 				/>
 				<ButtonLink
 					label={t('feedback.cta')}
 					href={`/app/feedback/dashboard/property/${propertyId}?returnTo=/app/properties/${propertyId}/${categoryId}/${subCategoryId}`}
 					color="white"
 					className="w-full"
+					iconLeft={<IconHelp />}
 				/>
 			</div>
 		</div>
