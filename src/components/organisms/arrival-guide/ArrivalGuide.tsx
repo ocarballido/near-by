@@ -21,6 +21,9 @@ import IconClose from '@/components/atoms/icon/close';
 import IconArrowLeftAlt from '@/components/atoms/icon/arrow-left-alt';
 import IconArrowRightAlt from '@/components/atoms/icon/arrow-right-alt';
 import Typography from '@/components/atoms/typography';
+import IconDirections from '@/components/atoms/icon/directions';
+import IconInfo from '@/components/atoms/icon/info';
+import IconHelp from '@/components/atoms/icon/help';
 
 interface Props {
 	data: ArrivalGuideData;
@@ -36,6 +39,7 @@ export default function ArrivalGuide({ data, propertyId, address }: Props) {
 	const t = useTranslations('ArrivalGuide');
 	const [open, setOpen] = useState(false);
 	const [step, setStep] = useState(1);
+	const [isPulsing, setIsPulsing] = useState(false);
 
 	useEffect(() => {
 		const seen = localStorage.getItem(getStorageKey(propertyId));
@@ -48,6 +52,8 @@ export default function ArrivalGuide({ data, propertyId, address }: Props) {
 		localStorage.setItem(getStorageKey(propertyId), '1');
 		setOpen(false);
 		setStep(1);
+		setIsPulsing(true);
+		setTimeout(() => setIsPulsing(false), 3500);
 	}
 
 	function handleOpen() {
@@ -78,12 +84,18 @@ export default function ArrivalGuide({ data, propertyId, address }: Props) {
 	return (
 		<>
 			<div className="fixed bottom-19 right-4 z-40">
-				<Button
-					iconLeft={<IconHome />}
-					aria-label={t('triggerLabel')}
-					onClick={handleOpen}
-					label={t('triggerLabel')}
-				/>
+				<div className={isPulsing ? 'animate-bounce' : ''}>
+					{isPulsing && (
+						<span className="absolute -inset-6 rounded-full bg-primary-400 animate-ping opacity-75 pointer-events-none" />
+					)}
+					<Button
+						iconLeft={<IconHelp />}
+						aria-label={t('triggerLabel')}
+						onClick={handleOpen}
+						label={t('triggerLabel')}
+						className="py-3! px-4!"
+					/>
+				</div>
 			</div>
 
 			<Dialog
