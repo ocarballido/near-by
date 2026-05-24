@@ -1101,5 +1101,6 @@
 		"step1MapsButton": "Abrir en Google Maps",
 		"step1Transit": "Transporte público",
 		"step1TransitText": "Ver opciones de metro, bus y tren desde tu ubicación actual"
-	}
+	},
+	"manage": "Gestionar"
 }

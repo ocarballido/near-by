@@ -67,6 +67,7 @@ type Props = {
 	// si vienen ambos => modo edición
 	propertyId?: string;
 	initialValues?: EditInitialValues;
+	redirectAfter?: string;
 };
 
 const DEFAULT_SEED_INFO_IDS = [
@@ -77,7 +78,11 @@ const DEFAULT_SEED_INFO_IDS = [
 	CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.WIFI.id,
 ] as const;
 
-const AddPropertyForm = ({ propertyId, initialValues }: Props) => {
+const AddPropertyForm = ({
+	propertyId,
+	initialValues,
+	redirectAfter,
+}: Props) => {
 	const t = useTranslations();
 	const locale = useLocale();
 	const router = useRouter();
@@ -281,7 +286,7 @@ const AddPropertyForm = ({ propertyId, initialValues }: Props) => {
 		openLoading();
 
 		const result = isEdit
-			? await updateProperty(propertyId as string, fd)
+			? await updateProperty(propertyId as string, fd, redirectAfter)
 			: await createProperty(fd);
 
 		if (result.errors) {

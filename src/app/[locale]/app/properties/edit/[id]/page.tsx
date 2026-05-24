@@ -7,13 +7,18 @@ import type { Tables } from '@/lib/types';
 type FullProperty = Tables<'properties'>;
 
 type PageProps = {
-	params: Promise<{ id: string }>; // ✅ Next 15
+	params: Promise<{ id: string }>;
+	searchParams: Promise<{ from?: string }>;
 };
 
 export const dynamic = 'force-dynamic';
 
-export default async function EditProperty({ params }: PageProps) {
+export default async function EditProperty({
+	params,
+	searchParams,
+}: PageProps) {
 	const { id: propertyId } = await params;
+	const { from } = await searchParams;
 
 	// 1) Auth (SSR client)
 	const supabase = await createSSRClient();
@@ -61,6 +66,9 @@ export default async function EditProperty({ params }: PageProps) {
 			<AddPropertyForm
 				propertyId={propertyId}
 				initialValues={initialValues}
+				redirectAfter={
+					from === 'properties' ? '/app/properties' : undefined
+				}
 			/>
 		</div>
 	);
