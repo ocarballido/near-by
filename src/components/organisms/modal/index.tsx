@@ -58,7 +58,7 @@ const Modal = ({
 			<div className="fixed inset-0 w-screen overflow-y-auto p-4">
 				<div className="flex items-center justify-center p-4">
 					<DialogPanel
-						className={`${size} space-y-4 rounded-2xl bg-white shadow-2xl`}
+						className={`${size} space-y-4 rounded-2xl bg-white shadow-2xl w-full`}
 					>
 						<DialogTitle className="font-bold text-xl p-4 border-b border-b-gray-100 m-0">
 							{title}
