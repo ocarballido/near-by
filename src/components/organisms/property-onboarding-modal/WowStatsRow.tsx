@@ -41,8 +41,6 @@ export function WowStatsRow({ totalLocations, totalInfo }: Props) {
 			<StatItem value={animatedLocations} label={t('stats.locations')} />
 			<div className="w-px bg-primary-100" />
 			<StatItem value={animatedInfo} label={t('stats.infoSections')} />
-			<div className="w-px bg-primary-100" />
-			<StatItem value="∞" label={t('stats.guestsCanSeeIt')} />
 		</div>
 	);
 }

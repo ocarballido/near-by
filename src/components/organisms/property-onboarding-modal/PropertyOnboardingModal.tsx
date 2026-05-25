@@ -353,7 +353,7 @@ const PropertyOnboardingModal = ({
 							<ShareMenu
 								url={publicUrl}
 								surface="property_card"
-								distinctId=""
+								distinctId={user?.id ?? ''}
 								whatsappText={t('shareWhatsappText', {
 									name: propertyName,
 								})}
