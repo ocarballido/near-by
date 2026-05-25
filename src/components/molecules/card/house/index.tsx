@@ -1,13 +1,11 @@
 import { useTranslations, useLocale } from 'next-intl';
 
 import Image from 'next/image';
-import IconApartment from '@/components/atoms/icon/apartment';
 import IconLocationOn from '@/components/atoms/icon/location-on';
 import IconDelete from '@/components/atoms/icon/delete';
 import IconEdit from '@/components/atoms/icon/edit';
 import IconCheckIn from '@/components/atoms/icon/check-in';
 import IconCheckOut from '@/components/atoms/icon/check-out';
-import Button from '../../button';
 import ButtonLink from '../../button-link';
 import PropertySteps from '../../property-steps';
 import Typography from '@/components/atoms/typography';
@@ -73,6 +71,14 @@ const House = ({
 					distinctId={distinctId}
 				/>
 			</div>
+			{deleatable && (
+				<ButtonIcon
+					icon={<IconDelete />}
+					onClick={handleDelete}
+					color="error"
+					className="absolute bg-white top-2 left-2 z-6"
+				/>
+			)}
 			<div className="content transition-all flex justify-end gap-2 flex-col relative w-full bg-white z-5">
 				<div className="flex gap-2 items-center">
 					<Typography component="h5">{name}</Typography>
@@ -145,13 +151,6 @@ const House = ({
 					/>
 				)}
 				<div className="flex gap-2 w-full mt-2">
-					{deleatable && (
-						<ButtonIcon
-							icon={<IconDelete />}
-							onClick={handleDelete}
-							color="error"
-						/>
-					)}
 					<ButtonLink
 						iconLeft={<IconEdit />}
 						label={t('Editar')}

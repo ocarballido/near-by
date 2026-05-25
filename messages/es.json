@@ -1102,5 +1102,30 @@
 		"step1Transit": "Transporte público",
 		"step1TransitText": "Ver opciones de metro, bus y tren desde tu ubicación actual"
 	},
-	"manage": "Gestionar"
+	"manage": "Gestionar",
+	"wow": {
+		"title": "¡Tu guía ya está publicada!",
+		"subtitle": "Esto es lo que verá tu inquilino en la guía de <bold>\"{name}\"</bold> ahora mismo.",
+		"motivation": "Completar tu guía mejora la experiencia de tus inquilinos y aumenta la valoración de tu alojamiento.",
+		"stats": {
+			"locations": "Lugares añadidos",
+			"infoSections": "Secciones de información",
+			"guestsCanSeeIt": "Inquilinos pueden verla"
+		},
+		"preview": {
+			"empty": "Aún no hay lugares añadidos. ¡Mejora tu guía para sorprender a tus inquilinos!",
+			"andMore": "y {count} lugares más..."
+		},
+		"cta": {
+			"improve": "Mejorar la guía",
+			"close": "Ahora no",
+			"closeModal": "Cerrar"
+		},
+		"contentTitle": "¡Todo listo!",
+		"publicWeb": "Sitio público",
+		"ownerAction": "Añade más contenido: cuanto más completa esté tu guía, menos preguntas recibirás, más satisfechos estarán tus inquilinos y más probable es que recomienden tu propiedad y te dejen 5 estrellas.",
+		"trigger": {
+			"label": "Vista del inquilino"
+		}
+	}
 }

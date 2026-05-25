@@ -1,5 +1,9 @@
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
-import ModalAutoContent from '@/components/templates/modal-auto-content';
+import PropertyOnboardingModal from '@/components/organisms/property-onboarding-modal/PropertyOnboardingModal';
+
+import type { Tables } from '@/lib/types';
+
+type PropertyDataRow = Pick<Tables<'property_data'>, 'id' | 'name' | 'type'>;
 
 type PageProps = {
 	params: Promise<{ slug: string[] }>;
@@ -13,22 +17,51 @@ export default async function PropertyEditorLayout({
 	const { slug } = await params;
 	const [propertyId] = slug;
 
-	const supabase = await createServerAdminClient();
+	let hasLocations = false;
+	let previewLocations: PropertyDataRow[] = [];
+	let totalInfo = 0;
+	let propertyName = '';
 
-	const { data, error } = await supabase
-		.from('property_data')
-		.select('id')
-		.eq('property_id', propertyId)
-		.eq('type', 'location')
-		.limit(1);
+	try {
+		const supabase = await createServerAdminClient();
 
-	const hasLocations = !error && (data?.length ?? 0) > 0;
+		const [{ data: allData }, { data: property }] = await Promise.all([
+			supabase
+				.from('property_data')
+				.select('id, name, type')
+				.eq('property_id', propertyId)
+				.order('created_at', { ascending: true }),
+			supabase
+				.from('properties')
+				.select('name')
+				.eq('id', propertyId)
+				.single()
+				.overrideTypes<{ name: string }, { merge: false }>(),
+		]);
+
+		const rows = (allData ?? []) as PropertyDataRow[];
+		const locations = rows.filter((r) => r.type === 'location');
+
+		hasLocations = locations.length > 0;
+		previewLocations = locations.slice(0, 4);
+		totalInfo = rows.filter((r) => r.type === 'info').length;
+		propertyName = property?.name ?? '';
+	} catch (error) {
+		console.error(
+			'PropertyEditorLayout: failed to fetch onboarding data',
+			error,
+		);
+		// Fallback seguro: el modal no aparece y la página sigue funcionando
+	}
 
 	return (
 		<>
-			<ModalAutoContent
+			<PropertyOnboardingModal
 				initialHasLocations={hasLocations}
 				propertyId={propertyId}
+				propertyName={propertyName}
+				previewLocations={previewLocations}
+				totalInfo={totalInfo}
 			/>
 			{children}
 		</>

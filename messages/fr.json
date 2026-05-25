@@ -1102,5 +1102,30 @@
 		"step1Transit": "Transports en commun",
 		"step1TransitText": "Voir les options de métro, bus et train depuis votre position actuelle"
 	},
-	"manage": "Gérer"
+	"manage": "Gérer",
+	"wow": {
+		"title": "Votre guide est déjà publié !",
+		"subtitle": "Voici ce que votre locataire verra dans le guide de <bold>\"{name}\"</bold> en ce moment.",
+		"motivation": "Compléter votre guide améliore l'expérience de vos locataires et augmente la note de votre hébergement.",
+		"stats": {
+			"locations": "Lieux ajoutés",
+			"infoSections": "Sections d'information",
+			"guestsCanSeeIt": "Locataires peuvent le voir"
+		},
+		"preview": {
+			"empty": "Aucun lieu ajouté pour l'instant. Améliorez votre guide pour impressionner vos locataires !",
+			"andMore": "et {count} lieux de plus..."
+		},
+		"cta": {
+			"improve": "Améliorer le guide",
+			"close": "Pas maintenant",
+			"closeModal": "Fermer"
+		},
+		"contentTitle": "Tout est prêt !",
+		"publicWeb": "Site public",
+		"ownerAction": "Ajoutez plus de contenu : plus votre guide est complet, moins vous recevrez de questions, plus vos locataires seront satisfaits et plus ils seront susceptibles de recommander votre logement et de vous laisser 5 étoiles.",
+		"trigger": {
+			"label": "Vue du locataire"
+		}
+	}
 }

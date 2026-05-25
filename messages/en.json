@@ -1098,5 +1098,30 @@
 		"step1Transit": "Public transport",
 		"step1TransitText": "View metro, bus and train options from your current location"
 	},
-	"manage": "Manage"
+	"manage": "Manage",
+	"wow": {
+		"title": "Your guide is already published!",
+		"subtitle": "This is what your guest will see in <bold>\"{name}'s\"</bold> guide right now.",
+		"motivation": "Completing your guide improves your guests' experience and increases your property rating.",
+		"stats": {
+			"locations": "Places added",
+			"infoSections": "Information sections",
+			"guestsCanSeeIt": "Guests can see it"
+		},
+		"preview": {
+			"empty": "No places added yet. Improve your guide to impress your guests!",
+			"andMore": "and {count} more places..."
+		},
+		"cta": {
+			"improve": "Improve the guide",
+			"close": "Not now",
+			"closeModal": "Close"
+		},
+		"contentTitle": "You're all set!",
+		"publicWeb": "Public web",
+		"ownerAction": "Add more content: the more complete your guide, the fewer questions you'll receive, the more satisfied your guests will be, and the more likely they are to recommend your property and leave you 5 stars.",
+		"trigger": {
+			"label": "Guest view"
+		}
+	}
 }

@@ -26,7 +26,6 @@ export default async function Property({ params }: PageProps) {
 	const { slug } = await params;
 	const [propertyId, categoryId, subCategoryId] = slug;
 
-	// Auth (cookie-based)
 	const ssrClient = await createSSRClient();
 	const {
 		data: { user },
@@ -35,10 +34,8 @@ export default async function Property({ params }: PageProps) {
 
 	if (authError || !user) redirect('/auth/login');
 
-	// Admin client (bypasses RLS) — but we will enforce ownership manually
 	const supabase = await createServerAdminClient();
 
-	// 1) Fetch property INCLUDING owner field
 	const { data: property, error: propErr } = await supabase
 		.from('properties')
 		.select(
@@ -48,49 +45,38 @@ export default async function Property({ params }: PageProps) {
 		.single()
 		.overrideTypes<FullProperty & { user_id: string }, { merge: false }>();
 
-	// Guards: exists
 	if (propErr || !property?.id) notFound();
 
-	// 2) Ownership guard (THIS is the missing protection)
 	if (property.user_id !== user.id) notFound();
-
-	// 3) Remaining queries in parallel (safe now because we already verified ownership)
-	const propertyDataPromise = supabase
-		.from('property_data')
-		.select(
-			'id,name,description,image_url,type,latitude,longitude,featured,address,must_visit',
-		)
-		.eq('property_id', propertyId)
-		.eq('sub_category_id', subCategoryId)
-		.order('featured', { ascending: false })
-		.order('must_visit', { ascending: false })
-		.order('name', { ascending: true });
-
-	const subCategoryPromise = supabase
-		.from('sub_categories')
-		.select('name,type,category_id')
-		.eq('id', subCategoryId)
-		.single()
-		.overrideTypes<SubCategoryForPage, { merge: false }>();
-
-	const countsPromise = getPropertySubCategoryCounts(propertyId);
 
 	const [
 		{ data: propertyData, error: propertyDataErr },
 		{ data: subCategory, error: subCategoryErr },
 		counts,
 	] = await Promise.all([
-		propertyDataPromise,
-		subCategoryPromise,
-		countsPromise,
+		supabase
+			.from('property_data')
+			.select(
+				'id,name,description,image_url,type,latitude,longitude,featured,address,must_visit',
+			)
+			.eq('property_id', propertyId)
+			.eq('sub_category_id', subCategoryId)
+			.order('featured', { ascending: false })
+			.order('must_visit', { ascending: false })
+			.order('name', { ascending: true }),
+		supabase
+			.from('sub_categories')
+			.select('name,type,category_id')
+			.eq('id', subCategoryId)
+			.single()
+			.overrideTypes<SubCategoryForPage, { merge: false }>(),
+		getPropertySubCategoryCounts(propertyId),
 	]);
 
 	if (propertyDataErr || subCategoryErr || !subCategory) notFound();
 
-	// URL consistency
 	if (subCategory.category_id !== categoryId) notFound();
 
-	// Strict guard for map context
 	if (property.latitude == null || property.longitude == null) notFound();
 
 	return (
