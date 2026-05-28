@@ -8,6 +8,7 @@ import multyProperty from '../../../public/static/img/multy-property-2x.webp';
 import blur from '../../../public/static/img/home/blur.webp';
 import how from '../../../public/static/img/home/how_bnbexplorer.webp';
 import guestChat from '../../../public/static/img/home/chatbot.webp';
+import welcome from '../../../public/static/img/home/welcome.png';
 
 import categories from '../../../public/static/img/categories-2x.webp';
 import uiEdit from '../../../public/static/img/ui-edit-2x.webp';
@@ -42,6 +43,7 @@ import { DEMOS } from '@/config/config-constants';
 
 import styles from './page.module.css';
 import Typography from '@/components/atoms/typography';
+import IconBookOpened from '@/components/atoms/icon/book-opened';
 
 export default function Home() {
 	const t = useTranslations();
@@ -153,13 +155,13 @@ export default function Home() {
 				<h3 className="font-heading font-medium text-xl md:text-2xl max-w-[800px] ml-auto mr-auto px-4 text-center">
 					{t('page_home.section_why.subtitle')}
 				</h3>
-				<div className="grid grid-cols-1 grid-rows-1 md:grid-cols-2 md:grid-rows-2 gap-2 max-w-[900px]">
+				{/* <div className="grid grid-cols-1 grid-rows-1 md:grid-cols-2 md:grid-rows-3 lg:grid-cols-3 lg:grid-rows-2 gap-2 max-w-[1200px]">
 					<Feature
 						color="gradient"
 						icon={<IconChatBubble color="white" />}
 						title={t('page_home.section_why.cardTitle1')}
 						body={t('page_home.section_why.cardSubtitle1')}
-						className="md:row-span-2"
+						className="lg:row-span-2"
 						isFeatured
 						image={guestChat.src}
 					/>
@@ -174,7 +176,50 @@ export default function Home() {
 						icon={<IconCheckCircle color="white" />}
 						title={t('page_home.section_why.cardTitle3')}
 						body={t('page_home.section_why.cardSubtitle3')}
-						className="md:col-start-2 md:row-start-2"
+						className="md:row-span-2 lg:col-start-2 lg:row-start-2"
+					/>
+					<Feature
+						color="gradient"
+						icon={<IconChatBubble color="white" />}
+						title={t('page_home.section_why.cardTitle1')}
+						body={t('page_home.section_why.cardSubtitle1')}
+						className="md:row-start-3 lg:row-span-2"
+						isFeatured
+						image={welcome.src}
+					/>
+				</div> */}
+				<div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3 max-w-[1200px]">
+					<Feature
+						color="gradient"
+						icon={<IconChatBubble color="white" />}
+						title={t('page_home.section_why.cardTitle1')}
+						body={t('page_home.section_why.cardSubtitle1')}
+						className="order-1 sm:row-span-2 lg:col-start-1 lg:row-start-1 lg:row-span-2"
+						isFeatured
+						image={guestChat.src}
+					/>
+					<Feature
+						color="gradient"
+						icon={<IconStarShine color="white" />}
+						title={t('page_home.section_why.cardTitle2')}
+						body={t('page_home.section_why.cardSubtitle2')}
+						className="order-2 sm:row-start-3 lg:col-start-2 lg:row-start-1 lg:row-span-1"
+					/>
+					<Feature
+						color="gradient"
+						icon={<IconCheckCircle color="white" />}
+						title={t('page_home.section_why.cardTitle3')}
+						body={t('page_home.section_why.cardSubtitle3')}
+						className="order-3 sm:col-start-2 sm:row-start-1 lg:col-start-2 lg:row-start-2 lg:row-span-1"
+					/>
+					<Feature
+						color="gradient"
+						icon={<IconBookOpened color="white" />}
+						title={t('page_home.section_why.cardTitle4')}
+						body={t('page_home.section_why.cardSubtitle4')}
+						className="order-4 sm:col-start-2 sm:row-start-2 sm:row-span-2 lg:col-start-3 lg:row-start-1 lg:row-span-2"
+						isFeatured
+						image={welcome.src}
 					/>
 				</div>
 				<ButtonLink
