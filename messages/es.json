@@ -693,11 +693,13 @@
 	},
 	"propertiesStatus": {
 		"completed": "Listas",
-		"inProgress": "Pendientes"
+		"inProgress": "Pendientes",
+		"properties": "Propiedades"
 	},
 	"lastActivity": {
 		"title": "Última actividad",
-		"edited": "Editaste \"{property}\" {time}"
+		"edited": "Editaste \"{property}\" {time}",
+		"seeProperty": "Ver propiedad"
 	},
 	"recommendations": {
 		"title": "Recomendaciones de la app",

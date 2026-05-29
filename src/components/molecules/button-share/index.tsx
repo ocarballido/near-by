@@ -24,6 +24,7 @@ type ShareMenuProps = {
 
 	/** distinctId para Mixpanel (owner user.id o tenant anon id) */
 	distinctId: string;
+	className?: string;
 
 	/** texto opcional para WhatsApp */
 	whatsappText?: string;
@@ -46,6 +47,7 @@ export function ShareMenu({
 	iconSize = 40,
 	showCopyLink = true,
 	props,
+	className,
 }: ShareMenuProps) {
 	const t = useTranslations();
 
@@ -103,7 +105,9 @@ export function ShareMenu({
 	};
 
 	return (
-		<div className="flex items-center gap-1 p-1 bg-gray-200 rounded-full">
+		<div
+			className={`flex items-center gap-1 p-1 bg-gray-200 rounded-full ${className}`}
+		>
 			<FacebookShareButton
 				url={shareUrl}
 				// react-share llama a onClick antes del popup

@@ -98,7 +98,7 @@ export default async function DashboardContent({ searchParams }: PageProps) {
 
 	return (
 		<AppContentTemplate>
-			<div className="p-2 font-roboto flex flex-col grow items-center gap-3 overflow-hidden">
+			<div className="p-2 font-roboto flex flex-col grow items-center gap-3 overflow-hidden pb-6">
 				<PropertiesCount totalCount={totalCount} />
 				<PropertiesStatus
 					completedCount={completedCount}

@@ -693,11 +693,13 @@
 	},
 	"propertiesStatus": {
 		"completed": "Prêtes",
-		"inProgress": "En cours"
+		"inProgress": "En cours",
+		"properties": "Propriétés"
 	},
 	"lastActivity": {
 		"title": "Dernière activité",
-		"edited": "Vous avez modifié \"{property}\" {time}"
+		"edited": "Vous avez modifié \"{property}\" {time}",
+		"seeProperty": "Voir la propriété"
 	},
 	"recommendations": {
 		"title": "Recommandations de l’application",
