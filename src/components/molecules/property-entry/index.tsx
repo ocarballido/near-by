@@ -7,9 +7,15 @@ type Props = {
 	link: React.ReactNode;
 	action: React.ReactNode;
 	href: string;
+	className?: string;
 };
 
-export default function CreatePropertyEntry({ link, action, href }: Props) {
+export default function CreatePropertyEntry({
+	link,
+	action,
+	href,
+	className,
+}: Props) {
 	const { paywallBehavior, requestCreateProperty } = usePaywall();
 
 	// Caso sin fricción → navegación directa
@@ -22,7 +28,7 @@ export default function CreatePropertyEntry({ link, action, href }: Props) {
 		<div
 			role="button"
 			tabIndex={0}
-			className="w-full"
+			className={`w-full ${className}`}
 			onClick={() => requestCreateProperty(href)}
 			onKeyDown={(e) => {
 				if (e.key === 'Enter' || e.key === ' ') {

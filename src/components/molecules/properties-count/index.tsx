@@ -17,7 +17,7 @@ const PropertiesCount = async ({ totalCount }: Props) => {
 
 	return (
 		<div className="flex flex-col gap-1 items-center px-4 py-8 pb-4 rounded-md bg-gradient-to-tr from-[#ffa263] to-[#6cffc9] w-full relative">
-			<div className="relative">
+			<div className="relative max-w-4xl">
 				<Image
 					alt="Add property"
 					src="/static/img/star-gradient.svg"
@@ -34,7 +34,7 @@ const PropertiesCount = async ({ totalCount }: Props) => {
 				{totalCount === 1 ? t('Propiedad') : t('Propiedades')}
 			</Typography>
 
-			<div className="flex flex-col lg:flex-row gap-1 w-full">
+			<div className="flex flex-col xl:flex-row gap-1 w-full max-w-4xl">
 				<CreatePropertyEntry
 					href="/app/properties/new"
 					link={
@@ -52,60 +52,24 @@ const PropertiesCount = async ({ totalCount }: Props) => {
 							className="w-full flex"
 						/>
 					}
+					className="max-w-md mx-auto"
 				/>
 				<ButtonLink
 					label={t('Mis propiedades')}
 					href="/app/properties"
 					iconLeft={<IconApartment />}
 					color="white"
-					className="w-full"
+					className="w-full max-w-md mx-auto"
 				/>
 				<ButtonLink
 					label={t('page_home.pilotHouseAction')}
 					href="https://www.bnbexplorer.com/es/public/37a03a95-cd39-4d40-a22b-7628cbb50245/welcome/highlights"
 					iconRight={<IconOpenInNew />}
 					color="white"
-					className="w-full"
+					className="w-full max-w-md mx-auto"
 					target="_blank"
 				/>
 			</div>
-
-			{/* <ButtonLink
-				label={t('Mis propiedades')}
-				href="/app/properties"
-				iconLeft={<IconApartment />}
-				color="secondary"
-				className="w-full"
-			/>
-
-			<div className="flex flex-col justify-center items-center gap-1 grow-0 p-1 bg-gray-200 rounded-3xl w-full">
-				<CreatePropertyEntry
-					href="/app/properties/new"
-					link={
-						<ButtonLink
-							label={t('Nueva propiedad')}
-							href="/app/properties/new"
-							iconLeft={<IconAdd />}
-							className="w-full flex"
-						/>
-					}
-					action={
-						<Button
-							label={t('Nueva propiedad')}
-							iconLeft={<IconAdd />}
-							className="w-full flex"
-						/>
-					}
-				/>
-				<ButtonLink
-					label={t('page_home.pilotHouseAction')}
-					href="https://www.bnbexplorer.com/es/public/37a03a95-cd39-4d40-a22b-7628cbb50245/welcome/highlights"
-					iconRight={<IconOpenInNew />}
-					color="white"
-					className="w-full"
-					target="_blank"
-				/>
-			</div> */}
 		</div>
 	);
 };

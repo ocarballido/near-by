@@ -688,11 +688,13 @@
 	},
 	"propertiesStatus": {
 		"completed": "Ready",
-		"inProgress": "In progress"
+		"inProgress": "In progress",
+		"properties": "Properties"
 	},
 	"lastActivity": {
 		"title": "Last activity",
-		"edited": "You edited \"{property}\" {time}"
+		"edited": "You edited \"{property}\" {time}",
+		"seeProperty": "View property"
 	},
 	"recommendations": {
 		"title": "App recommendations",

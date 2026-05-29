@@ -1,6 +1,11 @@
 import { getTranslations } from 'next-intl/server';
 import Typography from '@/components/atoms/typography';
 import { ShareMenu } from '@/components/molecules/button-share';
+import IconPersonAdd from '@/components/atoms/icon/person-add';
+import DashboardCard from '@/components/organisms/dashboard-card';
+import DashboardCardBody from '@/components/organisms/dashboard-card/dashboard-body';
+import DashboardCardHeading from '@/components/organisms/dashboard-card/dashboard-heading';
+import DashboardData from '@/components/organisms/dashboard-card/dashboard-data';
 
 type Props = {
 	userId: string;
@@ -10,19 +15,34 @@ const ShareSection = async ({ userId }: Props) => {
 	const t = await getTranslations();
 
 	return (
-		<div className="flex flex-col w-full p-3">
-			<Typography component="h3" size="lg" className="mb-3">
-				{t('shareButtonTitle')}
-			</Typography>
-			<Typography className="mb-2">{t('shareButtonText')}</Typography>
-			<div className="w-fit">
-				<ShareMenu
-					url="https://bnbexplorer.com"
-					surface="landing_header"
-					distinctId={userId}
+		<DashboardCard>
+			<DashboardCardHeading>
+				<div className="p-2 rounded-full bg-primary-50">
+					<IconPersonAdd color="primary" />
+				</div>
+				<Typography component="h3" className="text-lg!">
+					{t('shareButtonTitle')}
+				</Typography>
+			</DashboardCardHeading>
+
+			<DashboardCardBody>
+				<DashboardData
+					label={
+						<Typography size="sm" weight="medium">
+							{t('shareButtonText')}
+						</Typography>
+					}
+					action={
+						<ShareMenu
+							url="https://bnbexplorer.com"
+							surface="landing_header"
+							distinctId={userId}
+							className="w-full lg:w-fit"
+						/>
+					}
 				/>
-			</div>
-		</div>
+			</DashboardCardBody>
+		</DashboardCard>
 	);
 };
 

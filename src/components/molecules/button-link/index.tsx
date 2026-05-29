@@ -16,6 +16,7 @@ type ButtonLinkProps = {
 	iconRight?: React.ReactNode;
 	label: string;
 	download?: string;
+	size?: 'sm' | 'md';
 };
 
 const ButtonLink = ({
@@ -28,6 +29,7 @@ const ButtonLink = ({
 	label,
 	target = '_self',
 	download,
+	size = 'md',
 }: ButtonLinkProps) => {
 	const buttonLinkStyles = clsx(
 		{
@@ -72,7 +74,7 @@ const ButtonLink = ({
 		},
 	);
 
-	const sharedClassName = `font-medium text-base rounded-full transition-all flex items-center justify-center gap-1 py-2 px-5 hover:cursor-pointer disabled:opacity-30 disabled:pointer-events-none ${buttonLinkStyles} ${className}`;
+	const sharedClassName = `font-medium text-base rounded-full transition-all flex items-center justify-center gap-1 ${size === 'sm' ? 'py-1' : 'py-2'} px-5 hover:cursor-pointer disabled:opacity-30 disabled:pointer-events-none ${buttonLinkStyles} ${className}`;
 
 	if (download) {
 		return (
@@ -90,11 +92,7 @@ const ButtonLink = ({
 	}
 
 	return (
-		<Link
-			className={`font-medium text-base rounded-full transition-all flex items-center justify-center gap-1 py-2 px-5 hover:cursor-pointer disabled:opacity-30 disabled:pointer-events-none ${buttonLinkStyles} ${className}`}
-			href={href}
-			target={target}
-		>
+		<Link className={sharedClassName} href={href} target={target}>
 			{iconLeft}
 
 			{label}

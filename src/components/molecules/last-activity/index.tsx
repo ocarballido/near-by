@@ -4,6 +4,11 @@ import ButtonLink from '@/components/molecules/button-link';
 import IconArrowRightAlt from '@/components/atoms/icon/arrow-right-alt';
 import { CATEGORIES_SUB_CATEGORIES } from '@/config/config-constants';
 import { formatRelativeDays } from '@/utils/format-relative-days';
+import IconEdit from '@/components/atoms/icon/edit';
+import DashboardCard from '@/components/organisms/dashboard-card';
+import DashboardCardBody from '@/components/organisms/dashboard-card/dashboard-body';
+import DashboardCardHeading from '@/components/organisms/dashboard-card/dashboard-heading';
+import DashboardData from '@/components/organisms/dashboard-card/dashboard-data';
 
 type Props = {
 	lastEdited: { id: string; name: string; updated_at: string } | null;
@@ -16,20 +21,41 @@ const LastActivity = async ({ lastEdited }: Props) => {
 	if (!lastEdited?.updated_at) return null;
 
 	return (
-		<div className="flex flex-col justify-center gap-1 w-full p-3">
-			<Typography component="h3" size="lg" className="mb-1">
-				{t('lastActivity.title')}
-			</Typography>
-			<ButtonLink
-				label={t('lastActivity.edited', {
-					property: lastEdited.name,
-					time: formatRelativeDays(lastEdited.updated_at, locale),
-				})}
-				color="secondary"
-				href={`/app/properties/${lastEdited.id}/${CATEGORIES_SUB_CATEGORIES.LODGING.id}/${CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.MANUAL.id}`}
-				iconRight={<IconArrowRightAlt />}
-			/>
-		</div>
+		<DashboardCard>
+			<DashboardCardHeading>
+				<div className="p-2 rounded-full bg-primary-50">
+					<IconEdit color="primary" />
+				</div>
+				<Typography component="h3" className="text-lg!">
+					{t('lastActivity.title')}
+				</Typography>
+			</DashboardCardHeading>
+
+			<DashboardCardBody>
+				<DashboardData
+					label={
+						<Typography size="sm" weight="medium">
+							{t('lastActivity.edited', {
+								property: lastEdited.name,
+								time: formatRelativeDays(
+									lastEdited.updated_at,
+									locale,
+								),
+							})}
+						</Typography>
+					}
+					action={
+						<ButtonLink
+							label={t('lastActivity.seeProperty')}
+							color="secondary"
+							href={`/app/properties/${lastEdited.id}/${CATEGORIES_SUB_CATEGORIES.LODGING.id}/${CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.MANUAL.id}`}
+							className="w-full lg:w-fit"
+							iconRight={<IconArrowRightAlt />}
+						/>
+					}
+				/>
+			</DashboardCardBody>
+		</DashboardCard>
 	);
 };
 

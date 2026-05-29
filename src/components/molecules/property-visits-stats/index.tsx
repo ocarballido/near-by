@@ -8,6 +8,11 @@ import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 import { getSeasonalTip } from '@/lib/get-seasonal-tip';
 
 import Typography from '@/components/atoms/typography';
+import DashboardCard from '@/components/organisms/dashboard-card';
+import DashboardCardBody from '@/components/organisms/dashboard-card/dashboard-body';
+import DashboardCardHeading from '@/components/organisms/dashboard-card/dashboard-heading';
+import DashboardData from '@/components/organisms/dashboard-card/dashboard-data';
+import IconLocationOn from '@/components/atoms/icon/location-on';
 
 type WeekRow = {
 	week_label: string;
@@ -37,7 +42,29 @@ const PropertyVisitsStats = async () => {
 
 	if (error || !data) return null;
 
-	const rows = data as WeekRow[];
+	const mockRows: WeekRow[] = [
+		{
+			week_label: 'this_week',
+			week_start: '2026-05-26',
+			week_end: '2026-06-01',
+			visit_count: 14,
+		},
+		{
+			week_label: 'last_week',
+			week_start: '2026-05-19',
+			week_end: '2026-05-25',
+			visit_count: 9,
+		},
+		{
+			week_label: 'two_weeks_ago',
+			week_start: '2026-05-12',
+			week_end: '2026-05-18',
+			visit_count: 21,
+		},
+	];
+
+	const rows: WeekRow[] = mockRows;
+	// const rows = data as WeekRow[];
 
 	const totalVisits = rows.reduce((acc, r) => acc + (r.visit_count ?? 0), 0);
 
@@ -70,55 +97,67 @@ const PropertyVisitsStats = async () => {
 	};
 
 	return (
-		<div className="flex flex-col gap-3 w-full p-3">
-			<Typography component="h3" size="lg">
-				{t('visitsTitle')}
-			</Typography>
+		<>
+			<DashboardCard>
+				<DashboardCardHeading>
+					<div className="p-2 rounded-full bg-primary-50">
+						<IconLocationOn color="primary" />
+					</div>
+					<Typography component="h3" className="text-lg!">
+						{t('visitsTitle')}
+					</Typography>
+				</DashboardCardHeading>
 
-			<ul className="flex flex-col gap-1">
-				{rows.map((row) => (
-					<li
-						key={row.week_label}
-						className="flex items-center justify-between gap-2 bg-white rounded-lg px-3 py-2 shadow-xs"
-					>
-						<div className="flex flex-col">
-							<Typography size="sm" weight="medium">
-								{labelMap[row.week_label] ?? row.week_label}
-							</Typography>
-							<Typography size="sm" color="text-gray-500">
-								{formatDateRange(row.week_start, row.week_end)}
+				<DashboardCardBody>
+					{rows.map((row) => (
+						<DashboardData
+							key={row.week_label}
+							label={
+								<div className="flex flex-col">
+									<Typography size="sm" weight="medium">
+										{labelMap[row.week_label] ??
+											row.week_label}
+									</Typography>
+									<Typography size="sm" color="text-gray-500">
+										{formatDateRange(
+											row.week_start,
+											row.week_end,
+										)}
+									</Typography>
+								</div>
+							}
+							action={
+								<Typography
+									size="sm"
+									weight="medium"
+									color="text-primary-700"
+									className="px-3 py-2 rounded-full bg-primary-100"
+								>
+									{row.visit_count}
+								</Typography>
+							}
+						/>
+					))}
+					{tip && (
+						<div className="flex flex-col gap-2 p-4 bg-primary-50 rounded-lg mt-3">
+							<div className="flex items-center gap-2">
+								<span className="text-2xl">{tip.emoji}</span>
+								<Typography
+									component="h3"
+									size="base"
+									weight="semibold"
+								>
+									{tip.title}
+								</Typography>
+							</div>
+							<Typography size="sm" color="text-gray-600">
+								{tip.text}
 							</Typography>
 						</div>
-						{/* <span className="font-bold">{row.visit_count}</span> */}
-						<Typography
-							size="sm"
-							weight="medium"
-							color="text-primary-700"
-							className="px-2.5 py-1 rounded-full bg-primary-100"
-						>
-							{row.visit_count}
-						</Typography>
-					</li>
-				))}
-			</ul>
-			{tip && (
-				<div className="flex flex-col gap-2 bg-white rounded-xl shadow-xs p-4">
-					<div className="flex items-center gap-2">
-						<span className="text-2xl">{tip.emoji}</span>
-						<Typography
-							component="h3"
-							size="base"
-							weight="semibold"
-						>
-							{tip.title}
-						</Typography>
-					</div>
-					<Typography size="sm" color="text-gray-600">
-						{tip.text}
-					</Typography>
-				</div>
-			)}
-		</div>
+					)}
+				</DashboardCardBody>
+			</DashboardCard>
+		</>
 	);
 };
 
