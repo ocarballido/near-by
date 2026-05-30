@@ -67,11 +67,11 @@ const InputFile = forwardRef<HTMLInputElement, InputFileProps>(
 		);
 
 		return (
-			<div className={`flex flex-col gap-2 ${className}`}>
+			<div className={`flex flex-col gap-1 w-full max-w-96 ${className}`}>
 				{label && (
 					<label
 						htmlFor={id}
-						className={`font-medium text-sm ${labelStyles}`}
+						className={`font-medium text-xs text-gray-600 ${labelStyles}`}
 					>
 						{label}
 					</label>
@@ -91,7 +91,7 @@ const InputFile = forwardRef<HTMLInputElement, InputFileProps>(
 				/>
 
 				<div
-					className={`w-full max-w-96 h-full min-h-44 bg-gray-800/5 border-2 flex items-center justify-center cursor-pointer relative rounded-lg overflow-hidden ${inputStyles}`}
+					className={`h-full min-h-44 bg-gray-800/5 border-2 flex items-center justify-center cursor-pointer relative rounded-lg overflow-hidden ${inputStyles}`}
 					onClick={handleClick}
 				>
 					{selectedImage ? (

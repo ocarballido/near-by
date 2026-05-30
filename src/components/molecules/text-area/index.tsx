@@ -45,11 +45,11 @@ const TextArea = ({
 	);
 
 	return (
-		<div className={`flex flex-col gap-2 ${textAreaStyles}`}>
+		<div className={`flex flex-col gap-1 ${textAreaStyles}`}>
 			{label && (
 				<label
 					htmlFor={rest.id}
-					className={`font-medium text-sm ${labelStyles}`}
+					className={`font-medium text-xs text-gray-600 ${labelStyles}`}
 				>
 					{label}
 				</label>

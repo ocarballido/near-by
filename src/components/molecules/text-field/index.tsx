@@ -68,11 +68,11 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
 		const combinedRef = mergeRefs<HTMLInputElement>(forwardedRef, inputRef);
 
 		return (
-			<div className={`flex flex-col gap-2 ${textFieldStyles}`}>
+			<div className={`flex flex-col gap-1 ${textFieldStyles}`}>
 				{label && (
 					<label
 						htmlFor={id}
-						className={`font-medium text-sm ${labelStyles}`}
+						className={`font-medium text-xs text-gray-600 ${labelStyles}`}
 					>
 						{label}
 					</label>

@@ -26,8 +26,8 @@ export default function ImageSection({
 	return (
 		<>
 			{isEdit && imageUrl && (
-				<div className="flex flex-col gap-2">
-					<label className="font-medium text-sm">
+				<div className="flex flex-col gap-1 justify-center">
+					<label className="font-medium text-xs text-gray-600">
 						{t('propertyForm.currentImage')}
 					</label>
 
@@ -51,6 +51,7 @@ export default function ImageSection({
 				label={label}
 				error={Boolean(error)}
 				helperText={error?.message as string}
+				className="w-full mx-auto"
 				{...registerProps}
 			/>
 		</>
