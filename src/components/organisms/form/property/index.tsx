@@ -420,9 +420,9 @@ const AddPropertyForm = ({
 								weight="medium"
 								className="flex gap-2 items-center"
 							>
-								<div className="w-9 h-9 flex justify-center items-center rounded-full bg-primary-100 font-bold text-primary-800 text-base">
+								<span className="w-9 h-9 flex justify-center items-center rounded-full bg-primary-100 font-bold text-primary-800 text-base">
 									1
-								</div>
+								</span>
 								{t('escencial')}
 							</Typography>
 						}
@@ -488,9 +488,9 @@ const AddPropertyForm = ({
 								weight="medium"
 								className="flex gap-2 items-center"
 							>
-								<div className="w-9 h-9 flex justify-center items-center rounded-full bg-primary-100 font-bold text-primary-800 text-base">
+								<span className="w-9 h-9 flex justify-center items-center rounded-full bg-primary-100 font-bold text-primary-800 text-base">
 									2
-								</div>
+								</span>
 								{t('access')}
 							</Typography>
 						}
@@ -652,9 +652,9 @@ const AddPropertyForm = ({
 								weight="medium"
 								className="flex gap-2 items-center"
 							>
-								<div className="w-9 h-9 flex justify-center items-center rounded-full bg-primary-100 font-bold text-primary-800 text-base">
+								<span className="w-9 h-9 flex justify-center items-center rounded-full bg-primary-100 font-bold text-primary-800 text-base">
 									3
-								</div>
+								</span>
 								{t('image')}
 							</Typography>
 						}

@@ -141,8 +141,8 @@ const MagicFinderForm = ({
 			</div>
 
 			<div className="p-2">
-				<div className="p-4 bg-sky-100 rounded-md">
-					<Typography component="p" size="sm" color="text-sky-900">
+				<div className="p-4 bg-primary-50 rounded-md">
+					<Typography component="p" size="sm" color="text-gray-600">
 						{t(
 							'Con un solo clic, añade automáticamente los lugares más valorados en la zona: restaurantes, farmacias, parques, museos y mucho más',
 						)}

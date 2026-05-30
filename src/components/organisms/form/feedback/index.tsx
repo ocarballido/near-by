@@ -272,7 +272,7 @@ export default function FeedbackForm({
 				/>
 
 				<div className="flex flex-col gap-1">
-					<label htmlFor="message" className="font-bold text-sm">
+					<label htmlFor="message" className="font-medium text-xs">
 						{t('feedback.message.label')}
 					</label>
 
