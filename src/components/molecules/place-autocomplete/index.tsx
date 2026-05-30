@@ -203,7 +203,7 @@ export default function PlaceAutocompleteField({
 		<div className="flex flex-col gap-2">
 			{isSelectedEffective ? (
 				<>
-					<div className="flex gap-2 items-end">
+					<div className="flex gap-1 items-end">
 						<TextField
 							label={label}
 							value={selectedAddressEffective}
@@ -220,9 +220,9 @@ export default function PlaceAutocompleteField({
 					/>
 				</>
 			) : (
-				<div className="flex flex-col gap-2">
+				<div className="flex flex-col gap-1">
 					<label
-						className={`font-medium text-sm ${error ? 'text-error-500' : ''}`}
+						className={`font-medium text-xs text-gray-600 ${error ? 'text-error-500' : ''}`}
 					>
 						{label}
 					</label>
@@ -231,7 +231,7 @@ export default function PlaceAutocompleteField({
 
 					{helperTextToShow && (
 						<span
-							className={`text-sm ${error || internalError ? 'text-error-500' : ''}`}
+							className={`text-xs ${error || internalError ? 'text-error-500' : ''}`}
 						>
 							{helperTextToShow}
 						</span>

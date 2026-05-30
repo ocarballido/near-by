@@ -271,6 +271,8 @@ export type ArrivalGuideData = {
 	access_instructions: string | null;
 	check_in_time: string | null;
 	check_out_time: string | null;
+	check_in_date: string | null;
+	check_out_date: string | null;
 	emergency_number: string | null;
 };
 
@@ -321,7 +323,11 @@ export async function fetchArrivalGuideData(
 	propertyId: string,
 	property: Pick<
 		FullProperty,
-		'check_in_time' | 'check_out_time' | 'address'
+		| 'check_in_time'
+		| 'check_out_time'
+		| 'check_out_date'
+		| 'check_in_date'
+		| 'address'
 	> & {
 		access_instructions?: string | null;
 	},
@@ -376,6 +382,8 @@ export async function fetchArrivalGuideData(
 		access_instructions: property.access_instructions ?? null,
 		check_in_time: property.check_in_time ?? null,
 		check_out_time: property.check_out_time ?? null,
+		check_in_date: property.check_in_date ?? null,
+		check_out_date: property.check_out_date ?? null,
 		emergency_number: getEmergencyNumber(property.address),
 	};
 }

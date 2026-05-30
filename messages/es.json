@@ -1131,5 +1131,10 @@
 		"trigger": {
 			"label": "Vista del inquilino"
 		}
-	}
+	},
+	"Requerido": "Requerido",
+	"Opcional": "Opcional",
+	"escencial": "Lo escencial",
+	"access": "Llegada y acceso",
+	"image": "Imagen"
 }

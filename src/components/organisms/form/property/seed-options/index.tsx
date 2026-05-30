@@ -21,9 +21,11 @@ export default function SeedOptions({
 	onToggle,
 }: Props) {
 	return (
-		<fieldset className="w-full p-2">
-			<label className="font-bold text-sm mb-2 block">{title}</label>
-			<div className="flex gap-1 flex-wrap mb-2">
+		<fieldset className="w-full">
+			<label className="font-medium text-xs mb-1 block text-gray-600">
+				{title}
+			</label>
+			<div className="flex gap-1 flex-wrap">
 				{options.map((opt) => (
 					<BadgeCheck
 						key={opt.id}

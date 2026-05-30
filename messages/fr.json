@@ -1131,5 +1131,10 @@
 		"trigger": {
 			"label": "Vue du locataire"
 		}
-	}
+	},
+	"Requerido": "Demandé",
+	"Opcional": "Facultatif",
+	"escencial": "L'essentiel",
+	"access": "Arrivée et accès",
+	"image": "Image"
 }

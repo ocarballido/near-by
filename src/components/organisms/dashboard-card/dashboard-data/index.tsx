@@ -1,6 +1,6 @@
 type DashboardDataProps = {
 	label: React.ReactNode;
-	action: React.ReactNode;
+	action?: React.ReactNode;
 };
 
 const DashboardData = ({ label, action }: DashboardDataProps) => {

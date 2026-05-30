@@ -10,6 +10,7 @@ type Props = {
 	onCancel: () => void;
 	submitLabel: string;
 	cancelLabel: string;
+	className?: string;
 
 	// Feedback (solo create)
 	showFeedback: boolean;
@@ -26,9 +27,10 @@ export default function FormActions({
 	showFeedback,
 	feedbackLabel,
 	feedbackHref,
+	className,
 }: Props) {
 	return (
-		<div className="flex flex-col gap-2">
+		<div className={`flex flex-col gap-2 ${className}`}>
 			<Button
 				type="submit"
 				label={submitLabel}

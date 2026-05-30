@@ -33,6 +33,8 @@ import { getPropertyFormDefaultValues } from './getPropertyFormDefaultValues';
 import { buildPropertyFormData } from './buildPropertyFormData';
 import Button from '@/components/molecules/button';
 import TextArea from '@/components/molecules/text-area';
+import Typography from '@/components/atoms/typography';
+import DashboardData from '../../dashboard-card/dashboard-data';
 
 type FormValues = {
 	name: string;
@@ -378,7 +380,7 @@ const AddPropertyForm = ({
 	}, [distinctId, getValues, coords, isEdit]);
 
 	return (
-		<div className="bg-white p-2 rounded-xl w-full max-w-[400px] shadow-xs">
+		<div className="w-full max-w-[460px] shadow-xs rounded-xl bg-white">
 			{alert && (
 				<Alert
 					hideTime={3000}
@@ -398,7 +400,7 @@ const AddPropertyForm = ({
 						: t('Nuevo Alojamiento')
 				}
 				modalTitle={t('createPropertyTipsModal.title')}
-				primaryButtonLabel="Cancel"
+				primaryButtonLabel={t('Cancelar')}
 				isOpen={isOpen}
 				onOpen={() => setIsOpen(true)}
 				onClose={() => setIsOpen(false)}
@@ -406,197 +408,301 @@ const AddPropertyForm = ({
 				t={t}
 			/>
 
-			{!isEdit && (
-				<SeedOptions
-					title={t('Contenido generado automáticamente')}
-					options={seedOptions}
-					selectedIds={selectedSeedInfoIds}
-					onToggle={toggleSeed}
-				/>
-			)}
-
 			<form
 				onSubmit={handleSubmit(onSubmit)}
-				className="flex flex-col gap-4 w-full p-2"
+				className="flex flex-col gap-0 w-full"
 			>
-				<TextField
-					label={t('Nombre de la propiedad *')}
-					placeholder={t('Nombre ejemplo')}
-					id="name"
-					{...register('name', {
-						required: t('El nombre es obligatorio'),
-					})}
-					error={Boolean(errors.name)}
-					helperText={errors.name?.message}
-				/>
+				<div className="flex flex-col gap-4 p-4 pt-0 border-b border-gray-200">
+					<DashboardData
+						label={
+							<Typography
+								size="sm"
+								weight="medium"
+								className="flex gap-2 items-center"
+							>
+								<div className="w-9 h-9 flex justify-center items-center rounded-full bg-primary-100 font-bold text-primary-800 text-base">
+									1
+								</div>
+								{t('escencial')}
+							</Typography>
+						}
+						action={
+							<Typography
+								weight="medium"
+								className="flex gap-2 items-center text-xs!"
+							>
+								{t('Requerido')}
+							</Typography>
+						}
+					/>
 
-				<AddressSection
-					t={t}
-					locale={locale}
-					isEdit={isEdit}
-					error={Boolean(errors.address)}
-					helperTextIdle={t('addressHelperIdle')}
-					helperTextError={t('addressHelperError')}
-					onSelect={handleSelectAddress}
-					onClearSelection={clearSelection}
-					addressValue={getValues('address')}
-					addressRegisterProps={
-						isEdit
-							? register('address')
-							: register('address', {
-									required: t('La dirección es obligatoria'),
-								})
-					}
-					latRegisterProps={register('latitude')}
-					lngRegisterProps={register('longitude')}
-				/>
+					{!isEdit && (
+						<SeedOptions
+							title={t('Contenido generado automáticamente')}
+							options={seedOptions}
+							selectedIds={selectedSeedInfoIds}
+							onToggle={toggleSeed}
+						/>
+					)}
 
-				<div className="rounded-lg bg-primary-100 p-4 text-sm text-primary-800 font-medium">
-					{t('address_hint')}
+					<TextField
+						label={t('Nombre de la propiedad *')}
+						placeholder={t('Nombre ejemplo')}
+						id="name"
+						{...register('name', {
+							required: t('El nombre es obligatorio'),
+						})}
+						error={Boolean(errors.name)}
+						helperText={errors.name?.message}
+					/>
+
+					<AddressSection
+						t={t}
+						locale={locale}
+						isEdit={isEdit}
+						error={Boolean(errors.address)}
+						helperTextIdle={t('addressHelperIdle')}
+						helperTextError={t('addressHelperError')}
+						onSelect={handleSelectAddress}
+						onClearSelection={clearSelection}
+						addressValue={getValues('address')}
+						addressRegisterProps={
+							isEdit
+								? register('address')
+								: register('address', {
+										required: t(
+											'La dirección es obligatoria',
+										),
+									})
+						}
+						latRegisterProps={register('latitude')}
+						lngRegisterProps={register('longitude')}
+					/>
 				</div>
 
-				<div className="flex gap-1 p-1 rounded-full bg-gray-200 -mb-1">
-					<Button
-						label={t('propertyForm.dateAndTime')}
-						className="w-full"
-						color={
-							dateTimeMode === 'isDateAndTime'
-								? 'white'
-								: 'secondary'
+				<div className="flex flex-col gap-4 p-4 border-b border-gray-200">
+					<DashboardData
+						label={
+							<Typography
+								size="sm"
+								weight="medium"
+								className="flex gap-2 items-center"
+							>
+								<div className="w-9 h-9 flex justify-center items-center rounded-full bg-primary-100 font-bold text-primary-800 text-base">
+									2
+								</div>
+								{t('access')}
+							</Typography>
 						}
-						onClick={() => {
-							if (dateTimeMode === 'isDateAndTime') return;
-							setDateTimeMode('isDateAndTime');
-						}}
-					/>
-					<Button
-						label={t('propertyForm.onlyTime')}
-						className="w-full"
-						color={
-							dateTimeMode === 'isOnlyTime'
-								? 'white'
-								: 'secondary'
+						action={
+							<Typography
+								weight="medium"
+								className="flex gap-2 items-center text-xs!"
+							>
+								{t('Opcional')}
+							</Typography>
 						}
-						onClick={() => {
-							if (dateTimeMode === 'isOnlyTime') return;
-							setDateTimeMode('isOnlyTime');
-
-							// opcional: limpiar errores para que no aparezcan si el campo está oculto
-							clearErrors(['checkInDate', 'checkOutDate']);
-						}}
 					/>
-				</div>
+					<div className="flex gap-1 p-1 rounded-full bg-gray-200 -mb-1">
+						<Button
+							label={t('propertyForm.dateAndTime')}
+							className="w-full"
+							color={
+								dateTimeMode === 'isDateAndTime'
+									? 'white'
+									: 'secondary'
+							}
+							onClick={() => {
+								if (dateTimeMode === 'isDateAndTime') return;
+								setDateTimeMode('isDateAndTime');
+							}}
+						/>
+						<Button
+							label={t('propertyForm.onlyTime')}
+							className="w-full"
+							color={
+								dateTimeMode === 'isOnlyTime'
+									? 'white'
+									: 'secondary'
+							}
+							onClick={() => {
+								if (dateTimeMode === 'isOnlyTime') return;
+								setDateTimeMode('isOnlyTime');
 
-				<fieldset className="flex flex-col gap-1">
-					<div className="flex gap-2 flex-col sm:flex-row">
-						{dateTimeMode === 'isDateAndTime' && (
+								// opcional: limpiar errores para que no aparezcan si el campo está oculto
+								clearErrors(['checkInDate', 'checkOutDate']);
+							}}
+						/>
+					</div>
+
+					{dateTimeMode === 'isDateAndTime' ? (
+						<fieldset className="flex gap-2 flex-col">
+							<div className="flex gap-2 flex-col sm:flex-row">
+								<div className="w-full">
+									<TextField
+										label={`${t('propertyForm.checkIn')}/${t('propertyForm.date')}`}
+										id="checkInDate"
+										type="date"
+										{...register('checkInDate')}
+										error={Boolean(errors.checkInDate)}
+										helperText={
+											errors.checkInDate
+												?.message as string
+										}
+									/>
+								</div>
+
+								<div className="w-full">
+									<TextField
+										label={`${t('propertyForm.checkIn')}/${t('propertyForm.time')}`}
+										id="checkInTime"
+										type="time"
+										step={60}
+										{...register('checkInTime')}
+										error={Boolean(errors.checkInTime)}
+										helperText={
+											errors.checkInTime
+												?.message as string
+										}
+									/>
+								</div>
+							</div>
+
+							<div className="flex gap-2 flex-col sm:flex-row">
+								<div className="w-full">
+									<TextField
+										label={`${t('propertyForm.checkOut')}/${t('propertyForm.date')}`}
+										id="checkOutDate"
+										type="date"
+										{...register('checkOutDate')}
+										error={Boolean(errors.checkOutDate)}
+										helperText={
+											errors.checkOutDate
+												?.message as string
+										}
+									/>
+								</div>
+
+								<div className="w-full">
+									<TextField
+										label={`${t('propertyForm.checkOut')}/${t('propertyForm.time')}`}
+										id="checkOutTime"
+										type="time"
+										step={60}
+										{...register('checkOutTime')}
+										error={Boolean(errors.checkOutTime)}
+										helperText={
+											errors.checkOutTime
+												?.message as string
+										}
+									/>
+								</div>
+							</div>
+						</fieldset>
+					) : (
+						<fieldset className="flex gap-2 flex-col sm:flex-row">
 							<div className="w-full">
 								<TextField
-									label={`${t('propertyForm.checkIn')}/${t('propertyForm.date')}`}
-									id="checkInDate"
-									type="date"
-									{...register('checkInDate')}
-									error={Boolean(errors.checkInDate)}
+									label={`${t('propertyForm.checkIn')}/${t('propertyForm.time')}`}
+									id="checkInTime"
+									type="time"
+									step={60}
+									{...register('checkInTime')}
+									error={Boolean(errors.checkInTime)}
 									helperText={
-										errors.checkInDate?.message as string
+										errors.checkInTime?.message as string
 									}
 								/>
 							</div>
-						)}
 
-						<div className="w-full">
-							<TextField
-								label={`${t('propertyForm.checkIn')}/${t('propertyForm.time')}`}
-								id="checkInTime"
-								type="time"
-								step={60}
-								{...register('checkInTime')}
-								error={Boolean(errors.checkInTime)}
-								helperText={
-									errors.checkInTime?.message as string
-								}
-							/>
-						</div>
-					</div>
-				</fieldset>
-
-				<fieldset className="flex flex-col gap-1">
-					<div className="flex gap-2 flex-col sm:flex-row">
-						{dateTimeMode === 'isDateAndTime' && (
-							<div className="flex-1">
+							<div className="w-full">
 								<TextField
-									label={`${t('propertyForm.checkOut')}/${t('propertyForm.date')}`}
-									id="checkOutDate"
-									type="date"
-									{...register('checkOutDate')}
-									error={Boolean(errors.checkOutDate)}
+									label={`${t('propertyForm.checkOut')}/${t('propertyForm.time')}`}
+									id="checkOutTime"
+									type="time"
+									step={60}
+									{...register('checkOutTime')}
+									error={Boolean(errors.checkOutTime)}
 									helperText={
-										errors.checkOutDate?.message as string
+										errors.checkOutTime?.message as string
 									}
 								/>
 							</div>
-						)}
+						</fieldset>
+					)}
 
-						<div className="flex-1">
-							<TextField
-								label={`${t('propertyForm.checkOut')}/${t('propertyForm.time')}`}
-								id="checkOutTime"
-								type="time"
-								step={60}
-								{...register('checkOutTime')}
-								error={Boolean(errors.checkOutTime)}
-								helperText={
-									errors.checkOutTime?.message as string
-								}
-							/>
-						</div>
-					</div>
-				</fieldset>
+					<fieldset className="flex flex-col gap-1">
+						<TextArea
+							id="accessInstructions"
+							label={t('propertyForm.accessInstructions')}
+							placeholder={t(
+								'propertyForm.accessInstructionsPlaceholder',
+							)}
+							rows={4}
+							{...register('accessInstructions')}
+						/>
+					</fieldset>
+				</div>
 
-				<fieldset className="flex flex-col gap-1">
-					<TextArea
-						id="accessInstructions"
-						label={t('propertyForm.accessInstructions')}
-						placeholder={t(
-							'propertyForm.accessInstructionsPlaceholder',
-						)}
-						rows={4}
-						{...register('accessInstructions')}
+				<div className="flex flex-col gap-4 px-4 py-4 border-b border-gray-100">
+					<DashboardData
+						label={
+							<Typography
+								size="sm"
+								weight="medium"
+								className="flex gap-2 items-center"
+							>
+								<div className="w-9 h-9 flex justify-center items-center rounded-full bg-primary-100 font-bold text-primary-800 text-base">
+									3
+								</div>
+								{t('image')}
+							</Typography>
+						}
+						action={
+							<Typography
+								weight="medium"
+								className="flex gap-2 items-center text-xs!"
+							>
+								{t('Opcional')}
+							</Typography>
+						}
 					/>
-				</fieldset>
 
-				<ImageSection
-					t={t}
-					isEdit={isEdit}
-					imageUrl={initialValues?.image_url ?? null}
-					label={t('Imagen')}
-					error={errors.image}
-					registerProps={register('image', {
-						validate: (files) => {
-							const file = files?.[0];
-							if (!file) return true;
-							if (file.size <= MAX_IMAGE_SIZE) return true;
-							return `La imagen no debe superar ${(
-								MAX_IMAGE_SIZE / 1024
-							).toFixed(
-								0,
-							)} KB (tienes ${(file.size / 1024).toFixed(0)} KB)`;
-						},
-					})}
-				/>
-
-				<FormActions
-					isEdit={isEdit}
-					isSubmitting={isSubmitting}
-					onCancel={() => router.back()}
-					submitLabel={
-						isEdit ? t('Guardar cambios') : t('Añadir propiedad')
-					}
-					cancelLabel={t('Cancelar')}
-					showFeedback={!isEdit}
-					feedbackLabel={t('feedback.cta')}
-					feedbackHref="/app/feedback/create_property?returnTo=/app/properties/new"
-				/>
+					<ImageSection
+						t={t}
+						isEdit={isEdit}
+						imageUrl={initialValues?.image_url ?? null}
+						label={t('Imagen')}
+						error={errors.image}
+						registerProps={register('image', {
+							validate: (files) => {
+								const file = files?.[0];
+								if (!file) return true;
+								if (file.size <= MAX_IMAGE_SIZE) return true;
+								return `La imagen no debe superar ${(
+									MAX_IMAGE_SIZE / 1024
+								).toFixed(
+									0,
+								)} KB (tienes ${(file.size / 1024).toFixed(0)} KB)`;
+							},
+						})}
+					/>
+					<FormActions
+						isEdit={isEdit}
+						isSubmitting={isSubmitting}
+						onCancel={() => router.back()}
+						submitLabel={
+							isEdit
+								? t('Guardar cambios')
+								: t('Añadir propiedad')
+						}
+						cancelLabel={t('Cancelar')}
+						showFeedback={!isEdit}
+						feedbackLabel={t('feedback.cta')}
+						feedbackHref="/app/feedback/create_property?returnTo=/app/properties/new"
+						className="mt-4"
+					/>
+				</div>
 			</form>
 		</div>
 	);
