@@ -15,14 +15,11 @@ import Step3Access from './steps/Step3Access';
 import Step4Essentials from './steps/Step4Essentials';
 import Step5Done from './steps/Step5Done';
 import Button from '@/components/molecules/button';
-import IconHome from '@/components/atoms/icon/home';
 import ButtonIcon from '@/components/atoms/button-icon';
 import IconClose from '@/components/atoms/icon/close';
 import IconArrowLeftAlt from '@/components/atoms/icon/arrow-left-alt';
 import IconArrowRightAlt from '@/components/atoms/icon/arrow-right-alt';
 import Typography from '@/components/atoms/typography';
-import IconDirections from '@/components/atoms/icon/directions';
-import IconInfo from '@/components/atoms/icon/info';
 import IconHelp from '@/components/atoms/icon/help';
 
 interface Props {
@@ -137,7 +134,9 @@ export default function ArrivalGuide({ data, propertyId, address }: Props) {
 									{step === 4 && (
 										<Step4Essentials
 											wifi={data.wifi}
+											checkInDate={data.check_in_date}
 											checkInTime={data.check_in_time}
+											checkOutDate={data.check_out_date}
 											checkOutTime={data.check_out_time}
 											emergencyNumber={
 												data.emergency_number

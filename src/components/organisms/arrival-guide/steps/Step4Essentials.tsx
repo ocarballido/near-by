@@ -1,22 +1,44 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { useLocale } from 'next-intl';
+import { formatDate, formatTime } from '@/utils/format-date-time';
 import Typography from '@/components/atoms/typography';
 
 interface Props {
 	wifi: string | null;
+	checkInDate: string | null;
 	checkInTime: string | null;
+	checkOutDate: string | null;
 	checkOutTime: string | null;
 	emergencyNumber: string | null;
 }
 
 export default function Step4Essentials({
 	wifi,
+	checkInDate,
 	checkInTime,
+	checkOutDate,
 	checkOutTime,
 	emergencyNumber,
 }: Props) {
 	const t = useTranslations('ArrivalGuide');
+
+	const locale = useLocale();
+
+	const formattedCheckIn = [
+		formatDate(checkInDate, locale),
+		formatTime(checkInTime, locale),
+	]
+		.filter(Boolean)
+		.join(' · ');
+
+	const formattedCheckOut = [
+		formatDate(checkOutDate, locale),
+		formatTime(checkOutTime, locale),
+	]
+		.filter(Boolean)
+		.join(' · ');
 
 	return (
 		<div className="flex flex-col gap-1">
@@ -52,7 +74,7 @@ export default function Step4Essentials({
 						{t('step4CheckIn')}
 					</Typography>
 					<Typography size="sm" weight="medium" color="text-gray-500">
-						{checkInTime}
+						{formattedCheckIn}
 					</Typography>
 				</div>
 			)}
@@ -67,7 +89,7 @@ export default function Step4Essentials({
 						{t('step4CheckOut')}
 					</Typography>
 					<Typography size="sm" weight="medium" color="text-gray-500">
-						{checkOutTime}
+						{formattedCheckOut}
 					</Typography>
 				</div>
 			)}
