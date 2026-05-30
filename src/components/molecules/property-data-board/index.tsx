@@ -43,70 +43,48 @@ const PropertyDataBoard = ({
 	const locale = useLocale();
 
 	return (
-		<div className="bg-primary-200 p-3 flex gap-3 flex-col mx-1 mt-1 rounded-md relative overflow-hidden">
-			<div className="flex gap-1 rounded-md">
-				<div className="flex flex-wrap gap-1 relative z-1">
-					<BadgeCheck
-						label={propertyName}
-						checked
-						checkedColor="primary"
-						iconChecked={<IconHome size={16} color="success" />}
-						className="hover:cursor-auto hover:bg-primary-100!"
-					/>
-					<BadgeCheck
-						label={propertyAddress}
-						checked
-						checkedColor="primary"
-						iconChecked={
-							<IconLocationOn size={16} color="success" />
-						}
-						className="hover:cursor-auto hover:bg-primary-100!"
-					/>
-					{(propertyCheckInDate || propertyCheckInTime) && (
-						<BadgeCheck
-							label={`${propertyCheckInDate ? formatDate(propertyCheckInDate, locale) + ' | ' : ''} ${propertyCheckInTime ? formatTime(propertyCheckInTime, locale) : ''}`}
-							checked
-							checkedColor="primary"
-							iconChecked={
-								<IconCheckIn size={16} color="success" />
-							}
-							className="hover:cursor-auto hover:bg-primary-100!"
-						/>
-					)}
-					{(propertyCheckOutDate || propertyCheckOutTime) && (
-						<BadgeCheck
-							label={`${propertyCheckOutDate ? formatDate(propertyCheckOutDate, locale) + ' | ' : ''} ${propertyCheckOutTime ? formatTime(propertyCheckOutTime, locale) : ''}`}
-							checked
-							checkedColor="primary"
-							iconChecked={
-								<IconCheckOut size={16} color="success" />
-							}
-							className="hover:cursor-auto hover:bg-primary-100!"
-						/>
-					)}
+		<div className="bg-gradient-to-tr from-[#ffa263] to-[#6cffc9] mx-1 mt-1 p-4 flex gap-3 flex-col rounded-md relative overflow-hidden">
+			<div className="grid grid-cols-2 xl:grid-cols-3 gap-3 justify-center">
+				<div className="col-span-2 xl:col-span-1 flex gap-2 items-center">
+					<div className="shrink-0 h-8 w-8 flex justify-center items-center p-1 rounded-full bg-white/50">
+						<IconHome size={20} color="primary" />
+					</div>
+					<p className="text-sm font-medium">{propertyName}</p>
 				</div>
+
+				{(propertyCheckInDate || propertyCheckInTime) && (
+					<div className="flex gap-2 items-center">
+						<div className="shrink-0 h-8 w-8 flex justify-center items-center p-1 rounded-full bg-white/50">
+							<IconCheckIn size={20} color="primary" />
+						</div>
+						<p className="text-sm font-medium">{`${propertyCheckInDate ? formatDate(propertyCheckInDate, locale) + ' | ' : ''} ${propertyCheckInTime ? formatTime(propertyCheckInTime, locale) : ''}`}</p>
+					</div>
+				)}
+
+				{(propertyCheckOutDate || propertyCheckOutTime) && (
+					<div className="flex gap-2 items-center">
+						<div className="shrink-0 h-8 w-8 flex justify-center items-center p-1 rounded-full bg-white/50">
+							<IconCheckOut size={20} color="primary" />
+						</div>
+						<p className="text-sm font-medium">{`${propertyCheckOutDate ? formatDate(propertyCheckOutDate, locale) + ' | ' : ''} ${propertyCheckOutTime ? formatTime(propertyCheckOutTime, locale) : ''}`}</p>
+					</div>
+				)}
 			</div>
-			<div className="flex flex-col lg:flex-row gap-1 relative z-1">
+
+			<div className="flex flex-col sm:flex-row gap-1 relative z-1">
 				<ButtonLink
 					label={t('Editar')}
 					href={`/app/properties/edit/${propertyId}?from=manage`}
-					color="primary"
-					className="w-full"
+					color="white"
+					className="w-full xl:w-fit"
 					iconLeft={<IconEdit />}
 				/>
 				<ButtonLink
 					label={t('Mis Propiedades')}
 					href="/app/properties"
 					color="white"
-					className="w-full"
+					className="w-full xl:w-fit"
 					iconLeft={<IconApartment />}
-				/>
-				<ButtonLink
-					label={t('feedback.cta')}
-					href={`/app/feedback/dashboard/property/${propertyId}?returnTo=/app/properties/${propertyId}/${categoryId}/${subCategoryId}`}
-					color="white"
-					className="w-full"
-					iconLeft={<IconHelp />}
 				/>
 			</div>
 		</div>

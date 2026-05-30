@@ -33,6 +33,7 @@ import PlaceAutocompleteField from '@/components/molecules/place-autocomplete';
 import { SelectedPlace } from '@/components/molecules/place-autocomplete';
 import IconLocationOn from '@/components/atoms/icon/location-on';
 import IconOpenInNew from '@/components/atoms/icon/open-in-new';
+import DashboardData from '../../dashboard-card/dashboard-data';
 
 type FormValues = {
 	property_id: string;
@@ -246,7 +247,7 @@ const AddPlaceForm = ({
 		recos[0];
 
 	return (
-		<div className="bg-white p-2 rounded-xl max-w-[400px] w-full shadow-xs">
+		<div className="bg-white rounded-xl max-w-[460px] w-full shadow-xs">
 			{alert && (
 				<Alert
 					hideTime={3000}
@@ -270,195 +271,276 @@ const AddPlaceForm = ({
 
 			<form
 				onSubmit={handleSubmit(onSubmit)}
-				className="flex flex-col gap-4 p-2 w-full"
+				className="flex flex-col gap-4 w-full"
 			>
-				{RECO_UI_ENABLED && recos.length > 0 && (
-					<>
-						<Modal
-							title={t('recommendations.title')}
-							open={modalOpen}
-							onClose={() => {
-								setModalOpen(false);
-							}}
-							secondaryButtonAction={() => setModalOpen(false)}
-							secondaryButtonLabel={t('Cancelar')}
-							size="max-w-md"
-						>
-							<div className="flex flex-col gap-3 items-center">
-								<FancyIcon
-									color="gradient"
-									icon={<IconLocationOn color="white" />}
-								/>
-								<Typography>
-									{t('recommendations.subtitle')}
-								</Typography>
-								<div className="flex flex-col gap-1 w-full">
-									{recos.map((r) => {
-										const selected =
-											selectedRecoId === r.id;
-										return (
-											<RecomendationCard
-												key={r.id}
-												id={r.id}
-												name={r.name}
-												address={r.address}
-												rating={r.rating}
-												selected={selected}
-												applyRecommendation={() => {
-													applyRecommendation(r);
-													setModalOpen(false);
-												}}
-											/>
-										);
-									})}
-								</div>
-							</div>
-						</Modal>
-						<fieldset className="flex flex-col gap-2 text-center">
+				<div className="flex flex-col gap-4 p-4 pt-0 border-b border-gray-200">
+					<DashboardData
+						label={
 							<Typography
-								size="base"
-								component="h3"
-								className="flex items-center justify-center gap-1"
+								size="sm"
+								weight="medium"
+								className="flex gap-2 items-center"
 							>
-								<IconLocationOn color="primary" />
-								{t('recommendations.title')}
+								<span className="w-9 h-9 flex justify-center items-center rounded-full bg-primary-100 font-bold text-primary-800 text-base">
+									1
+								</span>
+								{t('escencial')}
 							</Typography>
-							<div className="bg-gray-200 p-1 rounded-b-3xl rounded-t-2xl flex flex-col gap-1">
-								{teaserReco && (
-									<RecomendationCard
-										id={teaserReco.id}
-										name={teaserReco.name}
-										address={teaserReco.address}
-										rating={teaserReco.rating}
-										selected={
-											selectedRecoId === teaserReco.id
-										}
-										applyRecommendation={() =>
-											applyRecommendation(teaserReco)
-										}
-									/>
-								)}
+						}
+						action={
+							<Typography
+								weight="medium"
+								className="flex gap-2 items-center text-xs!"
+							>
+								{t('Requerido')}
+							</Typography>
+						}
+					/>
 
-								<Button
-									color="secondary"
-									onClick={() => setModalOpen(true)}
-									label={t('recommendations.cta')}
-									iconLeft={<IconOpenInNew />}
+					{RECO_UI_ENABLED && recos.length > 0 && (
+						<>
+							<Modal
+								title={t('recommendations.title')}
+								open={modalOpen}
+								onClose={() => {
+									setModalOpen(false);
+								}}
+								secondaryButtonAction={() =>
+									setModalOpen(false)
+								}
+								secondaryButtonLabel={t('Cancelar')}
+								size="max-w-md"
+							>
+								<div className="flex flex-col gap-3 items-center">
+									<FancyIcon
+										color="gradient"
+										icon={<IconLocationOn color="white" />}
+									/>
+									<Typography>
+										{t('recommendations.subtitle')}
+									</Typography>
+									<div className="flex flex-col gap-1 w-full">
+										{recos.map((r) => {
+											const selected =
+												selectedRecoId === r.id;
+											return (
+												<RecomendationCard
+													key={r.id}
+													id={r.id}
+													name={r.name}
+													address={r.address}
+													rating={r.rating}
+													selected={selected}
+													applyRecommendation={() => {
+														applyRecommendation(r);
+														setModalOpen(false);
+													}}
+												/>
+											);
+										})}
+									</div>
+								</div>
+							</Modal>
+							<fieldset className="flex flex-col gap-2 text-center">
+								<Typography
+									size="base"
+									component="h3"
+									className="flex items-center justify-center gap-1"
+								>
+									<IconLocationOn color="primary" />
+									{t('recommendations.title')}
+								</Typography>
+								<div className="bg-gray-200 p-1 rounded-b-3xl rounded-t-2xl flex flex-col gap-1">
+									{teaserReco && (
+										<RecomendationCard
+											id={teaserReco.id}
+											name={teaserReco.name}
+											address={teaserReco.address}
+											rating={teaserReco.rating}
+											selected={
+												selectedRecoId === teaserReco.id
+											}
+											applyRecommendation={() =>
+												applyRecommendation(teaserReco)
+											}
+										/>
+									)}
+
+									<Button
+										color="secondary"
+										onClick={() => setModalOpen(true)}
+										label={t('recommendations.cta')}
+										iconLeft={<IconOpenInNew />}
+									/>
+								</div>
+							</fieldset>
+						</>
+					)}
+					<TextField
+						label={t('Nombre del sitio *')}
+						placeholder={t('Sitio nombre ejemplo')}
+						id="name"
+						{...register('name', {
+							required: t('El nombre es obligatorio'),
+						})}
+						error={Boolean(errors.name)}
+						helperText={errors.name?.message}
+					/>
+
+					<PlaceAutocompleteField
+						label={t('Dirección *')}
+						placeholder={t('Sitio dirección ejemplo')}
+						locale={locale}
+						countryCodes={['es']}
+						error={Boolean(errors.address)}
+						helperTextIdle={t('addressHelperIdle')}
+						helperTextError={t('addressHelperError')}
+						onSelect={handleSelectAddress}
+						onClearSelection={clearSelection}
+						isSelected={!!coords}
+						selectedValue={watch('address')}
+					/>
+
+					<input
+						type="hidden"
+						{...register('address', {
+							required: t('La dirección es obligatoria'),
+						})}
+					/>
+					<input type="hidden" {...register('latitude')} />
+					<input type="hidden" {...register('longitude')} />
+
+					<TextArea
+						label={t('Descripción')}
+						placeholder={t('description-placeholder')}
+						rows={3}
+						{...register('description', {
+							setValueAs: (v) =>
+								typeof v === 'string' ? v.trim() : v,
+							maxLength: {
+								value: 200,
+								message: t('description-characters', {
+									n: 200,
+								}),
+							},
+						})}
+						error={!!errors.description}
+						helperText={errors.description?.message}
+					/>
+				</div>
+
+				<div className="flex flex-col gap-4 p-4 pt-0 border-b border-gray-200">
+					<DashboardData
+						label={
+							<Typography
+								size="sm"
+								weight="medium"
+								className="flex gap-2 items-center"
+							>
+								<span className="w-9 h-9 flex justify-center items-center rounded-full bg-primary-100 font-bold text-primary-800 text-base">
+									2
+								</span>
+								{t('markLocation')}
+							</Typography>
+						}
+						action={
+							<Typography
+								weight="medium"
+								className="flex gap-2 items-center text-xs!"
+							>
+								{t('Opcional')}
+							</Typography>
+						}
+					/>
+					<fieldset className="flex flex-col gap-2">
+						<div className="flex items-center gap-2">
+							<div className="flex gap-0.5 items-center w-full">
+								<div className="shrink-0">
+									<IconFavorite color="primary" size={20} />
+								</div>
+								<BadgeCheck
+									label={t('markFavoriteCheck')}
+									checked={!!featuredValue}
+									className="w-full"
+									onToggle={() => {
+										setValue('featured', !featuredValue, {
+											shouldDirty: true,
+											shouldTouch: true,
+											shouldValidate: true,
+										});
+									}}
 								/>
 							</div>
-						</fieldset>
-					</>
-				)}
-				<TextField
-					label={t('Nombre del sitio *')}
-					placeholder={t('Sitio nombre ejemplo')}
-					id="name"
-					{...register('name', {
-						required: t('El nombre es obligatorio'),
-					})}
-					error={Boolean(errors.name)}
-					helperText={errors.name?.message}
-				/>
-
-				<PlaceAutocompleteField
-					label={t('Dirección *')}
-					placeholder={t('Sitio dirección ejemplo')}
-					locale={locale}
-					countryCodes={['es']}
-					error={Boolean(errors.address)}
-					helperTextIdle={t('addressHelperIdle')}
-					helperTextError={t('addressHelperError')}
-					onSelect={handleSelectAddress}
-					onClearSelection={clearSelection}
-					isSelected={!!coords}
-					selectedValue={watch('address')}
-				/>
-
-				<input
-					type="hidden"
-					{...register('address', {
-						required: t('La dirección es obligatoria'),
-					})}
-				/>
-				<input type="hidden" {...register('latitude')} />
-				<input type="hidden" {...register('longitude')} />
-
-				<TextArea
-					label={t('Descripción')}
-					placeholder={t('description-placeholder')}
-					rows={3}
-					{...register('description', {
-						setValueAs: (v) =>
-							typeof v === 'string' ? v.trim() : v,
-						maxLength: {
-							value: 200,
-							message: t('description-characters', { n: 200 }),
-						},
-					})}
-					error={!!errors.description}
-					helperText={errors.description?.message}
-				/>
-
-				<fieldset className="flex flex-col gap-2">
-					<p className="font-medium text-sm">{t('markLocation')}</p>
-					<div className="flex items-center gap-2">
-						<div className="flex gap-0.5 items-center w-full">
-							<div className="shrink-0">
-								<IconFavorite color="primary" size={20} />
+							<div className="flex gap-0.5 items-center w-full">
+								<div className="shrink-0">
+									<IconModeHeat color="error" size={20} />
+								</div>
+								<BadgeCheck
+									label={t('markMustSeeCheck')}
+									checked={!!mustVisitValue}
+									className="w-full"
+									checkedColor="error"
+									onToggle={() => {
+										setValue(
+											'must_visit',
+											!mustVisitValue,
+											{
+												shouldDirty: true,
+												shouldTouch: true,
+												shouldValidate: true,
+											},
+										);
+									}}
+								/>
 							</div>
-							<BadgeCheck
-								label={t('markFavoriteCheck')}
-								checked={!!featuredValue}
-								className="w-full"
-								onToggle={() => {
-									setValue('featured', !featuredValue, {
-										shouldDirty: true,
-										shouldTouch: true,
-										shouldValidate: true,
-									});
-								}}
-							/>
 						</div>
-						<div className="flex gap-0.5 items-center w-full">
-							<div className="shrink-0">
-								<IconModeHeat color="error" size={20} />
-							</div>
-							<BadgeCheck
-								label={t('markMustSeeCheck')}
-								checked={!!mustVisitValue}
-								className="w-full"
-								checkedColor="error"
-								onToggle={() => {
-									setValue('must_visit', !mustVisitValue, {
-										shouldDirty: true,
-										shouldTouch: true,
-										shouldValidate: true,
-									});
-								}}
-							/>
-						</div>
-					</div>
-				</fieldset>
+					</fieldset>
+				</div>
 
-				<InputFile
-					label={t('Imagen')}
-					error={Boolean(errors.image)}
-					helperText={errors.image?.message as string}
-					{...register('image', {
-						validate: (files) => {
-							const file = files?.[0];
-							if (!file) return true;
-							if (file.size <= MAX_IMAGE_SIZE) return true;
-							return `La imagen no debe superar ${(
-								MAX_IMAGE_SIZE / 1024
-							).toFixed(0)} KB (tienes ${(
-								file.size / 1024
-							).toFixed(0)} KB)`;
-						},
-					})}
-				/>
+				<div className="flex flex-col gap-4 p-4 pt-0 border-b border-gray-200 justify-center">
+					<DashboardData
+						label={
+							<Typography
+								size="sm"
+								weight="medium"
+								className="flex gap-2 items-center"
+							>
+								<span className="w-9 h-9 flex justify-center items-center rounded-full bg-primary-100 font-bold text-primary-800 text-base">
+									3
+								</span>
+								{t('image')}
+							</Typography>
+						}
+						action={
+							<Typography
+								weight="medium"
+								className="flex gap-2 items-center text-xs!"
+							>
+								{t('Opcional')}
+							</Typography>
+						}
+					/>
+					<InputFile
+						className="w-full mx-auto"
+						label={t('Imagen')}
+						error={Boolean(errors.image)}
+						helperText={errors.image?.message as string}
+						{...register('image', {
+							validate: (files) => {
+								const file = files?.[0];
+								if (!file) return true;
+								if (file.size <= MAX_IMAGE_SIZE) return true;
+								return `La imagen no debe superar ${(
+									MAX_IMAGE_SIZE / 1024
+								).toFixed(0)} KB (tienes ${(
+									file.size / 1024
+								).toFixed(0)} KB)`;
+							},
+						})}
+					/>
+				</div>
 
-				<div className="flex flex-col gap-2">
+				<div className="flex flex-col gap-2 p-4 pt-0">
 					<Button
 						type="submit"
 						label={t('Añadir')}

@@ -22,6 +22,7 @@ import IconInfo from '@/components/atoms/icon/info';
 import Typography from '@/components/atoms/typography';
 
 import { DAILY_AI_USAGE_LIMMIT } from '@/config/config-constants';
+import DashboardData from '../../dashboard-card/dashboard-data';
 
 type AddInfoFormProps = {
 	propertyId: string;
@@ -153,7 +154,7 @@ const UpdateInfoForm = ({
 	}, [remaining]);
 
 	return (
-		<div className="bg-white p-2 rounded-xl max-w-[600px] w-full shadow-xs">
+		<div className="bg-white rounded-xl max-w-[600px] w-full shadow-xs">
 			{alert && (
 				<Alert
 					hideTime={3000}
@@ -165,7 +166,7 @@ const UpdateInfoForm = ({
 				/>
 			)}
 
-			<div className="rounded-lg p-2 pt-0 flex flex-col gap-2 items-center">
+			<div className="rounded-lg flex flex-col gap-2 items-center mb-3">
 				<FancyIcon icon={<IconInfo color="white" />} color="gradient" />
 				{name && (
 					<Typography component="h2" size="lg">
@@ -176,19 +177,65 @@ const UpdateInfoForm = ({
 
 			<form
 				onSubmit={handleSubmit(onSubmit)}
-				className="flex flex-col gap-4 w-full p-2"
+				className="flex flex-col gap-0 w-full"
 			>
-				{/* Text content */}
-				<TextArea
-					label={t('Añade el contenido que desees')}
-					defaultValue={initialContent}
-					{...register('content')}
-					error={!!errors.content}
-					helperText={errors.content?.message}
-					rows={15}
-				/>
+				<div className="flex flex-col gap-4 p-4 pt-0 border-b border-gray-200">
+					<DashboardData
+						label={
+							<Typography
+								size="sm"
+								weight="medium"
+								className="flex gap-2 items-center"
+							>
+								<span className="w-9 h-9 flex justify-center items-center rounded-full bg-primary-100 font-bold text-primary-800 text-base">
+									1
+								</span>
+								{t('demo.navigation.editPropertyInfo')}
+							</Typography>
+						}
+						action={
+							<Typography
+								weight="medium"
+								className="flex gap-2 items-center text-xs!"
+							>
+								{t('Opcional')}
+							</Typography>
+						}
+					/>
+					{/* Text content */}
+					<TextArea
+						label={t('Añade el contenido que desees')}
+						defaultValue={initialContent}
+						{...register('content')}
+						error={!!errors.content}
+						helperText={errors.content?.message}
+						rows={15}
+					/>
+				</div>
 
-				<div className="relative z-10 bg-white rounded-md">
+				<div className="flex flex-col gap-4 p-4 border-b border-gray-200">
+					<DashboardData
+						label={
+							<Typography
+								size="sm"
+								weight="medium"
+								className="flex gap-2 items-center"
+							>
+								<span className="w-9 h-9 flex justify-center items-center rounded-full bg-primary-100 font-bold text-primary-800 text-base">
+									2
+								</span>
+								{t('Generar con IA')}
+							</Typography>
+						}
+						action={
+							<Typography
+								weight="medium"
+								className="flex gap-2 items-center text-xs!"
+							>
+								{t('Opcional')}
+							</Typography>
+						}
+					/>
 					<TextArea
 						label={t('Describe lo que quieres que la IA escriba')}
 						value={prompt}
@@ -227,26 +274,28 @@ const UpdateInfoForm = ({
 						))}
 				</div>
 
-				<div className="flex flex-col gap-2">
-					<Button
-						type="submit"
-						label={t('Añadir información')}
-						className="w-full"
-						disabled={isSubmitting}
-					/>
-					<Button
-						label={t('Cancelar')}
-						className="w-full"
-						color="secondary"
-						onClick={() => router.back()}
-					/>
-					<ButtonLink
-						label={t('feedback.cta')}
-						href={`/app/feedback/create_info/property/${propertyId}?returnTo=/app/properties/${propertyId}/${categoryId}/${subCategoryId}`}
-						color="white"
-						className="w-full"
-						iconLeft={<IconHelp />}
-					/>
+				<div className="flex flex-col gap-4 p-4">
+					<div className="flex flex-col gap-2">
+						<Button
+							type="submit"
+							label={t('Añadir información')}
+							className="w-full"
+							disabled={isSubmitting}
+						/>
+						<Button
+							label={t('Cancelar')}
+							className="w-full"
+							color="secondary"
+							onClick={() => router.back()}
+						/>
+						<ButtonLink
+							label={t('feedback.cta')}
+							href={`/app/feedback/create_info/property/${propertyId}?returnTo=/app/properties/${propertyId}/${categoryId}/${subCategoryId}`}
+							color="white"
+							className="w-full"
+							iconLeft={<IconHelp />}
+						/>
+					</div>
 				</div>
 			</form>
 		</div>
