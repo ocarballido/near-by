@@ -43,7 +43,7 @@ const PropertyDataBoard = ({
 	const locale = useLocale();
 
 	return (
-		<div className="bg-gradient-to-tr from-[#ffa263] to-[#6cffc9] mx-1 mt-1 p-4 flex gap-3 flex-col rounded-md relative overflow-hidden">
+		<div className="bg-gradient-to-tr from-[#ffa263] to-[#6cffc9] mx-1.5 mt-1.5 p-4 flex gap-3 flex-col rounded-md relative overflow-hidden">
 			<div className="grid grid-cols-2 xl:grid-cols-3 gap-3 justify-center">
 				<div className="col-span-2 xl:col-span-1 flex gap-2 items-center">
 					<div className="shrink-0 h-8 w-8 flex justify-center items-center p-1 rounded-full bg-white/50">
