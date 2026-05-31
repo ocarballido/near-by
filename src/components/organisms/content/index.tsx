@@ -48,7 +48,7 @@ const Content = ({
 	const { openSidebar } = useSidebar();
 
 	return (
-		<main className="flex flex-col gap-2 w-full grow rounded-lg overflow-hidden bg-gray-50 p-0.5">
+		<main className="flex flex-col gap-2 w-full grow rounded-xl overflow-hidden bg-gray-50 p-0.5">
 			<div className="flex flex-col sm:flex-row gap-2 md:hidden p-2">
 				<Button
 					label={t('Abrir menú')}
