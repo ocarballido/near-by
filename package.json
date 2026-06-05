@@ -29,13 +29,12 @@
 		"embla-carousel-autoplay": "8.6.0",
 		"embla-carousel-fade": "8.6.0",
 		"embla-carousel-react": "8.6.0",
-		"lucide-react": "0.469.0",
 		"next": "15.5.18",
 		"next-intl": "4.11.0",
 		"qrcode.react": "4.2.0",
 		"react": "19.0.1",
 		"react-dom": "19.0.1",
-		"react-hook-form": "7.55.0",
+		"react-hook-form": "7.77.0",
 		"react-markdown": "9.0.3",
 		"react-player": "2.16.0",
 		"react-share": "5.2.2",
@@ -48,7 +47,7 @@
 	"overrides": {
 		"minimatch": "10.2.3",
 		"tar": "7.5.11",
-		"flatted": "3.4.0"
+		"flatted": "3.4.2"
 	},
 	"devDependencies": {
 		"@eslint/eslintrc": "3",

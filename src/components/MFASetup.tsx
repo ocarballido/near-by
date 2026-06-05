@@ -9,7 +9,6 @@ import {
 	CardContent,
 } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Key, CheckCircle, XCircle, Loader2 } from 'lucide-react';
 import { Factor } from '@supabase/auth-js';
 import { MFAEnrollTOTPParams } from '@supabase/supabase-js';
 
@@ -44,7 +43,7 @@ export function MFASetup({ onStatusChange }: MFASetupProps) {
 			setError(
 				err instanceof Error
 					? err.message
-					: 'Failed to fetch MFA status'
+					: 'Failed to fetch MFA status',
 			);
 			setLoading(false);
 		}
@@ -83,7 +82,7 @@ export function MFASetup({ onStatusChange }: MFASetupProps) {
 			setError(
 				err instanceof Error
 					? err.message
-					: 'Failed to start MFA enrollment'
+					: 'Failed to start MFA enrollment',
 			);
 			setStep('name');
 		} finally {
@@ -114,7 +113,9 @@ export function MFASetup({ onStatusChange }: MFASetupProps) {
 			onStatusChange?.();
 		} catch (err) {
 			setError(
-				err instanceof Error ? err.message : 'Failed to verify MFA code'
+				err instanceof Error
+					? err.message
+					: 'Failed to verify MFA code',
 			);
 		} finally {
 			setActionInProgress(false);
@@ -139,7 +140,7 @@ export function MFASetup({ onStatusChange }: MFASetupProps) {
 			setError(
 				err instanceof Error
 					? err.message
-					: 'Failed to unenroll MFA factor'
+					: 'Failed to unenroll MFA factor',
 			);
 		} finally {
 			setActionInProgress(false);
@@ -159,7 +160,7 @@ export function MFASetup({ onStatusChange }: MFASetupProps) {
 		return (
 			<Card>
 				<CardContent className="flex justify-center items-center p-6">
-					<Loader2 className="h-6 w-6 animate-spin" />
+					<div className="h-6 w-6 animate-spin" />
 				</CardContent>
 			</Card>
 		);
@@ -169,7 +170,6 @@ export function MFASetup({ onStatusChange }: MFASetupProps) {
 		<Card>
 			<CardHeader>
 				<CardTitle className="flex items-center gap-2">
-					<Key className="h-5 w-5" />
 					Two-Factor Authentication (2FA)
 				</CardTitle>
 				<CardDescription>
@@ -192,9 +192,9 @@ export function MFASetup({ onStatusChange }: MFASetupProps) {
 							>
 								<div className="flex items-center gap-3">
 									{factor.status === 'verified' ? (
-										<CheckCircle className="h-5 w-5 text-green-500" />
+										<div className="h-5 w-5 text-green-500" />
 									) : (
-										<XCircle className="h-5 w-5 text-red-500" />
+										<div className="h-5 w-5 text-red-500" />
 									)}
 									<div>
 										<p className="font-medium">
@@ -204,7 +204,7 @@ export function MFASetup({ onStatusChange }: MFASetupProps) {
 										<p className="text-sm text-gray-500">
 											Added on{' '}
 											{new Date(
-												factor.created_at
+												factor.created_at,
 											).toLocaleDateString()}
 										</p>
 									</div>
