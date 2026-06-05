@@ -26,12 +26,12 @@
 		"class-variance-authority": "0.7.1",
 		"clsx": "2.1.1",
 		"cookies-next": "5.0.2",
-		"embla-carousel-autoplay": "^8.6.0",
-		"embla-carousel-fade": "^8.6.0",
-		"embla-carousel-react": "^8.6.0",
+		"embla-carousel-autoplay": "8.6.0",
+		"embla-carousel-fade": "8.6.0",
+		"embla-carousel-react": "8.6.0",
 		"lucide-react": "0.469.0",
-		"next": "^15.5.14",
-		"next-intl": "^4.11.0",
+		"next": "15.5.18",
+		"next-intl": "4.11.0",
 		"qrcode.react": "4.2.0",
 		"react": "19.0.1",
 		"react-dom": "19.0.1",
@@ -46,9 +46,9 @@
 		"zod": "3.24.3"
 	},
 	"overrides": {
-		"minimatch": "^10.2.3",
-		"tar": "^7.5.11",
-		"flatted": "^3.4.0"
+		"minimatch": "10.2.3",
+		"tar": "7.5.11",
+		"flatted": "3.4.0"
 	},
 	"devDependencies": {
 		"@eslint/eslintrc": "3",
@@ -61,9 +61,9 @@
 		"eslint": "9",
 		"eslint-config-next": "15.5.11",
 		"knip": "5.58.1",
-		"postcss": "8.5.3",
+		"postcss": "8.5.15",
 		"postcss-import": "16.1.0",
-		"supabase": "^2.84.4",
+		"supabase": "2.84.4",
 		"tailwindcss": "4.1.4",
 		"typescript": "5"
 	}
