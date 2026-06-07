@@ -16,7 +16,7 @@ async function main() {
   const { data: items, error } = await supabase
     .from("property_data")
     .select("id, type, name, description")
-    .range(0, 9999);
+    .limit(5000);
 
   if (error || !items) {
     console.error("Error fetching property_data:", error);
