@@ -7,6 +7,7 @@ type Props = {
 	subCategoryId: string;
 	lat: number;
 	lng: number;
+	locale: string;
 };
 
 export default async function SubcategorySection({
@@ -15,11 +16,13 @@ export default async function SubcategorySection({
 	subCategoryId,
 	lat,
 	lng,
+	locale,
 }: Props) {
 	const data = await fetchSubcategoryPageData(
 		propertyId,
 		categoryId,
 		subCategoryId,
+		locale,
 	);
 
 	return (
@@ -31,6 +34,7 @@ export default async function SubcategorySection({
 			subCategoryId={subCategoryId}
 			lng={lng}
 			sub_category_name={data.subCategory?.name}
+			hasTranslations={data.hasTranslations}
 		/>
 	);
 }

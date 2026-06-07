@@ -9,11 +9,13 @@ const PublicLocationContent = ({
 	categoryId,
 	subCategoryId,
 	locations = [],
+	hasTranslations,
 }: {
 	locations: PropertyDataItem[];
 	sub_category_name?: string;
 	categoryId?: string;
 	subCategoryId?: string;
+	hasTranslations?: boolean;
 }) => {
 	const t = useTranslations();
 
@@ -47,6 +49,11 @@ const PublicLocationContent = ({
 					/>
 				))}
 			</div>
+			{hasTranslations && (
+				<p className="text-xs text-gray-400 text-center mt-2">
+					🌐 {t('Traducido automáticamente')}
+				</p>
+			)}
 		</div>
 	);
 };

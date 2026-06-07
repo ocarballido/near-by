@@ -129,6 +129,9 @@ export default function ArrivalGuide({ data, propertyId, address }: Props) {
 											accessInstructions={
 												data.access_instructions
 											}
+											isTranslated={
+												data.isAccessInstructionsTranslated
+											}
 										/>
 									)}
 									{step === 4 && (

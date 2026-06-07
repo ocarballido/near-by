@@ -138,11 +138,15 @@ export default async function Property({ params, searchParams }: PageProps) {
 		await Promise.all([
 			getPublicSidebarData(propertyId),
 			fetchPropertyBase(propertyId),
-			fetchInfoSectionsData(propertyId),
+			fetchInfoSectionsData(propertyId, locale),
 			getPropertySubCategoryCounts(propertyId),
 		]);
 
-	const arrivalGuideData = await fetchArrivalGuideData(propertyId, property);
+	const arrivalGuideData = await fetchArrivalGuideData(
+		propertyId,
+		property,
+		locale,
+	);
 
 	const hasInfoContent = infoGroups.length > 0;
 	const mode = getMode(categoryId);
@@ -186,6 +190,7 @@ export default async function Property({ params, searchParams }: PageProps) {
 							subCategoryId={subCategoryId}
 							lat={lat}
 							lng={lng}
+							locale={locale}
 						/>
 					)}
 
