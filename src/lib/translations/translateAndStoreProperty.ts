@@ -50,7 +50,7 @@ export async function translateAndStoreProperty(
 			updated_at: new Date().toISOString(),
 		}));
 
-		const { error } = await (supabase as any)
+		const { error } = await supabase
 			.from('property_translations')
 			.upsert(upsertRows, { onConflict: 'property_id,lang,field_key' });
 

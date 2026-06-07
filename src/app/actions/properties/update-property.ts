@@ -186,7 +186,7 @@ export async function updateProperty(
 
 		// Si access_instructions se ha borrado, eliminamos sus traducciones
 		if (!validated.access_instructions) {
-			await (supabase as any)
+			await supabase
 				.from('property_translations')
 				.delete()
 				.eq('property_id', propertyId)

@@ -1,6 +1,12 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database } from '@/lib/types';
 
+type TranslationRow = {
+	property_data_id: string;
+	field_key: string;
+	translated_value: string;
+};
+
 export async function getTranslatedPropertyData(
 	propertyId: string,
 	lang: string,
@@ -25,11 +31,12 @@ export async function getTranslatedPropertyData(
 	// 2. Fetch de traducciones para el idioma solicitado
 	const ids = items.map((i) => i.id);
 
-	const { data: translations } = await (supabase as any)
+	const { data: translations } = await supabase
 		.from('property_data_translations')
 		.select('property_data_id, field_key, translated_value')
 		.in('property_data_id', ids)
-		.eq('lang', lang);
+		.eq('lang', lang)
+		.overrideTypes<TranslationRow[], { merge: false }>();
 
 	// Si no hay traducciones, devolvemos los items originales
 	if (!translations || translations.length === 0) return items;

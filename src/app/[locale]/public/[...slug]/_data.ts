@@ -14,6 +14,11 @@ type SubcatMiniWithOrder = {
 	name: string;
 	order_index: number | null;
 };
+type TranslationRow = {
+	property_data_id: string;
+	field_key: string;
+	translated_value: string;
+};
 
 export const PROPERTY_DATA_SELECT =
 	'id, name, description, image_url, type, latitude, longitude, featured, must_visit, address, sub_category_id';
@@ -110,11 +115,12 @@ export async function fetchSubcategoryPageData(
 
 	// Fetch traducciones para el locale solicitado
 	const ids = (items ?? []).map((i) => i.id);
-	const { data: translations } = await (supabase as any)
+	const { data: translations } = await supabase
 		.from('property_data_translations')
 		.select('property_data_id, field_key, translated_value')
 		.in('property_data_id', ids)
-		.eq('lang', locale);
+		.eq('lang', locale)
+		.overrideTypes<TranslationRow[], { merge: false }>();
 
 	// Merge: traducción tiene prioridad, fallback al original
 	const translationMap = new Map<string, Record<string, string>>();
@@ -208,11 +214,12 @@ export async function fetchWelcomeHighlightsTabsData(
 	// Fetch traducciones para el locale solicitado
 	const { data: translations } =
 		allIds.length > 0
-			? await (supabase as any)
+			? await supabase
 					.from('property_data_translations')
 					.select('property_data_id, field_key, translated_value')
 					.in('property_data_id', allIds)
 					.eq('lang', locale)
+					.overrideTypes<TranslationRow[], { merge: false }>()
 			: { data: [] };
 
 	// Merge: traducción tiene prioridad, fallback al original
@@ -298,11 +305,12 @@ export async function fetchInfoSectionsData(
 
 	// Fetch traducciones para el locale solicitado
 	const ids = items.map((i) => i.id);
-	const { data: translations } = await (supabase as any)
+	const { data: translations } = await supabase
 		.from('property_data_translations')
 		.select('property_data_id, field_key, translated_value')
 		.in('property_data_id', ids)
-		.eq('lang', locale);
+		.eq('lang', locale)
+		.overrideTypes<TranslationRow[], { merge: false }>();
 
 	// Merge: traducción tiene prioridad, fallback al original
 	const translationMap = new Map<string, Record<string, string>>();
@@ -470,7 +478,7 @@ export async function fetchArrivalGuideData(
 			.eq('sub_category_id', PARKINGS_SUB_CAT_ID)
 			.order('name', { ascending: true })
 			.overrideTypes<ParkingRow[], { merge: false }>(),
-		(supabase as any)
+		supabase
 			.from('property_translations')
 			.select('field_key, translated_value')
 			.eq('property_id', propertyId)
