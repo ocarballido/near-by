@@ -6,6 +6,7 @@ import { createSSRClient } from '@/lib/supabase/server';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 import { MAX_IMAGE_SIZE } from '@/config/config-constants';
 import { touchPropertyUpdatedAt } from '@/lib/properties/touch-property';
+import { translateAndStore } from '@/lib/translations/translateAndStore';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database, Tables, TablesInsert, TablesUpdate } from '@/lib/types';
@@ -177,7 +178,6 @@ export async function createLocation(
 		}
 
 		if (existing) {
-			// 7) Actualizar si ya existe — mismo shape, sólo tipado y call-site neutralizado
 			type PDUpdate = TablesUpdate<'property_data'>;
 			const updatePayload: PDUpdate = {
 				address: loc.address,
@@ -199,6 +199,24 @@ export async function createLocation(
 					errors: { server: ['Error actualizando el sitio.'] },
 				};
 			}
+
+			// Fire and forget — re-traducimos por si el propietario cambió el texto
+			translateAndStore(existing.id, [
+				{ fieldKey: 'name', value: loc.name },
+				...(loc.description
+					? [
+							{
+								fieldKey: 'description' as const,
+								value: loc.description,
+							},
+						]
+					: []),
+			]).catch((err) =>
+				console.error(
+					'[createLocation] Error en traducción (update):',
+					err,
+				),
+			);
 		} else {
 			// 8) Insertar si no existe — mismo shape, sólo tipado y call-site neutralizado
 			type PDInsert = TablesInsert<'property_data'>;
@@ -218,15 +236,34 @@ export async function createLocation(
 				must_visit: loc.must_visit,
 			};
 
-			const { error: insertErr } = await db
+			const { data: inserted, error: insertErr } = await db
 				.from('property_data')
-				.insert(insertPayload);
+				.insert(insertPayload)
+				.select('id')
+				.single();
 
 			if (insertErr) {
 				console.error('Error insertando location:', insertErr);
 				return {
 					errors: { server: ['Error creando el sitio.'] },
 				};
+			}
+
+			// Fire and forget — traducimos el nombre de la location
+			if (inserted) {
+				translateAndStore(inserted.id, [
+					{ fieldKey: 'name', value: loc.name },
+					...(loc.description
+						? [
+								{
+									fieldKey: 'description' as const,
+									value: loc.description,
+								},
+							]
+						: []),
+				]).catch((err) =>
+					console.error('[createLocation] Error en traducción:', err),
+				);
 			}
 		}
 

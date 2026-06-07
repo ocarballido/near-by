@@ -17,6 +17,7 @@ import type { Database, TablesInsert } from '@/lib/types';
 
 import { uploadPropertyImage } from '@/lib/uploadPropertyImage';
 import { seedLodgingContent } from '@/lib/seedLodgingContent';
+import { translateAndStoreProperty } from '@/lib/translations/translateAndStoreProperty';
 
 const emptyToNull = (v: unknown) => {
 	if (typeof v !== 'string') return null;
@@ -214,6 +215,18 @@ export async function createProperty(formData: FormData): Promise<FormState> {
 			locale,
 			selectedSubCategoryIds: selectedSeedSubCategoryIds,
 		});
+
+		// Fire and forget — traducimos access_instructions si existe
+		if (validated.access_instructions) {
+			translateAndStoreProperty(property.id, [
+				{
+					fieldKey: 'access_instructions',
+					value: validated.access_instructions,
+				},
+			]).catch((err) =>
+				console.error('[createProperty] Error en traducción:', err),
+			);
+		}
 
 		// 10. Revalidar la ruta del dashboard para mostrar la nueva propiedad
 		revalidatePath('/app');
