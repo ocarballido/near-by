@@ -14,6 +14,11 @@ type SubcatMiniWithOrder = {
 	name: string;
 	order_index: number | null;
 };
+type TranslationRow = {
+	property_data_id: string;
+	field_key: string;
+	translated_value: string;
+};
 
 export const PROPERTY_DATA_SELECT =
 	'id, name, description, image_url, type, latitude, longitude, featured, must_visit, address, sub_category_id';
@@ -42,6 +47,7 @@ export type InfoGroup = {
 	sub_category_name: string;
 	description: string;
 	order: number;
+	isTranslated: boolean;
 };
 
 type InfoRow = {
@@ -73,6 +79,7 @@ export async function fetchSubcategoryPageData(
 	propertyId: string,
 	categoryId: string,
 	subCategoryId: string,
+	locale: string,
 ) {
 	const supabase = await createServerAdminClient();
 
@@ -106,10 +113,40 @@ export async function fetchSubcategoryPageData(
 
 	if (errorPropertyData || errorCategoryType || errorSubcats) notFound();
 
+	// Fetch traducciones para el locale solicitado
+	const ids = (items ?? []).map((i) => i.id);
+	const { data: translations } = await supabase
+		.from('property_data_translations')
+		.select('property_data_id, field_key, translated_value')
+		.in('property_data_id', ids)
+		.eq('lang', locale)
+		.overrideTypes<TranslationRow[], { merge: false }>();
+
+	// Merge: traducción tiene prioridad, fallback al original
+	const translationMap = new Map<string, Record<string, string>>();
+	for (const t of translations ?? []) {
+		if (!translationMap.has(t.property_data_id)) {
+			translationMap.set(t.property_data_id, {});
+		}
+		translationMap.get(t.property_data_id)![t.field_key] =
+			t.translated_value;
+	}
+
+	const mergedItems = (items ?? []).map((item) => {
+		const tr = translationMap.get(item.id);
+		if (!tr) return item;
+		return {
+			...item,
+			name: tr.name ?? item.name,
+			description: tr.description ?? item.description,
+		};
+	});
+
 	return {
-		propertyData: (items ?? []).map(toPublicItem),
+		propertyData: mergedItems.map(toPublicItem),
 		categoryType: typeRow ?? null,
 		subCategory: subcatRow ?? null,
+		hasTranslations: translationMap.size > 0,
 	};
 }
 
@@ -139,6 +176,7 @@ function groupBySubcategory(
 
 export async function fetchWelcomeHighlightsTabsData(
 	propertyId: string,
+	locale: string,
 ): Promise<{
 	featuredGroups: HighlightGroup[];
 	mustVisitGroups: HighlightGroup[];
@@ -170,9 +208,44 @@ export async function fetchWelcomeHighlightsTabsData(
 	const featuredItems = featuredData ?? [];
 	const mustVisitItems = mustVisitData ?? [];
 
+	const allItems = [...featuredItems, ...mustVisitItems];
+	const allIds = allItems.map((i) => i.id);
+
+	// Fetch traducciones para el locale solicitado
+	const { data: translations } =
+		allIds.length > 0
+			? await supabase
+					.from('property_data_translations')
+					.select('property_data_id, field_key, translated_value')
+					.in('property_data_id', allIds)
+					.eq('lang', locale)
+					.overrideTypes<TranslationRow[], { merge: false }>()
+			: { data: [] };
+
+	// Merge: traducción tiene prioridad, fallback al original
+	const translationMap = new Map<string, Record<string, string>>();
+	for (const t of translations ?? []) {
+		if (!translationMap.has(t.property_data_id)) {
+			translationMap.set(t.property_data_id, {});
+		}
+		translationMap.get(t.property_data_id)![t.field_key] =
+			t.translated_value;
+	}
+
+	const applyTranslations = (items: PropertyDataRow[]) =>
+		items.map((item) => {
+			const tr = translationMap.get(item.id);
+			if (!tr) return item;
+			return {
+				...item,
+				name: tr.name ?? item.name,
+				description: tr.description ?? item.description,
+			};
+		});
+
 	const allSubCategoryIds = Array.from(
 		new Set(
-			[...featuredItems, ...mustVisitItems]
+			allItems
 				.map((i) => i.sub_category_id)
 				.filter(
 					(id): id is string =>
@@ -198,27 +271,69 @@ export async function fetchWelcomeHighlightsTabsData(
 	);
 
 	return {
-		featuredGroups: groupBySubcategory(featuredItems, subCategoryMap),
-		mustVisitGroups: groupBySubcategory(mustVisitItems, subCategoryMap),
+		featuredGroups: groupBySubcategory(
+			applyTranslations(featuredItems),
+			subCategoryMap,
+		),
+		mustVisitGroups: groupBySubcategory(
+			applyTranslations(mustVisitItems),
+			subCategoryMap,
+		),
 	};
 }
 
 export async function fetchInfoSectionsData(
 	propertyId: string,
+	locale: string,
 ): Promise<InfoGroup[]> {
 	const supabase = await createServerAdminClient();
 
+	type InfoRow = {
+		id: string;
+		description: string | null;
+		sub_category_id: string | null;
+	};
+
 	const { data: items, error } = await supabase
 		.from('property_data')
-		.select('description, sub_category_id')
+		.select('id, description, sub_category_id')
 		.eq('property_id', propertyId)
 		.eq('type', 'info')
 		.overrideTypes<InfoRow[], { merge: false }>();
 
 	if (error || !items || items.length === 0) return [];
 
-	const validItems = items.filter(
-		(i): i is { description: string; sub_category_id: string } =>
+	// Fetch traducciones para el locale solicitado
+	const ids = items.map((i) => i.id);
+	const { data: translations } = await supabase
+		.from('property_data_translations')
+		.select('property_data_id, field_key, translated_value')
+		.in('property_data_id', ids)
+		.eq('lang', locale)
+		.overrideTypes<TranslationRow[], { merge: false }>();
+
+	// Merge: traducción tiene prioridad, fallback al original
+	const translationMap = new Map<string, Record<string, string>>();
+	for (const t of translations ?? []) {
+		if (!translationMap.has(t.property_data_id)) {
+			translationMap.set(t.property_data_id, {});
+		}
+		translationMap.get(t.property_data_id)![t.field_key] =
+			t.translated_value;
+	}
+
+	const mergedItems = items.map((item) => {
+		const tr = translationMap.get(item.id);
+		return {
+			...item,
+			description: tr?.description ?? item.description,
+		};
+	});
+
+	const validItems = mergedItems.filter(
+		(
+			i,
+		): i is { id: string; description: string; sub_category_id: string } =>
 			typeof i.description === 'string' &&
 			i.description.trim().length > 0 &&
 			typeof i.sub_category_id === 'string' &&
@@ -240,7 +355,6 @@ export async function fetchInfoSectionsData(
 	const nameMap: Record<string, string> = Object.fromEntries(
 		subCats.map((s) => [s.id, s.name]),
 	);
-
 	const orderMap: Record<string, number> = Object.fromEntries(
 		subCats.map((s) => [s.id, s.order_index ?? 999]),
 	);
@@ -251,6 +365,9 @@ export async function fetchInfoSectionsData(
 			sub_category_name: nameMap[i.sub_category_id] ?? '',
 			description: i.description,
 			order: orderMap[i.sub_category_id],
+			isTranslated:
+				translationMap.has(i.id) &&
+				!!translationMap.get(i.id)?.description,
 		}))
 		.sort((a, b) => a.order - b.order);
 }
@@ -269,6 +386,7 @@ export type ArrivalGuideData = {
 	wifi: string | null;
 	parkings: ArrivalParking[];
 	access_instructions: string | null;
+	isAccessInstructionsTranslated: boolean;
 	check_in_time: string | null;
 	check_out_time: string | null;
 	check_in_date: string | null;
@@ -331,6 +449,7 @@ export async function fetchArrivalGuideData(
 	> & {
 		access_instructions?: string | null;
 	},
+	locale: string,
 ): Promise<ArrivalGuideData> {
 	const supabase = await createServerAdminClient();
 
@@ -342,6 +461,7 @@ export async function fetchArrivalGuideData(
 	const [
 		{ data: wifiData, error: wifiError },
 		{ data: parkingsData, error: parkingsError },
+		{ data: propertyTranslations },
 	] = await Promise.all([
 		supabase
 			.from('property_data')
@@ -358,6 +478,11 @@ export async function fetchArrivalGuideData(
 			.eq('sub_category_id', PARKINGS_SUB_CAT_ID)
 			.order('name', { ascending: true })
 			.overrideTypes<ParkingRow[], { merge: false }>(),
+		supabase
+			.from('property_translations')
+			.select('field_key, translated_value')
+			.eq('property_id', propertyId)
+			.eq('lang', locale),
 	]);
 
 	if (wifiError) {
@@ -370,6 +495,15 @@ export async function fetchArrivalGuideData(
 		);
 	}
 
+	const translationMap = new Map<string, string>(
+		(propertyTranslations ?? []).map(
+			(t: { field_key: string; translated_value: string }) => [
+				t.field_key,
+				t.translated_value,
+			],
+		),
+	);
+
 	return {
 		wifi: (wifiData as WifiRow | null)?.description ?? null,
 		parkings: (parkingsData ?? []).map((p) => ({
@@ -379,7 +513,13 @@ export async function fetchArrivalGuideData(
 			latitude: null,
 			longitude: null,
 		})),
-		access_instructions: property.access_instructions ?? null,
+		access_instructions:
+			translationMap.get('access_instructions') ??
+			property.access_instructions ??
+			null,
+		isAccessInstructionsTranslated: translationMap.has(
+			'access_instructions',
+		),
 		check_in_time: property.check_in_time ?? null,
 		check_out_time: property.check_out_time ?? null,
 		check_in_date: property.check_in_date ?? null,

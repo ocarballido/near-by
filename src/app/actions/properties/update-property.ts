@@ -9,6 +9,8 @@ import { z } from 'zod';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database, TablesUpdate } from '@/lib/types';
 
+import { translateAndStoreProperty } from '@/lib/translations/translateAndStoreProperty';
+
 import { uploadPropertyImage } from '@/lib/uploadPropertyImage';
 
 // ==============================
@@ -180,6 +182,37 @@ export async function updateProperty(
 					],
 				},
 			};
+		}
+
+		// Si access_instructions se ha borrado, eliminamos sus traducciones
+		if (!validated.access_instructions) {
+			await supabase
+				.from('property_translations')
+				.delete()
+				.eq('property_id', propertyId)
+				.eq('field_key', 'access_instructions');
+		} else {
+			const fieldsToTranslate: {
+				fieldKey: 'name' | 'access_instructions';
+				value: string;
+			}[] = [];
+
+			if (validated.name) {
+				fieldsToTranslate.push({
+					fieldKey: 'name',
+					value: validated.name,
+				});
+			}
+
+			fieldsToTranslate.push({
+				fieldKey: 'access_instructions',
+				value: validated.access_instructions,
+			});
+
+			translateAndStoreProperty(propertyId, fieldsToTranslate).catch(
+				(err) =>
+					console.error('[updateProperty] Error en traducción:', err),
+			);
 		}
 
 		revalidatePath('/app');

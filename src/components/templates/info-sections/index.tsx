@@ -84,6 +84,11 @@ const InfoSections = ({ groups, defaultOpenId, title }: Props) => {
 							<div className="overflow-hidden">
 								<div className="px-4 pb-4 text-sm whitespace-pre-wrap font-body text-gray-700">
 									<Typography>{group.description}</Typography>
+									{group.isTranslated && (
+										<p className="text-xs text-gray-400 text-center mt-4">
+											🌐 {t('Traducido automáticamente')}
+										</p>
+									)}
 								</div>
 							</div>
 						</div>

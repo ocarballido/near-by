@@ -1,4 +1,4 @@
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, getLocale } from 'next-intl/server';
 
 import WelcomeTabs from '@/components/templates/welcome-tabs';
 import WeatherWidget from '@/components/templates/weather-widget';
@@ -13,12 +13,14 @@ type Props = {
 };
 
 export default async function WelcomeSection({ propertyId, lat, lng }: Props) {
+	const locale = await getLocale();
+
 	const t = await getTranslations();
 
 	const { featuredGroups, mustVisitGroups } =
-		await fetchWelcomeHighlightsTabsData(propertyId);
+		await fetchWelcomeHighlightsTabsData(propertyId, locale);
 
-	const infoGroups = await fetchInfoSectionsData(propertyId);
+	const infoGroups = await fetchInfoSectionsData(propertyId, locale);
 
 	return (
 		<>

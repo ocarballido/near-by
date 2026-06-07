@@ -1,4 +1,4 @@
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, getLocale } from 'next-intl/server';
 import { fetchInfoSectionsData } from './_data';
 import InfoSections from '@/components/templates/info-sections';
 
@@ -11,8 +11,9 @@ export default async function LodgingSection({
 	propertyId,
 	defaultOpenId,
 }: Props) {
+	const locale = await getLocale();
 	const t = await getTranslations();
-	const infoGroups = await fetchInfoSectionsData(propertyId);
+	const infoGroups = await fetchInfoSectionsData(propertyId, locale);
 
 	return (
 		<InfoSections

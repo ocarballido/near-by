@@ -5,9 +5,13 @@ import { useTranslations } from 'next-intl';
 
 interface Props {
 	accessInstructions: string | null;
+	isTranslated?: boolean;
 }
 
-export default function Step3Access({ accessInstructions }: Props) {
+export default function Step3Access({
+	accessInstructions,
+	isTranslated,
+}: Props) {
 	const t = useTranslations('ArrivalGuide');
 
 	return (
@@ -20,9 +24,16 @@ export default function Step3Access({ accessInstructions }: Props) {
 					{t('step3Empty')}
 				</Typography>
 			) : (
-				<Typography size="sm" weight="medium" color="text-gray-500">
-					{accessInstructions}
-				</Typography>
+				<>
+					<Typography size="sm" weight="medium" color="text-gray-500">
+						{accessInstructions}
+					</Typography>
+					{isTranslated && (
+						<p className="text-xs text-gray-400 text-center mt-4">
+							🌐 {t('traducidoAutomaticamente')}
+						</p>
+					)}
+				</>
 			)}
 		</div>
 	);

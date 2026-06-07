@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { createSSRClient } from '@/lib/supabase/server';
 import { touchPropertyUpdatedAt } from '@/lib/properties/touch-property';
 import { updatePropertyProgressAndTrack } from '@/lib/updatePropertyProgress';
+import { translateAndStore } from '@/lib/translations/translateAndStore';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database, Tables, TablesUpdate } from '@/lib/types';
@@ -85,6 +86,8 @@ export async function updateInfo(formData: FormData): Promise<CreateInfoState> {
 			.single()
 			.overrideTypes<IdOnly, { merge: false }>();
 
+		let propertyDataId: string | undefined = existing?.id;
+
 		// none exists => PGRST116 OK
 		if (findError && findError.code !== 'PGRST116') {
 			console.error('Error buscando info existente:', findError);
@@ -126,18 +129,26 @@ export async function updateInfo(formData: FormData): Promise<CreateInfoState> {
 				dbError = error;
 				didMutate = !error;
 			} else {
-				const { error } = await db.from('property_data').insert({
-					user_id: user.id, // keep if your schema uses it
-					property_id,
-					category_id,
-					sub_category_id,
-					type,
-					description: content,
-					name: null,
-				});
+				const { data: inserted, error } = await db
+					.from('property_data')
+					.insert({
+						user_id: user.id,
+						property_id,
+						category_id,
+						sub_category_id,
+						type,
+						description: content,
+						name: null,
+					})
+					.select('id')
+					.single();
 
 				dbError = error;
-				didMutate = !error; // ✅ fix
+				didMutate = !error;
+
+				if (!error && inserted) {
+					propertyDataId = inserted.id;
+				}
 			}
 		}
 
@@ -152,6 +163,15 @@ export async function updateInfo(formData: FormData): Promise<CreateInfoState> {
 
 		if (didMutate) {
 			await touchPropertyUpdatedAt(db, property_id);
+
+			// Fire and forget — no bloqueamos la respuesta al propietario
+			if (content !== null && propertyDataId) {
+				translateAndStore(propertyDataId, [
+					{ fieldKey: 'description', value: content },
+				]).catch((err) =>
+					console.error('[updateInfo] Error en traducción:', err),
+				);
+			}
 		}
 
 		await updatePropertyProgressAndTrack({
