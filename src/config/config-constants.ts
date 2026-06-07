@@ -1,6 +1,7 @@
 import type { SidebarMenuItemConfig } from '@/types/sidebar';
 
-export const LOCALES = ['es', 'en', 'fr'];
+export const LOCALES = ['es', 'en', 'fr'] as const;
+export type Locale = (typeof LOCALES)[number]; // 'es' | 'en' | 'fr'
 
 export const DEFAULT_LOCALE = 'en';
 
