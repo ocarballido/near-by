@@ -1,113 +1,104 @@
-'use client';
+"use client";
 
-import { useTranslations } from 'next-intl';
-import { useLocale } from 'next-intl';
-import { formatDate, formatTime } from '@/utils/format-date-time';
-import Typography from '@/components/atoms/typography';
+import { useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
+import { formatDate, formatTime } from "@/utils/format-date-time";
+import Typography from "@/components/atoms/typography";
 
 interface Props {
-	wifi: string | null;
-	checkInDate: string | null;
-	checkInTime: string | null;
-	checkOutDate: string | null;
-	checkOutTime: string | null;
-	emergencyNumber: string | null;
+  wifi: string | null;
+  isWifiTranslated?: boolean;
+  checkInDate: string | null;
+  checkInTime: string | null;
+  checkOutDate: string | null;
+  checkOutTime: string | null;
+  emergencyNumber: string | null;
 }
 
 export default function Step4Essentials({
-	wifi,
-	checkInDate,
-	checkInTime,
-	checkOutDate,
-	checkOutTime,
-	emergencyNumber,
+  wifi,
+  isWifiTranslated,
+  checkInDate,
+  checkInTime,
+  checkOutDate,
+  checkOutTime,
+  emergencyNumber,
 }: Props) {
-	const t = useTranslations('ArrivalGuide');
+  const t = useTranslations("ArrivalGuide");
 
-	const locale = useLocale();
+  const locale = useLocale();
 
-	const formattedCheckIn = [
-		formatDate(checkInDate, locale),
-		formatTime(checkInTime, locale),
-	]
-		.filter(Boolean)
-		.join(' · ');
+  const formattedCheckIn = [
+    formatDate(checkInDate, locale),
+    formatTime(checkInTime, locale),
+  ]
+    .filter(Boolean)
+    .join(" · ");
 
-	const formattedCheckOut = [
-		formatDate(checkOutDate, locale),
-		formatTime(checkOutTime, locale),
-	]
-		.filter(Boolean)
-		.join(' · ');
+  const formattedCheckOut = [
+    formatDate(checkOutDate, locale),
+    formatTime(checkOutTime, locale),
+  ]
+    .filter(Boolean)
+    .join(" · ");
 
-	return (
-		<div className="flex flex-col gap-1">
-			<Typography component="h3" size="lg" className="mb-2">
-				{t('step4Title')}
-			</Typography>
-			<div className="rounded-xl bg-gray-100/50 p-4 flex flex-col gap-1">
-				<Typography
-					weight="semibold"
-					fontFamily="base"
-					color="text-gray-900"
-				>
-					{t('step4Wifi')}
-				</Typography>
-				{!wifi ? (
-					<Typography size="sm" weight="medium" color="text-gray-500">
-						{t('step4WifiEmpty')}
-					</Typography>
-				) : (
-					<Typography size="sm" weight="medium" color="text-gray-500">
-						{wifi}
-					</Typography>
-				)}
-			</div>
+  return (
+    <div className="flex flex-col gap-1">
+      <Typography component="h3" size="lg" className="mb-2">
+        {t("step4Title")}
+      </Typography>
+      <div className="rounded-xl bg-gray-100/50 p-4 flex flex-col gap-1">
+        <Typography weight="semibold" fontFamily="base" color="text-gray-900">
+          {t("step4Wifi")}
+        </Typography>
+        {!wifi ? (
+          <Typography size="sm" weight="medium" color="text-gray-500">
+            {t("step4WifiEmpty")}
+          </Typography>
+        ) : (
+          <Typography size="sm" weight="medium" color="text-gray-500">
+            {wifi}
+          </Typography>
+        )}
+        {wifi && isWifiTranslated && (
+          <p className="text-xs text-gray-400 text-center mt-1">
+            🌐 {t("traducidoAutomaticamente")}
+          </p>
+        )}
+      </div>
 
-			{checkInTime && (
-				<div className="rounded-xl bg-gray-100/50 p-4 flex items-center justify-between">
-					<Typography
-						weight="semibold"
-						fontFamily="base"
-						color="text-gray-900"
-					>
-						{t('step4CheckIn')}
-					</Typography>
-					<Typography size="sm" weight="medium" color="text-gray-500">
-						{formattedCheckIn}
-					</Typography>
-				</div>
-			)}
+      {checkInTime && (
+        <div className="rounded-xl bg-gray-100/50 p-4 flex items-center justify-between">
+          <Typography weight="semibold" fontFamily="base" color="text-gray-900">
+            {t("step4CheckIn")}
+          </Typography>
+          <Typography size="sm" weight="medium" color="text-gray-500">
+            {formattedCheckIn}
+          </Typography>
+        </div>
+      )}
 
-			{checkOutTime && (
-				<div className="rounded-xl bg-gray-100/50 p-4 flex items-center justify-between">
-					<Typography
-						weight="semibold"
-						fontFamily="base"
-						color="text-gray-900"
-					>
-						{t('step4CheckOut')}
-					</Typography>
-					<Typography size="sm" weight="medium" color="text-gray-500">
-						{formattedCheckOut}
-					</Typography>
-				</div>
-			)}
+      {checkOutTime && (
+        <div className="rounded-xl bg-gray-100/50 p-4 flex items-center justify-between">
+          <Typography weight="semibold" fontFamily="base" color="text-gray-900">
+            {t("step4CheckOut")}
+          </Typography>
+          <Typography size="sm" weight="medium" color="text-gray-500">
+            {formattedCheckOut}
+          </Typography>
+        </div>
+      )}
 
-			{emergencyNumber && (
-				<div className="rounded-xl bg-red-50 p-3 flex items-center justify-between">
-					<Typography
-						weight="semibold"
-						fontFamily="base"
-						color="text-red-700"
-					>
-						{t('step4Emergency')}
-					</Typography>
-					<Typography size="sm" weight="medium" color="text-red-700">
-						{emergencyNumber}
-					</Typography>
-				</div>
-			)}
-		</div>
-	);
+      {emergencyNumber && (
+        <div className="rounded-xl bg-red-50 p-3 flex items-center justify-between">
+          <Typography weight="semibold" fontFamily="base" color="text-red-700">
+            {t("step4Emergency")}
+          </Typography>
+          <Typography size="sm" weight="medium" color="text-red-700">
+            {emergencyNumber}
+          </Typography>
+        </div>
+      )}
+    </div>
+  );
 }
