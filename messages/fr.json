@@ -1104,7 +1104,8 @@
 		"step5GuideLink": "Voir le guide complet",
 		"step1MapsButton": "Ouvrir dans Google Maps",
 		"step1Transit": "Transports en commun",
-		"step1TransitText": "Voir les options de métro, bus et train depuis votre position actuelle"
+		"step1TransitText": "Voir les options de métro, bus et train depuis votre position actuelle",
+		"traducidoAutomaticamente": "Traduit automatiquement"
 	},
 	"manage": "Gérer",
 	"wow": {
@@ -1136,5 +1137,6 @@
 	"Opcional": "Facultatif",
 	"escencial": "L'essentiel",
 	"access": "Arrivée et accès",
-	"image": "Image"
+	"image": "Image",
+	"Traducido automáticamente": "Traduit automatiquement"
 }
