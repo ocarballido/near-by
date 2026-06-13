@@ -20,10 +20,6 @@ const CategoryButton = ({
     hasContent,
     onClick,
 }: CategoryButtonProps) => {
-    const buttonStyles = clsx({
-        "font-bold": open,
-    });
-
     const arrowStyles = clsx({
         "rotate-180": open,
     });
