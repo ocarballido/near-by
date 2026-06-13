@@ -42,6 +42,7 @@ values
   ('a1091bf8-4fe3-4ded-854b-fc08019d9296', '4581a08a-3e78-4800-b16c-575f5da81cba', 'Horario', 'info'::public.property_data_type, 3),
   ('cd19040f-5160-49ac-b395-adab3ec2d919', '4581a08a-3e78-4800-b16c-575f5da81cba', 'Reciclaje', 'info'::public.property_data_type, 4),
   ('0e04b6d5-72be-4f9b-9274-3526ff3f851a', '4581a08a-3e78-4800-b16c-575f5da81cba', 'Wifi', 'info'::public.property_data_type, 5),
+  ('e34d65fd-18a4-4fca-9522-5585593fe28d', '4581a08a-3e78-4800-b16c-575f5da81cba', 'Explora los detalles', 'info'::public.property_data_type, 6),
 
   -- Familia y Niños
   ('8028b58d-6024-42dc-a4e2-2ff2caa27e56', '5509834d-c45c-4667-9e8b-960fea63ffc2', 'Restaurantes para niños', 'location'::public.property_data_type, 1),
