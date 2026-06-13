@@ -17,6 +17,7 @@ import DashboardData from "@/components/organisms/dashboard-card/dashboard-data"
 import ExploreDetailFieldset, {
     type DetailFieldsetState,
 } from "@/components/molecules/explore-detail-fieldset";
+import IconFamiltHome from "@/components/atoms/icon/family-home";
 
 const PREDEFINED_KEYS = [
     "bicis",
@@ -265,7 +266,7 @@ export default function ExploreDetailsEditor({
             <div className="bg-white rounded-xl max-w-[600px] w-full shadow-xs">
                 <div className="rounded-lg flex flex-col gap-2 items-center mb-3 pt-4">
                     <FancyIcon
-                        icon={<IconInfo color="white" />}
+                        icon={<IconFamiltHome color="white" />}
                         color="gradient"
                     />
                     <Typography component="h2" size="lg">
