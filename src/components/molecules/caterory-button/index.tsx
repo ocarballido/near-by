@@ -31,11 +31,11 @@ const CategoryButton = ({
     return (
         <div onClick={onClick} className={`flex w-full items-center`}>
             <div
-                className={`flex items-center justify-center gap-2 mr-auto py-2 ${active ? "text-primary-500" : "text-gray-700"}`}
+                className={`flex items-center justify-center gap-2 mr-auto py-2 `}
             >
                 <ButtonIcon
-                    className={`pointer-events-none ${active ? "bg-primary-100" : "bg-transparent opacity-70"}`}
-                    color={active ? "primary" : "secondary"}
+                    className={`pointer-events-none ${active ? "bg-primary-500" : "bg-transparent opacity-70"}`}
+                    color={active ? "white" : "secondary"}
                     icon={icon}
                     active={open}
                 />
