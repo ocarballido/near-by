@@ -467,6 +467,94 @@ export type Database = {
           },
         ]
       }
+      property_details: {
+        Row: {
+          created_at: string | null
+          guidelines: string | null
+          id: string
+          image_url: string | null
+          instructions: string | null
+          name: string
+          order_index: number
+          predefined_key: string | null
+          property_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          guidelines?: string | null
+          id?: string
+          image_url?: string | null
+          instructions?: string | null
+          name: string
+          order_index?: number
+          predefined_key?: string | null
+          property_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          guidelines?: string | null
+          id?: string
+          image_url?: string | null
+          instructions?: string | null
+          name?: string
+          order_index?: number
+          predefined_key?: string | null
+          property_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_details_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_details_translations: {
+        Row: {
+          created_at: string | null
+          field_key: string
+          id: string
+          lang: string
+          property_detail_id: string
+          source_lang: string | null
+          translated_value: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          field_key: string
+          id?: string
+          lang: string
+          property_detail_id: string
+          source_lang?: string | null
+          translated_value?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          field_key?: string
+          id?: string
+          lang?: string
+          property_detail_id?: string
+          source_lang?: string | null
+          translated_value?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_details_translations_property_detail_id_fkey"
+            columns: ["property_detail_id"]
+            isOneToOne: false
+            referencedRelation: "property_details"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       property_info: {
         Row: {
           category_id: string

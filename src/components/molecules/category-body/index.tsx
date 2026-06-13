@@ -1,29 +1,23 @@
-// 'use client';
-
-import clsx from 'clsx';
-
-// import { useRef } from 'react';
+import clsx from "clsx";
 
 type CategoryBodyProps = {
-	children: React.ReactNode;
-	open: boolean;
+    children: React.ReactNode;
+    open: boolean;
 };
 
 const CategoryBody = ({ children, open = false }: CategoryBodyProps) => {
-	// const bodyRef = useRef<HTMLDivElement>(null);
-
-	const bodyStyles = clsx({ 'h-0 mt-0': !open }, { 'h-auto mt-1': open });
-
-	return (
-		<div
-			className={`flex flex-col w-full gap-2 transition-all duration-300 overflow-hidden ${bodyStyles}`}
-			// className={`flex flex-col w-full gap-2 transition-all duration-300 overflow-hidden`}
-			// ref={bodyRef}
-			// style={{ height: open ? bodyRef.current?.scrollHeight : 0 }}
-		>
-			{children}
-		</div>
-	);
+    return (
+        <div
+            className={clsx(
+                "grid w-full transition-all duration-300",
+                open ? "grid-rows-[1fr] mt-1" : "grid-rows-[0fr] mt-0",
+            )}
+        >
+            <div className="flex flex-col gap-2 overflow-hidden min-h-0 text-sm">
+                {children}
+            </div>
+        </div>
+    );
 };
 
 export default CategoryBody;
