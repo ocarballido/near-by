@@ -1,117 +1,135 @@
-import { notFound, redirect } from 'next/navigation';
-import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
-import { createSSRClient } from '@/lib/supabase/server';
+import { notFound, redirect } from "next/navigation";
+import { createServerAdminClient } from "@/lib/supabase/serverAdminClient";
+import { createSSRClient } from "@/lib/supabase/server";
 
-import AppContentTemplate from '@/components/templates/app-content';
-import PropertyNameTitle from '@/components/atoms/property-name-title';
-import PropertyDataBoard from '@/components/molecules/property-data-board';
-import { PropertyDataBySubCategory } from '@/components/templates/property-data';
+import AppContentTemplate from "@/components/templates/app-content";
+import PropertyNameTitle from "@/components/atoms/property-name-title";
+import PropertyDataBoard from "@/components/molecules/property-data-board";
+import { PropertyDataBySubCategory } from "@/components/templates/property-data";
 
-import { getPropertySubCategoryCounts } from '@/utils/get-property-subcategory-counts';
-import PropertyCountsBootstrap from '@/components/providers/PropertyCountsBootstrap';
+import { getPropertySubCategoryCounts } from "@/utils/get-property-subcategory-counts";
+import PropertyCountsBootstrap from "@/components/providers/PropertyCountsBootstrap";
 
-import type { Tables } from '@/lib/types';
+import { CATEGORIES_SUB_CATEGORIES } from "@/config/config-constants";
+import type { PropertyDetailRow } from "@/types/property-details";
 
-type FullProperty = Tables<'properties'>;
+import type { Tables } from "@/lib/types";
+
+type FullProperty = Tables<"properties">;
 type SubCategoryForPage = Pick<
-	Tables<'sub_categories'>,
-	'name' | 'type' | 'category_id'
+    Tables<"sub_categories">,
+    "name" | "type" | "category_id"
 >;
 
 type PageProps = {
-	params: Promise<{ slug: string[] }>;
+    params: Promise<{ slug: string[] }>;
 };
 
 export default async function Property({ params }: PageProps) {
-	const { slug } = await params;
-	const [propertyId, categoryId, subCategoryId] = slug;
+    const { slug } = await params;
+    const [propertyId, categoryId, subCategoryId] = slug;
 
-	const ssrClient = await createSSRClient();
-	const {
-		data: { user },
-		error: authError,
-	} = await ssrClient.auth.getUser();
+    const isExploreDetails =
+        subCategoryId ===
+        CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.EXPLORE_DETAILS.id;
 
-	if (authError || !user) redirect('/auth/login');
+    const ssrClient = await createSSRClient();
+    const {
+        data: { user },
+        error: authError,
+    } = await ssrClient.auth.getUser();
 
-	const supabase = await createServerAdminClient();
+    if (authError || !user) redirect("/auth/login");
 
-	const { data: property, error: propErr } = await supabase
-		.from('properties')
-		.select(
-			'id,name,slug,image_url,address,latitude,longitude,check_in_date,check_in_time,check_out_date,check_out_time,user_id',
-		)
-		.eq('id', propertyId)
-		.single()
-		.overrideTypes<FullProperty & { user_id: string }, { merge: false }>();
+    const supabase = await createServerAdminClient();
 
-	if (propErr || !property?.id) notFound();
+    const { data: property, error: propErr } = await supabase
+        .from("properties")
+        .select(
+            "id,name,slug,image_url,address,latitude,longitude,check_in_date,check_in_time,check_out_date,check_out_time,user_id",
+        )
+        .eq("id", propertyId)
+        .single()
+        .overrideTypes<FullProperty & { user_id: string }, { merge: false }>();
 
-	if (property.user_id !== user.id) notFound();
+    if (propErr || !property?.id) notFound();
 
-	const [
-		{ data: propertyData, error: propertyDataErr },
-		{ data: subCategory, error: subCategoryErr },
-		counts,
-	] = await Promise.all([
-		supabase
-			.from('property_data')
-			.select(
-				'id,name,description,image_url,type,latitude,longitude,featured,address,must_visit',
-			)
-			.eq('property_id', propertyId)
-			.eq('sub_category_id', subCategoryId)
-			.order('featured', { ascending: false })
-			.order('must_visit', { ascending: false })
-			.order('name', { ascending: true }),
-		supabase
-			.from('sub_categories')
-			.select('name,type,category_id')
-			.eq('id', subCategoryId)
-			.single()
-			.overrideTypes<SubCategoryForPage, { merge: false }>(),
-		getPropertySubCategoryCounts(propertyId),
-	]);
+    if (property.user_id !== user.id) notFound();
 
-	if (propertyDataErr || subCategoryErr || !subCategory) notFound();
+    const [
+        { data: propertyData, error: propertyDataErr },
+        { data: subCategory, error: subCategoryErr },
+        counts,
+        { data: propertyDetails },
+    ] = await Promise.all([
+        supabase
+            .from("property_data")
+            .select(
+                "id,name,description,image_url,type,latitude,longitude,featured,address,must_visit",
+            )
+            .eq("property_id", propertyId)
+            .eq("sub_category_id", subCategoryId)
+            .order("featured", { ascending: false })
+            .order("must_visit", { ascending: false })
+            .order("name", { ascending: true }),
+        supabase
+            .from("sub_categories")
+            .select("name,type,category_id")
+            .eq("id", subCategoryId)
+            .single()
+            .overrideTypes<SubCategoryForPage, { merge: false }>(),
+        getPropertySubCategoryCounts(propertyId),
+        isExploreDetails
+            ? (supabase as any)
+                  .from("property_details")
+                  .select(
+                      "id,name,instructions,guidelines,predefined_key,order_index",
+                  )
+                  .eq("property_id", propertyId)
+                  .order("order_index", { ascending: true })
+            : Promise.resolve({ data: [], error: null }),
+    ]);
 
-	if (subCategory.category_id !== categoryId) notFound();
+    if (propertyDataErr || subCategoryErr || !subCategory) notFound();
 
-	if (property.latitude == null || property.longitude == null) notFound();
+    if (subCategory.category_id !== categoryId) notFound();
 
-	return (
-		<AppContentTemplate
-			sidebar="PROPERTY"
-			categoryId={categoryId}
-			subCategoryId={subCategoryId}
-			subcategoryGroupId={subCategoryId}
-			propertyId={propertyId}
-		>
-			<PropertyCountsBootstrap counts={counts} />
-			<PropertyDataBoard
-				propertyName={property.name}
-				propertyAddress={property.address}
-				propertyCheckInDate={property.check_in_date ?? ''}
-				propertyCheckInTime={property.check_in_time ?? ''}
-				propertyCheckOutDate={property.check_out_date ?? ''}
-				propertyCheckOutTime={property.check_out_time ?? ''}
-				propertyId={propertyId}
-				categoryId={categoryId}
-				subCategoryId={subCategoryId}
-			/>
+    if (property.latitude == null || property.longitude == null) notFound();
 
-			<div className="p-4 pt-0 font-roboto flex flex-col grow gap-4 rounded-lg overflow-hidden">
-				<PropertyNameTitle subCategoryName={subCategory.name} />
-				<PropertyDataBySubCategory
-					propertyId={propertyId}
-					subCategoryId={subCategoryId}
-					categoryId={categoryId}
-					type={subCategory.type ?? 'location'}
-					propertyData={propertyData ?? []}
-					lat={property.latitude}
-					lng={property.longitude}
-				/>
-			</div>
-		</AppContentTemplate>
-	);
+    return (
+        <AppContentTemplate
+            sidebar="PROPERTY"
+            categoryId={categoryId}
+            subCategoryId={subCategoryId}
+            subcategoryGroupId={subCategoryId}
+            propertyId={propertyId}
+        >
+            <PropertyCountsBootstrap counts={counts} />
+            <PropertyDataBoard
+                propertyName={property.name}
+                propertyAddress={property.address}
+                propertyCheckInDate={property.check_in_date ?? ""}
+                propertyCheckInTime={property.check_in_time ?? ""}
+                propertyCheckOutDate={property.check_out_date ?? ""}
+                propertyCheckOutTime={property.check_out_time ?? ""}
+                propertyId={propertyId}
+                categoryId={categoryId}
+                subCategoryId={subCategoryId}
+            />
+
+            <div className="p-4 pt-0 font-roboto flex flex-col grow gap-4 rounded-lg overflow-hidden">
+                <PropertyNameTitle subCategoryName={subCategory.name} />
+                <PropertyDataBySubCategory
+                    propertyId={propertyId}
+                    subCategoryId={subCategoryId}
+                    categoryId={categoryId}
+                    type={subCategory.type ?? "location"}
+                    propertyData={propertyData ?? []}
+                    lat={property.latitude}
+                    lng={property.longitude}
+                    propertyDetails={propertyDetails ?? []}
+                />
+            </div>
+        </AppContentTemplate>
+    );
 }
