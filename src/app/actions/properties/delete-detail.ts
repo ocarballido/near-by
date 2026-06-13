@@ -21,11 +21,12 @@ export async function deleteDetail(
         const supabase = await createServerAdminClient();
 
         // Verificar ownership a través de la propiedad
-        const { data: detail } = await (supabase as any)
+        const { data: detail } = await supabase
             .from("property_details")
             .select("property_id")
             .eq("id", detailId)
-            .single();
+            .single()
+            .overrideTypes<{ property_id: string }, { merge: false }>();
 
         if (!detail) return { error: "Detalle no encontrado" };
 
@@ -40,10 +41,7 @@ export async function deleteDetail(
             return { error: "No tienes permisos para eliminar este detalle" };
         }
 
-        await (supabase as any)
-            .from("property_details")
-            .delete()
-            .eq("id", detailId);
+        await supabase.from("property_details").delete().eq("id", detailId);
 
         revalidatePath("/app");
 

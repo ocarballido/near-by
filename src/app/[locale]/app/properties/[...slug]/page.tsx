@@ -80,14 +80,15 @@ export default async function Property({ params }: PageProps) {
             .overrideTypes<SubCategoryForPage, { merge: false }>(),
         getPropertySubCategoryCounts(propertyId),
         isExploreDetails
-            ? (supabase as any)
+            ? supabase
                   .from("property_details")
                   .select(
-                      "id,name,instructions,guidelines,predefined_key,order_index",
+                      "id,name,instructions,guidelines,image_url,predefined_key,order_index",
                   )
                   .eq("property_id", propertyId)
                   .order("order_index", { ascending: true })
-            : Promise.resolve({ data: [], error: null }),
+                  .overrideTypes<PropertyDetailRow[]>()
+            : Promise.resolve({ data: [] as PropertyDetailRow[], error: null }),
     ]);
 
     if (propertyDataErr || subCategoryErr || !subCategory) notFound();

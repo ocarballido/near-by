@@ -564,23 +564,41 @@ export async function fetchExploreDetailsData(
 ): Promise<ExploreDetailPublic[]> {
     const supabase = await createServerAdminClient();
 
-    const { data: details } = await (supabase as any)
+    const { data: details } = await supabase
         .from("property_details")
         .select(
             "id, name, instructions, guidelines, image_url, order_index, predefined_key",
         )
         .eq("property_id", propertyId)
-        .order("order_index", { ascending: true });
+        .order("order_index", { ascending: true })
+        .overrideTypes<
+            {
+                id: string;
+                name: string;
+                instructions: string | null;
+                guidelines: string | null;
+                image_url: string | null;
+                order_index: number;
+                predefined_key: string | null;
+            }[]
+        >();
 
     if (!details || details.length === 0) return [];
 
-    // Fetch traducciones
-    const ids = details.map((d: any) => d.id);
-    const { data: translations } = await (supabase as any)
+    const ids = details.map((d) => d.id);
+
+    const { data: translations } = await supabase
         .from("property_details_translations")
         .select("property_detail_id, field_key, translated_value")
         .in("property_detail_id", ids)
-        .eq("lang", locale);
+        .eq("lang", locale)
+        .overrideTypes<
+            {
+                property_detail_id: string;
+                field_key: string;
+                translated_value: string;
+            }[]
+        >();
 
     const translationMap = new Map<string, Record<string, string>>();
     for (const t of translations ?? []) {
@@ -591,16 +609,16 @@ export async function fetchExploreDetailsData(
             t.translated_value;
     }
 
-    return details.map((d: any) => {
+    return details.map((d) => {
         const tr = translationMap.get(d.id);
         return {
             id: d.id,
             name: tr?.name ?? d.name,
-            instructions: tr?.instructions ?? d.instructions,
-            guidelines: tr?.guidelines ?? d.guidelines,
-            image_url: d.image_url,
+            instructions: tr?.instructions ?? d.instructions ?? null,
+            guidelines: tr?.guidelines ?? d.guidelines ?? null,
+            image_url: d.image_url ?? null,
             order_index: d.order_index,
-            predefined_key: d.predefined_key,
+            predefined_key: d.predefined_key ?? null,
         };
     });
 }

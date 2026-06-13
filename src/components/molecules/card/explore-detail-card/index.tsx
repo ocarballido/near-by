@@ -7,8 +7,16 @@ import ButtonIcon from "@/components/atoms/button-icon";
 import IconDelete from "@/components/atoms/icon/delete";
 import type { PropertyDetailRow } from "@/types/property-details";
 
+export type ExploreDetailCardDetail = {
+    id: string;
+    name: string;
+    instructions: string | null;
+    guidelines: string | null;
+    image_url: string | null;
+};
+
 type ExploreDetailCardProps = {
-    detail: PropertyDetailRow;
+    detail: ExploreDetailCardDetail;
     onDelete?: (id: string) => void;
 };
 

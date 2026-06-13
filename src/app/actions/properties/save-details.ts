@@ -6,7 +6,7 @@ import { createServerAdminClient } from "@/lib/supabase/serverAdminClient";
 import { z } from "zod";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Database } from "@/lib/types";
+import type { Database, TablesInsert, TablesUpdate } from "@/lib/types";
 
 import { translateAndStoreDetails } from "@/lib/translations/translateAndStoreDetails";
 
@@ -97,13 +97,13 @@ export async function saveDetails(
 
         // 6) Eliminar los que ya no están en el listado
         if (keepIds.length > 0) {
-            await (db as any)
+            await db
                 .from("property_details")
                 .delete()
                 .eq("property_id", propertyId)
                 .not("id", "in", `(${keepIds.join(",")})`);
         } else {
-            await (db as any)
+            await db
                 .from("property_details")
                 .delete()
                 .eq("property_id", propertyId);
@@ -111,7 +111,7 @@ export async function saveDetails(
 
         // 7) Actualizar existentes
         for (const detail of toUpdate) {
-            await (db as any)
+            await db
                 .from("property_details")
                 .update({
                     name: detail.name,
@@ -120,22 +120,25 @@ export async function saveDetails(
                     predefined_key: detail.predefined_key,
                     order_index: detail.order_index,
                     updated_at: new Date().toISOString(),
-                })
+                } satisfies TablesUpdate<"property_details">)
                 .eq("id", detail.id as string)
                 .eq("property_id", propertyId);
         }
 
         // 8) Insertar nuevos
         if (toInsert.length > 0) {
-            await (db as any).from("property_details").insert(
-                toInsert.map((detail) => ({
-                    property_id: propertyId,
-                    name: detail.name,
-                    instructions: detail.instructions,
-                    guidelines: detail.guidelines,
-                    predefined_key: detail.predefined_key,
-                    order_index: detail.order_index,
-                })),
+            await db.from("property_details").insert(
+                toInsert.map(
+                    (detail) =>
+                        ({
+                            property_id: propertyId,
+                            name: detail.name,
+                            instructions: detail.instructions,
+                            guidelines: detail.guidelines,
+                            predefined_key: detail.predefined_key,
+                            order_index: detail.order_index,
+                        }) satisfies TablesInsert<"property_details">,
+                ),
             );
         }
 
@@ -152,7 +155,7 @@ export async function saveDetails(
         // Para los insertados necesitamos sus IDs recién creados
         if (toInsert.length > 0) {
             const insertedNames = toInsert.map((d) => d.name);
-            const { data: inserted } = await (db as any)
+            const { data: inserted } = await db
                 .from("property_details")
                 .select("id, name, instructions, guidelines")
                 .eq("property_id", propertyId)

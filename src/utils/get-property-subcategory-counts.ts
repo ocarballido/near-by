@@ -14,7 +14,7 @@ export async function getPropertySubCategoryCounts(
             .select("sub_category_id")
             .eq("property_id", propertyId)
             .overrideTypes<{ sub_category_id: string | null }[]>(),
-        (supabase as any)
+        supabase
             .from("property_details")
             .select("id", { count: "exact", head: true })
             .eq("property_id", propertyId),
