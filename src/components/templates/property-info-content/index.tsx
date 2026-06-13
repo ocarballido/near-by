@@ -40,7 +40,6 @@ export function PropertyInfoContent({
     if (infos) {
         info = infos[0];
     }
-    console.log(infos);
 
     return (
         <>
