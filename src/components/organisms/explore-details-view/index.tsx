@@ -79,8 +79,7 @@ export default function ExploreDetailsView({
 
             <Modal
                 title={t("deleteDetail.title")}
-                description={t("deleteDetail.description")}
-                message={t("¿Estás seguro que deseas continuar?")}
+                message={t("deleteDetail.description")}
                 open={isModalOpen}
                 onClose={() => {
                     setIsModalOpen(false);

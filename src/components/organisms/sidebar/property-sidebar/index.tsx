@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useSidebarData } from "@/lib/context/EditMenuContext";
@@ -21,8 +22,6 @@ import IconInterests from "@/components/atoms/icon/interests";
 import IconShoppingBag from "@/components/atoms/icon/shopping-bag";
 import CategoryAccordion from "@/components/molecules/category-accordion";
 import GroupItem from "@/components/molecules/group-item";
-
-import { CATEGORIES_SUB_CATEGORIES } from "@/config/config-constants";
 
 const ICON_COMPONENTS = {
     IconHealing,
@@ -59,6 +58,14 @@ const PropertySidebar = ({
     const { closeSidebar } = useSidebar();
     const router = useRouter();
 
+    const [openCategoryId, setOpenCategoryId] = useState<string | null>(
+        categoryId ?? null,
+    );
+
+    const handleCategoryToggle = (id: string) => {
+        setOpenCategoryId((prev) => (prev === id ? null : id));
+    };
+
     return (
         <>
             {sidebarData &&
@@ -70,18 +77,17 @@ const PropertySidebar = ({
                         (sub) => (subCategoryCounts[sub.id] ?? 0) > 0,
                     );
 
+                    const isActive = category.id === categoryId;
+                    const isOpen = category.id === openCategoryId;
+
                     return (
                         <CategoryAccordion
                             key={category.name}
-                            open={category.id === categoryId}
+                            open={isOpen}
+                            active={isActive}
                             name={t(category.name)}
                             hasContent={hasContent}
-                            onClick={() => {
-                                closeSidebar();
-                                router.push(
-                                    `/app/properties/${propertyId}/${category.id}/${category.sub_categories[0].id}`,
-                                );
-                            }}
+                            onClick={() => handleCategoryToggle(category.id)}
                             icon={<IconComponent />}
                         >
                             {category.sub_categories.map((subcategory) => {
@@ -95,33 +101,12 @@ const PropertySidebar = ({
                                         active={
                                             subcategory.id === subCategoryId
                                         }
-                                        // editeable={
-                                        //     subcategory.type === "info" &&
-                                        //     subcategory.id === subCategoryId
-                                        // }
                                         onClick={() => {
                                             closeSidebar();
                                             router.push(
                                                 `/app/properties/${propertyId}/${category.id}/${subcategory.id}`,
                                             );
                                         }}
-                                        // handleEdit={(e) => {
-                                        //     e.stopPropagation();
-                                        //     if (
-                                        //         subcategory.id ===
-                                        //         CATEGORIES_SUB_CATEGORIES
-                                        //             .LODGING.SUB_CATEGORIES
-                                        //             .EXPLORE_DETAILS.id
-                                        //     ) {
-                                        //         router.push(
-                                        //             `/app/details/${propertyId}/${category.id}/${subcategory.id}`,
-                                        //         );
-                                        //     } else {
-                                        //         router.push(
-                                        //             `/app/info/${propertyId}/${category.id}/${subcategory.id}`,
-                                        //         );
-                                        //     }
-                                        // }}
                                     />
                                 );
                             })}
