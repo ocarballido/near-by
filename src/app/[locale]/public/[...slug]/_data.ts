@@ -4,6 +4,7 @@ import { createServerAdminClient } from "@/lib/supabase/serverAdminClient";
 
 import type { Tables } from "@/lib/types";
 import { CATEGORIES_SUB_CATEGORIES } from "@/config/config-constants";
+import { getCategoryBySubCategoryId } from "@/utils/get-category-by-subcategory";
 
 type FullProperty = Tables<"properties">;
 type PropertyDataRow = Tables<"property_data">;
@@ -23,6 +24,14 @@ type WifiTranslationRow = {
     translated_value: string;
 };
 
+export type HighlightGroup = {
+    sub_category_id: string;
+    sub_category_name: string;
+    category_id: string | null;
+    icon: string | null;
+    items: ReturnType<typeof toPublicItem>[];
+};
+
 export const PROPERTY_DATA_SELECT =
     "id, name, description, image_url, type, latitude, longitude, featured, must_visit, address, sub_category_id";
 
@@ -38,12 +47,6 @@ export const toPublicItem = (r: PropertyDataRow) => ({
     featured: r.featured ?? false,
     must_visit: r.must_visit ?? false,
 });
-
-export type HighlightGroup = {
-    sub_category_id: string;
-    sub_category_name: string;
-    items: ReturnType<typeof toPublicItem>[];
-};
 
 export type InfoGroup = {
     sub_category_id: string;
@@ -168,13 +171,19 @@ function groupBySubcategory(
         ),
     );
 
-    return subCategoryIds.map((id) => ({
-        sub_category_id: id,
-        sub_category_name: subCategoryMap[id] ?? "Sin nombre",
-        items: (items ?? [])
-            .filter((item) => item.sub_category_id === id)
-            .map(toPublicItem),
-    }));
+    return subCategoryIds.map((id) => {
+        const categoryInfo = getCategoryBySubCategoryId(id);
+
+        return {
+            sub_category_id: id,
+            sub_category_name: subCategoryMap[id] ?? "Sin nombre",
+            category_id: categoryInfo?.categoryId ?? null,
+            icon: categoryInfo?.icon ?? null,
+            items: (items ?? [])
+                .filter((item) => item.sub_category_id === id)
+                .map(toPublicItem),
+        };
+    });
 }
 
 export async function fetchWelcomeHighlightsTabsData(
