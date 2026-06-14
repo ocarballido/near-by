@@ -6,6 +6,7 @@ import ExploreDetailCard, {
     type ExploreDetailCardDetail,
 } from "@/components/molecules/card/explore-detail-card";
 import type { ExploreDetailPublic } from "@/app/[locale]/public/[...slug]/_data";
+import ExploreDetailCardPublic from "@/components/molecules/card/explore-details-card-public";
 
 type Props = {
     details: ExploreDetailPublic[];
@@ -33,7 +34,7 @@ export default function ExploreDetailsPublicSection({ details }: Props) {
                         image_url: detail.image_url,
                     };
                     return (
-                        <ExploreDetailCard
+                        <ExploreDetailCardPublic
                             key={detail.id}
                             detail={cardDetail}
                         />
