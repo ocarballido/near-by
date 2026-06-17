@@ -1,17 +1,17 @@
-import PublicLayout from '@/components/layouts/public';
-import { createSSRClient } from '@/lib/supabase/server';
+import PublicLayout from "@/components/layouts/public";
+import { createSSRClient } from "@/lib/supabase/server";
 
 export default async function Layout({
-	children,
+    children,
 }: {
-	children: React.ReactNode;
+    children: React.ReactNode;
 }) {
-	const ssrClient = await createSSRClient();
-	const {
-		data: { user },
-	} = await ssrClient.auth.getUser();
+    const ssrClient = await createSSRClient();
+    const {
+        data: { user },
+    } = await ssrClient.auth.getUser();
 
-	const isLoggedIn = Boolean(user);
+    const isLoggedIn = Boolean(user);
 
-	return <PublicLayout isLoggedIn={isLoggedIn}>{children}</PublicLayout>;
+    return <PublicLayout isLoggedIn={isLoggedIn}>{children}</PublicLayout>;
 }

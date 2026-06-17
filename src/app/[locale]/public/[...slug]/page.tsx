@@ -28,6 +28,7 @@ import PublicCountsBootstrap from "@/components/providers/PublicCountsBootstrap"
 import { getPropertySubCategoryCounts } from "@/utils/get-property-subcategory-counts";
 import GuestChat from "@/components/organisms/guest-chat/GuestChat";
 import ArrivalGuide from "@/components/organisms/arrival-guide/ArrivalGuide";
+import { SidebarProvider } from "@/lib/context/SidebarContext";
 
 type PageMode = "welcome" | "custom-plans" | "subcategory" | "lodging";
 
@@ -152,63 +153,69 @@ export default async function Property({ params, searchParams }: PageProps) {
     const mode = getMode(categoryId);
 
     return (
-        <EditPublicMenuProvider initialData={sidebarData}>
-            <PublicAppBar />
-            <PublicInfoContentBootstrap hasInfoContent={hasInfoContent} />
-            <PublicCountsBootstrap counts={counts} />
-            <PublicContentTemplate
-                address={getDisplayZoneFromString(property.address)}
-                propertyId={propertyId}
-                categoryId={categoryId}
-                subCategoryId={subCategoryId}
-                name={property.name}
-                latitude={lat}
-                longitude={lng}
-                checkInDate={property.check_in_date ?? ""}
-                checkInTime={property.check_in_time ?? ""}
-                checkOutDate={property.check_out_date ?? ""}
-                checkOutTime={property.check_out_time ?? ""}
-                image={property.image_url}
-            >
-                <div className="p-4 font-roboto flex flex-col grow gap-4 rounded-lg overflow-hidden">
-                    {mode === "welcome" && (
-                        <WelcomeSection
-                            propertyId={propertyId}
-                            categoryId={categoryId}
-                            lat={lat}
-                            lng={lng}
-                        />
-                    )}
+        <SidebarProvider>
+            <EditPublicMenuProvider initialData={sidebarData}>
+                <PublicAppBar />
+                <PublicInfoContentBootstrap hasInfoContent={hasInfoContent} />
+                <PublicCountsBootstrap counts={counts} />
+                <PublicContentTemplate
+                    address={getDisplayZoneFromString(property.address)}
+                    propertyId={propertyId}
+                    categoryId={categoryId}
+                    subCategoryId={subCategoryId}
+                    name={property.name}
+                    latitude={lat}
+                    longitude={lng}
+                    checkInDate={property.check_in_date ?? ""}
+                    checkInTime={property.check_in_time ?? ""}
+                    checkOutDate={property.check_out_date ?? ""}
+                    checkOutTime={property.check_out_time ?? ""}
+                    image={property.image_url}
+                >
+                    <div className="p-4 font-roboto flex flex-col grow gap-4 rounded-lg overflow-hidden">
+                        {mode === "welcome" && (
+                            <WelcomeSection
+                                propertyId={propertyId}
+                                categoryId={categoryId}
+                                lat={lat}
+                                lng={lng}
+                            />
+                        )}
 
-                    {mode === "custom-plans" && (
-                        <ItineraryForm locale={locale} lat={lat} lng={lng} />
-                    )}
+                        {mode === "custom-plans" && (
+                            <ItineraryForm
+                                locale={locale}
+                                lat={lat}
+                                lng={lng}
+                            />
+                        )}
 
-                    {mode === "subcategory" && (
-                        <SubcategorySection
-                            propertyId={propertyId}
-                            categoryId={categoryId}
-                            subCategoryId={subCategoryId}
-                            lat={lat}
-                            lng={lng}
-                            locale={locale}
-                        />
-                    )}
+                        {mode === "subcategory" && (
+                            <SubcategorySection
+                                propertyId={propertyId}
+                                categoryId={categoryId}
+                                subCategoryId={subCategoryId}
+                                lat={lat}
+                                lng={lng}
+                                locale={locale}
+                            />
+                        )}
 
-                    {mode === "lodging" && (
-                        <LodgingSection
-                            propertyId={propertyId}
-                            defaultOpenId={open}
-                        />
-                    )}
-                </div>
-            </PublicContentTemplate>
-            <ArrivalGuide
-                data={arrivalGuideData}
-                propertyId={propertyId}
-                address={property.address}
-            />
-            <GuestChat propertyId={propertyId} locale={locale} />
-        </EditPublicMenuProvider>
+                        {mode === "lodging" && (
+                            <LodgingSection
+                                propertyId={propertyId}
+                                defaultOpenId={open}
+                            />
+                        )}
+                    </div>
+                </PublicContentTemplate>
+                <ArrivalGuide
+                    data={arrivalGuideData}
+                    propertyId={propertyId}
+                    address={property.address}
+                />
+                <GuestChat propertyId={propertyId} locale={locale} />
+            </EditPublicMenuProvider>
+        </SidebarProvider>
     );
 }

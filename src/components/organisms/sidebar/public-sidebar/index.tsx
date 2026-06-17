@@ -126,10 +126,10 @@ const PublicSidebar = ({
                 <div className="flex gap-2 items-center md:hidden">
                     <Button
                         label={t("Ocultar menú")}
-                        color="white"
+                        color="primary"
                         onClick={closeSidebar}
                         iconLeft={<IconClose />}
-                        className="shadow-sm grow"
+                        className="grow"
                     />
                 </div>
 

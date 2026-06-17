@@ -22,6 +22,10 @@ import IconInterests from "@/components/atoms/icon/interests";
 import IconShoppingBag from "@/components/atoms/icon/shopping-bag";
 import CategoryAccordion from "@/components/molecules/category-accordion";
 import GroupItem from "@/components/molecules/group-item";
+import ButtonLink from "@/components/molecules/button-link";
+import IconOpenInNew from "@/components/atoms/icon/open-in-new";
+import Button from "@/components/molecules/button";
+import IconClose from "@/components/atoms/icon/close";
 
 const ICON_COMPONENTS = {
     IconHealing,
@@ -66,8 +70,27 @@ const PropertySidebar = ({
         setOpenCategoryId((prev) => (prev === id ? null : id));
     };
 
+    const publicUrl = `${process.env.NEXT_PUBLIC_APP_URL}/public/${propertyId}/welcome/highlights`;
+
     return (
         <>
+            <div className="flex gap-1 items-center md:hidden">
+                <Button
+                    label={t("Ocultar menú")}
+                    color="primary"
+                    onClick={closeSidebar}
+                    iconLeft={<IconClose />}
+                    className="w-fit shrink-0"
+                />
+                <ButtonLink
+                    className="gap-1 w-full"
+                    color="primary"
+                    iconRight={<IconOpenInNew />}
+                    label={t("Sitio público")}
+                    href={publicUrl}
+                    target="_blank"
+                />
+            </div>
             {sidebarData &&
                 sidebarData.map((category) => {
                     const iconName = category.icon as IconName;

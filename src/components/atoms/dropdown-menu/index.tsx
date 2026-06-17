@@ -1,33 +1,33 @@
-import clsx from 'clsx';
+import clsx from "clsx";
 
 type DropdownMenuProps = {
-	className?: string;
-	children: React.ReactNode;
-	open: boolean;
+    className?: string;
+    children: React.ReactNode;
+    open: boolean;
 };
 
 const DropdownMenu = ({
-	className = '',
-	children,
-	open = false,
+    className = "",
+    children,
+    open = false,
 }: DropdownMenuProps) => {
-	const dropdownMenuStyles = clsx(
-		{
-			flex: open,
-		},
-		{
-			hidden: !open,
-		},
-		className
-	);
+    const dropdownMenuStyles = clsx(
+        {
+            flex: open,
+        },
+        {
+            hidden: !open,
+        },
+        className,
+    );
 
-	return (
-		<div
-			className={`flex-col gap-2 p-2 bg-white rounded-2xl shadow-xl z-10 ${dropdownMenuStyles}`}
-		>
-			{children}
-		</div>
-	);
+    return (
+        <div
+            className={`flex-col gap-2 p-1 bg-white rounded-xl shadow-xl z-10 ${dropdownMenuStyles}`}
+        >
+            {children}
+        </div>
+    );
 };
 
 export default DropdownMenu;
