@@ -26,6 +26,11 @@ export const USER_MENU_OPTIONS = [
         icon: "IconHome",
     },
     {
+        label: "Mis Propiedades",
+        url: PAGES.properties,
+        icon: "IconApartment",
+    },
+    {
         label: "Mi Perfil",
         url: PAGES.profile,
         icon: "IconAccountCircle",

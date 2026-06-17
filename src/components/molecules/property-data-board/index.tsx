@@ -4,17 +4,13 @@ import { useTranslations, useLocale } from "next-intl";
 
 import { formatDate, formatTime } from "@/utils/format-date-time";
 
-import Image from "next/image";
-import BadgeCheck from "@/components/atoms/BadgeCheck";
 import IconHome from "@/components/atoms/icon/home";
-import IconLocationOn from "@/components/atoms/icon/location-on";
 import IconCheckIn from "@/components/atoms/icon/check-in";
 import IconCheckOut from "@/components/atoms/icon/check-out";
 import ButtonLink from "../button-link";
 import IconEdit from "@/components/atoms/icon/edit";
 import IconApartment from "@/components/atoms/icon/apartment";
-import IconHelp from "@/components/atoms/icon/help";
-import IconConstruction from "@/components/atoms/icon/construction";
+import ButtonQr from "../button-qr";
 
 type PropertyDataBoardProps = {
     propertyId: string;
@@ -30,10 +26,7 @@ type PropertyDataBoardProps = {
 
 const PropertyDataBoard = ({
     propertyId,
-    categoryId,
-    subCategoryId,
     propertyName,
-    propertyAddress,
     propertyCheckInDate,
     propertyCheckInTime,
     propertyCheckOutDate,
@@ -43,9 +36,10 @@ const PropertyDataBoard = ({
     const locale = useLocale();
 
     // bg-gradient-to-tr from-[#ffa263] to-[#6cffc9]
+    const publicUrl = `${process.env.NEXT_PUBLIC_APP_URL}/public/${propertyId}/welcome/highlights`;
 
     return (
-        <div className="bg-white -mt-0.5 -ms-0.5 -me-0.5 p-3 flex gap-3 flex-col xl:flex-row justify-between shadow-xs relative overflow-hidden">
+        <div className="bg-white -mt-0.5 -ms-0.5 -me-0.5 p-3 flex flex-col sm:flex-row gap-2 justify-between shadow-xs relative overflow-hidden">
             <div className="flex gap-4 flex-wrap">
                 <div className="col-span-2 xl:col-span-1 flex gap-2 items-center">
                     <div className="shrink-0 flex justify-center items-center p-1.5 rounded-full bg-primary-100">
@@ -73,21 +67,22 @@ const PropertyDataBoard = ({
                 )}
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-1 relative z-1 justify-end flex-1">
+            <div className="flex gap-1 justify-end flex-1">
                 <ButtonLink
-                    label={t("Editar")}
+                    label=""
                     href={`/app/properties/edit/${propertyId}?from=manage`}
-                    color="white"
-                    className="w-full xl:w-fit"
+                    color="secondary"
+                    className="px-2.5! h-10 w-full sm:w-fit"
                     iconLeft={<IconEdit size={20} />}
                 />
                 <ButtonLink
-                    label={t("Mis Propiedades")}
+                    label=""
                     href="/app/properties"
                     color="secondary"
-                    className="w-full xl:w-fit"
+                    className="px-2.5! h-10 w-full sm:w-fit"
                     iconLeft={<IconApartment size={20} />}
                 />
+                <ButtonQr url={publicUrl} />
             </div>
         </div>
     );
