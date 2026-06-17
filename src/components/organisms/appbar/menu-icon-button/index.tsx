@@ -38,11 +38,12 @@ const MenuIconButton = () => {
 
     return doShow ? (
         <Button
-            label={t("Abrir menú")}
+            label=""
+            // label={t("Abrir menú")}
             color="primary"
             onClick={openSidebar}
             iconLeft={<IconMenu />}
-            className="flex md:hidden"
+            className="flex md:hidden px-2!"
         />
     ) : (
         <Button
