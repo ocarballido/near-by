@@ -34,12 +34,10 @@ const MenuIconButton = () => {
                 return true;
         }
     }, [pathName]);
-    console.log(doShow);
 
     return doShow ? (
         <Button
             label=""
-            // label={t("Abrir menú")}
             color="primary"
             onClick={openSidebar}
             iconLeft={<IconMenu />}
