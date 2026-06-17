@@ -34,6 +34,7 @@ const MenuIconButton = () => {
                 return true;
         }
     }, [pathName]);
+    console.log(doShow);
 
     return doShow ? (
         <Button
