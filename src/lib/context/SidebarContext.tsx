@@ -1,68 +1,72 @@
-'use client';
+"use client";
 
 import React, {
-	createContext,
-	useContext,
-	useState,
-	ReactNode,
-	useEffect,
-} from 'react';
-import { usePathname } from 'next/navigation';
+    createContext,
+    useContext,
+    useState,
+    ReactNode,
+    useEffect,
+} from "react";
+import { usePathname } from "next/navigation";
 
 export interface SidebarContextProps {
-	isOpen: boolean;
-	openSidebar: () => void;
-	closeSidebar: () => void;
-	toggleSidebar: () => void;
+    isOpen: boolean;
+    openSidebar: () => void;
+    closeSidebar: () => void;
+    toggleSidebar: () => void;
 }
 
 interface SidebarProviderProps {
-	children: ReactNode;
+    children: ReactNode;
 }
 
 const SidebarContext = createContext<SidebarContextProps | undefined>(
-	undefined
+    undefined,
 );
 
 export const SidebarProvider: React.FC<SidebarProviderProps> = ({
-	children,
+    children,
 }) => {
-	const [isOpen, setIsOpen] = useState<boolean>(false);
-	const pathname = usePathname();
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+    const pathname = usePathname();
 
-	const openSidebar = (): void => setIsOpen(true);
-	const closeSidebar = (): void => setIsOpen(false);
-	const toggleSidebar = (): void => setIsOpen((prev) => !prev);
+    const openSidebar = (): void => setIsOpen(true);
+    const closeSidebar = (): void => setIsOpen(false);
+    const toggleSidebar = (): void => setIsOpen((prev) => !prev);
 
-	useEffect(() => {
-		if (isOpen) {
-			closeSidebar();
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [pathname]);
+    useEffect(() => {
+        if (isOpen) {
+            closeSidebar();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [pathname]);
 
-	useEffect(() => {
-		const handleResize = () => {
-			if (isOpen) closeSidebar();
-		};
+    useEffect(() => {
+        const MOBILE_BREAKPOINT = 768; // debe coincidir con tu breakpoint `md` de Tailwind
 
-		window.addEventListener('resize', handleResize);
-		return () => window.removeEventListener('resize', handleResize);
-	}, [isOpen]);
+        const handleResize = () => {
+            if (isOpen && window.innerWidth >= MOBILE_BREAKPOINT) {
+                closeSidebar();
+            }
+        };
 
-	return (
-		<SidebarContext.Provider
-			value={{ isOpen, openSidebar, closeSidebar, toggleSidebar }}
-		>
-			{children}
-		</SidebarContext.Provider>
-	);
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, [isOpen]);
+
+    return (
+        <SidebarContext.Provider
+            value={{ isOpen, openSidebar, closeSidebar, toggleSidebar }}
+        >
+            {children}
+        </SidebarContext.Provider>
+    );
 };
 
 export const useSidebar = (): SidebarContextProps => {
-	const context = useContext(SidebarContext);
-	if (!context) {
-		throw new Error('useSidebar must be used within a SidebarProvider');
-	}
-	return context;
+    const context = useContext(SidebarContext);
+    if (!context) {
+        throw new Error("useSidebar must be used within a SidebarProvider");
+    }
+    return context;
 };
