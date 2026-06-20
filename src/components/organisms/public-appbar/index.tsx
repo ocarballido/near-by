@@ -27,9 +27,9 @@ const PublicAppBar = ({ className = "" }: PublicAppBarProps) => {
                     BNBexplorer
                 </h1>
             </Link>
-            <div className="w-full justify-between md:justify-end flex gap-1">
-                <MenuIconButton />
+            <div className="w-full justify-end md:justify-end flex gap-1">
                 <LanguageSelector triggerColor="white" />
+                <MenuIconButton />
             </div>
         </div>
     );

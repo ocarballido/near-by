@@ -172,7 +172,7 @@ export default async function Property({ params, searchParams }: PageProps) {
                     checkOutTime={property.check_out_time ?? ""}
                     image={property.image_url}
                 >
-                    <div className="p-4 font-roboto flex flex-col grow gap-4 rounded-lg overflow-hidden">
+                    <div className="p-4 font-roboto flex flex-col grow gap-4">
                         {mode === "welcome" && (
                             <WelcomeSection
                                 propertyId={propertyId}

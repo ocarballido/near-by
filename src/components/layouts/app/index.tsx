@@ -45,7 +45,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 </SpinnerPortal>
             )}
             <SidebarProvider>
-                <div className="p-2 flex flex-col gap-2 items-stretch w-full min-h-screen bg-[#EFEFEF] font-body overflow-hidden">
+                <div className="p-2 flex flex-col gap-2 items-stretch w-full h-dvh bg-[#EFEFEF] font-body overflow-hidden">
                     <PaywallModal />
                     <AppBar
                         accommodationHref={

@@ -39,7 +39,7 @@ const PropertyDataBoard = ({
     const publicUrl = `${process.env.NEXT_PUBLIC_APP_URL}/public/${propertyId}/welcome/highlights`;
 
     return (
-        <div className="bg-white -mt-0.5 -ms-0.5 -me-0.5 p-3 flex flex-col sm:flex-row gap-2 justify-between shadow-xs relative overflow-hidden">
+        <div className="bg-white -mt-0.5 -ms-0.5 -me-0.5 p-3 flex flex-col sm:flex-row gap-2 justify-between shadow-xs relative">
             <div className="flex gap-4 flex-wrap">
                 <div className="col-span-2 xl:col-span-1 flex gap-2 items-center">
                     <div className="shrink-0 flex justify-center items-center p-1.5 rounded-full bg-primary-100">
