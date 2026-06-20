@@ -9,6 +9,15 @@ import IconMenu from "@/components/atoms/icon/menu";
 import { useMemo } from "react";
 import IconArrowLeftAlt from "@/components/atoms/icon/arrow-left-alt";
 
+const HIDDEN_SEGMENTS = [
+    "info",
+    "location",
+    "magic-finder",
+    "feedback",
+    "new",
+    "edit",
+];
+
 const MenuIconButton = () => {
     const t = useTranslations();
     const { openSidebar } = useSidebar();
@@ -17,22 +26,19 @@ const MenuIconButton = () => {
     const router = useRouter();
 
     const doShow = useMemo(() => {
-        switch (true) {
-            case pathName.includes("info"):
-                return false;
-            case pathName.includes("location"):
-                return false;
-            case pathName.includes("magic-finder"):
-                return false;
-            case pathName.includes("feedback"):
-                return false;
-            case pathName.includes("new"):
-                return false;
-            case pathName.includes("edit"):
-                return false;
-            default:
-                return true;
-        }
+        const segments = pathName.split("/").filter(Boolean);
+
+        // En /public siempre se muestra el botón normal del menú
+        if (segments.includes("public")) return true;
+
+        // En /app/details siempre se muestra "Cancelar"
+        if (segments.includes("app") && segments.includes("details"))
+            return false;
+
+        const hasHiddenSegment = segments.some((segment) =>
+            HIDDEN_SEGMENTS.includes(segment),
+        );
+        return !hasHiddenSegment;
     }, [pathName]);
 
     return doShow ? (
