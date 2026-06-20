@@ -229,7 +229,7 @@ export default function ExploreDetailsEditor({
         <>
             {/* Chips flotantes — aparecen cuando el original sale del viewport */}
             {chipsFloating && (
-                <div className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
+                <div className="fixed top-22 left-0 md:-left-2 right-2 z-50 flex justify-center pointer-events-none">
                     <div className="bg-white border-b border-gray-100 p-4 max-w-[600px] w-full pointer-events-auto">
                         <Typography weight="medium" size="sm" className="mb-3">
                             {t("Elementos frecuentes")}
@@ -240,7 +240,7 @@ export default function ExploreDetailsEditor({
             )}
 
             {buttonsFloating && (
-                <div className="fixed -bottom-4 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none pb-4">
+                <div className="fixed -bottom-4 left-0 md:-left-2 right-2 z-50 flex justify-center pointer-events-none pb-4">
                     <div className="bg-white border-t border-gray-100 p-4 max-w-[600px] w-full pointer-events-auto flex flex-col gap-2">
                         <Button
                             label={
@@ -263,7 +263,7 @@ export default function ExploreDetailsEditor({
                 </div>
             )}
 
-            <div className="bg-white rounded-xl max-w-[600px] w-full shadow-xs">
+            <div className="bg-white rounded-xl max-w-[600px] w-full shadow-xs relative">
                 <div className="rounded-lg flex flex-col gap-2 items-center mb-3 pt-4">
                     <FancyIcon
                         icon={<IconFamiltHome color="white" />}

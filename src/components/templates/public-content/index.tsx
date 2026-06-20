@@ -1,6 +1,6 @@
 import PublicSidebar from "@/components/organisms/sidebar/public-sidebar";
 import Content from "@/components/organisms/content";
-import HousePublic from "@/components/molecules/card/house-public";
+import HousePublicMobile from "@/components/molecules/card/house-public-mobile";
 
 type PublicContentTemplateProps = {
     address: string;
@@ -36,22 +36,19 @@ const PublicContentTemplate = ({
 }: PublicContentTemplateProps) => {
     return (
         <>
-            <HousePublic
+            <HousePublicMobile
                 address={address}
                 latitude={latitude}
                 longitude={longitude}
                 name={name}
-                image={image}
                 checkInDate={checkInDate}
                 checkInTime={checkInTime}
                 checkOutDate={checkOutDate}
                 checkOutTime={checkOutTime}
-                className="block md:hidden"
+                className="flex md:hidden -mt-6.5 rounded-t-none"
             />
-            <div className="flex flex-col gap-2 items-stretch w-full font-body overflow-hidden grow">
-                <div
-                    className={`flex flex-auto gap-2 min-h-full relative w-full`}
-                >
+            <div className="flex flex-col gap-2 items-stretch w-full font-body overflow-hidden grow min-h-0">
+                <div className={`flex flex-auto gap-2 min-h-0 relative w-full`}>
                     <PublicSidebar
                         categoryId={categoryId}
                         subCategoryId={subCategoryId}

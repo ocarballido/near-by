@@ -4,6 +4,7 @@ import { createServerAdminClient } from "@/lib/supabase/serverAdminClient";
 import ExploreDetailsEditor from "@/components/organisms/explore-details-editor";
 import { PropertyDetailRow } from "@/types/property-details";
 import type { DetailFieldsetState } from "@/components/molecules/explore-detail-fieldset";
+import AppContentTemplate from "@/components/templates/app-content";
 
 type PageProps = {
     params: Promise<{ detailsSlug: string[] }>;
@@ -59,11 +60,15 @@ export default async function DetailsPage({ params }: PageProps) {
     const initialFieldsets = (data ?? []).map(rowToFieldset);
 
     return (
-        <ExploreDetailsEditor
-            propertyId={propertyId}
-            categoryId={categoryId}
-            subCategoryId={subCategoryId}
-            initialFieldsets={initialFieldsets}
-        />
+        <AppContentTemplate showSidebar={false}>
+            <div className="p-1.5 font-roboto flex flex-col grow items-center gap-3 py-6">
+                <ExploreDetailsEditor
+                    propertyId={propertyId}
+                    categoryId={categoryId}
+                    subCategoryId={subCategoryId}
+                    initialFieldsets={initialFieldsets}
+                />
+            </div>
+        </AppContentTemplate>
     );
 }

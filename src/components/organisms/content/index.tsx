@@ -10,7 +10,7 @@ const Content = ({
     subCategoryId?: string;
 }) => {
     return (
-        <main className="flex flex-col gap-2 w-full grow rounded-xl overflow-hidden bg-gray-50 p-0.5">
+        <main className="flex flex-col gap-2 w-full grow min-h-0 rounded-xl bg-gray-50 p-0.5 overflow-y-auto overscroll-contain">
             {children}
         </main>
     );

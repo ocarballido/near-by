@@ -19,6 +19,7 @@ type AppContentTemplateProps = {
     subcategoryGroupId?: string;
     propertySlug?: string;
     propertyId?: string;
+    showSidebar?: boolean;
 };
 
 const AppContentTemplate = ({
@@ -27,16 +28,19 @@ const AppContentTemplate = ({
     propertyId,
     categoryId,
     subCategoryId,
+    showSidebar = true,
 }: AppContentTemplateProps) => {
     return (
-        <div className="flex flex-col gap-2 items-stretch w-full font-body overflow-hidden grow">
-            <div className={`flex flex-auto gap-2 min-h-full relative w-full`}>
-                <Sidebar
-                    sidebar={sidebar}
-                    propertyId={propertyId}
-                    categoryId={categoryId}
-                    subCategoryId={subCategoryId}
-                />
+        <div className="flex flex-col gap-2 items-stretch w-full font-body overflow-hidden grow min-h-0">
+            <div className="flex flex-auto gap-2 min-h-0 relative w-full">
+                {showSidebar && (
+                    <Sidebar
+                        sidebar={sidebar}
+                        propertyId={propertyId}
+                        categoryId={categoryId}
+                        subCategoryId={subCategoryId}
+                    />
+                )}
                 <Content
                     propertyId={propertyId}
                     categoryId={categoryId}

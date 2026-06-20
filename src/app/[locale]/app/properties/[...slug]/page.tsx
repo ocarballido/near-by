@@ -118,7 +118,7 @@ export default async function Property({ params }: PageProps) {
                 subCategoryId={subCategoryId}
             />
 
-            <div className="p-4 pt-0 font-roboto flex flex-col grow gap-4 rounded-lg overflow-hidden">
+            <div className="p-4 pt-0 font-roboto flex flex-col grow gap-4 rounded-lg">
                 <PropertyNameTitle subCategoryName={subCategory.name} />
                 <PropertyDataBySubCategory
                     propertyId={propertyId}

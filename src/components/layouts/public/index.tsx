@@ -1,34 +1,34 @@
-'use client';
+"use client";
 
-import { useLoading } from '@/lib/context/LoadingContext';
+import { useLoading } from "@/lib/context/LoadingContext";
 
-import Spinner from '@/components/atoms/spinner';
-import { SpinnerPortal } from '@/components/atoms/spinner/spinner-portal';
-import PublicPageBanner from '@/components/molecules/public-page-banner';
+import Spinner from "@/components/atoms/spinner";
+import { SpinnerPortal } from "@/components/atoms/spinner/spinner-portal";
+import PublicPageBanner from "@/components/molecules/public-page-banner";
 
 export default function PublicLayout({
-	children,
-	isLoggedIn,
+    children,
+    isLoggedIn,
 }: {
-	children: React.ReactNode;
-	isLoggedIn: boolean;
+    children: React.ReactNode;
+    isLoggedIn: boolean;
 }) {
-	const { loading } = useLoading();
+    const { loading } = useLoading();
 
-	return (
-		<>
-			{loading && (
-				<SpinnerPortal>
-					<Spinner position="fixed" />
-				</SpinnerPortal>
-			)}
-			<PublicPageBanner
-				authHref="/auth/magic-link"
-				isLoggedIn={isLoggedIn}
-			/>
-			<div className="p-2 flex flex-col gap-2 items-stretch w-full min-h-screen bg-[#EFEFEF] font-body overflow-hidden">
-				{children}
-			</div>
-		</>
-	);
+    return (
+        <>
+            {loading && (
+                <SpinnerPortal>
+                    <Spinner position="fixed" />
+                </SpinnerPortal>
+            )}
+            <PublicPageBanner
+                authHref="/auth/magic-link"
+                isLoggedIn={isLoggedIn}
+            />
+            <div className="p-2 flex flex-col gap-2 items-stretch w-full h-dvh bg-[#EFEFEF] font-body overflow-hidden">
+                {children}
+            </div>
+        </>
+    );
 }
