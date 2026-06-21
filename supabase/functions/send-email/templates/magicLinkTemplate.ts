@@ -1,70 +1,70 @@
 export type Locale = string;
 
 export type MagicLinkCopy = {
-	subject: string;
-	preheader: string;
-	title: string;
-	intro: string;
-	text1: string;
-	text2: string;
-	buttonLabel: string;
-	footerText: string;
+    subject: string;
+    preheader: string;
+    title: string;
+    intro: string;
+    text1: string;
+    text2: string;
+    buttonLabel: string;
+    footerText: string;
 };
 
 export const MAGIC_LINK_MESSAGES: Record<string, MagicLinkCopy> = {
-	en: {
-		subject: 'Your login link',
-		preheader: 'Click the button to access your account.',
-		title: 'Welcome to BNB Explorer,',
-		intro: "You've just taken the first step towards becoming a 5-star Host!",
-		text1: 'Discover how to create your own online guide for your accommodation with the help of AI, including services, useful tips, nearby recommendations and all the information you need.',
-		text2: 'Design your own accommodation website for FREE in just a few seconds and share the link with your guests every time they book. Your ratings will keep growing!',
-		buttonLabel: 'Sign in',
-		footerText: 'If you did not request this email, ignore it.',
-	},
-	es: {
-		subject: 'Tu enlace de acceso',
-		preheader: 'Haz clic en el botón para acceder a tu cuenta.',
-		title: 'Bienvenid@ a BNB Explorer,',
-		intro: '¡Acabas de dar el primer paso para convertirte en un Anfitrión 5 estrellas!',
-		text1: 'Descubre cómo crear una guía online propia para tus alojamientos con ayuda de la IA, incluyendo los servicios, consejos útiles, recomendaciones cercanas y toda la información que necesites.',
-		text2: 'Diseña tú mismo la web de tu alojamiento GRATIS y en sólo unos segundos y comparte el enlace con tus huéspedes cada vez que reserven. ¡Tus valoraciones no pararán de crecer!',
-		buttonLabel: 'Acceder',
-		footerText: 'Si no has solicitado este correo, puedes ignorarlo.',
-	},
+    en: {
+        subject: "Your login link",
+        preheader: "Click the button to access your account.",
+        title: "Welcome to BNB Explorer,",
+        intro: "You've just taken the first step towards becoming a 5-star Host!",
+        text1: "Discover how to create your own online guide for your accommodation with the help of AI, including services, useful tips, nearby recommendations and all the information you need.",
+        text2: "Design your own accommodation website for FREE in just a few seconds and share the link with your guests every time they book. Your ratings will keep growing!",
+        buttonLabel: "Sign in",
+        footerText: "If you did not request this email, ignore it.",
+    },
+    es: {
+        subject: "Tu enlace de acceso",
+        preheader: "Haz clic en el botón para acceder a tu cuenta.",
+        title: "Bienvenid@ a BNB Explorer,",
+        intro: "¡Acabas de dar el primer paso para convertirte en un Anfitrión 5 estrellas!",
+        text1: "Descubre cómo crear una guía online propia para tus alojamientos con ayuda de la IA, incluyendo los servicios, consejos útiles, recomendaciones cercanas y toda la información que necesites.",
+        text2: "Diseña tú mismo la web de tu alojamiento GRATIS y en sólo unos segundos y comparte el enlace con tus huéspedes cada vez que reserven. ¡Tus valoraciones no pararán de crecer!",
+        buttonLabel: "Acceder",
+        footerText: "Si no has solicitado este correo, puedes ignorarlo.",
+    },
 };
 
 function getMagicLinkCopy(locale: Locale): MagicLinkCopy {
-	const normalized = (locale || 'en').split('-')[0];
-	return MAGIC_LINK_MESSAGES[normalized] ?? MAGIC_LINK_MESSAGES.en;
+    const normalized = (locale || "en").split("-")[0];
+    return MAGIC_LINK_MESSAGES[normalized] ?? MAGIC_LINK_MESSAGES.en;
 }
 
 type RenderMagicLinkParams = {
-	locale: string;
-	magicLink: string;
-	productName: string;
-	heroUrl: string;
-	logoSymbolUrl: string;
-	videoImageUrl: string;
-	footerLogoUrl: string;
-	appUrl: string; // p.ej. https://bnbexplorer.com
+    locale: string;
+    magicLink: string;
+    productName: string;
+    heroUrl: string;
+    logoSymbolUrl: string;
+    videoImageUrl: string;
+    footerLogoUrl: string;
+    appUrl: string; // p.ej. https://bnbexplorer.com
 };
 
 export function renderMagicLinkEmail({
-	locale,
-	magicLink,
-	productName,
-	heroUrl,
-	logoSymbolUrl,
-	videoImageUrl,
-	footerLogoUrl,
-	appUrl,
+    locale,
+    magicLink,
+    productName,
+    heroUrl,
+    logoSymbolUrl,
+    videoImageUrl,
+    footerLogoUrl,
+    appUrl,
 }: RenderMagicLinkParams): { subject: string; html: string } {
-	const copy = getMagicLinkCopy(locale);
+    const copy = getMagicLinkCopy(locale);
 
-	const subject = copy.subject;
+    const subject = copy.subject;
 
-	const html = `<!DOCTYPE html>
+    const html = `<!DOCTYPE html>
 <html lang="${locale}" xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="UTF-8" />
@@ -370,19 +370,19 @@ export function renderMagicLinkEmail({
             </div>
             <!-- Appbar -->
 
-            <a href="${magicLink}" style="text-decoration: none; display: block;">
-              <!-- Hero -->
+            <!-- Hero -->
+            <a href="${magicLink}" target="_blank" style="text-decoration: none; display: block;">
               <img class="img" src="${heroUrl}" alt="BNBexplorer Login-Register" />
-              <!-- /Hero -->
-
-              <!-- Button -->
-              <div class="content">
-                <div class="btn-span-shadow">
-                  <span class="btn-primary" style="box-shadow: 0px 0px 0px 4px #F3F4F6;">${copy.buttonLabel}</span>
-                </div>
-              </div>
-              <!-- Button -->
             </a>
+            <!-- /Hero -->
+
+            <!-- Button -->
+            <div class="content">
+              <div class="btn-span-shadow">
+                <a href="${magicLink}" target="_blank" class="btn-primary" style="box-shadow: 0px 0px 0px 4px #F3F4F6; text-decoration: none; display: inline-block;">${copy.buttonLabel}</a>
+              </div>
+            </div>
+            <!-- /Button -->
 
             <div class="content">
               <!-- START CENTERED WHITE CONTAINER -->
@@ -438,5 +438,5 @@ export function renderMagicLinkEmail({
   </body>
 </html>`;
 
-	return { subject, html };
+    return { subject, html };
 }
