@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { createSSRClient } from "@/lib/supabase/server";
 import { createServerAdminClient } from "@/lib/supabase/serverAdminClient";
+import { trackEvent } from "@/lib/analytics/mixpanel";
 import { z } from "zod";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
@@ -191,6 +192,24 @@ export async function saveDetails(
                 );
             }
         }
+
+        // 10) Track
+        await trackEvent({
+            event: "property_details_saved",
+            distinctId: user.id,
+            props: {
+                property_id: propertyId,
+                details_count: validatedDetails.length,
+                predefined_count: validatedDetails.filter(
+                    (d) => d.predefined_key !== null,
+                ).length,
+                custom_count: validatedDetails.filter(
+                    (d) => d.predefined_key === null,
+                ).length,
+                updated_count: toUpdate.length,
+                inserted_count: toInsert.length,
+            },
+        });
 
         revalidatePath("/app");
 
