@@ -19,6 +19,7 @@ export type EventName =
     | "create_property_submit_clicked"
     | "create_property_address_selected"
     | "property_details_saved"
+    | "property_detail_deleted"
     | "create_property_blocked_no_address_selection";
 
 type TrackInput = {
