@@ -85,7 +85,7 @@ export default function WelcomeTabsMenu({
                             onClick={() => onChange(tab.key)}
                             aria-pressed={isActive}
                             className={clsx(
-                                "flex-1 rounded-full px-2 py-2 text-md font-medium min-w-0",
+                                "flex-1 rounded-full px-1.5 py-1.5 ps-2.5 text-md font-medium min-w-0",
                                 "flex items-center justify-center lg:justify-between gap-2 transition-colors hover:cursor-pointer",
                                 isActive
                                     ? config.activeBg
@@ -112,7 +112,7 @@ export default function WelcomeTabsMenu({
                                         "text-sm font-semibold px-2.5 py-1 rounded-full flex-shrink-0",
                                         isActive
                                             ? config.activeCountBg
-                                            : "bg-gray-200",
+                                            : "bg-white",
                                         isActive
                                             ? config.activeText
                                             : "text-gray-800",

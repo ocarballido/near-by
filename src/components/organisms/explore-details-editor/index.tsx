@@ -12,7 +12,6 @@ import BadgeCheck from "@/components/atoms/BadgeCheck";
 import Button from "@/components/molecules/button";
 import Typography from "@/components/atoms/typography";
 import FancyIcon from "@/components/atoms/icon/fancy-icon";
-import IconInfo from "@/components/atoms/icon/info";
 import DashboardData from "@/components/organisms/dashboard-card/dashboard-data";
 import ExploreDetailFieldset, {
     type DetailFieldsetState,
@@ -52,6 +51,15 @@ export default function ExploreDetailsEditor({
         useState<DetailFieldsetState[]>(initialFieldsets);
     const [chipsFloating, setChipsFloating] = useState(false);
     const chipsRef = useRef<HTMLDivElement>(null);
+
+    // Justo después del estado de fieldsets:
+    const [openLocalId, setOpenLocalId] = useState<string | null>(
+        initialFieldsets[0]?.localId ?? null,
+    );
+
+    const handleToggle = useCallback((localId: string) => {
+        setOpenLocalId((prev) => (prev === localId ? null : localId));
+    }, []);
 
     const [buttonsFloating, setButtonsFloating] = useState(false);
     const buttonsRef = useRef<HTMLDivElement>(null);
@@ -155,6 +163,7 @@ export default function ExploreDetailsEditor({
                     isDirty: true,
                 };
                 setFieldsets((prev) => [...prev, newFieldset]);
+                setOpenLocalId(newFieldset.localId);
                 setTimeout(() => {
                     lastFieldsetRef.current?.scrollIntoView({
                         behavior: "smooth",
@@ -178,6 +187,7 @@ export default function ExploreDetailsEditor({
             isDirty: true,
         };
         setFieldsets((prev) => [...prev, newFieldset]);
+        setOpenLocalId(newFieldset.localId);
         setTimeout(() => {
             lastFieldsetRef.current?.scrollIntoView({
                 behavior: "smooth",
@@ -206,8 +216,17 @@ export default function ExploreDetailsEditor({
         [],
     );
 
-    const handleRemove = useCallback((localId: string) => {
-        setFieldsets((prev) => prev.filter((f) => f.localId !== localId));
+    // En ExploreDetailsEditor, reemplaza handleRemove por esto:
+    const handleRemove = useCallback((localId: string, wasOpen: boolean) => {
+        setFieldsets((prev) => {
+            const next = prev.filter((f) => f.localId !== localId);
+            if (wasOpen && next.length > 0) {
+                setOpenLocalId(next[0].localId);
+            } else if (next.length === 0) {
+                setOpenLocalId(null);
+            }
+            return next;
+        });
     }, []);
 
     const canSave = fieldsets.some((f) => f.name.trim().length > 0);
@@ -347,7 +366,7 @@ export default function ExploreDetailsEditor({
                             </Typography>
                         }
                     />
-                    <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-1">
                         {fieldsets.map((fieldset, index) => (
                             <div
                                 key={fieldset.localId}
@@ -359,6 +378,8 @@ export default function ExploreDetailsEditor({
                             >
                                 <ExploreDetailFieldset
                                     fieldset={fieldset}
+                                    isOpen={openLocalId === fieldset.localId}
+                                    onToggle={handleToggle}
                                     onChange={handleChange}
                                     onRemove={handleRemove}
                                 />

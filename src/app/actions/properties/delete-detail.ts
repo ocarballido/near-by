@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { createSSRClient } from "@/lib/supabase/server";
 import { createServerAdminClient } from "@/lib/supabase/serverAdminClient";
+import { trackEvent } from "@/lib/analytics/mixpanel";
 
 export async function deleteDetail(
     detailId: string,
@@ -20,7 +21,6 @@ export async function deleteDetail(
 
         const supabase = await createServerAdminClient();
 
-        // Verificar ownership a través de la propiedad
         const { data: detail } = await supabase
             .from("property_details")
             .select("property_id")
@@ -42,6 +42,15 @@ export async function deleteDetail(
         }
 
         await supabase.from("property_details").delete().eq("id", detailId);
+
+        await trackEvent({
+            event: "property_detail_deleted",
+            distinctId: user.id,
+            props: {
+                detail_id: detailId,
+                property_id: detail.property_id,
+            },
+        });
 
         revalidatePath("/app");
 
