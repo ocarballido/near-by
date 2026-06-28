@@ -56,6 +56,7 @@ export function PropertyInfoContent({
                             iconLeft={<IconEdit />}
                             color="primary"
                             href={`/app/info/${propertyId}/${categoryId}/${subCategoryId}`}
+                            className="w-full sm:w-fit"
                         />
                     </div>
                     <div className="font-medium whitespace-pre-wrap">
