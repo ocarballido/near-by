@@ -220,18 +220,18 @@ export function LocationsContent({
                 primaryButtonLabel={t("Cancelar")}
                 icon={<IconDelete color="error" />}
             />
-            <div className="flex flex-col lg:flex-row gap-2">
+            <div className="flex flex-col justify-end lg:flex-row gap-2">
                 <ButtonLinkMagic
                     label={t("Buscador mágico")}
                     url={`/app/magic-finder/${propertyId}/${lat}/${lng}/${categoryId}/${subCategoryId}`}
-                    className="w-full lg:w-full ml-auto mr-auto"
+                    className="w-full lg:w-fit"
                 />
                 <ButtonLink
                     label={t("Nuevo sitio")}
                     color="primary"
                     href={`/app/location/${propertyId}/${categoryId}/${subCategoryId}`}
                     iconLeft={<IconAdd />}
-                    className="w-full"
+                    className="w-full lg:w-fit"
                 />
             </div>
             <div className="flex flex-col gap-2">

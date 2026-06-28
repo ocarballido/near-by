@@ -97,6 +97,7 @@ export default function ExploreDetailsView({
                     label={t("Editar")}
                     iconLeft={<IconEdit />}
                     color="primary"
+                    className="w-full sm:w-fit"
                     href={`/app/details/${propertyId}/${categoryId}/${subCategoryId}`}
                 />
             </div>

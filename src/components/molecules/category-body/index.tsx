@@ -13,7 +13,7 @@ const CategoryBody = ({ children, open = false }: CategoryBodyProps) => {
                 open ? "grid-rows-[1fr] mt-1" : "grid-rows-[0fr] mt-0",
             )}
         >
-            <div className="flex flex-col gap-2 overflow-hidden min-h-0 text-sm">
+            <div className="flex flex-col gap-1 overflow-hidden min-h-0 text-sm">
                 {children}
             </div>
         </div>
