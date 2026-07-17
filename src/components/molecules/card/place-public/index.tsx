@@ -163,7 +163,7 @@ const PlacePublic = ({
                                 )}
                             </div>
                             <span className="text-xs font-medium truncate">
-                                {sub_category_name}
+                                {sub_category_name && t(sub_category_name)}
                             </span>
                         </div>
                     ) : (
