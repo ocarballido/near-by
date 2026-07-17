@@ -1186,5 +1186,10 @@
     "deleteDetail": {
         "title": "Delete detail",
         "description": "You are about to delete this detail"
+    },
+    "maintenance": {
+        "title": "We're under maintenance",
+        "description": "We're currently performing maintenance to improve your BNBexplorer experience. Please check back in a few minutes.",
+        "retryButton": "Retry"
     }
 }
