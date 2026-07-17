@@ -1190,5 +1190,10 @@
     "deleteDetail": {
         "title": "Supprimer le détail",
         "description": "Vous êtes sur le point de supprimer ce détail"
+    },
+    "maintenance": {
+        "title": "Nous sommes en maintenance",
+        "description": "Nous effectuons actuellement une maintenance pour améliorer votre expérience sur BNBexplorer. Revenez dans quelques minutes.",
+        "retryButton": "Réessayer"
     }
 }
