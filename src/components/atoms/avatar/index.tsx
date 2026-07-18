@@ -3,7 +3,7 @@
 import { useGlobal } from "@/lib/context/GlobalContext";
 import { useCallback } from "react";
 import IconKeyboardArrowDown from "../icon/keyboard-arrow-down";
-import IconAccountCircle from "../icon/account-circle";
+import IconHome from "../icon/home";
 
 type AvatarProps = {
     onClick?: React.MouseEventHandler<HTMLDivElement>;
@@ -26,7 +26,7 @@ const Avatar = ({ className, onClick }: AvatarProps) => {
             className={`h-10 ps-3 pe-2 rounded-full bg-primary-500 hover:bg-primary-600 hover:cursor-pointer flex justify-center items-center font-bold text-white text-xl transition-all duration-200 focus:border-4 focus:border-primary-200 ${className}`}
         >
             {/* {user ? getInitials(user.email) : "?"}{" "} */}
-            <IconAccountCircle color="white" />
+            <IconHome color="white" />
             <IconKeyboardArrowDown color="white" />
         </div>
     );
