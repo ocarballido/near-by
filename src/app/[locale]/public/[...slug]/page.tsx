@@ -187,6 +187,7 @@ export default async function Property({ params, searchParams }: PageProps) {
                                 locale={locale}
                                 lat={lat}
                                 lng={lng}
+                                anonId={anonId}
                             />
                         )}
 

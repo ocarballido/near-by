@@ -20,7 +20,8 @@ export type EventName =
     | "create_property_address_selected"
     | "property_details_saved"
     | "property_detail_deleted"
-    | "create_property_blocked_no_address_selection";
+    | "create_property_blocked_no_address_selection"
+    | "itinerary_generate_clicked";
 
 type TrackInput = {
     event: EventName;

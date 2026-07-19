@@ -11,10 +11,7 @@ import FancyIcon from "@/components/atoms/icon/fancy-icon";
 import IconMap from "@/components/atoms/icon/map";
 import ItineraryTimeline from "@/components/organisms/itinerary-timeline";
 import { useItineraryGeneration } from "@/hooks/use-itinerary-generation";
-import {
-    mockItineraryWeekend,
-    mockItinerarySingleDay,
-} from "@/mocks/itinerary.mock";
+import { trackClientEvent } from "@/lib/analytics/trackClient";
 
 type FormValues = {
     preferences: string;
@@ -47,10 +44,12 @@ const ItineraryForm = ({
     lat,
     lng,
     locale = "es",
+    anonId,
 }: {
     lat: number;
     lng: number;
     locale?: string;
+    anonId: string;
 }) => {
     const t = useTranslations();
     const { openLoading, closeLoading } = useLoading();
@@ -72,6 +71,16 @@ const ItineraryForm = ({
     const selectedTransport = useWatch({ control, name: "transport" });
 
     const onSubmit: SubmitHandler<FormValues> = async (data) => {
+        trackClientEvent({
+            event: "itinerary_generate_clicked",
+            distinctId: anonId,
+            props: {
+                preferences: data.preferences,
+                duration: data.duration,
+                transport: data.transport,
+            },
+        });
+
         openLoading();
 
         await generateItinerary({
