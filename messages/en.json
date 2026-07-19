@@ -1191,5 +1191,13 @@
         "title": "We're under maintenance",
         "description": "We're currently performing maintenance to improve your BNBexplorer experience. Please check back in a few minutes.",
         "retryButton": "Retry"
-    }
+    },
+    "Desayuno": "Breakfast",
+    "Comida": "Lunch",
+    "Cena": "Dinner",
+    "Qué hacer": "What to do",
+    "Cómo llegar a {name}": "Get directions to {name}",
+    "Día {number}": "Day {number}",
+    "Días del itinerario": "Itinerary days",
+    "Ver ruta completa en Google Maps": "View on Google Maps"
 }

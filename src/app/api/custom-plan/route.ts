@@ -1,93 +1,109 @@
-// app/api/generate-itinerary/route.ts
-import { NextRequest, NextResponse } from 'next/server';
-import { getPrompt } from '@/config/prompt';
+import { NextRequest, NextResponse } from "next/server";
+import OpenAI from "openai";
+import { zodTextFormat } from "openai/helpers/zod";
+import { getPrompt } from "@/config/prompt";
+import { itinerarySchema } from "@/types/itinerary";
+import type { POI } from "@/lib/fetcher-nearby";
 
-type POI = {
-	name: string;
-	type: string;
-	lat: number;
-	lng: number;
-	description: string;
-	estimated_duration: number;
-	start_time?: string;
+type GenerateItineraryRequestBody = {
+    location: string;
+    preferences: string[];
+    duration: string;
+    transport: string;
+    poiList: POI[];
+    locale: string;
 };
 
+const ITINERARY_MODEL = "gpt-4o-mini";
+
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+function isGenerateItineraryRequestBody(
+    body: unknown,
+): body is GenerateItineraryRequestBody {
+    if (typeof body !== "object" || body === null) return false;
+
+    const candidate = body as Record<string, unknown>;
+
+    return (
+        typeof candidate.location === "string" &&
+        Array.isArray(candidate.preferences) &&
+        typeof candidate.duration === "string" &&
+        typeof candidate.transport === "string" &&
+        Array.isArray(candidate.poiList) &&
+        typeof candidate.locale === "string"
+    );
+}
+
 export async function POST(req: NextRequest) {
-	try {
-		const body = await req.json();
+    let body: unknown;
 
-		const {
-			location,
-			preferences,
-			duration,
-			transport,
-			poiList,
-			locale,
-		}: {
-			location: string;
-			preferences: string[];
-			duration: string;
-			transport: string;
-			poiList: POI[];
-			locale: string;
-		} = body;
+    try {
+        body = await req.json();
+    } catch {
+        return NextResponse.json(
+            { success: false, error: "Invalid JSON body" },
+            { status: 400 },
+        );
+    }
 
-		const prompt = getPrompt(locale, {
-			location,
-			duration,
-			preferences,
-			transport,
-			poiList,
-		});
+    if (!isGenerateItineraryRequestBody(body)) {
+        return NextResponse.json(
+            { success: false, error: "Missing or invalid required fields" },
+            { status: 400 },
+        );
+    }
 
-		const response = await fetch(
-			'https://api.openai.com/v1/chat/completions',
-			{
-				method: 'POST',
-				headers: {
-					Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					model: 'gpt-3.5-turbo',
-					temperature: 0.9,
-					max_tokens: 700,
-					messages: [
-						{
-							role: 'system',
-							content:
-								'You are a helpful travel assistant that generates friendly, practical, and clear itinerary suggestions for travelers.',
-						},
-						{
-							role: 'user',
-							content: prompt,
-						},
-					],
-				}),
-			}
-		);
+    const { location, preferences, duration, transport, poiList, locale } =
+        body;
 
-		if (!response.ok) {
-			const error = await response.text();
-			console.error('OpenAI API error:', error);
-			return NextResponse.json(
-				{ success: false, error: 'OpenAI API error' },
-				{ status: 500 }
-			);
-		}
+    const prompt = getPrompt(locale, {
+        location,
+        duration,
+        preferences,
+        transport,
+        poiList,
+    });
 
-		const data = await response.json();
-		const itinerary = data.choices[0].message.content;
+    try {
+        const response = await openai.responses.parse({
+            model: ITINERARY_MODEL,
+            input: [
+                {
+                    role: "system",
+                    content:
+                        "You are a helpful travel assistant that generates practical, well-organized itineraries strictly grounded in the places provided by the user.",
+                },
+                {
+                    role: "user",
+                    content: prompt,
+                },
+            ],
+            text: {
+                format: zodTextFormat(itinerarySchema, "itinerary"),
+            },
+        });
 
-		return NextResponse.json({ success: true, itinerary });
-	} catch (error) {
-		console.error('Itinerary generation error:', error);
-		return NextResponse.json(
-			{
-				success: false,
-				error: 'Internal server error generating itinerary',
-			},
-			{ status: 500 }
-		);
-	}
+        if (!response.output_parsed) {
+            console.error("Itinerary generation returned no parsed output");
+            return NextResponse.json(
+                { success: false, error: "Itinerary generation was refused" },
+                { status: 422 },
+            );
+        }
+
+        return NextResponse.json({
+            success: true,
+            itinerary: response.output_parsed,
+        });
+    } catch (error) {
+        console.error("Itinerary generation error:", error);
+        return NextResponse.json(
+            {
+                success: false,
+                error: "Internal server error generating itinerary",
+            },
+            { status: 500 },
+        );
+    }
 }

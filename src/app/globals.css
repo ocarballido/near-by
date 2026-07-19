@@ -291,3 +291,12 @@ body {
 *::-webkit-scrollbar-thumb:hover {
     background-color: var(--gray-400);
 }
+
+@utility basic-gradient {
+    background: #ffa263;
+    background: linear-gradient(
+        45deg,
+        rgba(255, 162, 99, 1) 0%,
+        rgba(108, 255, 201, 1) 100%
+    );
+}
