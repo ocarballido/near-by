@@ -1198,5 +1198,6 @@
     "Qué hacer": "What to do",
     "Cómo llegar a {name}": "Get directions to {name}",
     "Día {number}": "Day {number}",
-    "Días del itinerario": "Itinerary days"
+    "Días del itinerario": "Itinerary days",
+    "Ver ruta completa en Google Maps": "View on Google Maps"
 }
