@@ -1195,5 +1195,12 @@
         "title": "Estamos en mantenimiento",
         "description": "Ahora mismo estamos realizando mantenimiento para mejorar tu experiencia en BNBexplorer. Vuelve en unos minutos e inténtalo de nuevo.",
         "retryButton": "Reintentar"
-    }
+    },
+    "Desayuno": "Desayuno",
+    "Comida": "Comida",
+    "Cena": "Cena",
+    "Qué hacer": "Qué hacer",
+    "Cómo llegar a {name}": "Cómo llegar a {name}",
+    "Día {number}": "Día {number}",
+    "Días del itinerario": "Días del itinerario"
 }
