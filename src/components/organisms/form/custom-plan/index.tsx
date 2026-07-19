@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm, Controller, SubmitHandler } from "react-hook-form";
+import { useForm, Controller, SubmitHandler, useWatch } from "react-hook-form";
 import { useTranslations } from "next-intl";
 import { useLoading } from "@/lib/context/LoadingContext";
 import Alert from "@/components/molecules/alert";
@@ -68,6 +68,8 @@ const ItineraryForm = ({
             transport: "",
         },
     });
+
+    const selectedTransport = useWatch({ control, name: "transport" });
 
     const onSubmit: SubmitHandler<FormValues> = async (data) => {
         openLoading();
@@ -221,7 +223,10 @@ const ItineraryForm = ({
                     <Typography component="h2" size="lg" className="font-bold">
                         {t("Tu plan personalizado")}
                     </Typography>
-                    <ItineraryTimeline itinerary={itinerary} />
+                    <ItineraryTimeline
+                        itinerary={itinerary}
+                        transport={selectedTransport}
+                    />
                 </div>
             )}
         </div>

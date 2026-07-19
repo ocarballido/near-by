@@ -5,19 +5,26 @@ import { useState } from "react";
 import clsx from "clsx";
 import { useTranslations } from "next-intl";
 import Typography from "@/components/atoms/typography";
+import ButtonLink from "@/components/molecules/button-link";
 import ItineraryTimelineItem from "@/components/molecules/itinerary-timeline-item";
+import { buildDayRouteUrl } from "@/utils/build-day-route-url";
 import type { Itinerary } from "@/types/itinerary";
 
 type ItineraryTimelineProps = {
     itinerary: Itinerary;
+    transport: string;
 };
 
-const ItineraryTimeline = ({ itinerary }: ItineraryTimelineProps) => {
+const ItineraryTimeline = ({
+    itinerary,
+    transport,
+}: ItineraryTimelineProps) => {
     const t = useTranslations();
     const [selectedDayIndex, setSelectedDayIndex] = useState(0);
 
     const hasMultipleDays = itinerary.days.length > 1;
     const selectedDay = itinerary.days[selectedDayIndex] ?? itinerary.days[0];
+    const dayRouteUrl = buildDayRouteUrl(selectedDay, transport);
 
     return (
         <div className="flex flex-col gap-4">
@@ -77,6 +84,7 @@ const ItineraryTimeline = ({ itinerary }: ItineraryTimelineProps) => {
                         ? `itinerary-day-tab-${selectedDay.dayNumber}`
                         : undefined
                 }
+                className="flex flex-col gap-4"
             >
                 <ol className="flex flex-col">
                     {selectedDay.blocks.map((block, index) => (
@@ -87,6 +95,17 @@ const ItineraryTimeline = ({ itinerary }: ItineraryTimelineProps) => {
                         />
                     ))}
                 </ol>
+
+                {dayRouteUrl && (
+                    <ButtonLink
+                        href={dayRouteUrl}
+                        target="_blank"
+                        label={t("Ver ruta completa en Google Maps")}
+                        color="primary"
+                        className="w-fit mx-auto -mt-4"
+                        size="md"
+                    />
+                )}
             </div>
 
             <Typography
