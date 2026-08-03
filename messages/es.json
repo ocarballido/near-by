@@ -1203,5 +1203,10 @@
     "Cómo llegar a {name}": "Cómo llegar a {name}",
     "Día {number}": "Día {number}",
     "Días del itinerario": "Días del itinerario",
-    "Ver ruta completa en Google Maps": "Ver en Google Maps"
+    "Ver ruta completa en Google Maps": "Ver en Google Maps",
+    "visitsEmptyState": {
+        "emoji": "📣",
+        "title": "Aún no has recibido visitas",
+        "description": "Comparte el enlace de tu guía con tus huéspedes para que empiecen a usarla."
+    }
 }
