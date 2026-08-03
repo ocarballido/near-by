@@ -1203,5 +1203,10 @@
     "Cómo llegar a {name}": "Itinéraire vers {name}",
     "Día {number}": "Jour {number}",
     "Días del itinerario": "Jours de l'itinéraire",
-    "Ver ruta completa en Google Maps": "Afficher sur Google Maps"
+    "Ver ruta completa en Google Maps": "Afficher sur Google Maps",
+    "visitsEmptyState": {
+        "emoji": "📣",
+        "title": "Vous n'avez pas encore reçu de visites",
+        "description": "Partagez le lien de votre guide avec vos invités pour qu'ils commencent à l'utiliser."
+    }
 }
