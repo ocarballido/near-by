@@ -11,6 +11,7 @@ const ALLOWED_EVENTS: ReadonlySet<EventName> = new Set([
     "property_deleted",
     "create_property_failed",
     "create_property_abandoned",
+    "wow_modal_dismissed",
 
     // ✅ Feedback
     "feedback_opened",

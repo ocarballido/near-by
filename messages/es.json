@@ -622,6 +622,13 @@
     "addressHelperSelected": "Usaremos esta ubicación para recomendar lugares cercanos. No se muestra públicamente.",
     "addressHelperError": "No se pudieron cargar sugerencias de dirección.",
     "addressChange": "Cambiar dirección",
+    "addressChangeWarning": {
+        "title": "Has cambiado la dirección",
+        "description": "Los lugares recomendados que ya tienes se generaron con la dirección anterior y podrían dejar de ser precisos con la nueva ubicación.",
+        "pregunta": "¿Qué quieres hacer con ellos?",
+        "deleteButton": "Eliminarlos",
+        "keepButton": "Mantenerlos"
+    },
     "feedback": {
         "title": "Queremos escucharte",
         "subtitle": "Esto no es soporte. Es para mejorar la app contigo.",
