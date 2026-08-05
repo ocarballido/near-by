@@ -1,85 +1,68 @@
-'use client';
+"use client";
 /// <reference types="google.maps" />
 
-import TextField from '@/components/molecules/text-field';
-import PlaceAutocompleteField from '@/components/molecules/place-autocomplete';
+import PlaceAutocompleteField from "@/components/molecules/place-autocomplete";
 
-import type { SelectedPlace } from '@/components/molecules/place-autocomplete';
+import type { SelectedPlace } from "@/components/molecules/place-autocomplete";
 
 type Props = {
-	t: (key: string) => string;
-	locale: string;
+    t: (key: string) => string;
+    locale: string;
 
-	isEdit: boolean;
+    error: boolean;
+    helperTextIdle: string;
+    helperTextSelected?: string;
+    helperTextError: string;
 
-	// Create mode widgets
-	error: boolean;
-	helperTextIdle: string;
-	helperTextSelected?: string;
-	helperTextError: string;
+    onSelect: (p: SelectedPlace) => void;
+    onClearSelection: () => void;
 
-	onSelect: (p: SelectedPlace) => void;
-	onClearSelection: () => void;
+    // Estado controlado desde el padre — refleja si hay una dirección
+    // seleccionada ahora mismo (true en edición al montar, false en creación).
+    // undefined preservaría el comportamiento interno del widget, pero ya
+    // no lo necesitamos: ambos modos pasan siempre un valor explícito.
+    isSelected: boolean;
+    selectedValue: string;
 
-	// Values for edit display
-	addressValue: string;
-
-	// Hidden input props (from RHF register)
-	addressRegisterProps: React.InputHTMLAttributes<HTMLInputElement>;
-	latRegisterProps: React.InputHTMLAttributes<HTMLInputElement>;
-	lngRegisterProps: React.InputHTMLAttributes<HTMLInputElement>;
+    addressRegisterProps: React.InputHTMLAttributes<HTMLInputElement>;
+    latRegisterProps: React.InputHTMLAttributes<HTMLInputElement>;
+    lngRegisterProps: React.InputHTMLAttributes<HTMLInputElement>;
 };
 
 export default function AddressSection({
-	t,
-	locale,
-	isEdit,
-	error,
-	helperTextIdle,
-	helperTextSelected = '',
-	helperTextError,
-	onSelect,
-	onClearSelection,
-	addressValue,
-	addressRegisterProps,
-	latRegisterProps,
-	lngRegisterProps,
+    t,
+    locale,
+    error,
+    helperTextIdle,
+    helperTextSelected = "",
+    helperTextError,
+    onSelect,
+    onClearSelection,
+    isSelected,
+    selectedValue,
+    addressRegisterProps,
+    latRegisterProps,
+    lngRegisterProps,
 }: Props) {
-	if (isEdit) {
-		return (
-			<>
-				<TextField
-					label={t('Dirección *')}
-					id="address_display"
-					value={addressValue}
-					disabled
-				/>
+    return (
+        <>
+            <PlaceAutocompleteField
+                label={t("Dirección *")}
+                placeholder={t("Dirección ejemplo")}
+                locale={locale}
+                error={error}
+                helperTextIdle={helperTextIdle}
+                helperTextSelected={helperTextSelected}
+                helperTextError={helperTextError}
+                onSelect={onSelect}
+                onClearSelection={onClearSelection}
+                isSelected={isSelected}
+                selectedValue={selectedValue}
+            />
 
-				{/* Mantener address/lat/lng en RHF para submit */}
-				<input type="hidden" {...addressRegisterProps} />
-				<input type="hidden" {...latRegisterProps} />
-				<input type="hidden" {...lngRegisterProps} />
-			</>
-		);
-	}
-
-	return (
-		<>
-			<PlaceAutocompleteField
-				label={t('Dirección *')}
-				placeholder={t('Dirección ejemplo')}
-				locale={locale}
-				error={error}
-				helperTextIdle={helperTextIdle}
-				helperTextSelected={helperTextSelected}
-				helperTextError={helperTextError}
-				onSelect={onSelect}
-				onClearSelection={onClearSelection}
-			/>
-
-			<input type="hidden" {...addressRegisterProps} />
-			<input type="hidden" {...latRegisterProps} />
-			<input type="hidden" {...lngRegisterProps} />
-		</>
-	);
+            <input type="hidden" {...addressRegisterProps} />
+            <input type="hidden" {...latRegisterProps} />
+            <input type="hidden" {...lngRegisterProps} />
+        </>
+    );
 }

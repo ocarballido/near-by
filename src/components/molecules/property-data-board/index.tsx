@@ -68,11 +68,18 @@ const PropertyDataBoard = ({
             </div>
 
             <div className="flex gap-1 justify-end flex-1">
-                <ButtonLink
+                {/* <ButtonLink
                     label=""
                     href={`/app/properties/edit/${propertyId}?from=manage`}
                     color="secondary"
                     className="px-2.5! h-10 w-full sm:w-fit"
+                    iconLeft={<IconEdit size={20} />}
+                /> */}
+                <ButtonLink
+                    label={t("Editar")}
+                    href={`/app/properties/edit/${propertyId}?from=manage`}
+                    color="secondary"
+                    className="w-full h-10 sm:w-fit"
                     iconLeft={<IconEdit size={20} />}
                 />
                 <ButtonLink

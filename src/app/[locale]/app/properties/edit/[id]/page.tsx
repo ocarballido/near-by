@@ -1,3 +1,4 @@
+// app/[locale]/app/edit/[id]/page.tsx
 import { notFound, redirect } from "next/navigation";
 import AddPropertyForm from "@/components/organisms/form/property";
 import AppContentTemplate from "@/components/templates/app-content";
@@ -21,7 +22,6 @@ export default async function EditProperty({
     const { id: propertyId } = await params;
     const { from } = await searchParams;
 
-    // 1) Auth (SSR client)
     const supabase = await createSSRClient();
     const {
         data: { user },
@@ -32,7 +32,6 @@ export default async function EditProperty({
         redirect("/auth/login");
     }
 
-    // 2) Query property (SSR client => RLS applies)
     const { data: property, error: propErr } = await supabase
         .from("properties")
         .select(
@@ -42,13 +41,24 @@ export default async function EditProperty({
         .single()
         .overrideTypes<FullProperty, { merge: false }>();
 
-    // With RLS, if it's not yours you'll get 0 rows => notFound
     if (propErr || !property?.id) notFound();
 
-    // (Optional) extra guard, harmless, but no longer required for security
-    // if (property.user_id !== user.id) redirect('/app/properties');
+    // Nº de localizaciones existentes (solo necesitamos saber si hay >0, no listarlas)
+    const { count: locationsCount, error: locationsCountErr } = await supabase
+        .from("property_data")
+        .select("id", { count: "exact", head: true })
+        .eq("property_id", propertyId)
+        .eq("type", "location");
 
-    // 3) initialValues para el form
+    if (locationsCountErr) {
+        console.error(
+            "EditProperty: failed to count locations",
+            locationsCountErr,
+        );
+    }
+
+    const hasLocations = (locationsCount ?? 0) > 0;
+
     const initialValues = {
         name: property.name ?? "",
         address: property.address ?? "",
@@ -68,6 +78,7 @@ export default async function EditProperty({
                 <AddPropertyForm
                     propertyId={propertyId}
                     initialValues={initialValues}
+                    hasLocations={hasLocations}
                     redirectAfter={
                         from === "properties" ? "/app/properties" : undefined
                     }
