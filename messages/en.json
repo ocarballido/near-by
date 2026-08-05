@@ -617,6 +617,13 @@
     "addressHelperSelected": "We’ll use this location to recommend nearby places. It won’t be shown publicly.",
     "addressHelperError": "Address suggestions could not be loaded.",
     "addressChange": "Change address",
+    "addressChangeWarning": {
+        "title": "You've changed the address",
+        "description": "The recommended places you already have were generated using the previous address and may no longer be accurate for the new location.",
+        "pregunta": "What would you like to do with them?",
+        "deleteButton": "Delete them",
+        "keepButton": "Keep them"
+    },
     "feedback": {
         "title": "We want to hear you",
         "subtitle": "This isn’t support. It helps us improve the app with you.",
