@@ -49,11 +49,11 @@ export default function Home() {
     const t = useTranslations();
 
     return (
-        <div className="roboto p-4">
-            <LandingAppBar />
+        <div className="roboto">
+            <LandingAppBar className="mx-4 mt-4" />
             <section
                 aria-labelledby="BNB-explorer"
-                className="bg-primary-200 rounded-lg mt-2 px-0 py-12 md:py-18 min-h-[600px] md:min-h-[800px] lg:min-h-[900px] relative flex"
+                className="bg-primary-200 rounded-lg mt-2 px-0 py-12 md:py-18 min-h-[600px] md:min-h-[800px] lg:min-h-[900px] relative flex mx-4"
             >
                 <div className="absolute inset-0 z-0 rounded-lg overflow-hidden">
                     <HomeCarousel />
@@ -301,7 +301,7 @@ export default function Home() {
             </section>
             <section
                 aria-labelledby="features"
-                className="flex flex-col gap-8 rounded-lg mt-2 px-0 py-12 items-center max-w-[1400px] ml-auto mr-auto bg-white"
+                className="flex flex-col gap-8 rounded-lg mt-2 px-0 py-12 items-center max-w-[1400px] xl:ml-auto xl:mr-auto mx-4 bg-white"
             >
                 <h2
                     id="features"
