@@ -1,6 +1,6 @@
 // supabase/functions/weekly-digest/index.ts
 
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { withSupabase } from "npm:@supabase/server@^1";
 import { sendWeeklyDigest } from "../_shared/send-email.ts";
 
 type DenoEnv = {
@@ -471,182 +471,195 @@ function getSeasonalTip(
     };
 }
 
-Deno.serve(async (req: Request) => {
-    try {
-        if (req.method !== "POST") {
-            return new Response(
-                JSON.stringify({ error: "Method not allowed" }),
-                {
-                    status: 405,
-                    headers: { "Content-Type": "application/json" },
-                },
-            );
-        }
-
-        const testMode = Deno.env.get("EMAIL_TEST_MODE") === "true";
-        const testWhitelist = (Deno.env.get("EMAIL_TEST_WHITELIST") ?? "")
-            .split(",")
-            .map((e: string) => e.trim())
-            .filter(Boolean);
-        const maxEmails = parseInt(
-            Deno.env.get("MAX_EMAILS_PER_RUN") ?? "50",
-            10,
-        );
-
-        const supabase = createClient(
-            Deno.env.get("SUPABASE_URL")!,
-            Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-        );
-
-        const now = new Date();
-        const isMonday = now.getDay() === 1;
-
-        const { data: users, error } = await supabase.rpc(
-            "get_users_for_weekly_digest",
-        );
-
-        if (error) {
-            console.error("Error fetching users:", error);
-            return new Response(JSON.stringify({ error: error.message }), {
-                status: 500,
-                headers: { "Content-Type": "application/json" },
-            });
-        }
-
-        let emailsSent = 0;
-        const results: object[] = [];
-
-        for (const user of users ?? []) {
-            if (emailsSent >= maxEmails) break;
-
-            // Segmentación de frecuencia
-            const isWeekly = user.frequency === "weekly";
-            const isMonthly = user.frequency === "monthly";
-
-            // Semanal: solo lunes
-            if (isWeekly && !isMonday) continue;
-
-            // Mensual: solo primer lunes del mes
-            if (isMonthly && (!isMonday || now.getDate() > 7)) continue;
-
-            // Test mode
-            if (testMode && !testWhitelist.includes(user.email)) {
-                results.push({
-                    skipped: true,
-                    reason: "not_in_whitelist",
-                    email: user.email,
-                });
-                continue;
-            }
-
-            // Verificar si ya se envió esta semana
-            const weekStart = new Date(now);
-            const day = now.getDay();
-            // Si es domingo (0), retrocedemos 6 días para llegar al lunes anterior
-            const diff = day === 0 ? -6 : 1 - day;
-            weekStart.setDate(now.getDate() + diff);
-            weekStart.setHours(0, 0, 0, 0);
-
-            const { data: alreadySent, error: alreadySentError } =
-                await supabase
-                    .from("email_sequence_log")
-                    .select("id")
-                    .eq("user_id", user.user_id)
-                    .eq("type", "weekly_digest")
-                    .gte("sent_at", weekStart.toISOString())
-                    .maybeSingle();
-
-            if (alreadySentError) {
-                console.error(
-                    "[weekly-digest] Error checking already_sent_this_week for",
-                    user.email,
-                    ":",
-                    alreadySentError,
-                );
-            }
-
-            if (alreadySent) {
-                results.push({
-                    skipped: true,
-                    reason: "already_sent_this_week",
-                    email: user.email,
-                });
-                continue;
-            }
-
-            // Primero obtenemos las propiedades del usuario
-            const { data: userProperties } = await supabase
-                .from("properties")
-                .select("id, name")
-                .eq("user_id", user.user_id);
-
-            const propertyIds = (userProperties ?? []).map(
-                (p: { id: string; name: string }) => p.id,
-            );
-
-            // Luego las visitas de esas propiedades esta semana
-            const { data: visits } = await supabase
-                .from("property_visits")
-                .select("property_id")
-                .in("property_id", propertyIds)
-                .gte("visited_at", weekStart.toISOString());
-
-            // Agrupar visitas por propiedad
-            const visitMap: Record<string, { name: string; count: number }> =
-                {};
-            for (const v of visits ?? []) {
-                if (!v.property_id) continue;
-                const prop = userProperties?.find(
-                    (p: { id: string; name: string }) => p.id === v.property_id,
-                );
-                const name = prop?.name ?? "Propiedad";
-                if (!visitMap[v.property_id]) {
-                    visitMap[v.property_id] = { name, count: 0 };
+Deno.serve(
+    withSupabase(
+        { auth: ["secret:cron", "secret"] },
+        async (req: Request, ctx) => {
+            try {
+                if (req.method !== "POST") {
+                    return new Response(
+                        JSON.stringify({ error: "Method not allowed" }),
+                        {
+                            status: 405,
+                            headers: { "Content-Type": "application/json" },
+                        },
+                    );
                 }
-                visitMap[v.property_id].count++;
+
+                const testMode = Deno.env.get("EMAIL_TEST_MODE") === "true";
+                const testWhitelist = (
+                    Deno.env.get("EMAIL_TEST_WHITELIST") ?? ""
+                )
+                    .split(",")
+                    .map((e: string) => e.trim())
+                    .filter(Boolean);
+                const maxEmails = parseInt(
+                    Deno.env.get("MAX_EMAILS_PER_RUN") ?? "50",
+                    10,
+                );
+
+                const supabase = ctx.supabaseAdmin;
+
+                const now = new Date();
+                const isMonday = now.getDay() === 1;
+
+                const { data: users, error } = await supabase.rpc(
+                    "get_users_for_weekly_digest",
+                );
+
+                if (error) {
+                    console.error("Error fetching users:", error);
+                    return new Response(
+                        JSON.stringify({ error: error.message }),
+                        {
+                            status: 500,
+                            headers: { "Content-Type": "application/json" },
+                        },
+                    );
+                }
+
+                let emailsSent = 0;
+                const results: object[] = [];
+
+                for (const user of users ?? []) {
+                    if (emailsSent >= maxEmails) break;
+
+                    // Segmentación de frecuencia
+                    const isWeekly = user.frequency === "weekly";
+                    const isMonthly = user.frequency === "monthly";
+
+                    // Semanal: solo lunes
+                    if (isWeekly && !isMonday) continue;
+
+                    // Mensual: solo primer lunes del mes
+                    if (isMonthly && (!isMonday || now.getDate() > 7)) continue;
+
+                    // Test mode
+                    if (testMode && !testWhitelist.includes(user.email)) {
+                        results.push({
+                            skipped: true,
+                            reason: "not_in_whitelist",
+                            email: user.email,
+                        });
+                        continue;
+                    }
+
+                    // Verificar si ya se envió esta semana
+                    const weekStart = new Date(now);
+                    const day = now.getDay();
+                    // Si es domingo (0), retrocedemos 6 días para llegar al lunes anterior
+                    const diff = day === 0 ? -6 : 1 - day;
+                    weekStart.setDate(now.getDate() + diff);
+                    weekStart.setHours(0, 0, 0, 0);
+
+                    const { data: alreadySent, error: alreadySentError } =
+                        await supabase
+                            .from("email_sequence_log")
+                            .select("id")
+                            .eq("user_id", user.user_id)
+                            .eq("type", "weekly_digest")
+                            .gte("sent_at", weekStart.toISOString())
+                            .maybeSingle();
+
+                    if (alreadySentError) {
+                        console.error(
+                            "[weekly-digest] Error checking already_sent_this_week for",
+                            user.email,
+                            ":",
+                            alreadySentError,
+                        );
+                    }
+
+                    if (alreadySent) {
+                        results.push({
+                            skipped: true,
+                            reason: "already_sent_this_week",
+                            email: user.email,
+                        });
+                        continue;
+                    }
+
+                    // Primero obtenemos las propiedades del usuario
+                    const { data: userProperties } = await supabase
+                        .from("properties")
+                        .select("id, name")
+                        .eq("user_id", user.user_id);
+
+                    const propertyIds = (userProperties ?? []).map(
+                        (p: { id: string; name: string }) => p.id,
+                    );
+
+                    // Luego las visitas de esas propiedades esta semana
+                    const { data: visits } = await supabase
+                        .from("property_visits")
+                        .select("property_id")
+                        .in("property_id", propertyIds)
+                        .gte("visited_at", weekStart.toISOString());
+
+                    // Agrupar visitas por propiedad
+                    const visitMap: Record<
+                        string,
+                        { name: string; count: number }
+                    > = {};
+                    for (const v of visits ?? []) {
+                        if (!v.property_id) continue;
+                        const prop = userProperties?.find(
+                            (p: { id: string; name: string }) =>
+                                p.id === v.property_id,
+                        );
+                        const name = prop?.name ?? "Propiedad";
+                        if (!visitMap[v.property_id]) {
+                            visitMap[v.property_id] = { name, count: 0 };
+                        }
+                        visitMap[v.property_id].count++;
+                    }
+
+                    const propertyVisits = Object.values(visitMap).map((p) => ({
+                        property_name: p.name,
+                        visit_count: p.count,
+                    }));
+
+                    const locale: Locale =
+                        user.locale === "es" ||
+                        user.locale === "en" ||
+                        user.locale === "fr"
+                            ? user.locale
+                            : "en";
+                    const tip = getSeasonalTip(now, locale);
+
+                    const result = await sendWeeklyDigest({
+                        userId: user.user_id,
+                        email: user.email,
+                        locale,
+                        propertyVisits,
+                        tip,
+                    });
+
+                    results.push({ ...result, email: user.email });
+                    if (result.sent) emailsSent++;
+                }
+
+                return new Response(
+                    JSON.stringify({ ok: true, emailsSent, testMode, results }),
+                    {
+                        status: 200,
+                        headers: { "Content-Type": "application/json" },
+                    },
+                );
+            } catch (error: unknown) {
+                let message = "Unknown error";
+                if (error && typeof error === "object" && "message" in error) {
+                    const maybeError = error as { message?: unknown };
+                    message =
+                        typeof maybeError.message === "string"
+                            ? maybeError.message
+                            : "Unknown error";
+                }
+                return new Response(JSON.stringify({ error: message }), {
+                    status: 500,
+                    headers: { "Content-Type": "application/json" },
+                });
             }
-
-            const propertyVisits = Object.values(visitMap).map((p) => ({
-                property_name: p.name,
-                visit_count: p.count,
-            }));
-
-            const locale: Locale =
-                user.locale === "es" ||
-                user.locale === "en" ||
-                user.locale === "fr"
-                    ? user.locale
-                    : "en";
-            const tip = getSeasonalTip(now, locale);
-
-            const result = await sendWeeklyDigest({
-                userId: user.user_id,
-                email: user.email,
-                locale,
-                propertyVisits,
-                tip,
-            });
-
-            results.push({ ...result, email: user.email });
-            if (result.sent) emailsSent++;
-        }
-
-        return new Response(
-            JSON.stringify({ ok: true, emailsSent, testMode, results }),
-            { status: 200, headers: { "Content-Type": "application/json" } },
-        );
-    } catch (error: unknown) {
-        let message = "Unknown error";
-        if (error && typeof error === "object" && "message" in error) {
-            const maybeError = error as { message?: unknown };
-            message =
-                typeof maybeError.message === "string"
-                    ? maybeError.message
-                    : "Unknown error";
-        }
-        return new Response(JSON.stringify({ error: message }), {
-            status: 500,
-            headers: { "Content-Type": "application/json" },
-        });
-    }
-});
+        },
+    ),
+);
