@@ -53,10 +53,21 @@ const HousePublic = ({
 
     return (
         <div
-            className={`flex items-end rounded-xl overflow-hidden px-2 pb-2 pt-[180px] relative min-h-[400px] transition-all [&>.content]:p-3 [&>.content]:rounded-lg shadow-xs hover:shadow-2xl hover:px-0 hover:pb-0 hover:pt-[172px] hover:[&>.content]:p-5 hover:[&>.content]:rounded-none bg-gradient-to-tr from-[#ffa263] to-[#6cffc9] ${className}`}
+            className={`group flex flex-col justify-end rounded-xl overflow-hidden relative min-h-[400px] pt-[180px] shadow-xs bg-gradient-to-tr from-[#ffa263] to-[#6cffc9] ${className}`}
         >
+            <Image
+                className="absolute inset-0 object-cover z-0"
+                src={
+                    image === null ? "/static/img/header-trimed-2x.webp" : image
+                }
+                fill={true}
+                placeholder="blur"
+                blurDataURL={grayDataUrl}
+                alt={name}
+            />
+
             {(mustSee || featured) && (
-                <div className="flex p-1 items-center absolute z-1 rounded-full right-2 top-2 gap-1">
+                <div className="flex p-1 items-center absolute z-30 rounded-full right-2 top-2 gap-1">
                     {mustSee && (
                         <div className="p-1.5 rounded-full w-fit h-fit bg-white shadow-xs">
                             <IconModeHeat color="error" size={18} />
@@ -69,90 +80,107 @@ const HousePublic = ({
                     )}
                 </div>
             )}
-            <div className="content transition-all flex justify-end gap-3 flex-col relative w-full bg-white z-5">
-                <div className="flex gap-2">
-                    <Typography component="h5">{name}</Typography>
-                </div>
-                <div className="flex gap-2 items-center">
-                    <span className="grow-0 p-1.5 bg-primary-100 rounded-full h-fit">
-                        <IconLocationOn size={18} color="primary" />
-                    </span>
-                    <Typography size="sm" weight="medium" color="text-gray-600">
-                        {address}
-                    </Typography>
-                </div>
-                {(checkInDate ||
-                    checkInTime ||
-                    checkOutDate ||
-                    checkInTime) && (
-                    <div className="flex gap-2 flex-wrap">
-                        {(checkInDate || checkInTime) && (
-                            <div className="flex gap-2 flex-1 items-center">
-                                <span className="grow-0 p-1.5 bg-primary-100 rounded-full h-fit">
-                                    <IconCheckIn size={18} color="primary" />
-                                </span>
-                                <Typography
-                                    size="sm"
-                                    color="text-gray-600"
-                                    weight="medium"
-                                >
-                                    {checkInDate && (
-                                        <span className="mr-2">
-                                            {formatDate(checkInDate, locale)}
-                                        </span>
-                                    )}
-                                    {checkInTime && (
-                                        <span>
-                                            {formatTime(checkInTime, locale)}
-                                        </span>
-                                    )}
-                                </Typography>
-                            </div>
-                        )}
-                        {(checkOutDate || checkInTime) && (
-                            <div className="flex gap-2 flex-1 items-center">
-                                <span className="grow-0 p-1.5 bg-primary-100 rounded-full h-fit">
-                                    <IconCheckOut size={18} color="primary" />
-                                </span>
-                                <Typography
-                                    size="sm"
-                                    weight="medium"
-                                    color="text-gray-600"
-                                >
-                                    {checkOutDate && (
-                                        <span className="mr-2">
-                                            {formatDate(checkOutDate, locale)}
-                                        </span>
-                                    )}
-                                    {checkOutTime && (
-                                        <span>
-                                            {formatTime(checkOutTime, locale)}
-                                        </span>
-                                    )}
-                                </Typography>
-                            </div>
-                        )}
+
+            <div className="relative z-10 w-full">
+                <div className="absolute inset-1 bg-white rounded-lg transition-all duration-150 group-hover:inset-0 group-hover:rounded-none" />
+
+                <div className="content relative z-10 p-5 flex flex-col gap-3">
+                    <div className="flex gap-2">
+                        <Typography component="h5">{name}</Typography>
                     </div>
-                )}
-                <ButtonLink
-                    className="w-full"
-                    color="primary"
-                    iconLeft={<IconDirections />}
-                    label={t("Como llegar")}
-                    href={`${GOOGLE_MAPS_DIRECTION_URL}${latitude},${longitude}`}
-                    target="_blank"
-                />
+                    <div className="flex gap-2 items-center">
+                        <span className="grow-0 p-1.5 bg-primary-100 rounded-full h-fit">
+                            <IconLocationOn size={18} color="primary" />
+                        </span>
+                        <Typography
+                            size="sm"
+                            weight="medium"
+                            color="text-gray-600"
+                        >
+                            {address}
+                        </Typography>
+                    </div>
+                    {(checkInDate ||
+                        checkInTime ||
+                        checkOutDate ||
+                        checkInTime) && (
+                        <div className="flex gap-2 flex-wrap">
+                            {(checkInDate || checkInTime) && (
+                                <div className="flex gap-2 flex-1 items-center">
+                                    <span className="grow-0 p-1.5 bg-primary-100 rounded-full h-fit">
+                                        <IconCheckIn
+                                            size={18}
+                                            color="primary"
+                                        />
+                                    </span>
+                                    <Typography
+                                        size="sm"
+                                        color="text-gray-600"
+                                        weight="medium"
+                                    >
+                                        {checkInDate && (
+                                            <span className="mr-2">
+                                                {formatDate(
+                                                    checkInDate,
+                                                    locale,
+                                                )}
+                                            </span>
+                                        )}
+                                        {checkInTime && (
+                                            <span>
+                                                {formatTime(
+                                                    checkInTime,
+                                                    locale,
+                                                )}
+                                            </span>
+                                        )}
+                                    </Typography>
+                                </div>
+                            )}
+                            {(checkOutDate || checkInTime) && (
+                                <div className="flex gap-2 flex-1 items-center">
+                                    <span className="grow-0 p-1.5 bg-primary-100 rounded-full h-fit">
+                                        <IconCheckOut
+                                            size={18}
+                                            color="primary"
+                                        />
+                                    </span>
+                                    <Typography
+                                        size="sm"
+                                        weight="medium"
+                                        color="text-gray-600"
+                                    >
+                                        {checkOutDate && (
+                                            <span className="mr-2">
+                                                {formatDate(
+                                                    checkOutDate,
+                                                    locale,
+                                                )}
+                                            </span>
+                                        )}
+                                        {checkOutTime && (
+                                            <span>
+                                                {formatTime(
+                                                    checkOutTime,
+                                                    locale,
+                                                )}
+                                            </span>
+                                        )}
+                                    </Typography>
+                                </div>
+                            )}
+                        </div>
+                    )}
+                    <ButtonLink
+                        className="w-full"
+                        color="primary"
+                        iconLeft={<IconDirections />}
+                        label={t("Como llegar")}
+                        href={`${GOOGLE_MAPS_DIRECTION_URL}${latitude},${longitude}`}
+                        target="_blank"
+                    />
+                </div>
             </div>
-            <Image
-                className="object-cover z-0"
-                src={
-                    image === null ? "/static/img/header-trimed-2x.webp" : image
-                }
-                fill={true}
-                placeholder="blur"
-                blurDataURL={grayDataUrl}
-                alt={name}
-            />
         </div>
     );
 };

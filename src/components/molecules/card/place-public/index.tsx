@@ -151,10 +151,19 @@ const PlacePublic = ({
 
     return (
         <div
-            className={`flex items-end rounded-xl overflow-hidden px-2 pb-2 pt-[180px] relative min-h-[400px] transition-all [&>.content]:p-3 [&>.content]:rounded-lg shadow-xs hover:px-0 hover:pb-0 hover:pt-[172px] hover:[&>.content]:p-5 hover:[&>.content]:rounded-none bg-gradient-to-tr from-[#ffa263] to-[#6cffc9]`}
+            className={`group flex flex-col justify-end rounded-xl overflow-hidden relative min-h-[400px] pt-[180px] shadow-xs bg-gradient-to-tr from-[#ffa263] to-[#6cffc9]`}
         >
+            <Image
+                className="absolute inset-0 object-cover z-0"
+                src={src}
+                fill={true}
+                placeholder="blur"
+                blurDataURL={grayDataUrl}
+                alt={name}
+            />
+
             {(mustSee || featured) && (
-                <div className="flex p-1 items-center absolute z-1 rounded-full right-1 left-1 top-1 justify-between gap-1">
+                <div className="flex p-1 items-center absolute z-30 rounded-full right-1 left-1 top-1 justify-between gap-1">
                     {showBadge ? (
                         <div className="px-0.5 pe-2 py-0.5 flex gap-1.5 items-center rounded-full w-fit h-fit bg-white shadow-xs">
                             <div className="flex justify-center items-center p-1.5 rounded-full bg-primary-400">
@@ -183,49 +192,50 @@ const PlacePublic = ({
                     </div>
                 </div>
             )}
-            <div className="content transition-all flex justify-end gap-2 flex-col relative w-full bg-white z-5">
-                <div className="flex gap-2">
-                    <Typography component="h5">{name}</Typography>
-                </div>
-                <div className="flex gap-1.5 items-center">
-                    <span className="grow-0 p-1.5 bg-primary-100 rounded-full h-fit">
-                        <IconLocationOn color="primary" size={18} />
-                    </span>
-                    <Typography size="sm" weight="medium" color="text-gray-600">
-                        {address}
-                    </Typography>
-                </div>
-                {description && (
-                    <div className="flex gap-1.5">
+
+            <div className="relative z-10 w-full">
+                <div className="absolute inset-1 bg-white rounded-lg transition-all duration-150 group-hover:inset-0 group-hover:rounded-none" />
+
+                <div className="content relative z-10 p-5 flex flex-col gap-2">
+                    <div className="flex gap-2">
+                        <Typography component="h5">{name}</Typography>
+                    </div>
+                    <div className="flex gap-1.5 items-center">
                         <span className="grow-0 p-1.5 bg-primary-100 rounded-full h-fit">
-                            <IconInfo color="primary" size={18} />
+                            <IconLocationOn color="primary" size={18} />
                         </span>
                         <Typography
-                            weight="normal"
                             size="sm"
-                            color="text-gray-500"
+                            weight="medium"
+                            color="text-gray-600"
                         >
-                            {description}
+                            {address}
                         </Typography>
                     </div>
-                )}
-                <ButtonLink
-                    className="w-full mt-2"
-                    color="primary"
-                    iconLeft={<IconDirections />}
-                    label={t("Como llegar")}
-                    href={`${GOOGLE_MAPS_DIRECTION_URL}${latitude},${longitude}`}
-                    target="_blank"
-                />
+                    {description && (
+                        <div className="flex gap-1.5">
+                            <span className="grow-0 p-1.5 bg-primary-100 rounded-full h-fit">
+                                <IconInfo color="primary" size={18} />
+                            </span>
+                            <Typography
+                                weight="normal"
+                                size="sm"
+                                color="text-gray-500"
+                            >
+                                {description}
+                            </Typography>
+                        </div>
+                    )}
+                    <ButtonLink
+                        className="w-full mt-2"
+                        color="primary"
+                        iconLeft={<IconDirections />}
+                        label={t("Como llegar")}
+                        href={`${GOOGLE_MAPS_DIRECTION_URL}${latitude},${longitude}`}
+                        target="_blank"
+                    />
+                </div>
             </div>
-            <Image
-                className="object-cover z-0"
-                src={src}
-                fill={true}
-                placeholder="blur"
-                blurDataURL={grayDataUrl}
-                alt={name}
-            />
         </div>
     );
 };

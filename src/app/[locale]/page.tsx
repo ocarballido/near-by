@@ -318,7 +318,7 @@ export default function Home() {
             <section className="px-4 max-w-7xl w-full">
                 <div
                     aria-labelledby="features"
-                    className="flex flex-col gap-8 rounded-lg px-0 py-12 items-center max-w-5xl ml-auto mr-auto bg-white"
+                    className="flex flex-col gap-8 rounded-lg px-0 py-12 items-center ml-auto mr-auto bg-white"
                 >
                     <h2
                         id="features"
@@ -547,7 +547,7 @@ export default function Home() {
                     />
                 </div>
 
-                <div className="flex flex-col gap-8 max-w-[400px] md:max-w-sm items-center text-center relative w-full mr-0 py-6">
+                <div className="flex flex-col gap-2 max-w-[400px] md:max-w-sm items-center text-center relative w-full mr-0 py-6">
                     {/* <div className="absolute -inset-1 z-[-1] rounded-md bg-gradient-to-tr from-[#FF6B06] to-[#31C48D] blur-xl opacity-30"></div> */}
                     <Feature
                         color="gradient"
@@ -566,14 +566,14 @@ export default function Home() {
             <section className="px-4 w-full">
                 <div
                     aria-labelledby="benefits"
-                    className="flex flex-col gap-8 rounded-lg px-4 py-12 items-center max-w-5xl w-full mx-auto bg-gray-50 relative"
+                    className="flex flex-col gap-8 rounded-xl px-4 py-12 items-center max-w-7xl bg-white w-full mx-auto relative"
                 >
-                    <Image
+                    {/* <Image
                         src={blur}
                         fill={true}
                         alt="Blur image"
                         className="z-0 object-cover md:object-fill md:h-full md:w-auto"
-                    />
+                    /> */}
                     <div className="relative z-1 flex flex-col gap-8">
                         <h2
                             id="benefits"
@@ -584,14 +584,14 @@ export default function Home() {
                         <h3 className="font-heading font-medium text-xl md:text-2xl max-w-[800px] ml-auto mr-auto px-4 text-center">
                             {t("page_home.section_benefits.subtitle")}
                         </h3>
-                        <div className="flex flex-col items-center rounded-xl bg-white overflow-hidden shadow-2xl/20">
-                            <div className="flex items-center p-4 gap-4 font-bold w-full bg-primary-400">
-                                <p className="w-full text-xl text-white">
+                        <div className="flex flex-col items-center rounded-xl bg-white overflow-hidden border border-gray-100 shadow-xs">
+                            <div className="flex items-center p-4 gap-4 font-bold w-full border-b border-gray-100 bg-primary-50">
+                                <p className="w-full text-xl">
                                     {t(
                                         "page_home.section_benefits.tableHeading1",
                                     )}
                                 </p>
-                                <p className="w-full text-xl text-white">
+                                <p className="w-full text-xl">
                                     {t(
                                         "page_home.section_benefits.tableHeading2",
                                     )}
@@ -611,7 +611,7 @@ export default function Home() {
                                     )}
                                 />
                             </div>
-                            <div className="flex w-full items-center p-4 gap-4 font-body bg-primary-50">
+                            <div className="flex w-full items-center p-4 gap-4 font-body border-b border-t border-gray-100">
                                 <ListItem
                                     icon={<IconCancel color="error" />}
                                     label={t(
@@ -639,7 +639,7 @@ export default function Home() {
                                     )}
                                 />
                             </div>
-                            <div className="flex w-full items-center p-4 gap-4 font-body bg-primary-50">
+                            <div className="flex w-full items-center p-4 gap-4 font-body border-b border-t border-gray-100">
                                 <ListItem
                                     icon={<IconCancel color="error" />}
                                     label={t(
@@ -667,7 +667,7 @@ export default function Home() {
                                     )}
                                 />
                             </div>
-                            <div className="flex w-full items-center p-4 gap-4 font-body bg-primary-50">
+                            <div className="flex w-full items-center p-4 gap-4 font-body border-b border-t border-gray-100">
                                 <ListItem
                                     icon={<IconCancel color="error" />}
                                     label={t(
