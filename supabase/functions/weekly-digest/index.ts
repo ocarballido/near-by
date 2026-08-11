@@ -545,12 +545,8 @@ Deno.serve(
                     }
 
                     // Verificar si ya se envió esta semana
-                    const weekStart = new Date(now);
-                    const day = now.getDay();
-                    // Si es domingo (0), retrocedemos 6 días para llegar al lunes anterior
-                    const diff = day === 0 ? -6 : 1 - day;
-                    weekStart.setDate(now.getDate() + diff);
-                    weekStart.setHours(0, 0, 0, 0);
+                    const todayStart = new Date(now);
+                    todayStart.setHours(0, 0, 0, 0);
 
                     const { data: alreadySent, error: alreadySentError } =
                         await supabase
@@ -558,7 +554,7 @@ Deno.serve(
                             .select("id")
                             .eq("user_id", user.user_id)
                             .eq("type", "weekly_digest")
-                            .gte("sent_at", weekStart.toISOString())
+                            .gte("sent_at", todayStart.toISOString())
                             .maybeSingle();
 
                     if (alreadySentError) {
@@ -579,6 +575,10 @@ Deno.serve(
                         continue;
                     }
 
+                    const visitWindowStart = user.last_digest_sent_at
+                        ? new Date(user.last_digest_sent_at)
+                        : new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+
                     // Primero obtenemos las propiedades del usuario
                     const { data: userProperties } = await supabase
                         .from("properties")
@@ -589,12 +589,12 @@ Deno.serve(
                         (p: { id: string; name: string }) => p.id,
                     );
 
-                    // Luego las visitas de esas propiedades esta semana
+                    // Luego las visitas de esas propiedades en la ventana calculada
                     const { data: visits } = await supabase
                         .from("property_visits")
                         .select("property_id")
                         .in("property_id", propertyIds)
-                        .gte("visited_at", weekStart.toISOString());
+                        .gte("visited_at", visitWindowStart.toISOString());
 
                     // Agrupar visitas por propiedad
                     const visitMap: Record<
