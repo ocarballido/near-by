@@ -1,1 +1,1 @@
-select address from properties limit 5;
+select * from get_users_for_weekly_digest();

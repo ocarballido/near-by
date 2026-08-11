@@ -1,106 +1,106 @@
 // supabase/functions/send-sequence-email/templates/d1-weekly-digest.ts
 
-export type Locale = 'es' | 'en' | 'fr';
+export type Locale = "es" | "en" | "fr";
 
 type PropertyVisit = {
-	property_name: string;
-	visit_count: number;
+    property_name: string;
+    visit_count: number;
 };
 
 type Copy = {
-	subject: string;
-	preheader: string;
-	title: string;
-	body1: string;
-	visitsLabel: string;
-	noVisitsMessage: string;
-	tipTitle: string;
-	buttonLabel: string;
-	footerUnsubscribe: string;
-	footerIgnore: string;
+    subject: string;
+    preheader: string;
+    title: string;
+    body1: string;
+    visitsLabel: string;
+    noVisitsMessage: string;
+    tipTitle: string;
+    buttonLabel: string;
+    footerUnsubscribe: string;
+    footerIgnore: string;
 };
 
 const MESSAGES: Record<Locale, Copy> = {
-	es: {
-		subject: 'Tus inquilinos han visitado tu guía esta semana',
-		preheader: 'Descubre cuántas visitas han recibido tus alojamientos.',
-		title: 'Tus guías esta semana',
-		body1: 'Aquí tienes un resumen de las visitas que han recibido tus alojamientos esta semana.',
-		visitsLabel: 'visitas',
-		noVisitsMessage:
-			'Esta semana no has recibido visitas. Comparte tu guía con tus próximos inquilinos.',
-		tipTitle: 'Consejo del mes',
-		buttonLabel: 'Ver mis propiedades',
-		footerUnsubscribe: 'No quiero recibir más emails',
-		footerIgnore: 'Si no reconoces este email, puedes ignorarlo.',
-	},
-	en: {
-		subject: 'Your guests visited your guide this week',
-		preheader: 'Discover how many visits your properties received.',
-		title: 'Your guides this week',
-		body1: 'Here is a summary of the visits your properties received this week.',
-		visitsLabel: 'visits',
-		noVisitsMessage:
-			'No visits this week. Share your guide with your next guests.',
-		tipTitle: 'Tip of the month',
-		buttonLabel: 'View my properties',
-		footerUnsubscribe: 'Unsubscribe from these emails',
-		footerIgnore: "If you don't recognise this email, you can ignore it.",
-	},
-	fr: {
-		subject: 'Vos locataires ont visité votre guide cette semaine',
-		preheader: 'Découvrez combien de visites vos hébergements ont reçues.',
-		title: 'Vos guides cette semaine',
-		body1: 'Voici un résumé des visites reçues par vos hébergements cette semaine.',
-		visitsLabel: 'visites',
-		noVisitsMessage:
-			'Aucune visite cette semaine. Partagez votre guide avec vos prochains locataires.',
-		tipTitle: 'Conseil du mois',
-		buttonLabel: 'Voir mes propriétés',
-		footerUnsubscribe: 'Se désabonner de ces emails',
-		footerIgnore:
-			"Si vous ne reconnaissez pas cet email, vous pouvez l'ignorer.",
-	},
+    es: {
+        subject: "Tus inquilinos han visitado tu guía",
+        preheader: "Descubre cuántas visitas han recibido tus alojamientos.",
+        title: "Tus guías",
+        body1: "Aquí tienes un resumen de las visitas que han recibido tus alojamientos desde tu último resumen.",
+        visitsLabel: "visitas",
+        noVisitsMessage:
+            "No has recibido visitas desde tu último resumen. Comparte tu guía con tus próximos inquilinos.",
+        tipTitle: "Consejo del mes",
+        buttonLabel: "Ver mis propiedades",
+        footerUnsubscribe: "No quiero recibir más emails",
+        footerIgnore: "Si no reconoces este email, puedes ignorarlo.",
+    },
+    en: {
+        subject: "Your guests visited your guide",
+        preheader: "Discover how many visits your properties received.",
+        title: "Your guides",
+        body1: "Here is a summary of the visits your properties received since your last summary.",
+        visitsLabel: "visits",
+        noVisitsMessage:
+            "No visits since your last summary. Share your guide with your next guests.",
+        tipTitle: "Tip of the month",
+        buttonLabel: "View my properties",
+        footerUnsubscribe: "Unsubscribe from these emails",
+        footerIgnore: "If you don't recognise this email, you can ignore it.",
+    },
+    fr: {
+        subject: "Vos locataires ont visité votre guide",
+        preheader: "Découvrez combien de visites vos hébergements ont reçues.",
+        title: "Vos guides",
+        body1: "Voici un résumé des visites reçues par vos hébergements depuis votre dernier résumé.",
+        visitsLabel: "visites",
+        noVisitsMessage:
+            "Aucune visite depuis votre dernier résumé. Partagez votre guide avec vos prochains locataires.",
+        tipTitle: "Conseil du mois",
+        buttonLabel: "Voir mes propriétés",
+        footerUnsubscribe: "Se désabonner de ces emails",
+        footerIgnore:
+            "Si vous ne reconnaissez pas cet email, vous pouvez l'ignorer.",
+    },
 };
 
 function getCopy(locale: string): Copy {
-	const normalized = (locale || 'en').split('-')[0] as Locale;
-	return MESSAGES[normalized] ?? MESSAGES.en;
+    const normalized = (locale || "en").split("-")[0] as Locale;
+    return MESSAGES[normalized] ?? MESSAGES.en;
 }
 
 type Tip = {
-	emoji: string;
-	title: string;
-	text: string;
+    emoji: string;
+    title: string;
+    text: string;
 };
 
 type Params = {
-	locale: string;
-	appUrl: string;
-	logoSymbolUrl: string;
-	footerLogoUrl: string;
-	unsubscribeUrl: string;
-	propertyVisits: PropertyVisit[];
-	tip: Tip | null;
+    locale: string;
+    appUrl: string;
+    logoSymbolUrl: string;
+    footerLogoUrl: string;
+    unsubscribeUrl: string;
+    propertyVisits: PropertyVisit[];
+    tip: Tip | null;
 };
 
 export function renderD1WeeklyDigest({
-	locale,
-	appUrl,
-	logoSymbolUrl,
-	footerLogoUrl,
-	unsubscribeUrl,
-	propertyVisits,
-	tip,
+    locale,
+    appUrl,
+    logoSymbolUrl,
+    footerLogoUrl,
+    unsubscribeUrl,
+    propertyVisits,
+    tip,
 }: Params): { subject: string; html: string } {
-	const copy = getCopy(locale);
-	const ctaUrl = `${appUrl}/${locale}/app/properties`;
+    const copy = getCopy(locale);
+    const ctaUrl = `${appUrl}/${locale}/app/properties`;
 
-	const visitsRows =
-		propertyVisits.length > 0
-			? propertyVisits
-					.map(
-						(p) => `
+    const visitsRows =
+        propertyVisits.length > 0
+            ? propertyVisits
+                  .map(
+                      (p) => `
       <tr>
         <td style="padding: 10px 0; border-bottom: 1px solid #F3F4F6; font-family: sans-serif; font-size: 15px; color: #374151;">
           ${p.property_name}
@@ -109,17 +109,17 @@ export function renderD1WeeklyDigest({
           ${p.visit_count} ${copy.visitsLabel}
         </td>
       </tr>`,
-					)
-					.join('')
-			: `
+                  )
+                  .join("")
+            : `
       <tr>
         <td colspan="2" style="padding: 16px 0; font-family: sans-serif; font-size: 15px; color: #6B7280; text-align: center;">
           ${copy.noVisitsMessage}
         </td>
       </tr>`;
 
-	const tipBlock = tip
-		? `
+    const tipBlock = tip
+        ? `
       <tr>
         <td style="padding-top: 24px;">
           <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #F0FDF9; border-radius: 8px; padding: 16px;">
@@ -141,9 +141,9 @@ export function renderD1WeeklyDigest({
           </table>
         </td>
       </tr>`
-		: '';
+        : "";
 
-	const html = `<!DOCTYPE html>
+    const html = `<!DOCTYPE html>
 <html lang="${locale}" xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="UTF-8" />
@@ -277,5 +277,5 @@ export function renderD1WeeklyDigest({
   </body>
 </html>`;
 
-	return { subject: copy.subject, html };
+    return { subject: copy.subject, html };
 }
