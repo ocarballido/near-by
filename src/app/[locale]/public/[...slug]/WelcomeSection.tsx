@@ -3,14 +3,16 @@ import { getTranslations, getLocale } from "next-intl/server";
 import WelcomeTabs from "@/components/templates/welcome-tabs";
 import WeatherWidget from "@/components/templates/weather-widget";
 import InfoShortcuts from "@/components/molecules/info-shortcuts";
+import { fetchWeather } from "@/components/templates/weather-widget/_data";
 
-import { fetchWelcomeHighlightsTabsData, fetchInfoSectionsData } from "./_data";
+import { fetchWelcomeHighlightsTabsData, type InfoGroup } from "./_data";
 
 type Props = {
     propertyId: string;
     categoryId: string;
     lat: number;
     lng: number;
+    infoGroups: InfoGroup[];
 };
 
 export default async function WelcomeSection({
@@ -18,15 +20,16 @@ export default async function WelcomeSection({
     lat,
     lng,
     categoryId,
+    infoGroups,
 }: Props) {
     const locale = await getLocale();
 
     const t = await getTranslations();
 
-    const { featuredGroups, mustVisitGroups } =
-        await fetchWelcomeHighlightsTabsData(propertyId, locale);
-
-    const infoGroups = await fetchInfoSectionsData(propertyId, locale);
+    const [{ featuredGroups, mustVisitGroups }, weather] = await Promise.all([
+        fetchWelcomeHighlightsTabsData(propertyId, locale),
+        fetchWeather(lat, lng),
+    ]);
 
     return (
         <>
@@ -42,7 +45,7 @@ export default async function WelcomeSection({
 
             <InfoShortcuts groups={infoGroups} propertyId={propertyId} />
 
-            <WeatherWidget lat={lat} lng={lng} />
+            <WeatherWidget weather={weather} />
 
             <WelcomeTabs
                 lat={lat}
