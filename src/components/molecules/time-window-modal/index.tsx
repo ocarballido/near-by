@@ -13,6 +13,7 @@ import ButtonLink from "@/components/molecules/button-link";
 import IconDirections from "@/components/atoms/icon/directions";
 import { buildDirectionsUrl } from "@/utils/build-directions-url";
 import { resolveTimeWindowGradientForPill } from "@/utils/resolve-time-window-gradient";
+import { trackClientEvent } from "@/lib/analytics/trackClient";
 import type {
     TimeWindowWidgetData,
     TimeWindowPill,
@@ -42,6 +43,8 @@ type Props = {
     selectedPill: TimeWindowPill | null;
     onSelectPill: (pill: TimeWindowPill) => void;
     onClose: () => void;
+    propertyId: string;
+    anonId: string;
 };
 
 export default function TimeWindowModal({
@@ -49,6 +52,8 @@ export default function TimeWindowModal({
     selectedPill,
     onSelectPill,
     onClose,
+    propertyId,
+    anonId,
 }: Props) {
     const t = useTranslations();
 
@@ -57,6 +62,18 @@ export default function TimeWindowModal({
     const image =
         IMAGE_BY_PILL_ID[selectedPill.id] ?? IMAGE_BY_PILL_ID.breakfast;
     const gradient = resolveTimeWindowGradientForPill(selectedPill.id);
+
+    const handleDirectionsClick = (locationId: string) => {
+        void trackClientEvent({
+            event: "time_window_directions_clicked",
+            distinctId: anonId,
+            props: {
+                property_id: propertyId,
+                pill_id: selectedPill.id,
+                location_id: locationId,
+            },
+        });
+    };
 
     return (
         <Dialog
@@ -112,17 +129,27 @@ export default function TimeWindowModal({
 
                                     {item.latitude != null &&
                                         item.longitude != null && (
-                                            <ButtonLink
-                                                href={buildDirectionsUrl(
-                                                    item.latitude,
-                                                    item.longitude,
-                                                )}
-                                                target="_blank"
-                                                label=""
-                                                color="primary"
-                                                iconLeft={<IconDirections />}
-                                                className="aspect-square !p-0 w-10 h-10 shrink-0"
-                                            />
+                                            <div
+                                                onClick={() =>
+                                                    handleDirectionsClick(
+                                                        item.id,
+                                                    )
+                                                }
+                                            >
+                                                <ButtonLink
+                                                    href={buildDirectionsUrl(
+                                                        item.latitude,
+                                                        item.longitude,
+                                                    )}
+                                                    target="_blank"
+                                                    label=""
+                                                    color="primary"
+                                                    iconLeft={
+                                                        <IconDirections />
+                                                    }
+                                                    className="aspect-square !p-0 w-10 h-10 shrink-0"
+                                                />
+                                            </div>
                                         )}
                                 </div>
                             ))}
