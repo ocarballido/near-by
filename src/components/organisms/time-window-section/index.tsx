@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import TimeWindowWidget from "@/components/molecules/time-window-widget";
 import TimeWindowModal from "@/components/molecules/time-window-modal";
+import { trackClientEvent } from "@/lib/analytics/trackClient";
 import type {
     TimeWindowWidgetData,
     TimeWindowPill,
@@ -11,14 +12,24 @@ import type {
 
 type Props = {
     data: TimeWindowWidgetData;
+    propertyId: string;
+    anonId: string;
 };
 
-export default function TimeWindowSection({ data }: Props) {
+export default function TimeWindowSection({ data, propertyId, anonId }: Props) {
     const [selectedPill, setSelectedPill] = useState<TimeWindowPill | null>(
         null,
     );
 
     const handleSelectPill = (pill: TimeWindowPill) => {
+        const source = selectedPill ? "modal" : "widget";
+
+        void trackClientEvent({
+            event: "time_window_pill_clicked",
+            distinctId: anonId,
+            props: { property_id: propertyId, pill_id: pill.id, source },
+        });
+
         setSelectedPill(pill);
     };
 
@@ -35,6 +46,8 @@ export default function TimeWindowSection({ data }: Props) {
                 selectedPill={selectedPill}
                 onSelectPill={handleSelectPill}
                 onClose={handleClose}
+                propertyId={propertyId}
+                anonId={anonId}
             />
         </>
     );
