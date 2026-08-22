@@ -12,7 +12,7 @@ import TimeWindowHeader from "@/components/molecules/time-window-header";
 import ButtonLink from "@/components/molecules/button-link";
 import IconDirections from "@/components/atoms/icon/directions";
 import { buildDirectionsUrl } from "@/utils/build-directions-url";
-import { resolveTimeWindowGradient } from "@/utils/resolve-time-window-gradient";
+import { resolveTimeWindowGradientForPill } from "@/utils/resolve-time-window-gradient";
 import type {
     TimeWindowWidgetData,
     TimeWindowPill,
@@ -56,7 +56,7 @@ export default function TimeWindowModal({
 
     const image =
         IMAGE_BY_PILL_ID[selectedPill.id] ?? IMAGE_BY_PILL_ID.breakfast;
-    const gradient = resolveTimeWindowGradient(data.hourDecimal);
+    const gradient = resolveTimeWindowGradientForPill(selectedPill.id);
 
     return (
         <Dialog
