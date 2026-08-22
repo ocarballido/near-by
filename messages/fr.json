@@ -1215,5 +1215,12 @@
         "emoji": "📣",
         "title": "Vous n'avez pas encore reçu de visites",
         "description": "Partagez le lien de votre guide avec vos invités pour qu'ils commencent à l'utiliser."
-    }
+    },
+    "timeWindowBreakfast": "Breakfast",
+    "timeWindowSightseeing": "Explore",
+    "timeWindowLunch": "Lunch",
+    "timeWindowAperitif": "Drinks",
+    "timeWindowDinner": "Dinner",
+    "timeWindowNightlife": "Nightlife",
+    "Cerrar": "Fermer"
 }

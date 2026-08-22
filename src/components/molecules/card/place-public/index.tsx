@@ -163,7 +163,7 @@ const PlacePublic = ({
             />
 
             {(mustSee || featured) && (
-                <div className="flex p-1 items-center absolute z-30 rounded-full right-1 left-1 top-1 justify-between gap-1">
+                <div className="flex p-1 items-center absolute z-5 rounded-full right-1 left-1 top-1 justify-between gap-1">
                     {showBadge ? (
                         <div className="px-0.5 pe-2 py-0.5 flex gap-1.5 items-center rounded-full w-fit h-fit bg-white shadow-xs">
                             <div className="flex justify-center items-center p-1.5 rounded-full bg-primary-400">
@@ -193,7 +193,7 @@ const PlacePublic = ({
                 </div>
             )}
 
-            <div className="relative z-10 w-full">
+            <div className="relative z-5 w-full">
                 <div className="absolute inset-1 bg-white rounded-lg transition-all duration-150 group-hover:inset-0 group-hover:rounded-none" />
 
                 <div className="content relative z-10 p-5 flex flex-col gap-2">

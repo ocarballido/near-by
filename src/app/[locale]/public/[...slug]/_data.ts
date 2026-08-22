@@ -6,6 +6,15 @@ import type { Tables } from "@/lib/types";
 import { CATEGORIES_SUB_CATEGORIES } from "@/config/config-constants";
 import { getCategoryBySubCategoryId } from "@/utils/get-category-by-subcategory";
 
+import { resolveTimeWindowZone } from "@/utils/resolve-time-window-zone";
+import { getLocalHourDecimal } from "@/utils/get-local-hour-decimal";
+import { resolveActiveWindow } from "@/utils/resolve-active-time-windows";
+import { TIME_WINDOWS_WIDGET } from "@/config/config-constants";
+import type {
+    TimeWindowPill,
+    TimeWindowWidgetData,
+} from "@/types/time-window-widget";
+
 type FullProperty = Tables<"properties">;
 type PropertyDataRow = Tables<"property_data">;
 type CategoryTypeOnly = Pick<Tables<"categories">, "type">;
@@ -630,4 +639,85 @@ export async function fetchExploreDetailsData(
             predefined_key: d.predefined_key ?? null,
         };
     });
+}
+
+export async function fetchTimeWindowWidgetData(
+    propertyId: string,
+    timezone: string,
+    locale: string,
+): Promise<TimeWindowWidgetData | null> {
+    const zone = resolveTimeWindowZone(timezone);
+    const hourDecimal = getLocalHourDecimal(timezone);
+    const activeWindow = resolveActiveWindow(zone, hourDecimal);
+
+    const supabase = await createServerAdminClient();
+
+    const allSubCategoryIds = Array.from(
+        new Set(TIME_WINDOWS_WIDGET.windows.flatMap((w) => w.subCategoryIds)),
+    );
+
+    const { data: items, error } = await supabase
+        .from("property_data")
+        .select(PROPERTY_DATA_SELECT)
+        .eq("property_id", propertyId)
+        .in("sub_category_id", allSubCategoryIds)
+        .not("latitude", "is", null)
+        .not("longitude", "is", null)
+        .order("featured", { ascending: false })
+        .order("must_visit", { ascending: false })
+        .order("name", { ascending: true })
+        .overrideTypes<PropertyDataRow[], { merge: false }>();
+
+    if (error || !items || items.length === 0) return null;
+
+    const ids = items.map((i) => i.id);
+    const { data: translations } = await supabase
+        .from("property_data_translations")
+        .select("property_data_id, field_key, translated_value")
+        .in("property_data_id", ids)
+        .eq("lang", locale)
+        .overrideTypes<TranslationRow[], { merge: false }>();
+
+    const translationMap = new Map<string, Record<string, string>>();
+    for (const t of translations ?? []) {
+        if (!translationMap.has(t.property_data_id)) {
+            translationMap.set(t.property_data_id, {});
+        }
+        translationMap.get(t.property_data_id)![t.field_key] =
+            t.translated_value;
+    }
+
+    const mergedItems = items.map((item) => {
+        const tr = translationMap.get(item.id);
+        if (!tr) return item;
+        return {
+            ...item,
+            name: tr.name ?? item.name,
+            description: tr.description ?? item.description,
+        };
+    });
+
+    const pills: TimeWindowPill[] = TIME_WINDOWS_WIDGET.windows
+        .filter((window) => (window.hours[zone]?.length ?? 0) > 0)
+        .map((window) => ({
+            id: window.id,
+            subCategoryIds: window.subCategoryIds,
+            items: mergedItems
+                .filter((item) =>
+                    (window.subCategoryIds as readonly string[]).includes(
+                        item.sub_category_id ?? "",
+                    ),
+                )
+                .map(toPublicItem),
+        }))
+        .filter((pill) => pill.items.length > 0);
+
+    if (pills.length === 0) return null;
+
+    return {
+        zone,
+        activeWindowId: activeWindow?.id ?? null,
+        hourDecimal,
+        pills,
+    };
 }

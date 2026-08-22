@@ -1146,3 +1146,73 @@ export const BILLBOARD_CAROUSEL = [
         link: "/app/properties",
     },
 ] as const;
+
+export const TIME_WINDOWS_WIDGET = {
+    zones: {
+        iberia: { countries: ["ES", "PT", "AD"] },
+        default: { countries: [] },
+    },
+    windows: [
+        {
+            id: "breakfast",
+            hours: { iberia: [[8, 11]], default: [[8, 11]] },
+            subCategoryIds: [
+                "45d9b160-4619-4e99-a9eb-f0c86768eb6e",
+                "7d77f635-9897-4ab0-8801-c3939a7f366b",
+            ],
+        },
+        {
+            id: "sightseeing",
+            hours: {
+                iberia: [
+                    [11, 14],
+                    [16, 18],
+                ],
+                default: [
+                    [11, 12],
+                    [14, 18],
+                ],
+            },
+            subCategoryIds: [
+                "370681cd-d2fa-4b2c-9224-0eb796eb25ba",
+                "d67c6e6e-9cca-4daa-b382-d458360a066d",
+                "7ad70a98-6d4d-473a-8d5b-e9c12af02976",
+                "fbac7bca-a33f-42fb-a266-cd5931f6f24b",
+                "ecd1752b-f8f4-4e6b-939b-a15586675b1f",
+                "01dcc1a2-fe62-4de8-822e-caba49c50f3c",
+                "57caef2f-6402-43b4-9b8f-303f3cb9ab75",
+            ],
+        },
+        {
+            id: "lunch",
+            hours: { iberia: [[14, 16]], default: [[12, 14]] },
+            subCategoryIds: ["b9048ed1-ab96-4a10-b542-2f5ef4fb5e78"],
+        },
+        {
+            id: "aperitif",
+            hours: { iberia: [[18, 20]], default: [] },
+            subCategoryIds: [
+                "b7f98f6d-0f44-4702-8ead-138342382694",
+                "f5fc055e-5d6e-451e-bede-4e0db4ec74eb",
+                "339a71f4-265e-4792-8d2a-f027bf69784b",
+                "eebdb669-57f0-4039-b6a9-b5b2e4158a5f",
+            ],
+        },
+        {
+            id: "dinner",
+            hours: { iberia: [[20, 22]], default: [[18, 20]] },
+            subCategoryIds: ["b9048ed1-ab96-4a10-b542-2f5ef4fb5e78"],
+        },
+        {
+            id: "nightlife",
+            hours: { iberia: [[22, 26]], default: [[22, 25]] },
+            subCategoryIds: [
+                "70a80113-e4cf-487b-8e39-bc5ed5fe7588",
+                "b7f98f6d-0f44-4702-8ead-138342382694",
+                "f5fc055e-5d6e-451e-bede-4e0db4ec74eb",
+                "339a71f4-265e-4792-8d2a-f027bf69784b",
+                "eebdb669-57f0-4039-b6a9-b5b2e4158a5f",
+            ],
+        },
+    ],
+} as const;

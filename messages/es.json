@@ -1215,5 +1215,12 @@
         "emoji": "📣",
         "title": "Aún no has recibido visitas",
         "description": "Comparte el enlace de tu guía con tus huéspedes para que empiecen a usarla."
-    }
+    },
+    "timeWindowBreakfast": "Desayuno",
+    "timeWindowSightseeing": "Para pasear",
+    "timeWindowLunch": "Comida",
+    "timeWindowAperitif": "Aperitivo",
+    "timeWindowDinner": "Cena",
+    "timeWindowNightlife": "Noche",
+    "Cerrar": "Cerrar"
 }
