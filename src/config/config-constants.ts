@@ -1166,7 +1166,7 @@ export const TIME_WINDOWS_WIDGET = {
             hours: {
                 iberia: [
                     [11, 14],
-                    [16, 19],
+                    [16, 18],
                 ],
                 default: [
                     [11, 12],
@@ -1190,7 +1190,7 @@ export const TIME_WINDOWS_WIDGET = {
         },
         {
             id: "aperitif",
-            hours: { iberia: [[19, 21]], default: [] },
+            hours: { iberia: [[18, 20]], default: [] },
             subCategoryIds: [
                 "b7f98f6d-0f44-4702-8ead-138342382694",
                 "f5fc055e-5d6e-451e-bede-4e0db4ec74eb",
@@ -1200,12 +1200,12 @@ export const TIME_WINDOWS_WIDGET = {
         },
         {
             id: "dinner",
-            hours: { iberia: [[21, 23]], default: [[18, 20]] },
+            hours: { iberia: [[20, 22]], default: [[18, 20]] },
             subCategoryIds: ["b9048ed1-ab96-4a10-b542-2f5ef4fb5e78"],
         },
         {
             id: "nightlife",
-            hours: { iberia: [[23, 26]], default: [[22, 25]] },
+            hours: { iberia: [[22, 26]], default: [[22, 25]] },
             subCategoryIds: [
                 "70a80113-e4cf-487b-8e39-bc5ed5fe7588",
                 "b7f98f6d-0f44-4702-8ead-138342382694",

@@ -12,7 +12,10 @@ import TimeWindowHeader from "@/components/molecules/time-window-header";
 import ButtonLink from "@/components/molecules/button-link";
 import IconDirections from "@/components/atoms/icon/directions";
 import { buildDirectionsUrl } from "@/utils/build-directions-url";
-import { resolveTimeWindowGradientForPill } from "@/utils/resolve-time-window-gradient";
+import {
+    resolveTimeWindowGradient,
+    resolveTimeWindowGradientForPill,
+} from "@/utils/resolve-time-window-gradient";
 import { trackClientEvent } from "@/lib/analytics/trackClient";
 import type {
     TimeWindowWidgetData,
@@ -61,7 +64,11 @@ export default function TimeWindowModal({
 
     const image =
         IMAGE_BY_PILL_ID[selectedPill.id] ?? IMAGE_BY_PILL_ID.breakfast;
-    const gradient = resolveTimeWindowGradientForPill(selectedPill.id);
+
+    const gradient =
+        selectedPill.id === data.activeWindowId
+            ? resolveTimeWindowGradient(data.hourDecimal)
+            : resolveTimeWindowGradientForPill(selectedPill.id);
 
     const handleDirectionsClick = (locationId: string) => {
         void trackClientEvent({
