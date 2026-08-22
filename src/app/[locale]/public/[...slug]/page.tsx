@@ -156,6 +156,14 @@ export default async function Property({ params, searchParams }: PageProps) {
         }),
     ]);
 
+    if (timeWindowData) {
+        void trackEvent({
+            event: "time_window_widget_shown",
+            distinctId: anonId,
+            props: { property_id: propertyId },
+        }).catch((e) => console.error("Mixpanel trackEvent failed:", e));
+    }
+
     const arrivalGuideData = await fetchArrivalGuideData(
         propertyId,
         property,
@@ -187,7 +195,11 @@ export default async function Property({ params, searchParams }: PageProps) {
                 >
                     <div className="p-4 font-roboto flex flex-col grow gap-4">
                         {timeWindowData && (
-                            <TimeWindowSection data={timeWindowData} />
+                            <TimeWindowSection
+                                data={timeWindowData}
+                                propertyId={propertyId}
+                                anonId={anonId}
+                            />
                         )}
 
                         {mode === "welcome" && (
