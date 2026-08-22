@@ -698,6 +698,7 @@ export async function fetchTimeWindowWidgetData(
     });
 
     const pills: TimeWindowPill[] = TIME_WINDOWS_WIDGET.windows
+        .filter((window) => (window.hours[zone]?.length ?? 0) > 0)
         .map((window) => ({
             id: window.id,
             subCategoryIds: window.subCategoryIds,

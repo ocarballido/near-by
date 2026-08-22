@@ -75,7 +75,7 @@ const House = ({
                 alt={name}
             />
 
-            <div className="absolute z-30 top-2 right-2">
+            <div className="absolute z-5 top-2 right-2">
                 <ShareButton
                     propertyId={propertyId ?? ""}
                     name={name}
@@ -88,14 +88,14 @@ const House = ({
                     icon={<IconDelete />}
                     onClick={handleDelete}
                     color="error"
-                    className="absolute bg-white top-2 left-2 z-30"
+                    className="absolute bg-white top-2 left-2 z-5"
                 />
             )}
 
-            <div className="relative z-10 w-full">
+            <div className="relative z-5 w-full">
                 <div className="absolute inset-1 bg-white rounded-lg transition-all duration-150 group-hover:inset-0 group-hover:rounded-none" />
 
-                <div className="content relative z-10 p-5 flex flex-col gap-2">
+                <div className="content relative z-5 p-5 flex flex-col gap-2">
                     <div className="flex gap-2 items-center">
                         <Typography component="h5">{name}</Typography>
                     </div>
