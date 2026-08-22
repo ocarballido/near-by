@@ -9,9 +9,14 @@ import type {
 type Props = {
     data: TimeWindowWidgetData;
     onSelectPill?: (pill: TimeWindowPill) => void;
+    edgeOffsetClassName?: string;
 };
 
-export default function TimeWindowWidget({ data, onSelectPill }: Props) {
+export default function TimeWindowWidget({
+    data,
+    onSelectPill,
+    edgeOffsetClassName,
+}: Props) {
     return (
         <TimeWindowHeader
             pills={data.pills}

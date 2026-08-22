@@ -107,14 +107,14 @@ export default function TimeWindowHeader({
                         ? "border-2 border-white bg-white text-black"
                         : isSelected
                           ? "border-2 border-white bg-white/20 text-white"
-                          : "border-2 border-transparent bg-white/20 text-white";
+                          : "border-2 border-transparent bg-white/20 text-white hover:bg-white/30";
 
                     return (
                         <button
                             key={pill.id}
                             ref={isRealActive ? activePillRef : undefined}
                             onClick={() => onSelectPill(pill)}
-                            className={`flex shrink-0 items-center gap-1 rounded-full ps-4 pe-3 py-1.5 text-sm font-bold transition-colors ${stateClasses}`}
+                            className={`flex shrink-0 items-center gap-1 rounded-full ps-4 pe-3 py-1.5 text-sm font-bold transition-colors hover:cursor-pointer ${stateClasses}`}
                         >
                             {t(LABEL_KEYS[pill.id] ?? pill.id)}
                             <IconAdd
