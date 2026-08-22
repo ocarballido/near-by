@@ -22,7 +22,10 @@ export type EventName =
     | "property_detail_deleted"
     | "create_property_blocked_no_address_selection"
     | "itinerary_generate_clicked"
-    | "wow_modal_dismissed";
+    | "wow_modal_dismissed"
+    | "time_window_widget_shown"
+    | "time_window_pill_clicked"
+    | "time_window_directions_clicked";
 
 type TrackInput = {
     event: EventName;

@@ -26,6 +26,11 @@ const ALLOWED_EVENTS: ReadonlySet<EventName> = new Set([
 
     // ✅ Itinerary
     "itinerary_generate_clicked",
+
+    // ✅ Time window widget
+    "time_window_widget_shown",
+    "time_window_pill_clicked",
+    "time_window_directions_clicked",
 ]);
 
 function isEventName(v: unknown): v is EventName {
