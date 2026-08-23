@@ -611,6 +611,12 @@
             "quote3Title": "I used to answer the same questions over and over.",
             "quote3Body": "Now I just share my guide link and guests understand everything from the start. Fewer messages and zero confusion.",
             "quote3Person": "— Lucía M., host in Seville"
+        },
+        "section_time_window": {
+            "title": "Recommendations that know what time it is",
+            "subtitle": "From the first morning coffee to the last drink of the night: your guide suggests the right plan for every moment of the day.",
+            "body1": "The widget detects your guests' local time and shows them only what matters in that moment.",
+            "body2": "It switches on by itself: as soon as your guide has recommendations with a location, it's ready."
         }
     },
     "addressHelperIdle": "Start typing and select a suggestion.",
@@ -1218,5 +1224,7 @@
     "timeWindowAperitif": "Drinks",
     "timeWindowDinner": "Dinner",
     "timeWindowNightlife": "Nightlife",
-    "Cerrar": "Close"
+    "Cerrar": "Close",
+    "Slide anterior": "Previous slide",
+    "Slide siguiente": "Next slide"
 }

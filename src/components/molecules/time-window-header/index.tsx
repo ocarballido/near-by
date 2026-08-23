@@ -71,7 +71,7 @@ export default function TimeWindowHeader({
 
     return (
         <div
-            className="flex w-full min-w-0 flex-col gap-4 rounded-xl p-3"
+            className="flex w-full min-w-0 flex-col gap-4 rounded-lg p-4"
             style={
                 transparent
                     ? undefined
@@ -96,7 +96,7 @@ export default function TimeWindowHeader({
             </div>
 
             <div
-                className="flex w-full min-w-0 gap-2 overflow-x-auto"
+                className="flex w-full min-w-0 gap-1 overflow-x-auto pb-1"
                 onScroll={handleScroll}
             >
                 {pills.map((pill) => {
@@ -114,7 +114,7 @@ export default function TimeWindowHeader({
                             key={pill.id}
                             ref={isRealActive ? activePillRef : undefined}
                             onClick={() => onSelectPill(pill)}
-                            className={`flex shrink-0 items-center gap-1 rounded-full ps-4 pe-3 py-1.5 text-sm font-bold transition-colors hover:cursor-pointer ${stateClasses}`}
+                            className={`flex shrink-0 items-center gap-1 rounded-full ps-4 pe-3 py-2 text-sm font-bold transition-colors hover:cursor-pointer ${stateClasses}`}
                         >
                             {t(LABEL_KEYS[pill.id] ?? pill.id)}
                             <IconAdd

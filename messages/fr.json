@@ -616,6 +616,12 @@
             "quote3Title": "Avant, je répondais toujours aux mêmes questions.",
             "quote3Body": "Maintenant, je partage simplement le lien de mon guide et les voyageurs comprennent tout dès le départ. Moins de messages et zéro confusion.",
             "quote3Person": "— Lucía M., hôte à Séville"
+        },
+        "section_time_window": {
+            "title": "Des recommandations qui savent quelle heure il est",
+            "subtitle": "Du premier café du matin au dernier verre de la soirée : votre guide suggère le bon plan à chaque moment de la journée.",
+            "body1": "Le widget détecte l'heure locale de vos voyageurs et leur montre uniquement ce qui compte à cet instant.",
+            "body2": "Il s'active tout seul : dès que votre guide contient des recommandations géolocalisées, c'est prêt."
         }
     },
     "addressHelperIdle": "Commencez à écrire et sélectionnez une suggestion.",
@@ -1222,5 +1228,7 @@
     "timeWindowAperitif": "Drinks",
     "timeWindowDinner": "Dinner",
     "timeWindowNightlife": "Nightlife",
-    "Cerrar": "Fermer"
+    "Cerrar": "Fermer",
+    "Slide anterior": "Diapositive précédente",
+    "Slide siguiente": "Diapositive suivante"
 }

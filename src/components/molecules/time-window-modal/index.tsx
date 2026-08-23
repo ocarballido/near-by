@@ -88,10 +88,10 @@ export default function TimeWindowModal({
             onClose={onClose}
             className="relative z-50"
         >
-            <DialogBackdrop className="fixed inset-0 bg-black/50" />
+            <DialogBackdrop className="fixed inset-0 bg-gray-200/90" />
 
             <div className="fixed inset-0 flex items-center justify-center">
-                <DialogPanel className="relative mx-auto flex h-full sm:max-h-[720px] w-full sm:max-w-[400px] flex-col overflow-hidden sm:rounded-2xl">
+                <DialogPanel className="relative mx-auto flex h-full sm:max-h-[720px] w-full sm:max-w-[400px] flex-col overflow-hidden sm:rounded-2xl shadow-xl">
                     <DialogTitle className="sr-only">
                         {t(LABEL_KEYS[selectedPill.id] ?? selectedPill.id)}
                     </DialogTitle>
@@ -123,13 +123,13 @@ export default function TimeWindowModal({
                             {selectedPill.items.map((item) => (
                                 <div
                                     key={item.id}
-                                    className="flex items-center justify-between gap-3 rounded-xl bg-white/90 p-4"
+                                    className="flex items-center justify-between gap-3 rounded-xl bg-gray-100 p-4"
                                 >
                                     <div className="min-w-0">
                                         <p className="truncate text-sm font-bold">
                                             {item.name}
                                         </p>
-                                        <p className="truncate text-xs text-gray-600">
+                                        <p className="truncate text-sm font-medium text-gray-600">
                                             {item.address}
                                         </p>
                                     </div>

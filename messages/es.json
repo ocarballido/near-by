@@ -616,6 +616,12 @@
             "quote3Title": "Antes respondía siempre las mismas preguntas.",
             "quote3Body": "Ahora solo comparto el enlace de mi guía y los huéspedes lo entienden todo desde el principio. Menos mensajes y cero confusiones.",
             "quote3Person": "— Lucía M., anfitriona en Sevilla"
+        },
+        "section_time_window": {
+            "title": "Recomendaciones que saben qué hora es",
+            "subtitle": "De la primera cafetería de la mañana a la última copa de la noche: tu guía sugiere el plan justo para cada momento del día.",
+            "body1": "El widget detecta la hora local de tus huéspedes y les muestra solo lo relevante en cada momento del día.",
+            "body2": "Se activa solo, sin configuración extra: en cuanto tu guía tiene recomendaciones con ubicación, ya está listo."
         }
     },
     "addressHelperIdle": "Empieza a escribir y selecciona una sugerencia.",
@@ -1222,5 +1228,7 @@
     "timeWindowAperitif": "Aperitivo",
     "timeWindowDinner": "Cena",
     "timeWindowNightlife": "Noche",
-    "Cerrar": "Cerrar"
+    "Cerrar": "Cerrar",
+    "Slide anterior": "Slide anterior",
+    "Slide siguiente": "Slide siguiente"
 }

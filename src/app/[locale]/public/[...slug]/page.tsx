@@ -193,7 +193,7 @@ export default async function Property({ params, searchParams }: PageProps) {
                     checkOutTime={property.check_out_time ?? ""}
                     image={property.image_url}
                 >
-                    <div className="p-4 font-roboto flex flex-col grow gap-4">
+                    <div className="px-0.5 pt-0.5">
                         {timeWindowData && (
                             <TimeWindowSection
                                 data={timeWindowData}
@@ -201,7 +201,8 @@ export default async function Property({ params, searchParams }: PageProps) {
                                 anonId={anonId}
                             />
                         )}
-
+                    </div>
+                    <div className="p-4 font-roboto flex flex-col grow gap-4">
                         {mode === "welcome" && (
                             <WelcomeSection
                                 propertyId={propertyId}
