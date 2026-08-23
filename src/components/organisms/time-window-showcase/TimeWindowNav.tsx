@@ -9,10 +9,6 @@ import IconAdd from "@/components/atoms/icon/add";
 
 import type { TimeWindowShowcaseSlide } from "./time-window-showcase.data";
 
-// Mirror deliberado de LABEL_KEYS (TimeWindowHeader.tsx, widget real de producción).
-// Duplicado en vez de importado para no acoplar este componente de landing al
-// componente que sirve a guests reales. Si esas claves cambian allí, deben
-// actualizarse aquí también.
 const LABEL_KEYS: Record<string, string> = {
     breakfast: "timeWindowBreakfast",
     sightseeing: "timeWindowSightseeing",
@@ -38,6 +34,7 @@ export default function TimeWindowNav({
     className = "",
 }: TimeWindowNavProps) {
     const t = useTranslations();
+    const pillsContainerRef = useRef<HTMLDivElement>(null);
     const pillRefs = useRef<Map<number, HTMLButtonElement>>(new Map());
     const userScrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
         null,
@@ -46,16 +43,26 @@ export default function TimeWindowNav({
     const activeSlide = slides[activeIndex];
     const sunMoonPosition = activeSlide?.sliderPosition ?? 0;
 
+    // Centra la pill activa desplazando solo el scroll horizontal del propio
+    // contenedor de pills — deliberadamente NO usa scrollIntoView, porque su
+    // eje vertical ("block") puede desplazar la página entera si la sección
+    // aún no está visible (p. ej. al montar, con la sección fuera de viewport).
     const scrollActivePillIntoView = () => {
-        pillRefs.current.get(activeIndex)?.scrollIntoView({
-            behavior: "smooth",
-            inline: "center",
-            block: "nearest",
-        });
+        const container = pillsContainerRef.current;
+        const pill = pillRefs.current.get(activeIndex);
+        if (!container || !pill) return;
+
+        const containerRect = container.getBoundingClientRect();
+        const pillRect = pill.getBoundingClientRect();
+
+        const offset =
+            pillRect.left -
+            containerRect.left -
+            (containerRect.width - pillRect.width) / 2;
+
+        container.scrollBy({ left: offset, behavior: "smooth" });
     };
 
-    // Re-centra la pill activa cada vez que cambia el índice — aquí cambia
-    // constantemente por el autoplay del carrusel, no solo al montar.
     useEffect(() => {
         scrollActivePillIntoView();
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -97,6 +104,7 @@ export default function TimeWindowNav({
             </div>
 
             <div
+                ref={pillsContainerRef}
                 className="flex w-full min-w-0 gap-1 overflow-x-auto pb-1 justify-center"
                 onScroll={handleManualScroll}
             >
