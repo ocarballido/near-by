@@ -38,6 +38,7 @@ import IconCancel from "@/components/atoms/icon/cancel";
 import Quote from "@/components/molecules/quote";
 import DemoHomeModal from "@/components/organisms/supademo/home-modal";
 import HomeCarousel from "@/components/molecules/home-carousel";
+import TimeWindowShowcaseSection from "@/components/organisms/time-window-showcase/TimeWindowShowcaseSection";
 
 import { DEMOS } from "@/config/config-constants";
 
@@ -525,6 +526,7 @@ export default function Home() {
                     </div>
                 </div>
             </section>
+            <TimeWindowShowcaseSection />
             <section
                 aria-labelledby="artificial-inteligence"
                 className={`flex flex-col md:flex-row justify-start items-center rounded-lg px-4 max-w-7xl relative overflow-hidden ${styles.ai_section}`}
