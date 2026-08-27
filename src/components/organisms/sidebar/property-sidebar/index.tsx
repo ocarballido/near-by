@@ -20,8 +20,10 @@ import IconFamilyRestroom from "@/components/atoms/icon/family-restroom";
 import IconPets from "@/components/atoms/icon/pets";
 import IconInterests from "@/components/atoms/icon/interests";
 import IconShoppingBag from "@/components/atoms/icon/shopping-bag";
+import IconEdit from "@/components/atoms/icon/edit";
 import CategoryAccordion from "@/components/molecules/category-accordion";
 import GroupItem from "@/components/molecules/group-item";
+import SidebarLinkItem from "@/components/molecules/sidebar-link-item";
 import ButtonLink from "@/components/molecules/button-link";
 import IconOpenInNew from "@/components/atoms/icon/open-in-new";
 import Button from "@/components/molecules/button";
@@ -92,9 +94,11 @@ const PropertySidebar = ({
                 />
             </div>
             {sidebarData &&
-                sidebarData.map((category) => {
+                sidebarData.map((category, index) => {
                     const iconName = category.icon as IconName;
                     const IconComponent = ICON_COMPONENTS[iconName];
+
+                    const isFirstCategory = index === 0;
 
                     const hasContent = category.sub_categories.some(
                         (sub) => (subCategoryCounts[sub.id] ?? 0) > 0,
@@ -113,6 +117,15 @@ const PropertySidebar = ({
                             onClick={() => handleCategoryToggle(category.id)}
                             icon={<IconComponent />}
                         >
+                            {isFirstCategory && propertyId && (
+                                <SidebarLinkItem
+                                    key="property-edit-link"
+                                    href={`/app/properties/edit/${propertyId}?from=manage`}
+                                    label={t("Datos del alojamiento")}
+                                    icon={<IconEdit size={24} />}
+                                    onClick={closeSidebar}
+                                />
+                            )}
                             {category.sub_categories.map((subcategory) => {
                                 const count =
                                     subCategoryCounts[subcategory.id] ?? 0;

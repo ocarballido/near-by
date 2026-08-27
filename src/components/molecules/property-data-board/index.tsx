@@ -35,7 +35,6 @@ const PropertyDataBoard = ({
     const t = useTranslations();
     const locale = useLocale();
 
-    // bg-gradient-to-tr from-[#ffa263] to-[#6cffc9]
     const publicUrl = `${process.env.NEXT_PUBLIC_APP_URL}/public/${propertyId}/welcome/highlights`;
 
     return (
@@ -68,25 +67,11 @@ const PropertyDataBoard = ({
             </div>
 
             <div className="flex gap-1 justify-end flex-1">
-                {/* <ButtonLink
-                    label=""
-                    href={`/app/properties/edit/${propertyId}?from=manage`}
-                    color="secondary"
-                    className="px-2.5! h-10 w-full sm:w-fit"
-                    iconLeft={<IconEdit size={20} />}
-                /> */}
                 <ButtonLink
-                    label={t("Editar")}
-                    href={`/app/properties/edit/${propertyId}?from=manage`}
-                    color="secondary"
-                    className="w-full h-10 sm:w-fit"
-                    iconLeft={<IconEdit size={20} />}
-                />
-                <ButtonLink
-                    label=""
+                    label={t("Mis propiedades")}
                     href="/app/properties"
                     color="secondary"
-                    className="px-2.5! h-10 w-full sm:w-fit"
+                    className="h-10 w-full sm:w-fit truncate"
                     iconLeft={<IconApartment size={20} />}
                 />
                 <ButtonQr url={publicUrl} />

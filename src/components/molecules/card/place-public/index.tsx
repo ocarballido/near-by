@@ -151,19 +151,29 @@ const PlacePublic = ({
 
     return (
         <div
-            className={`group flex flex-col justify-end rounded-xl overflow-hidden relative min-h-[400px] pt-[180px] shadow-xs bg-gradient-to-tr from-[#ffa263] to-[#6cffc9]`}
+            className={`relative flex flex-col justify-start rounded-2xl overflow-hidden shadow-xs bg-white h-fit`}
         >
-            <Image
+            {/* <Image
                 className="absolute inset-0 object-cover z-0"
                 src={src}
                 fill={true}
                 placeholder="blur"
                 blurDataURL={grayDataUrl}
                 alt={name}
-            />
+            /> */}
+            <div className="aspect-[4/3] p-1 overflow-hidden relative rounded-xl mx-1 mt-1 bg-gradient-to-tr from-[#ffa263] to-[#6cffc9]">
+                <Image
+                    className="absolute inset-0 object-cover z-0"
+                    src={src}
+                    fill={true}
+                    placeholder="blur"
+                    blurDataURL={grayDataUrl}
+                    alt={name}
+                />
+            </div>
 
             {(mustSee || featured) && (
-                <div className="flex p-1 items-center absolute z-5 rounded-full right-1 left-1 top-1 justify-between gap-1">
+                <div className="flex p-1 items-center absolute z-5 rounded-full right-2 left-2 top-2 justify-between gap-1">
                     {showBadge ? (
                         <div className="px-0.5 pe-2 py-0.5 flex gap-1.5 items-center rounded-full w-fit h-fit bg-white shadow-xs">
                             <div className="flex justify-center items-center p-1.5 rounded-full bg-primary-400">
@@ -193,48 +203,40 @@ const PlacePublic = ({
                 </div>
             )}
 
-            <div className="relative z-5 w-full">
-                <div className="absolute inset-1 bg-white rounded-lg transition-all duration-150 group-hover:inset-0 group-hover:rounded-none" />
-
-                <div className="content relative z-10 p-5 flex flex-col gap-2">
-                    <div className="flex gap-2">
-                        <Typography component="h5">{name}</Typography>
-                    </div>
-                    <div className="flex gap-1.5 items-center">
+            <div className="relative w-full px-5 pb-6 pt-4 flex flex-col gap-3">
+                <div className="flex gap-2">
+                    <Typography component="h5">{name}</Typography>
+                </div>
+                <div className="flex gap-1.5 items-center">
+                    <span className="grow-0 p-1.5 bg-primary-100 rounded-full h-fit">
+                        <IconLocationOn color="primary" size={18} />
+                    </span>
+                    <Typography size="sm" weight="medium" color="text-gray-600">
+                        {address}
+                    </Typography>
+                </div>
+                {description && (
+                    <div className="flex gap-1.5">
                         <span className="grow-0 p-1.5 bg-primary-100 rounded-full h-fit">
-                            <IconLocationOn color="primary" size={18} />
+                            <IconInfo color="primary" size={18} />
                         </span>
                         <Typography
+                            weight="normal"
                             size="sm"
-                            weight="medium"
-                            color="text-gray-600"
+                            color="text-gray-500"
                         >
-                            {address}
+                            {description}
                         </Typography>
                     </div>
-                    {description && (
-                        <div className="flex gap-1.5">
-                            <span className="grow-0 p-1.5 bg-primary-100 rounded-full h-fit">
-                                <IconInfo color="primary" size={18} />
-                            </span>
-                            <Typography
-                                weight="normal"
-                                size="sm"
-                                color="text-gray-500"
-                            >
-                                {description}
-                            </Typography>
-                        </div>
-                    )}
-                    <ButtonLink
-                        className="w-full mt-2"
-                        color="primary"
-                        iconLeft={<IconDirections />}
-                        label={t("Como llegar")}
-                        href={`${GOOGLE_MAPS_DIRECTION_URL}${latitude},${longitude}`}
-                        target="_blank"
-                    />
-                </div>
+                )}
+                <ButtonLink
+                    className="w-full mt-2"
+                    color="primary"
+                    iconLeft={<IconDirections />}
+                    label={t("Como llegar")}
+                    href={`${GOOGLE_MAPS_DIRECTION_URL}${latitude},${longitude}`}
+                    target="_blank"
+                />
             </div>
         </div>
     );

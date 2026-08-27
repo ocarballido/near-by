@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation";
 import { createSSRClient } from "@/lib/supabase/server";
 import { createServerAdminClient } from "@/lib/supabase/serverAdminClient";
-import { trackEvent } from "@/lib/analytics/mixpanel";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/types";
 
@@ -12,10 +11,6 @@ import PropertiesStatus from "@/components/molecules/properties-status";
 import LastActivity from "@/components/molecules/last-activity";
 import ShareSection from "@/components/molecules/share-section";
 
-type PageProps = {
-    searchParams?: Promise<{ fromAuth?: string }>;
-};
-
 type PropertyRow = {
     id: string;
     name: string;
@@ -23,10 +18,7 @@ type PropertyRow = {
     property_data: { type: string | null }[] | null;
 };
 
-export default async function DashboardContent({ searchParams }: PageProps) {
-    const { fromAuth } = (await searchParams) ?? {};
-    const shouldForceFirstProperty = fromAuth === "1";
-
+export default async function DashboardContent() {
     const ssrClient = await createSSRClient();
     const {
         data: { user },
@@ -35,19 +27,6 @@ export default async function DashboardContent({ searchParams }: PageProps) {
 
     if (authError || !user) redirect("/auth/login");
 
-    if (shouldForceFirstProperty) {
-        try {
-            await trackEvent({
-                event: "onboarding_start",
-                distinctId: user.id,
-                props: { page: "dashboard_home", fromAuth: 1 },
-            });
-        } catch {
-            // no romper
-        }
-    }
-
-    // Fetch centralizado — una sola query para todos los componentes
     const supabase = await createServerAdminClient();
     const db = supabase as unknown as SupabaseClient<Database>;
 
@@ -61,12 +40,6 @@ export default async function DashboardContent({ searchParams }: PageProps) {
 
     const rows = data ?? [];
 
-    // Redirect si no hay propiedades y viene de auth
-    if (shouldForceFirstProperty && rows.length === 0) {
-        redirect("/app/properties/new?fromAuth=1");
-    }
-
-    // Calcular datos derivados una sola vez
     let completedCount = 0;
     let lastEdited: { id: string; name: string; updated_at: string } | null =
         null;

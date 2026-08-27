@@ -72,6 +72,11 @@ type Props = {
     initialValues?: EditInitialValues;
     redirectAfter?: string;
     hasLocations?: boolean;
+    // Destino explícito para "Cancelar" cuando no existe un "atrás" fiable
+    // en el historial del navegador (p. ej. llegada vía redirects de
+    // servidor desde el login/registro). Si no se pasa, se mantiene el
+    // comportamiento actual de router.back().
+    cancelHref?: string;
 };
 
 const DEFAULT_SEED_INFO_IDS = [
@@ -87,6 +92,7 @@ const AddPropertyForm = ({
     initialValues,
     redirectAfter,
     hasLocations,
+    cancelHref,
 }: Props) => {
     const t = useTranslations();
     const locale = useLocale();
@@ -105,14 +111,9 @@ const AddPropertyForm = ({
     >(null);
     const [addressWarningOpen, setAddressWarningOpen] = useState(false);
 
-    // Se calcula una sola vez a partir de las props iniciales — no cambia
-    // durante la vida del componente, así que no hace falta ref ni estado.
     const originalLat = initialValues?.latitude ?? null;
     const originalLng = initialValues?.longitude ?? null;
 
-    // Evita marcar el formulario como "dirty" en el montaje inicial en edición,
-    // cuando el useEffect de sincronización de coords se dispara con el valor
-    // que ya viene de defaultValues (ver punto 6).
     const isFirstCoordsSyncRef = useRef(true);
 
     const didCompleteRef = useRef(false);
@@ -252,9 +253,6 @@ const AddPropertyForm = ({
             });
         }
 
-        // Cualquier nueva selección invalida una decisión previa sobre los
-        // lugares recomendados — la decisión debe ser siempre sobre la
-        // selección final, nunca sobre un intento anterior.
         setLocationsAction(null);
 
         if (
@@ -286,9 +284,6 @@ const AddPropertyForm = ({
     };
 
     const handleLocationsWarningClose = () => {
-        // Backdrop / Escape — no hay decisión. Si el usuario pulsa "Guardar
-        // cambios" después de esto, onSubmit volverá a interceptar y reabrir
-        // el modal (ver punto 7).
         setAddressWarningOpen(false);
     };
 
@@ -322,8 +317,6 @@ const AddPropertyForm = ({
             return;
         }
 
-        // Edición: la dirección quedó a medias (el usuario pulsó "Cambiar" y no
-        // completó una nueva selección). Bloquea el envío igual que en creación.
         if (isEdit && !coords) {
             setError("address", {
                 type: "manual",
@@ -332,9 +325,6 @@ const AddPropertyForm = ({
             return;
         }
 
-        // Edición con localizaciones existentes: si la dirección final difiere
-        // de la original y aún no hay decisión tomada, se intercepta el submit
-        // y se reabre el modal de aviso — nunca se envía sin decisión explícita.
         if (isEdit && hasLocations && coords) {
             const addressChanged =
                 coords.lat !== originalLat || coords.lng !== originalLng;
@@ -609,8 +599,6 @@ const AddPropertyForm = ({
                             onClick={() => {
                                 if (dateTimeMode === "isOnlyTime") return;
                                 setDateTimeMode("isOnlyTime");
-
-                                // opcional: limpiar errores para que no aparezcan si el campo está oculto
                                 clearErrors(["checkInDate", "checkOutDate"]);
                             }}
                         />
@@ -771,7 +759,9 @@ const AddPropertyForm = ({
                     <FormActions
                         isEdit={isEdit}
                         isSubmitting={isSubmitting}
-                        onCancel={() => router.back()}
+                        onCancel={() =>
+                            cancelHref ? router.push(cancelHref) : router.back()
+                        }
                         submitLabel={
                             isEdit
                                 ? t("Guardar cambios")
