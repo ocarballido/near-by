@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { createSSRClient } from "@/lib/supabase/server";
+import { trackEvent } from "@/lib/analytics/mixpanel";
 
 import PropertiesContent from "@/components/templates/properties-content";
 import AppContentTemplate from "@/components/templates/app-content";
@@ -17,7 +18,14 @@ type PropertyWithData = {
     property_data: { type: string | null }[] | null;
 };
 
-export default async function Properties() {
+type PageProps = {
+    searchParams?: Promise<{ fromAuth?: string }>;
+};
+
+export default async function Properties({ searchParams }: PageProps) {
+    const { fromAuth } = (await searchParams) ?? {};
+    const shouldForceFirstProperty = fromAuth === "1";
+
     const supabase = await createSSRClient();
     const {
         data: { user },
@@ -26,7 +34,18 @@ export default async function Properties() {
 
     if (authError || !user) redirect("/auth/login");
 
-    // ✅ Use SSR client so RLS applies (no admin client here)
+    if (shouldForceFirstProperty) {
+        try {
+            await trackEvent({
+                event: "onboarding_start",
+                distinctId: user.id,
+                props: { page: "properties_home", fromAuth: 1 },
+            });
+        } catch {
+            // no romper
+        }
+    }
+
     const { data, error } = await supabase
         .from("properties")
         .select(
@@ -43,13 +62,18 @@ export default async function Properties() {
       property_data ( type )
     `,
         )
-        // Puedes dejar este filtro (no hace daño), pero con RLS no es “necesario”
         .eq("user_id", user.id)
         .overrideTypes<PropertyWithData[], { merge: false }>();
 
     if (error) throw new Error("Error cargando propiedades: " + error.message);
 
-    const properties = (data ?? []).map((p) => {
+    const rows = data ?? [];
+
+    if (shouldForceFirstProperty && rows.length === 0) {
+        redirect("/app/properties/new?fromAuth=1");
+    }
+
+    const properties = rows.map((p) => {
         const types = new Set(
             (p.property_data ?? [])
                 .map((x) => (x?.type ?? "").toString().trim().toLowerCase())
