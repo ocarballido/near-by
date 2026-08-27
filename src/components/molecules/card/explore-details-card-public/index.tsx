@@ -34,8 +34,8 @@ export default function ExploreDetailCardPublic({
         "/static/img/place-placeholder/extras_placeholder.webp";
 
     return (
-        <div className="flex flex-col items-end rounded-xl overflow-hidden relative transition-all hover:shadow-xs hover:bg-white p-2">
-            <div className="h-[250px] w-full relative bg-gradient-to-tr from-[#ffa263] to-[#6cffc9] rounded-md overflow-hidden">
+        <div className="flex flex-col items-end rounded-2xl overflow-hidden relative transition-all hover:bg-white p-1 bg-white shadow-xs">
+            <div className="h-[250px] w-full relative bg-gradient-to-tr from-[#ffa263] to-[#6cffc9] rounded-xl overflow-hidden">
                 <Image
                     className="object-cover z-0"
                     src={imageSrc}
@@ -45,7 +45,7 @@ export default function ExploreDetailCardPublic({
                     alt={detail.name}
                 />
             </div>
-            <div className="content transition-all flex justify-end gap-3 flex-col relative w-full z-5 py-4 px-2">
+            <div className="content transition-all flex justify-end gap-3 flex-col relative w-full py-4 px-4">
                 <div className="flex items-center justify-between gap-2">
                     <Typography component="h5">{detail.name}</Typography>
                     {onDelete && (

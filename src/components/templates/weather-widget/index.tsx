@@ -23,7 +23,7 @@ export default async function WeatherWidget({ weather }: Props) {
     if (!weather) return null;
 
     return (
-        <div className="flex flex-col gap-3 rounded-xl bg-white p-1.5 shadow-xs">
+        <div className="flex flex-col gap-3 rounded-xl bg-white p-1 shadow-xs">
             <div className="flex justify-between gap-1">
                 {weather.days.map((day, index) => {
                     const isToday = index === 0;

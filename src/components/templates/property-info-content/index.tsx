@@ -50,17 +50,17 @@ export function PropertyInfoContent({
                             {t(sub_category_name)}
                         </Typography>
                     )}
+                    <div className="font-medium whitespace-pre-wrap">
+                        {info?.description}
+                    </div>
                     <div className="flex justify-start">
                         <ButtonLink
                             label={t("Editar")}
                             iconLeft={<IconEdit />}
-                            color="primary"
+                            color="secondary"
                             href={`/app/info/${propertyId}/${categoryId}/${subCategoryId}`}
                             className="w-full sm:w-fit"
                         />
-                    </div>
-                    <div className="font-medium whitespace-pre-wrap">
-                        {info?.description}
                     </div>
                 </>
             )}

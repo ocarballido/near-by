@@ -6,14 +6,17 @@ import MenuIconButton from "../appbar/menu-icon-button";
 
 type PublicAppBarProps = {
     className?: string;
+    propertyId?: string;
 };
 
-const PublicAppBar = ({ className = "" }: PublicAppBarProps) => {
+const PublicAppBar = ({ className = "", propertyId }: PublicAppBarProps) => {
+    const publicUrl = `${process.env.NEXT_PUBLIC_APP_URL}/public/${propertyId}/welcome/highlights`;
+
     return (
         <div
             className={`w-full shadow-xs ml-auto mr-auto flex gap-1 items-center rounded-lg p-4 bg-white transition-all ${className}`}
         >
-            <Link href="/" className="flex items-center">
+            <Link href={publicUrl} className="flex items-center">
                 <div className="relative mr-3 w-[40px] h-[50px]">
                     <Image
                         src="/static/img/symbol_shadow_colored@2x.webp"
