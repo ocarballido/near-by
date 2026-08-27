@@ -90,8 +90,16 @@ export default function ArrivalGuide({ data, propertyId, address }: Props) {
                         aria-label={t("triggerLabel")}
                         onClick={handleOpen}
                         label={t("triggerLabel")}
-                        className="py-3! px-4!"
+                        className="py-3! px-4! hidden md:flex"
                     />
+                    <div className="md:hidden">
+                        <ButtonIcon
+                            icon={<IconHelp />}
+                            className="bg-primary-500 hover:bg-primary-500 p-3"
+                            color="white"
+                            onClick={handleOpen}
+                        />
+                    </div>
                 </div>
             </div>
 
