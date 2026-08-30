@@ -17,7 +17,7 @@ type IconProps = {
     className?: string;
 };
 
-const IconMuseum = ({ color = "body", size = 24, className }: IconProps) => {
+const IconStar = ({ color = "body", size = 24, className }: IconProps) => {
     const semanticStyles = clsx({
         [styles["icon--primary"]]: color === "primary",
         [styles["icon--secondary"]]: color === "secondary",
@@ -54,11 +54,11 @@ const IconMuseum = ({ color = "body", size = 24, className }: IconProps) => {
             >
                 <rect width={size} height={size} fill="#D9D9D9" />
             </mask>
-            <g mask="url(#mask0_60_17032)">
-                <path d="M2 22V20H4V11H2V9L12 2L22 9V11H20V20H22V22H2ZM8 18H10V14L12 17L14 14V18H16V11H14L12 14L10 11H8V18Z" />
+            <g mask="url(#mask0_4_4084)">
+                <path d="M5.82537 20.9999L7.45037 13.9749L2.00037 9.24994L9.20037 8.62494L12.0004 1.99994L14.8004 8.62494L22.0004 9.24994L16.5504 13.9749L18.1754 20.9999L12.0004 17.2749L5.82537 20.9999Z" />
             </g>
         </svg>
     );
 };
 
-export default IconMuseum;
+export default IconStar;

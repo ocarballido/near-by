@@ -1,58 +1,68 @@
-import clsx from 'clsx';
+import clsx from "clsx";
 
-import styles from '../styles.module.css';
+import styles from "../styles.module.css";
 
 type IconProps = {
-	size?: number;
-	color?:
-		| 'primary'
-		| 'secondary'
-		| 'success'
-		| 'warning'
-		| 'info'
-		| 'error'
-		| 'body'
-		| 'light'
-		| 'white';
+    size?: number;
+    color?:
+        | "primary"
+        | "secondary"
+        | "success"
+        | "warning"
+        | "info"
+        | "error"
+        | "body"
+        | "light"
+        | "white";
+    className?: string;
 };
 
-const IconArrowLeftAlt = ({ color = 'body', size = 24 }: IconProps) => {
-	const iconStyles = clsx({
-		[styles['icon--primary']]: color === 'primary',
-		[styles['icon--secondary']]: color === 'secondary',
-		[styles['icon--success']]: color === 'success',
-		[styles['icon--warning']]: color === 'warning',
-		[styles['icon--info']]: color === 'info',
-		[styles['icon--error']]: color === 'error',
-		[styles['icon--body']]: color === 'body',
-		[styles['icon--light']]: color === 'light',
-		[styles['icon--white']]: color === 'white',
-	});
+const IconArrowLeftAlt = ({
+    color = "body",
+    size = 24,
+    className,
+}: IconProps) => {
+    const semanticStyles = clsx({
+        [styles["icon--primary"]]: color === "primary",
+        [styles["icon--secondary"]]: color === "secondary",
+        [styles["icon--success"]]: color === "success",
+        [styles["icon--warning"]]: color === "warning",
+        [styles["icon--info"]]: color === "info",
+        [styles["icon--error"]]: color === "error",
+        [styles["icon--body"]]: color === "body",
+        [styles["icon--light"]]: color === "light",
+        [styles["icon--white"]]: color === "white",
+    });
 
-	return (
-		<svg
-			width={size}
-			height={size}
-			viewBox="0 0 24 24"
-			fill="none"
-			xmlns="http://www.w3.org/2000/svg"
-			className={iconStyles}
-		>
-			<mask
-				id="mask0_3_666"
-				maskUnits="userSpaceOnUse"
-				x="0"
-				y="0"
-				width={size}
-				height={size}
-			>
-				<rect width={size} height={size} fill="#D9D9D9" />
-			</mask>
-			<g mask="url(#mask0_3_668)">
-				<path d="M10 18L4 12L10 6L11.4 7.45L7.85 11H20V13H7.85L11.4 16.55L10 18Z" />
-			</g>
-		</svg>
-	);
+    // className es una vía de escape explícita: si viene, sustituye a la
+    // clase semántica por completo, no se combinan (evita conflictos de
+    // orden de bundle entre Tailwind y el CSS Module).
+    const iconStyles = className ?? semanticStyles;
+
+    return (
+        <svg
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className={iconStyles}
+        >
+            <mask
+                id="mask0_3_666"
+                maskUnits="userSpaceOnUse"
+                x="0"
+                y="0"
+                width={size}
+                height={size}
+            >
+                <rect width={size} height={size} fill="#D9D9D9" />
+            </mask>
+            <g mask="url(#mask0_3_668)">
+                <path d="M10 18L4 12L10 6L11.4 7.45L7.85 11H20V13H7.85L11.4 16.55L10 18Z" />
+            </g>
+        </svg>
+    );
 };
 
 export default IconArrowLeftAlt;
