@@ -86,7 +86,7 @@ const PropertyTierModal = ({ open, onClose }: PropertyTierModalProps) => {
                     <span className="shrink-0 rounded-full p-1.5 bg-white">
                         <IconCrown size={20} className="fill-blue-400" />
                     </span>
-                    <span className="font-bold hidden sm:flex">Platinum</span>
+                    <span className="font-bold hidden sm:flex">PLATINUM</span>
                 </div>
                 <div
                     className={`flex items-center justify-center gap-1.5 rounded-t-lg px-4 py-3 border-b border-white/20 inset-shadow-[0_30px_40px_rgba(0,0,0,0.25)] ${TIER_VISUALS.diamond.pillClassName} ${TIER_VISUALS.diamond.textClassName}`}
