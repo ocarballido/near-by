@@ -8,12 +8,14 @@ import IconCheckIn from "@/components/atoms/icon/check-in";
 import IconCheckOut from "@/components/atoms/icon/check-out";
 import ButtonLink from "../../button-link";
 import PropertySteps from "../../property-steps";
+import PropertyTierBadge from "../../property-tier-badge";
 import Typography from "@/components/atoms/typography";
 import ShareButton from "../../share-property-button";
 
 import { formatDate, formatTime } from "@/utils/format-date-time";
 import IconConstruction from "@/components/atoms/icon/construction";
 import ButtonIcon from "@/components/atoms/button-icon";
+import type { PropertyTier } from "@/config/config-constants";
 
 type HouseProps = {
     address: string;
@@ -32,6 +34,8 @@ type HouseProps = {
     checkOutDate?: string;
     checkOutTime?: string;
     distinctId?: string;
+    tier?: PropertyTier;
+    onOpenTierModal?: () => void;
 };
 
 const House = ({
@@ -51,9 +55,13 @@ const House = ({
     checkOutTime,
     distinctId = "",
     image = "/static/img/header-trimed-2x.webp",
+    tier,
+    onOpenTierModal,
 }: HouseProps) => {
     const t = useTranslations();
     const locale = useLocale();
+
+    const isActivated = Boolean(hasInfo && hasLocation);
 
     const graySvg = `<svg xmlns="http://www.w3.org/2000/svg" width="4" height="4"><rect width="4" height="4" fill="#a3e7d0" /></svg>`;
     const grayDataUrl = `data:image/svg+xml;base64,${Buffer.from(
@@ -62,35 +70,24 @@ const House = ({
 
     return (
         <div
-            className={`relative flex flex-col justify-start rounded-2xl overflow-hidden shadow-xs bg-white h-fit ${className}`}
+            className={`group relative flex flex-col justify-start rounded-2xl overflow-hidden shadow-xs bg-white h-fit ${className}`}
         >
             <div className="aspect-[4/3] p-1 overflow-hidden relative rounded-xl mx-1 mt-1 bg-gradient-to-tr from-[#ffa263] to-[#6cffc9]">
                 <Image
-                    className="absolute inset-0 object-cover z-0"
+                    className="absolute inset-0 object-cover z-0 transition-transform duration-300 ease-out group-hover:scale-105"
                     src={image === null ? "/static/img/heroMobile.webp" : image}
                     fill={true}
                     placeholder="blur"
                     blurDataURL={grayDataUrl}
                     alt={name}
                 />
+                {isActivated && tier && (
+                    <PropertyTierBadge
+                        tier={tier}
+                        onOpenModal={onOpenTierModal}
+                    />
+                )}
             </div>
-
-            <div className="absolute z-5 top-3 right-3">
-                <ShareButton
-                    propertyId={propertyId ?? ""}
-                    name={name}
-                    distinctId={distinctId}
-                />
-            </div>
-
-            {deleatable && (
-                <ButtonIcon
-                    icon={<IconDelete />}
-                    onClick={handleDelete}
-                    color="error"
-                    className="absolute bg-white top-3 left-3 z-5"
-                />
-            )}
 
             <div className="relative w-full px-5 pb-6 pt-4 flex flex-col gap-2">
                 <div className="flex gap-2 items-center">
@@ -159,7 +156,7 @@ const House = ({
                     </div>
                 )}
 
-                {(!hasInfo || !hasLocation) && (
+                {!isActivated && (
                     <PropertySteps
                         hasLocation={hasLocation || false}
                         hasInfo={hasInfo || false}
@@ -174,6 +171,14 @@ const House = ({
                         color="secondary"
                         className="w-full"
                     /> */}
+                    {deleatable && (
+                        <ButtonIcon
+                            icon={<IconDelete />}
+                            onClick={handleDelete}
+                            color="error"
+                            className="bg-white top-3 left-3 z-5"
+                        />
+                    )}
                     {editeable && href && (
                         <ButtonLink
                             className="w-full"
@@ -182,6 +187,11 @@ const House = ({
                             iconLeft={<IconConstruction />}
                         />
                     )}
+                    <ShareButton
+                        propertyId={propertyId ?? ""}
+                        name={name}
+                        distinctId={distinctId}
+                    />
                 </div>
             </div>
         </div>

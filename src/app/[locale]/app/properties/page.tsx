@@ -5,6 +5,14 @@ import { trackEvent } from "@/lib/analytics/mixpanel";
 import PropertiesContent from "@/components/templates/properties-content";
 import AppContentTemplate from "@/components/templates/app-content";
 
+import {
+    deriveEnrichmentMetrics,
+    calculatePropertyScore,
+    getPropertyTier,
+    hasConfiguredCheckInOut,
+    type PropertyDataRow,
+} from "@/utils/property-tier";
+
 type PropertyWithData = {
     id: string;
     name: string;
@@ -15,7 +23,7 @@ type PropertyWithData = {
     check_out_time: string | null;
     address: string | null;
     image_url: string | null;
-    property_data: { type: string | null }[] | null;
+    property_data: PropertyDataRow[] | null;
 };
 
 type PageProps = {
@@ -59,7 +67,7 @@ export default async function Properties({ searchParams }: PageProps) {
       check_in_time,
       check_out_date,
       check_out_time,
-      property_data ( type )
+      property_data ( type, sub_category_id, featured, must_visit )
     `,
         )
         .eq("user_id", user.id)
@@ -74,11 +82,27 @@ export default async function Properties({ searchParams }: PageProps) {
     }
 
     const properties = rows.map((p) => {
+        const propertyData = p.property_data ?? [];
+
         const types = new Set(
-            (p.property_data ?? [])
+            propertyData
                 .map((x) => (x?.type ?? "").toString().trim().toLowerCase())
                 .filter(Boolean),
         );
+
+        const hasCustomImage = Boolean(p.image_url);
+        const hasCheckInOut = hasConfiguredCheckInOut({
+            checkInDate: p.check_in_date,
+            checkInTime: p.check_in_time,
+            checkOutDate: p.check_out_date,
+            checkOutTime: p.check_out_time,
+        });
+
+        const metrics = deriveEnrichmentMetrics(propertyData, {
+            hasCustomImage,
+            hasCheckInOut,
+        });
+        const tier = getPropertyTier(calculatePropertyScore(metrics));
 
         return {
             id: p.id,
@@ -92,12 +116,13 @@ export default async function Properties({ searchParams }: PageProps) {
             image_url: p.image_url ?? undefined,
             hasLocation: types.has("location"),
             hasInfo: types.has("info"),
+            tier,
         };
     });
 
     return (
         <AppContentTemplate>
-            <div className="p-4 font-roboto rounded-lg grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 auto-rows-min">
+            <div className="p-4 font-roboto rounded-lg grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-2 auto-rows-min">
                 <PropertiesContent properties={properties} />
             </div>
         </AppContentTemplate>
