@@ -1216,3 +1216,27 @@ export const TIME_WINDOWS_WIDGET = {
         },
     ],
 } as const;
+
+export const PROPERTY_TIER_SCORING = {
+    order: ["gold", "platinum", "diamond"],
+    weights: {
+        customImage: 10,
+        checkInOut: 10,
+        infoComplete: 15,
+        locationDiversity: 35,
+        marks: 30,
+    },
+    thresholds: {
+        infoSubcatsTotal: 6, // total real de sub-categorías 'info' en CATEGORIES_SUB_CATEGORIES
+        locationDiversityCeiling: 19, // techo ≈ p90 de sub-categorías 'location' distintas usadas
+        marksCeiling: 12, // techo ≈ p75 de featured/must_visit marcados
+    },
+    cutoffs: {
+        // provisional: calculado sin el eje checkInOut (máx 90 pts).
+        // pendiente recalcular sobre el máximo real de 100 pts.
+        platinum: 25,
+        diamond: 55,
+    },
+} as const;
+
+export type PropertyTier = (typeof PROPERTY_TIER_SCORING)["order"][number];

@@ -1,58 +1,64 @@
-import clsx from 'clsx';
+import clsx from "clsx";
 
-import styles from '../styles.module.css';
+import styles from "../styles.module.css";
 
 type IconProps = {
-	size?: number;
-	color?:
-		| 'primary'
-		| 'secondary'
-		| 'success'
-		| 'warning'
-		| 'info'
-		| 'error'
-		| 'body'
-		| 'light'
-		| 'white';
+    size?: number;
+    color?:
+        | "primary"
+        | "secondary"
+        | "success"
+        | "warning"
+        | "info"
+        | "error"
+        | "body"
+        | "light"
+        | "white";
+    className?: string;
 };
 
-const IconFavorite = ({ color = 'body', size = 24 }: IconProps) => {
-	const iconStyles = clsx({
-		[styles['icon--primary']]: color === 'primary',
-		[styles['icon--secondary']]: color === 'secondary',
-		[styles['icon--success']]: color === 'success',
-		[styles['icon--warning']]: color === 'warning',
-		[styles['icon--info']]: color === 'info',
-		[styles['icon--error']]: color === 'error',
-		[styles['icon--body']]: color === 'body',
-		[styles['icon--light']]: color === 'light',
-		[styles['icon--white']]: color === 'white',
-	});
+const IconFavorite = ({ color = "body", size = 24, className }: IconProps) => {
+    const semanticStyles = clsx({
+        [styles["icon--primary"]]: color === "primary",
+        [styles["icon--secondary"]]: color === "secondary",
+        [styles["icon--success"]]: color === "success",
+        [styles["icon--warning"]]: color === "warning",
+        [styles["icon--info"]]: color === "info",
+        [styles["icon--error"]]: color === "error",
+        [styles["icon--body"]]: color === "body",
+        [styles["icon--light"]]: color === "light",
+        [styles["icon--white"]]: color === "white",
+    });
 
-	return (
-		<svg
-			width={size}
-			height={size}
-			viewBox="0 0 24 24"
-			fill="none"
-			xmlns="http://www.w3.org/2000/svg"
-			className={iconStyles}
-		>
-			<mask
-				id="mask0_3_666"
-				maskUnits="userSpaceOnUse"
-				x="0"
-				y="0"
-				width={size}
-				height={size}
-			>
-				<rect width={size} height={size} fill="#D9D9D9" />
-			</mask>
-			<g mask="url(#mask0_687_1122)">
-				<path d="M12 21L10.55 19.7C8.86667 18.1833 7.475 16.875 6.375 15.775C5.275 14.675 4.4 13.6875 3.75 12.8125C3.1 11.9375 2.64583 11.1333 2.3875 10.4C2.12917 9.66667 2 8.91667 2 8.15C2 6.58333 2.525 5.275 3.575 4.225C4.625 3.175 5.93333 2.65 7.5 2.65C8.36667 2.65 9.19167 2.83333 9.975 3.2C10.7583 3.56667 11.4333 4.08333 12 4.75C12.5667 4.08333 13.2417 3.56667 14.025 3.2C14.8083 2.83333 15.6333 2.65 16.5 2.65C18.0667 2.65 19.375 3.175 20.425 4.225C21.475 5.275 22 6.58333 22 8.15C22 8.91667 21.8708 9.66667 21.6125 10.4C21.3542 11.1333 20.9 11.9375 20.25 12.8125C19.6 13.6875 18.725 14.675 17.625 15.775C16.525 16.875 15.1333 18.1833 13.45 19.7L12 21Z" />
-			</g>
-		</svg>
-	);
+    // className es una vía de escape explícita: si viene, sustituye a la
+    // clase semántica por completo, no se combinan (evita conflictos de
+    // orden de bundle entre Tailwind y el CSS Module).
+    const iconStyles = className ?? semanticStyles;
+
+    return (
+        <svg
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className={iconStyles}
+        >
+            <mask
+                id="mask0_3_666"
+                maskUnits="userSpaceOnUse"
+                x="0"
+                y="0"
+                width={size}
+                height={size}
+            >
+                <rect width={size} height={size} fill="#D9D9D9" />
+            </mask>
+            <g mask="url(#mask0_687_1122)">
+                <path d="M12 21L10.55 19.7C8.86667 18.1833 7.475 16.875 6.375 15.775C5.275 14.675 4.4 13.6875 3.75 12.8125C3.1 11.9375 2.64583 11.1333 2.3875 10.4C2.12917 9.66667 2 8.91667 2 8.15C2 6.58333 2.525 5.275 3.575 4.225C4.625 3.175 5.93333 2.65 7.5 2.65C8.36667 2.65 9.19167 2.83333 9.975 3.2C10.7583 3.56667 11.4333 4.08333 12 4.75C12.5667 4.08333 13.2417 3.56667 14.025 3.2C14.8083 2.83333 15.6333 2.65 16.5 2.65C18.0667 2.65 19.375 3.175 20.425 4.225C21.475 5.275 22 6.58333 22 8.15C22 8.91667 21.8708 9.66667 21.6125 10.4C21.3542 11.1333 20.9 11.9375 20.25 12.8125C19.6 13.6875 18.725 14.675 17.625 15.775C16.525 16.875 15.1333 18.1833 13.45 19.7L12 21Z" />
+            </g>
+        </svg>
+    );
 };
 
 export default IconFavorite;

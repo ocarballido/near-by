@@ -1231,5 +1231,17 @@
     "Cerrar": "Fermer",
     "Slide anterior": "Diapositive précédente",
     "Slide siguiente": "Diapositive suivante",
-    "Datos del alojamiento": "Informations du logement"
+    "Datos del alojamiento": "Informations du logement",
+    "propertyTierBadgeLabel": "Guide {tier}",
+    "propertyTierBadgeCta": "Passer en {tier}",
+    "propertyTierBadgeBestScore": "Meilleur score",
+    "propertyTierModalTitle": "Score du guide",
+    "propertyTierModalIntro": "Plus votre guide est complet, plus c'est simple pour vos voyageurs.",
+    "propertyTierModalRowPhoto": "Photo personnalisée",
+    "propertyTierModalRowSchedule": "Horaires configurés",
+    "propertyTierModalRowInfo": "Infos essentielles complètes",
+    "propertyTierModalRowDiversity": "Variété des recommandations",
+    "propertyTierModalRowMarks": "Favoris / incontournables",
+    "propertyTierModalDisclaimer": "Ces chiffres sont indicatifs — inutile d'atteindre chacun exactement, différentes combinaisons peuvent atteindre le même niveau.",
+    "propertyTierModalCloseLabel": "Fermer"
 }

@@ -14,10 +14,15 @@ type IconProps = {
         | "body"
         | "light"
         | "white";
+    className?: string;
 };
 
-const IconFamiltHome = ({ color = "body", size = 24 }: IconProps) => {
-    const iconStyles = clsx({
+const IconFamiltHome = ({
+    color = "body",
+    size = 24,
+    className,
+}: IconProps) => {
+    const semanticStyles = clsx({
         [styles["icon--primary"]]: color === "primary",
         [styles["icon--secondary"]]: color === "secondary",
         [styles["icon--success"]]: color === "success",
@@ -28,6 +33,11 @@ const IconFamiltHome = ({ color = "body", size = 24 }: IconProps) => {
         [styles["icon--light"]]: color === "light",
         [styles["icon--white"]]: color === "white",
     });
+
+    // className es una vía de escape explícita: si viene, sustituye a la
+    // clase semántica por completo, no se combinan (evita conflictos de
+    // orden de bundle entre Tailwind y el CSS Module).
+    const iconStyles = className ?? semanticStyles;
 
     return (
         <svg

@@ -1231,5 +1231,17 @@
     "Cerrar": "Cerrar",
     "Slide anterior": "Slide anterior",
     "Slide siguiente": "Slide siguiente",
-    "Datos del alojamiento": "Datos del alojamiento"
+    "Datos del alojamiento": "Datos del alojamiento",
+    "propertyTierBadgeLabel": "Guía {tier}",
+    "propertyTierBadgeCta": "Hazla {tier}",
+    "propertyTierBadgeBestScore": "Mejor puntuación",
+    "propertyTierModalTitle": "Puntuación de guías",
+    "propertyTierModalIntro": "Cuanto más completa está tu guía, más fácil se lo pones a tus huéspedes.",
+    "propertyTierModalRowPhoto": "Foto propia",
+    "propertyTierModalRowSchedule": "Horarios configurados",
+    "propertyTierModalRowInfo": "Info esencial completa",
+    "propertyTierModalRowDiversity": "Variedad de recomendaciones",
+    "propertyTierModalRowMarks": "Favoritos / imprescindibles",
+    "propertyTierModalDisclaimer": "Estos números son orientativos — no hace falta cumplir cada uno exactamente, distintas combinaciones pueden alcanzar el mismo nivel.",
+    "propertyTierModalCloseLabel": "Cerrar"
 }
