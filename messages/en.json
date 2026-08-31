@@ -1227,5 +1227,17 @@
     "Cerrar": "Close",
     "Slide anterior": "Previous slide",
     "Slide siguiente": "Next slide",
-    "Datos del alojamiento": "Property details"
+    "Datos del alojamiento": "Property details",
+    "propertyTierBadgeLabel": "{tier} guide",
+    "propertyTierBadgeCta": "Make it {tier}",
+    "propertyTierBadgeBestScore": "Best score",
+    "propertyTierModalTitle": "Guide score",
+    "propertyTierModalIntro": "The more complete your guide is, the easier it is for your guests.",
+    "propertyTierModalRowPhoto": "Custom photo",
+    "propertyTierModalRowSchedule": "Check-in/check-out set",
+    "propertyTierModalRowInfo": "Essential info complete",
+    "propertyTierModalRowDiversity": "Variety of recommendations",
+    "propertyTierModalRowMarks": "Favorites / must-visits",
+    "propertyTierModalDisclaimer": "These numbers are for guidance — you don't need to hit each one exactly, different combinations can reach the same level.",
+    "propertyTierModalCloseLabel": "Close"
 }
