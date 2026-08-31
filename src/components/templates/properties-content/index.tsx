@@ -20,25 +20,6 @@ import IconDelete from "@/components/atoms/icon/delete";
 import Alert from "@/components/molecules/alert";
 import NewPropertyCard from "@/components/molecules/new-property-card";
 
-// type Property = {
-//     address: string;
-//     slug: string;
-//     image_url?: string;
-//     name: string;
-//     id: string;
-//     hasLocation: boolean;
-//     hasInfo: boolean;
-//     checkInDate?: string;
-//     checkInTime?: string;
-//     checkOutDate?: string;
-//     checkOutTime?: string;
-//     tier: PropertyTier;
-// };
-
-// type PropertiesContentProps = {
-//     properties: Property[];
-// };
-
 type Property = {
     address: string;
     slug: string;
@@ -53,45 +34,6 @@ type Property = {
     checkOutTime?: string;
     tier: PropertyTier;
 };
-
-// TEMPORAL: mock para revisar visualmente los 3 tiers en el navegador.
-// Datos inventados — ELIMINAR este array y volver a usar la prop `properties`
-// real cuando termines de ajustar estilos.
-const MOCK_TIER_PROPERTIES: Property[] = [
-    {
-        id: "mock-gold",
-        name: "Casa Mock Gold",
-        slug: "casa-mock-gold",
-        address: "Calle Falsa 123, Madrid",
-        hasLocation: true,
-        hasInfo: true,
-        checkInTime: "15:00",
-        checkOutTime: "11:00",
-        tier: "gold",
-    },
-    {
-        id: "mock-platinum",
-        name: "Casa Mock Platinum",
-        slug: "casa-mock-platinum",
-        address: "Avenida Inventada 45, Barcelona",
-        hasLocation: true,
-        hasInfo: true,
-        checkInTime: "16:00",
-        checkOutTime: "10:00",
-        tier: "platinum",
-    },
-    {
-        id: "mock-diamond",
-        name: "Casa Mock Diamond",
-        slug: "casa-mock-diamond",
-        address: "Plaza Ficticia 7, Valencia",
-        hasLocation: true,
-        hasInfo: true,
-        checkInTime: "14:00",
-        checkOutTime: "12:00",
-        tier: "diamond",
-    },
-];
 
 type PropertiesContentProps = {
     properties: Property[];
@@ -176,31 +118,7 @@ const PropertiesContent = ({ properties }: PropertiesContentProps) => {
                 open={isTierModalOpen}
                 onClose={() => setIsTierModalOpen(false)}
             />
-            {/* {properties.map((property) => (
-                <House
-                    key={property?.id}
-                    name={property?.name}
-                    image={property?.image_url || null}
-                    href={`/app/properties/${property?.id}/${CATEGORIES_SUB_CATEGORIES.LODGING.id}/${CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.MANUAL.id}`}
-                    address={property?.address}
-                    propertyId={property?.id}
-                    hasInfo={property?.hasInfo}
-                    hasLocation={property?.hasLocation}
-                    tier={property?.tier}
-                    onOpenTierModal={() => setIsTierModalOpen(true)}
-                    handleDelete={() => {
-                        setIsOpen(true);
-                        setSelectedProperty(property?.id);
-                    }}
-                    checkInDate={property?.checkInDate}
-                    checkInTime={property?.checkInTime}
-                    checkOutDate={property?.checkOutDate}
-                    checkOutTime={property?.checkOutTime}
-                    distinctId={user?.id ?? ""}
-                />
-            ))} */}
-            {/* TEMPORAL: usando MOCK_TIER_PROPERTIES en vez de `properties` para ver los 3 tiers */}
-            {MOCK_TIER_PROPERTIES.map((property) => (
+            {properties.map((property) => (
                 <House
                     key={property?.id}
                     name={property?.name}
