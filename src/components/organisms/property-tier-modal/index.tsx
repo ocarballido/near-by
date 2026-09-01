@@ -8,6 +8,8 @@ import { PROPERTY_TIER_SCORING } from "@/config/config-constants";
 import IconCrown from "@/components/atoms/icon/crown";
 import IconDiamond from "@/components/atoms/icon/diamond";
 import IconCheckCircle from "@/components/atoms/icon/check-circle";
+import IconFavorite from "@/components/atoms/icon/favorite";
+import IconModeHeat from "@/components/atoms/icon/mode-heat";
 
 type PropertyTierModalProps = {
     open: boolean;
@@ -16,16 +18,27 @@ type PropertyTierModalProps = {
 
 // Cifras orientativas de Platinum (p50 real, no un gate exacto — el modelo es
 // ponderado y compensatorio). Diamond sí lee del techo real usado en el score.
-const PLATINUM_ILLUSTRATIVE = { diversity: 6, marks: 2 };
+const PLATINUM_ILLUSTRATIVE = { diversity: 6, featured: 4, mustVisit: 1 };
 
 const PropertyTierModal = ({ open, onClose }: PropertyTierModalProps) => {
     const t = useTranslations();
-    const { locationDiversityCeiling, marksCeiling } =
+    const { locationDiversityCeiling, featuredCeiling, mustVisitCeiling } =
         PROPERTY_TIER_SCORING.thresholds;
 
     type ModalRow =
-        | { label: string; kind: "check"; platinum: boolean; diamond: boolean }
-        | { label: string; kind: "value"; platinum: string; diamond: string };
+        | {
+              label: string;
+              kind: "check";
+              platinum: boolean;
+              diamond: boolean;
+          }
+        | {
+              label: string;
+              kind: "value";
+              platinum: string;
+              diamond: string;
+              icon?: React.ReactNode;
+          };
 
     const rows: ModalRow[] = [
         {
@@ -53,10 +66,18 @@ const PropertyTierModal = ({ open, onClose }: PropertyTierModalProps) => {
             diamond: `+${locationDiversityCeiling}`,
         },
         {
-            label: t("propertyTierModalRowMarks"),
+            label: t("favorites"),
             kind: "value",
-            platinum: `+${PLATINUM_ILLUSTRATIVE.marks}`,
-            diamond: `+${marksCeiling}`,
+            platinum: `+${PLATINUM_ILLUSTRATIVE.featured}`,
+            diamond: `+${featuredCeiling}`,
+            icon: <IconFavorite size={20} color="white" />,
+        },
+        {
+            label: t("mustSees"),
+            kind: "value",
+            platinum: `+${PLATINUM_ILLUSTRATIVE.mustVisit}`,
+            diamond: `+${mustVisitCeiling}`,
+            icon: <IconModeHeat size={20} color="white" />,
         },
     ];
 
@@ -119,8 +140,9 @@ const PropertyTierModal = ({ open, onClose }: PropertyTierModalProps) => {
                                             />
                                         )
                                     ) : (
-                                        <p className="text-sm font-bold">
+                                        <p className="flex items-center gap-1 text-sm font-bold">
                                             {row.platinum}
+                                            {row.kind === "value" && row.icon}
                                         </p>
                                     )}
                                 </div>
@@ -140,8 +162,9 @@ const PropertyTierModal = ({ open, onClose }: PropertyTierModalProps) => {
                                             />
                                         )
                                     ) : (
-                                        <p className="text-sm font-bold">
+                                        <p className="flex items-center gap-1 text-sm font-bold">
                                             {row.diamond}
+                                            {row.kind === "value" && row.icon}
                                         </p>
                                     )}
                                 </div>

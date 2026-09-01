@@ -176,7 +176,10 @@ export default async function Property({ params, searchParams }: PageProps) {
     return (
         <SidebarProvider>
             <EditPublicMenuProvider initialData={sidebarData}>
-                <PublicAppBar propertyId={propertyId} />
+                <PublicAppBar
+                    propertyId={propertyId}
+                    propertyName={property.name}
+                />
                 <PublicInfoContentBootstrap hasInfoContent={hasInfoContent} />
                 <PublicCountsBootstrap counts={counts} />
                 <PublicContentTemplate

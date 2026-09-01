@@ -15,7 +15,8 @@ export type PropertyEnrichmentMetrics = {
     hasCheckInOut: boolean;
     infoSubcatsUsed: number;
     locationSubcatsUsed: number;
-    markedCount: number;
+    featuredCount: number;
+    mustVisitCount: number;
 };
 
 // "Configurado" admite fecha U hora en cada lado, pero exige algo en entrada y algo en salida.
@@ -33,14 +34,16 @@ export function hasConfiguredCheckInOut(fields: {
 }
 
 // Agrega las filas crudas de property_data en las métricas que necesita el scoring.
-// Cuenta sub-categorías DISTINTAS (no filas) para info/location, y filas marcadas para featured/must_visit.
+// featuredCount y mustVisitCount son independientes: una fila con las dos marcas
+// a la vez incrementa ambos contadores (decisión confirmada explícitamente).
 export function deriveEnrichmentMetrics(
     propertyDataRows: PropertyDataRow[],
     flags: { hasCustomImage: boolean; hasCheckInOut: boolean },
 ): PropertyEnrichmentMetrics {
     const infoSubcats = new Set<string>();
     const locationSubcats = new Set<string>();
-    let markedCount = 0;
+    let featuredCount = 0;
+    let mustVisitCount = 0;
 
     for (const row of propertyDataRows) {
         if (row.sub_category_id) {
@@ -48,7 +51,8 @@ export function deriveEnrichmentMetrics(
             if (row.type === "location")
                 locationSubcats.add(row.sub_category_id);
         }
-        if (row.featured || row.must_visit) markedCount += 1;
+        if (row.featured) featuredCount += 1;
+        if (row.must_visit) mustVisitCount += 1;
     }
 
     return {
@@ -56,7 +60,8 @@ export function deriveEnrichmentMetrics(
         hasCheckInOut: flags.hasCheckInOut,
         infoSubcatsUsed: infoSubcats.size,
         locationSubcatsUsed: locationSubcats.size,
-        markedCount,
+        featuredCount,
+        mustVisitCount,
     };
 }
 
@@ -81,7 +86,16 @@ export function calculatePropertyScore(
             weights.locationDiversity,
             thresholds.locationDiversityCeiling,
         ) +
-        cappedRatio(metrics.markedCount, weights.marks, thresholds.marksCeiling)
+        cappedRatio(
+            metrics.featuredCount,
+            weights.featuredMarks,
+            thresholds.featuredCeiling,
+        ) +
+        cappedRatio(
+            metrics.mustVisitCount,
+            weights.mustVisitMarks,
+            thresholds.mustVisitCeiling,
+        )
     );
 }
 

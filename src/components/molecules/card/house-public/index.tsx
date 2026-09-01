@@ -53,11 +53,11 @@ const HousePublic = ({
 
     return (
         <div
-            className={`shrink-0 relative flex flex-col justify-start rounded-2xl overflow-hidden shadow-xs bg-white h-fit ${className}`}
+            className={`group shrink-0 relative flex flex-col justify-start rounded-2xl overflow-hidden shadow-xs bg-white h-fit ${className}`}
         >
             <div className="aspect-[4/3] p-1 overflow-hidden relative rounded-xl mx-1 mt-1 bg-gradient-to-tr from-[#ffa263] to-[#6cffc9]">
                 <Image
-                    className="absolute inset-0 object-cover z-0"
+                    className="absolute inset-0 object-cover z-0 transition-transform duration-300 ease-out group-hover:scale-105"
                     src={image === null ? "/static/img/heroMobile.webp" : image}
                     fill={true}
                     placeholder="blur"
@@ -82,9 +82,9 @@ const HousePublic = ({
             )}
 
             <div className="relative px-5 pb-5 pt-4 flex flex-col gap-3">
-                <div className="flex gap-2">
+                {/* <div className="flex gap-2">
                     <Typography component="h5">{name}</Typography>
-                </div>
+                </div> */}
                 <div className="flex gap-2 items-center">
                     <span className="grow-0 p-1.5 bg-primary-100 rounded-full h-fit">
                         <IconLocationOn size={18} color="primary" />
