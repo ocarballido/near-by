@@ -12,6 +12,31 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: "14.5"
   }
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json
+          operationName?: string
+          query?: string
+          variables?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
   public: {
     Tables: {
       ai_usage: {
@@ -300,6 +325,7 @@ export type Database = {
           id: string
           image_url: string | null
           latitude: number | null
+          logo_url: string | null
           longitude: number | null
           name: string
           slug: string | null
@@ -319,6 +345,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           latitude?: number | null
+          logo_url?: string | null
           longitude?: number | null
           name: string
           slug?: string | null
@@ -338,6 +365,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           latitude?: number | null
+          logo_url?: string | null
           longitude?: number | null
           name?: string
           slug?: string | null
@@ -872,7 +900,7 @@ export type Database = {
         Returns: {
           email: string
           frequency: string
-          locale: string
+          last_digest_sent_at: string
           property_count: number
           total_visits: number
           user_id: string
@@ -1015,6 +1043,9 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {
       property_data_type: ["info", "location"],
