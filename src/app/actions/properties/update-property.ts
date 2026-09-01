@@ -12,6 +12,7 @@ import type { Database, TablesUpdate } from "@/lib/types";
 import { translateAndStoreProperty } from "@/lib/translations/translateAndStoreProperty";
 
 import { uploadPropertyImage } from "@/lib/uploadPropertyImage";
+import { uploadPropertyLogo } from "@/lib/uploadPropertyLogo";
 
 // ==============================
 // Helpers
@@ -53,6 +54,14 @@ const UpdatePropertySchema = z.object({
         (v) => (v === "delete" || v === "keep" ? v : null),
         z.enum(["delete", "keep"]).nullable(),
     ),
+    image_action: z.preprocess(
+        (v) => (v === "remove" ? "remove" : null),
+        z.enum(["remove"]).nullable(),
+    ),
+    logo_action: z.preprocess(
+        (v) => (v === "remove" ? "remove" : null),
+        z.enum(["remove"]).nullable(),
+    ),
 });
 
 export type FormState = {
@@ -61,6 +70,7 @@ export type FormState = {
         description?: string[];
         address?: string[];
         image?: string[];
+        logo?: string[];
         server?: string[];
     };
     message?: string;
@@ -97,7 +107,7 @@ export async function updateProperty(
         // 3) Verificar que la propiedad existe y pertenece al usuario
         const { data: existing, error: existingError } = await db
             .from("properties")
-            .select("id, user_id, image_url")
+            .select("id, user_id, image_url, logo_url")
             .eq("id", propertyId)
             .single();
 
@@ -131,6 +141,8 @@ export async function updateProperty(
             check_out_time: formData.get("check_out_time"),
             access_instructions: formData.get("access_instructions"),
             locations_action: formData.get("locations_action"),
+            image_action: formData.get("image_action"),
+            logo_action: formData.get("logo_action"),
         };
 
         const parseResult = UpdatePropertySchema.safeParse(rawData);
@@ -148,7 +160,7 @@ export async function updateProperty(
 
         const validated = parseResult.data;
 
-        // 5) Imagen (opcional)
+        // 5) Imagen (opcional) — prioridad: archivo nuevo > acción "remove" > se mantiene la existente
         const imageFile = formData.get("image") as File | null;
 
         let imageUrl = existing.image_url ?? null;
@@ -163,6 +175,27 @@ export async function updateProperty(
             if (!uploadRes.ok) return uploadRes.errorState;
 
             imageUrl = uploadRes.imageUrl;
+        } else if (validated.image_action === "remove") {
+            imageUrl = null;
+        }
+
+        // 5.1) Logo (opcional) — misma prioridad que la imagen
+        const logoFile = formData.get("logo") as File | null;
+
+        let logoUrl = existing.logo_url ?? null;
+
+        if (logoFile) {
+            const logoUploadRes = await uploadPropertyLogo({
+                db,
+                userId,
+                logoFile,
+            });
+
+            if (!logoUploadRes.ok) return logoUploadRes.errorState;
+
+            logoUrl = logoUploadRes.logoUrl;
+        } else if (validated.logo_action === "remove") {
+            logoUrl = null;
         }
 
         // 6) Update en DB
@@ -173,6 +206,7 @@ export async function updateProperty(
             latitude: validated.latitude,
             longitude: validated.longitude,
             image_url: imageUrl,
+            logo_url: logoUrl,
             check_in_date: validated.check_in_date,
             check_in_time: validated.check_in_time,
             check_out_date: validated.check_out_date,
