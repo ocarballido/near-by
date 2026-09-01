@@ -34,10 +34,10 @@ export default function ExploreDetailCardPublic({
         "/static/img/place-placeholder/extras_placeholder.webp";
 
     return (
-        <div className="flex flex-col items-end rounded-2xl overflow-hidden relative transition-all hover:bg-white p-1 bg-white shadow-xs">
+        <div className="group flex flex-col items-end rounded-2xl overflow-hidden relative transition-all hover:bg-white p-1 bg-white shadow-xs">
             <div className="h-[250px] w-full relative bg-gradient-to-tr from-[#ffa263] to-[#6cffc9] rounded-xl overflow-hidden">
                 <Image
-                    className="object-cover z-0"
+                    className="object-cover z-0 transition-transform duration-300 ease-out group-hover:scale-105"
                     src={imageSrc}
                     fill={true}
                     placeholder="blur"

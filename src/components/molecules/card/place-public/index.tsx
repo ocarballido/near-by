@@ -151,19 +151,11 @@ const PlacePublic = ({
 
     return (
         <div
-            className={`relative flex flex-col justify-start rounded-2xl overflow-hidden shadow-xs bg-white h-fit`}
+            className={`group relative flex flex-col justify-start rounded-2xl overflow-hidden shadow-xs bg-white h-fit`}
         >
-            {/* <Image
-                className="absolute inset-0 object-cover z-0"
-                src={src}
-                fill={true}
-                placeholder="blur"
-                blurDataURL={grayDataUrl}
-                alt={name}
-            /> */}
             <div className="aspect-[4/3] p-1 overflow-hidden relative rounded-xl mx-1 mt-1 bg-gradient-to-tr from-[#ffa263] to-[#6cffc9]">
                 <Image
-                    className="absolute inset-0 object-cover z-0"
+                    className="absolute inset-0 object-cover z-0 transition-transform duration-300 ease-out group-hover:scale-105"
                     src={src}
                     fill={true}
                     placeholder="blur"

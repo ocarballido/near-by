@@ -1224,18 +1224,20 @@ export const PROPERTY_TIER_SCORING = {
         checkInOut: 10,
         infoComplete: 15,
         locationDiversity: 35,
-        marks: 30,
+        featuredMarks: 15,
+        mustVisitMarks: 15,
     },
     thresholds: {
         infoSubcatsTotal: 6, // total real de sub-categorías 'info' en CATEGORIES_SUB_CATEGORIES
         locationDiversityCeiling: 19, // techo ≈ p90 de sub-categorías 'location' distintas usadas
-        marksCeiling: 12, // techo ≈ p75 de featured/must_visit marcados
+        featuredCeiling: 10, // techo ≈ p75 real de marcas 'featured' (p75 = 10.5)
+        mustVisitCeiling: 2, // techo ≈ p75 real de marcas 'must_visit' (p75 = 2.25)
     },
     cutoffs: {
-        // provisional: calculado sin el eje checkInOut (máx 90 pts).
-        // pendiente recalcular sobre el máximo real de 100 pts.
-        platinum: 25,
-        diamond: 55,
+        // recalculado sobre la fórmula actual (con check-in/check-out + featured/must_visit
+        // separados), anclado a percentiles reales: platinum ≈ p50 (34.3), diamond ≈ p90 (66.5).
+        platinum: 35,
+        diamond: 65,
     },
 } as const;
 
