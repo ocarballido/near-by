@@ -179,6 +179,7 @@ export default async function Property({ params, searchParams }: PageProps) {
                 <PublicAppBar
                     propertyId={propertyId}
                     propertyName={property.name}
+                    propertyLogoUrl={property.logo_url}
                 />
                 <PublicInfoContentBootstrap hasInfoContent={hasInfoContent} />
                 <PublicCountsBootstrap counts={counts} />
