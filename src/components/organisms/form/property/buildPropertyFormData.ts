@@ -8,6 +8,8 @@ type BuildArgs = {
     selectedSeedInfoIds: string[];
     dateTimeMode?: DateTimeMode;
     locationsAction?: LocationsAction;
+    removeImage?: boolean;
+    removeLogo?: boolean;
     data: {
         name: string;
         address: string;
@@ -19,6 +21,7 @@ type BuildArgs = {
         checkOutTime: string;
         accessInstructions: string;
         image?: FileList;
+        logo?: FileList;
     };
 };
 
@@ -28,6 +31,8 @@ export function buildPropertyFormData({
     selectedSeedInfoIds,
     dateTimeMode = "isDateAndTime",
     locationsAction = null,
+    removeImage = false,
+    removeLogo = false,
     data,
 }: BuildArgs): FormData {
     const fd = new FormData();
@@ -58,7 +63,18 @@ export function buildPropertyFormData({
     fd.append("access_instructions", data.accessInstructions ?? "");
 
     const file = data.image?.[0];
-    if (file) fd.append("image", file);
+    if (file) {
+        fd.append("image", file);
+    } else if (isEdit && removeImage) {
+        fd.append("image_action", "remove");
+    }
+
+    const logoFile = data.logo?.[0];
+    if (logoFile) {
+        fd.append("logo", logoFile);
+    } else if (isEdit && removeLogo) {
+        fd.append("logo_action", "remove");
+    }
 
     return fd;
 }
