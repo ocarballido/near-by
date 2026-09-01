@@ -1242,3 +1242,5 @@ export const PROPERTY_TIER_SCORING = {
 } as const;
 
 export type PropertyTier = (typeof PROPERTY_TIER_SCORING)["order"][number];
+
+export const MAX_LOGO_SIZE = 300 * 1024; // 300 KB — debe coincidir con file_size_limit del bucket property-logos

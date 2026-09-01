@@ -93,6 +93,8 @@
     "Dirección *": "Address *",
     "La dirección es obligatoria": "The address is required",
     "Imagen": "Image (Max: 500KB. Not required)",
+    "Logo": "Logo (Max: 300KB. Recommended: square, 500x500px)",
+    "logo": "Logo",
     "Cancelar": "Cancel",
     "Añadir propiedad": "Add property",
     "Nombre ejemplo": "Eg: House in Madrid",
@@ -739,12 +741,17 @@
         "optional": "Optional",
         "currentImage": "Current image",
         "currentImageAlt": "Current property image",
-        "changeImageHelper": "You can select a new image to replace it.",
+        "changeImageHelper": "You can select another image to replace it.",
+        "currentLogo": "Current logo",
+        "currentLogoAlt": "Property logo",
+        "changeLogoHelper": "You can select another logo to replace it.",
+        "logoRecommendationTitle": "Logo recommendation",
+        "logoRecommendationBody": "Use a square 500x500px image so it looks good in your guide's header. Max size: 300 KB.",
         "formEditTitle": "Edit property",
-        "dateAndTime": "Date & time",
+        "dateAndTime": "Date and time",
         "onlyTime": "Time only",
         "accessInstructions": "Access instructions",
-        "accessInstructionsPlaceholder": "E.g. Blue front door, code 4821#. Take the lift to 3rd floor, apartment A. Key in lockbox next to the door, code 7743."
+        "accessInstructionsPlaceholder": "E.g.: Blue gate, code 4821#. Go up to 3rd floor, door A. Key in the lockbox next to the door, code 7743."
     },
     "Guardar cambios": "Save changes",
     "Imagen actual": "Current image",
@@ -1239,5 +1246,6 @@
     "propertyTierModalRowDiversity": "Variety of recommendations",
     "propertyTierModalRowMarks": "Favorites / must-visits",
     "propertyTierModalDisclaimer": "These numbers are for guidance — you don't need to hit each one exactly, different combinations can reach the same level.",
-    "propertyTierModalCloseLabel": "Close"
+    "propertyTierModalCloseLabel": "Close",
+    "Reemplazar": "Replace"
 }

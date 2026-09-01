@@ -15,6 +15,7 @@ import { updateProperty } from "@/app/actions/properties/update-property";
 
 import {
     MAX_IMAGE_SIZE,
+    MAX_LOGO_SIZE,
     CATEGORIES_SUB_CATEGORIES,
     TIPS,
 } from "@/config/config-constants";
@@ -24,6 +25,7 @@ import Alert from "@/components/molecules/alert";
 import SeedOptions from "./seed-options";
 import PropertyFormHeader from "./form-header";
 import ImageSection from "./image-section";
+import LogoSection from "./logo-section";
 import FormActions from "./form-actions";
 import AddressSection from "./address-section";
 import { SelectedPlace } from "@/components/molecules/place-autocomplete";
@@ -43,6 +45,7 @@ type FormValues = {
     latitude: string;
     longitude: string;
     image?: FileList;
+    logo?: FileList;
     checkInDate: string;
     checkInTime: string;
     checkOutDate: string;
@@ -56,6 +59,7 @@ export type EditInitialValues = {
     latitude: number | null;
     longitude: number | null;
     image_url: string | null;
+    logo_url: string | null;
     check_in_date: string | null;
     check_in_time: string | null;
     check_out_date: string | null;
@@ -110,6 +114,9 @@ const AddPropertyForm = ({
         "delete" | "keep" | null
     >(null);
     const [addressWarningOpen, setAddressWarningOpen] = useState(false);
+
+    const [removeImage, setRemoveImage] = useState(false);
+    const [removeLogo, setRemoveLogo] = useState(false);
 
     const originalLat = initialValues?.latitude ?? null;
     const originalLng = initialValues?.longitude ?? null;
@@ -350,12 +357,29 @@ const AddPropertyForm = ({
             return;
         }
 
+        const logoFile = data.logo?.[0];
+        if (logoFile && logoFile.size > MAX_LOGO_SIZE) {
+            setAlert({
+                type: "error",
+                message: t(
+                    "La imagen no debe superar {kb} KB (tienes {got} KB)",
+                    {
+                        kb: (MAX_LOGO_SIZE / 1024).toFixed(0),
+                        got: (logoFile.size / 1024).toFixed(0),
+                    },
+                ),
+            });
+            return;
+        }
+
         const fd = buildPropertyFormData({
             isEdit,
             locale,
             selectedSeedInfoIds,
             dateTimeMode,
             locationsAction,
+            removeImage,
+            removeLogo,
             data,
         });
 
@@ -391,6 +415,8 @@ const AddPropertyForm = ({
                 });
             if (result.errors.image)
                 setAlert({ type: "error", message: result.errors.image[0] });
+            if (result.errors.logo)
+                setAlert({ type: "error", message: result.errors.logo[0] });
             if (result.errors.server)
                 setAlert({
                     type: "error",
@@ -713,7 +739,7 @@ const AddPropertyForm = ({
                     </fieldset>
                 </div>
 
-                <div className="flex flex-col gap-4 px-4 py-4 border-b border-gray-100">
+                <div className="flex flex-col gap-4 p-4 border-b border-gray-100">
                     <DashboardData
                         label={
                             <Typography
@@ -738,11 +764,10 @@ const AddPropertyForm = ({
                     />
 
                     <ImageSection
-                        t={t}
-                        isEdit={isEdit}
                         imageUrl={initialValues?.image_url ?? null}
                         label={t("Imagen")}
                         error={errors.image}
+                        onRemove={() => setRemoveImage(true)}
                         registerProps={register("image", {
                             validate: (files) => {
                                 const file = files?.[0];
@@ -756,6 +781,54 @@ const AddPropertyForm = ({
                             },
                         })}
                     />
+                </div>
+
+                <div className="flex flex-col gap-4 p-4 border-b border-gray-100">
+                    <DashboardData
+                        label={
+                            <Typography
+                                size="sm"
+                                weight="medium"
+                                className="flex gap-2 items-center"
+                            >
+                                <span className="w-9 h-9 flex justify-center items-center rounded-full bg-primary-100 font-bold text-primary-800 text-base">
+                                    4
+                                </span>
+                                {t("logo")}
+                            </Typography>
+                        }
+                        action={
+                            <Typography
+                                weight="medium"
+                                className="flex gap-2 items-center text-xs!"
+                            >
+                                {t("Opcional")}
+                            </Typography>
+                        }
+                    />
+
+                    <LogoSection
+                        t={t}
+                        logoUrl={initialValues?.logo_url ?? null}
+                        label={t("Logo")}
+                        error={errors.logo}
+                        onRemove={() => setRemoveLogo(true)}
+                        registerProps={register("logo", {
+                            validate: (files) => {
+                                const file = files?.[0];
+                                if (!file) return true;
+                                if (file.size <= MAX_LOGO_SIZE) return true;
+                                return `El logo no debe superar ${(
+                                    MAX_LOGO_SIZE / 1024
+                                ).toFixed(
+                                    0,
+                                )} KB (tienes ${(file.size / 1024).toFixed(0)} KB)`;
+                            },
+                        })}
+                    />
+                </div>
+
+                <div className="flex flex-col gap-4 px-4 py-4">
                     <FormActions
                         isEdit={isEdit}
                         isSubmitting={isSubmitting}

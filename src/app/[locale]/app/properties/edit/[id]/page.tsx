@@ -35,7 +35,7 @@ export default async function EditProperty({
     const { data: property, error: propErr } = await supabase
         .from("properties")
         .select(
-            "id,user_id,name,address,latitude,longitude,image_url,check_in_date,check_in_time,check_out_date,check_out_time,access_instructions",
+            "id,user_id,name,address,latitude,longitude,image_url,logo_url,check_in_date,check_in_time,check_out_date,check_out_time,access_instructions",
         )
         .eq("id", propertyId)
         .single()
@@ -69,6 +69,7 @@ export default async function EditProperty({
         check_out_date: property.check_out_date ?? null,
         check_out_time: property.check_out_time ?? null,
         image_url: property.image_url ?? null,
+        logo_url: property.logo_url ?? null,
         access_instructions: property.access_instructions ?? null,
     };
 
