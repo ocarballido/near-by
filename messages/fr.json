@@ -98,6 +98,8 @@
     "Dirección *": "Adresse *",
     "La dirección es obligatoria": "L’adresse est obligatoire",
     "Imagen": "Image (Max : 500 Ko. Facultatif)",
+    "Logo": "Logo (Max : 300 Ko. Recommandé : carré, 500x500px)",
+    "Llogo": "Logo",
     "Cancelar": "Annuler",
     "Añadir propiedad": "Ajouter une propriété",
     "Nombre ejemplo": "Ex : Maison à Madrid",
@@ -741,15 +743,20 @@
         "checkOut": "Départ",
         "date": "Date",
         "time": "Heure",
-        "optional": "Facultatif",
+        "optional": "Optionnel",
         "currentImage": "Image actuelle",
-        "currentImageAlt": "Image actuelle du logement",
-        "changeImageHelper": "Vous pouvez sélectionner une nouvelle image pour la remplacer.",
+        "currentImageAlt": "Image actuelle de la propriété",
+        "changeImageHelper": "Vous pouvez sélectionner une autre image pour la remplacer.",
+        "currentLogo": "Logo actuel",
+        "currentLogoAlt": "Logo de la propriété",
+        "changeLogoHelper": "Vous pouvez sélectionner un autre logo pour le remplacer.",
+        "logoRecommendationTitle": "Recommandation pour le logo",
+        "logoRecommendationBody": "Utilisez une image carrée de 500x500px pour qu'elle s'affiche correctement dans l'en-tête de votre guide. Poids maximum : 300 Ko.",
         "formEditTitle": "Modifier la propriété",
         "dateAndTime": "Date et heure",
-        "onlyTime": "Heure uniquement",
+        "onlyTime": "Heure seulement",
         "accessInstructions": "Instructions d'accès",
-        "accessInstructionsPlaceholder": "Ex : Porte bleue, code 4821#. Monter au 3ème étage, appartement A. Clé dans la boîte à clés près de la porte, code 7743."
+        "accessInstructionsPlaceholder": "Ex : Portail bleu, code 4821#. Monter au 3e étage, porte A. Clé dans la boîte à clés à côté de la porte, code 7743."
     },
     "Guardar cambios": "Enregistrer les modifications",
     "Imagen actual": "Image actuelle",
@@ -1243,5 +1250,6 @@
     "propertyTierModalRowDiversity": "Variété des recommandations",
     "propertyTierModalRowMarks": "Favoris / incontournables",
     "propertyTierModalDisclaimer": "Ces chiffres sont indicatifs — inutile d'atteindre chacun exactement, différentes combinaisons peuvent atteindre le même niveau.",
-    "propertyTierModalCloseLabel": "Fermer"
+    "propertyTierModalCloseLabel": "Fermer",
+    "Reemplazar": "Remplacer"
 }

@@ -98,6 +98,8 @@
     "Dirección *": "Dirección *",
     "La dirección es obligatoria": "La dirección es obligatoria",
     "Imagen": "Imagen (Max: 500KB. No es obligatorio)",
+    "Logo": "Logo (Máx: 300KB. Recomendado: cuadrado, 500x500px)",
+    "logo": "Logo",
     "Cancelar": "Cancelar",
     "Añadir propiedad": "Añadir propiedad",
     "Nombre ejemplo": "Ej: Casa en Madrid",
@@ -745,6 +747,11 @@
         "currentImage": "Imagen actual",
         "currentImageAlt": "Imagen actual de la propiedad",
         "changeImageHelper": "Puedes seleccionar otra imagen para reemplazarla.",
+        "currentLogo": "Logo actual",
+        "currentLogoAlt": "Logo de la propiedad",
+        "changeLogoHelper": "Puedes seleccionar otro logo para reemplazarlo.",
+        "logoRecommendationTitle": "Recomendación para el logo",
+        "logoRecommendationBody": "Usa una imagen cuadrada de 500x500px para que se vea bien en la cabecera de tu guía. Peso máximo: 300 KB.",
         "formEditTitle": "Editar propiedad",
         "dateAndTime": "Fecha y hora",
         "onlyTime": "Solo hora",
@@ -1243,5 +1250,6 @@
     "propertyTierModalRowDiversity": "Variedad de recomendaciones",
     "propertyTierModalRowMarks": "Favoritos / imprescindibles",
     "propertyTierModalDisclaimer": "Estos números son orientativos — no hace falta cumplir cada uno exactamente, distintas combinaciones pueden alcanzar el mismo nivel.",
-    "propertyTierModalCloseLabel": "Cerrar"
+    "propertyTierModalCloseLabel": "Cerrar",
+    "Reemplazar": "Reemplazar"
 }
