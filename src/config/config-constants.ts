@@ -912,6 +912,161 @@ export const CATEGORIES_SUB_CATEGORIES = {
     },
 };
 
+// ─────────────────────────────────────────────────────────────
+// Auto-Content Onboarding: opciones de sub-categorías ofrecidas
+// en el modal de generación automática de locations.
+// Fuente única de verdad, derivada de CATEGORIES_SUB_CATEGORIES.
+// ─────────────────────────────────────────────────────────────
+
+export type AutoLocationOption = {
+    categoryId: string;
+    subCategoryId: string;
+    name: string;
+    defaultChecked: boolean;
+};
+
+export const AUTO_LOCATIONS_ONBOARDING_OPTIONS: AutoLocationOption[] = [
+    // --- Preseleccionadas: esenciales para cualquier huésped ---
+    {
+        categoryId: CATEGORIES_SUB_CATEGORIES.HEALTH_AND_WELLNESS.id,
+        subCategoryId:
+            CATEGORIES_SUB_CATEGORIES.HEALTH_AND_WELLNESS.SUB_CATEGORIES
+                .PHARMACIES.id,
+        name: CATEGORIES_SUB_CATEGORIES.HEALTH_AND_WELLNESS.SUB_CATEGORIES
+            .PHARMACIES.name,
+        defaultChecked: true,
+    },
+    {
+        categoryId: CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.id,
+        subCategoryId:
+            CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.SUB_CATEGORIES.RESTAURANTS
+                .id,
+        name: CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.SUB_CATEGORIES
+            .RESTAURANTS.name,
+        defaultChecked: true,
+    },
+    {
+        categoryId: CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.id,
+        subCategoryId:
+            CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.SUB_CATEGORIES.CAFES.id,
+        name: CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.SUB_CATEGORIES.CAFES
+            .name,
+        defaultChecked: true,
+    },
+    {
+        categoryId: CATEGORIES_SUB_CATEGORIES.SHOPPING.id,
+        subCategoryId:
+            CATEGORIES_SUB_CATEGORIES.SHOPPING.SUB_CATEGORIES.SUPERMARKETS.id,
+        name: CATEGORIES_SUB_CATEGORIES.SHOPPING.SUB_CATEGORIES.SUPERMARKETS
+            .name,
+        defaultChecked: true,
+    },
+    {
+        categoryId: CATEGORIES_SUB_CATEGORIES.HEALTH_AND_WELLNESS.id,
+        subCategoryId:
+            CATEGORIES_SUB_CATEGORIES.HEALTH_AND_WELLNESS.SUB_CATEGORIES
+                .EMERGENCY.id,
+        name: CATEGORIES_SUB_CATEGORIES.HEALTH_AND_WELLNESS.SUB_CATEGORIES
+            .EMERGENCY.name,
+        defaultChecked: true,
+    },
+
+    // --- Opt-in: el usuario las activa si le aportan valor ---
+    {
+        categoryId: CATEGORIES_SUB_CATEGORIES.SECURITY_AND_EMERGENCIES.id,
+        subCategoryId:
+            CATEGORIES_SUB_CATEGORIES.SECURITY_AND_EMERGENCIES.SUB_CATEGORIES
+                .POLICE_STATIONS.id,
+        name: CATEGORIES_SUB_CATEGORIES.SECURITY_AND_EMERGENCIES.SUB_CATEGORIES
+            .POLICE_STATIONS.name,
+        defaultChecked: false,
+    },
+    {
+        categoryId: CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.id,
+        subCategoryId:
+            CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.SUB_CATEGORIES.BARS.id,
+        name: CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.SUB_CATEGORIES.BARS.name,
+        defaultChecked: false,
+    },
+    {
+        categoryId: CATEGORIES_SUB_CATEGORIES.SERVICES.id,
+        subCategoryId:
+            CATEGORIES_SUB_CATEGORIES.SERVICES.SUB_CATEGORIES.PARKINGS.id,
+        name: CATEGORIES_SUB_CATEGORIES.SERVICES.SUB_CATEGORIES.PARKINGS.name,
+        defaultChecked: false,
+    },
+    {
+        categoryId: CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.id,
+        subCategoryId:
+            CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.SUB_CATEGORIES.BAKERIES.id,
+        name: CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.SUB_CATEGORIES.BAKERIES
+            .name,
+        defaultChecked: false,
+    },
+    {
+        categoryId: CATEGORIES_SUB_CATEGORIES.ARTS_AND_CULTURE.id,
+        subCategoryId:
+            CATEGORIES_SUB_CATEGORIES.ARTS_AND_CULTURE.SUB_CATEGORIES.MONUMENTS
+                .id,
+        name: CATEGORIES_SUB_CATEGORIES.ARTS_AND_CULTURE.SUB_CATEGORIES
+            .MONUMENTS.name,
+        defaultChecked: false,
+    },
+    {
+        categoryId: CATEGORIES_SUB_CATEGORIES.ARTS_AND_CULTURE.id,
+        subCategoryId:
+            CATEGORIES_SUB_CATEGORIES.ARTS_AND_CULTURE.SUB_CATEGORIES.MUSEUMS
+                .id,
+        name: CATEGORIES_SUB_CATEGORIES.ARTS_AND_CULTURE.SUB_CATEGORIES.MUSEUMS
+            .name,
+        defaultChecked: false,
+    },
+    {
+        categoryId: CATEGORIES_SUB_CATEGORIES.PARKS_AND_NATURE.id,
+        subCategoryId:
+            CATEGORIES_SUB_CATEGORIES.PARKS_AND_NATURE.SUB_CATEGORIES
+                .URBAN_PARKS.id,
+        name: CATEGORIES_SUB_CATEGORIES.PARKS_AND_NATURE.SUB_CATEGORIES
+            .URBAN_PARKS.name,
+        defaultChecked: false,
+    },
+    {
+        categoryId: CATEGORIES_SUB_CATEGORIES.SHOPPING.id,
+        subCategoryId:
+            CATEGORIES_SUB_CATEGORIES.SHOPPING.SUB_CATEGORIES.SHOPPING_MALLS.id,
+        name: CATEGORIES_SUB_CATEGORIES.SHOPPING.SUB_CATEGORIES.SHOPPING_MALLS
+            .name,
+        defaultChecked: false,
+    },
+    {
+        categoryId: CATEGORIES_SUB_CATEGORIES.TRANSPORTATION.id,
+        subCategoryId:
+            CATEGORIES_SUB_CATEGORIES.TRANSPORTATION.SUB_CATEGORIES
+                .TRAIN_STATIONS.id,
+        name: CATEGORIES_SUB_CATEGORIES.TRANSPORTATION.SUB_CATEGORIES
+            .TRAIN_STATIONS.name,
+        defaultChecked: false,
+    },
+    {
+        categoryId: CATEGORIES_SUB_CATEGORIES.TRANSPORTATION.id,
+        subCategoryId:
+            CATEGORIES_SUB_CATEGORIES.TRANSPORTATION.SUB_CATEGORIES
+                .METRO_STATIONS.id,
+        name: CATEGORIES_SUB_CATEGORIES.TRANSPORTATION.SUB_CATEGORIES
+            .METRO_STATIONS.name,
+        defaultChecked: false,
+    },
+    {
+        categoryId: CATEGORIES_SUB_CATEGORIES.ENTERTAINMENT_AND_NIGHTLIFE.id,
+        subCategoryId:
+            CATEGORIES_SUB_CATEGORIES.ENTERTAINMENT_AND_NIGHTLIFE.SUB_CATEGORIES
+                .NIGHTCLUBS.id,
+        name: CATEGORIES_SUB_CATEGORIES.ENTERTAINMENT_AND_NIGHTLIFE
+            .SUB_CATEGORIES.NIGHTCLUBS.name,
+        defaultChecked: false,
+    },
+];
+
 export const GOOGLE_MAPS_DIRECTION_URL =
     "https://www.google.com/maps/dir/?api=1&destination=";
 
