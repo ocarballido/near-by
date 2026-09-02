@@ -40,6 +40,7 @@ export default function TimeWindowHeader({
 }: Props) {
     const t = useTranslations();
     const activePillRef = useRef<HTMLButtonElement>(null);
+    const pillsContainerRef = useRef<HTMLDivElement>(null);
     const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     const gradient = resolveTimeWindowGradient(hourDecimal);
@@ -48,11 +49,27 @@ export default function TimeWindowHeader({
         Math.max(0, (hourDecimal / 24) * 100),
     );
 
+    // Centramos manualmente el scrollLeft del contenedor de pills en lugar
+    // de usar scrollIntoView(): scrollIntoView recorre TODOS los ancestros
+    // scrolleables del botón (incluido el <body> de la página), y aunque
+    // block:"nearest" minimiza el movimiento, en ciertos navegadores
+    // (especialmente Safari) igualmente termina desplazando la página
+    // completa si el botón no está 100% visible verticalmente en ese
+    // instante. Calculando el scrollLeft nosotros mismos y aplicándolo
+    // solo sobre el contenedor horizontal, el documento nunca se ve afectado.
     const scrollToActive = () => {
-        activePillRef.current?.scrollIntoView({
+        const pillEl = activePillRef.current;
+        const container = pillsContainerRef.current;
+        if (!pillEl || !container) return;
+
+        const targetScrollLeft =
+            pillEl.offsetLeft -
+            container.clientWidth / 2 +
+            pillEl.offsetWidth / 2;
+
+        container.scrollTo({
+            left: targetScrollLeft,
             behavior: "smooth",
-            inline: "center",
-            block: "nearest",
         });
     };
 
@@ -96,6 +113,7 @@ export default function TimeWindowHeader({
             </div>
 
             <div
+                ref={pillsContainerRef}
                 className="flex w-full min-w-0 gap-1 overflow-x-auto pb-1"
                 onScroll={handleScroll}
             >
