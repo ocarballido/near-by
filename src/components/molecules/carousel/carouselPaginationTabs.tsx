@@ -18,27 +18,27 @@ export function CarouselPaginationTabs({
     className = "",
 }: CarouselPaginationTabsProps) {
     const { selectedIndex, scrollTo } = useCarousel();
+    const containerRef = useRef<HTMLDivElement>(null);
     const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
-    const isFirstRender = useRef(true);
 
-    // Garantiza que el pill activo esté siempre visible dentro del
-    // contenedor, sin arrastrar el scroll vertical de la página
-    // (block: 'nearest' evita que scrollIntoView "salte" la página entera).
+    // Ajusta ÚNICAMENTE el scrollLeft del propio contenedor de pills.
+    // A diferencia de scrollIntoView, esto es imposible que "escale" al
+    // scroll vertical de la ventana: solo tocamos una propiedad concreta
+    // de un elemento concreto, nunca delegamos en el navegador para que
+    // decida qué ancestro debe moverse.
     useEffect(() => {
-        // En el montaje inicial el tab activo ya está correctamente
-        // posicionado por defecto — no hay ninguna acción del usuario
-        // que justifique desplazar la página. Solo desplazamos cuando
-        // selectedIndex cambia por una interacción real posterior.
-        if (isFirstRender.current) {
-            isFirstRender.current = false;
-            return;
-        }
+        const container = containerRef.current;
+        const activeTab = tabRefs.current[selectedIndex];
+        if (!container || !activeTab) return;
 
-        tabRefs.current[selectedIndex]?.scrollIntoView({
-            behavior: "smooth",
-            inline: "nearest",
-            block: "nearest",
-        });
+        const containerRect = container.getBoundingClientRect();
+        const tabRect = activeTab.getBoundingClientRect();
+
+        if (tabRect.left < containerRect.left) {
+            container.scrollLeft -= containerRect.left - tabRect.left;
+        } else if (tabRect.right > containerRect.right) {
+            container.scrollLeft += tabRect.right - containerRect.right;
+        }
     }, [selectedIndex]);
 
     if (items.length <= 1) return null;
