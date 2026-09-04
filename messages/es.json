@@ -1251,5 +1251,86 @@
     "propertyTierModalRowMarks": "Favoritos / imprescindibles",
     "propertyTierModalDisclaimer": "Estos números son orientativos — no hace falta cumplir cada uno exactamente, distintas combinaciones pueden alcanzar el mismo nivel.",
     "propertyTierModalCloseLabel": "Cerrar",
-    "Reemplazar": "Reemplazar"
+    "Reemplazar": "Reemplazar",
+    "home_page": {
+        "hero": {
+            "welcome_badge": "Acceso anticipado gratuito · Sin tarjeta",
+            "title": "Tu guía de bienvenida responde por ti",
+            "subtitle": "Créala en 2 minutos, 100% gratis, con toda la información que necesitan tus huéspedes sobre tu alquiler vacacional: normas, horarios, recomendaciones locales, chatbot, traducción automática y mucho más.",
+            "rating": "Anfitriones de todo el mundo ya han creado su guía con nosotros",
+            "action_label": "Ver una guía real",
+            "slide_01_alt": "Vista del panel de bienvenida de la guía digital con recomendaciones locales",
+            "slide_01_label": "Enlace directo",
+            "slide_02_alt": "Sección de horario de check-in y check-out en la guía del alojamiento",
+            "slide_02_label": "Guía de bienvenida",
+            "slide_03_alt": "Widget de recomendaciones por franja horaria del día",
+            "slide_03_label": "Recomendaciones horarias",
+            "slide_04_alt": "Asistente virtual respondiendo dudas del huésped dentro de la guía",
+            "slide_04_label": "Asistente virtual",
+            "slide_05_alt": "Recomendaciones destacadas de restaurantes y ocio cerca del alojamiento",
+            "slide_05_label": "Favoritos y Visita obligatoria"
+        },
+        "section_02": {
+            "welcome_badge": "Simple y rápido · Lo hacemos por ti",
+            "title": "Así de fácil: en solo 2 minutos",
+            "subtitle": "La experiencia arranca al instante",
+            "feature_01_title": "Introduce la dirección de tu alquiler vacacional",
+            "feature_01_body": "Nuestra IA crea automáticamente una guía con contenido básico en segundos. 100% gratis, sin tarjetas de crédito y al momento.",
+            "feature_02_title": "Personaliza la experiencia vacacional de tus huéspedes",
+            "feature_02_body": "Sugiere restaurantes, edita las normas, el wifi, cómo usar la barbacoa... ¡hay cientos de opciones!",
+            "feature_03_title": "Comparte el link de tu guía cuando reserven",
+            "feature_03_body": "Toda la información que necesitan sobre tu propiedad, en su móvil, para consultar cuando quieran, sin apps ni registros.",
+            "feature_04_title": "WhatsApp",
+            "feature_05_title": "Email",
+            "feature_06_title": "Redes",
+            "feature_07_title": "Código QR",
+            "feature_claim": "WhatsApp, email, mensajería de Airbnb/Booking, redes sociales, o código QR para imprimir en la propiedad.",
+            "action_label": "Crear mi guía gratis"
+        },
+        "section_03": {
+            "welcome_badge": "Huésped acompañado · Cercanía",
+            "title": "Una guía viva, que acompaña a tu huésped en todo momento",
+            "subtitle": "No es solo información. Es sentir que alguien está pendiente de él, aunque tú no estés.",
+            "feature_01_title": "Planes a su medida",
+            "feature_01_body": "Tus huéspedes deciden qué quieren hacer, cuándo y cómo. Tu guía crea planes personalizados al momento con itinerarios listos para abrir en Google Maps.",
+            "feature_02_title": "Recomendaciones según la hora del día",
+            "feature_02_body": "Desayuno, comida, cena, aperitivo, planes para pasear o salir de fiesta. Tu guía va cambiando sus recomendaciones en función de la hora local.",
+            "feature_03_title": "Los mejores shows cercanos",
+            "feature_03_body": "Musicales, monólogos, obras de teatro y mucho más. Todos los espectáculos cercanos de un vistazo con enlace directo a la compra de entradas.",
+            "feature_04_title": "Traducciones automáticas",
+            "feature_04_body": "Tu contenido se traduce automáticamente y tus huéspedes la ven en su propio idioma. Seguimos sumando idiomas constantemente, así que cada vez llega a más viajeros.",
+            "feature_rest_title": "Y aún hay más...",
+            "feature_rest_subtitle": "Los pequeños detalles son los que hacen conseguir las mejores valoraciones",
+            "feature_05": "Un bot inteligente dentro de la guía que responde por ti a tus huéspedes",
+            "feature_06": "Multialojamiento: Crea diferentes guías para más de una propiedad totalmente gratis.",
+            "feature_07": "A tu gusto: Personaliza tu guía con tus fotos. Añade tus restaurantes favoritos, cafés, pubs...",
+            "feature_08": "Todo tipo de categorías claras para que no les falte nada de información a tus huéspedes",
+            "feature_09": "¿Lloverá durante las vacaciones? Incluye la previsión meteorológica de hoy y los próximos días.",
+            "feature_claim": "WhatsApp, email, mensajería de Airbnb/Booking, redes sociales, o código QR para imprimir en la propiedad.",
+            "action_label": "Crear mi guía gratis"
+        },
+        "section_04": {
+            "welcome_badge": "¿Tienes dudas?",
+            "title": "Preguntas frecuentes",
+            "faq_01_title": "¿Tiene algún coste o periodo de prueba?",
+            "faq_01_body": "No, BNBexplorer es 100% gratuito tanto para el anfitrión como para los huéspedes. No hay pagos ocultos, no necesitas introducir ninguna tarjeta de crédito para empezar ni se limita el número de funcionalidades tras unos días de uso.",
+            "faq_02_title": "¿Mis huéspedes tienen que descargarse una app o registrarse para usar la guía?",
+            "faq_02_body": "No. La guía funciona a través de un simple enlace web o código QR. Tus viajeros solo tienen que hacer clic o escanearlo desde su teléfono y accederán al instante sin tener que instalar ninguna app ni crear una cuenta.",
+            "faq_03_title": "¿En qué idiomas está disponible la guía para mis huéspedes?",
+            "faq_03_body": "Sí, tu guía es multiidioma. Todo el contenido que añades se traduce automáticamente, y cada huésped la ve en su idioma cuando está disponible. Seguimos ampliando el número de idiomas soportados de forma constante, así que la cobertura solo va a ir a más.",
+            "faq_04_title": "¿Puedo gestionar varias propiedades si tengo más de un alquiler vacacional?",
+            "faq_04_body": "Sí, totalmente. Desde tu panel de control puedes añadir y gestionar todas las propiedades que quieras de forma independiente, creando una guía digital única y personalizada para cada una de ellas, totalmente gratis.",
+            "faq_05_title": "¿Puedo usar BNBexplorer si alquilo una habitación o una casa rural en lugar de un piso en la ciudad?",
+            "faq_05_body": "Sí, sirve para cualquier tipo de alojamiento vacacional: apartamentos urbanos, casas rurales, villas, habitaciones o bungalows. Las recomendaciones locales e instrucciones de uso se adaptan a la ubicación exacta de tu propiedad.",
+            "action_label": "Crear mi guía gratis"
+        },
+        "call_to_action": {
+            "title": "Tu próxima reseña de 5 estrellas empieza aquí",
+            "subtitle": "Crea tu guía gratis en 2 minutos. Sin tarjeta. Sin descargas ni registros para tus huéspedes.",
+            "action_label": "Crear mi guía gratis"
+        },
+        "footer": {
+            "description": "La herramienta para anfitriones de Airbnb que permite crear guías digitales personalizadas para tus alojamientos, con IA, mapas interactivos y enlaces únicos para tus huéspedes."
+        }
+    }
 }

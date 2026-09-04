@@ -1247,5 +1247,86 @@
     "propertyTierModalRowMarks": "Favorites / must-visits",
     "propertyTierModalDisclaimer": "These numbers are for guidance — you don't need to hit each one exactly, different combinations can reach the same level.",
     "propertyTierModalCloseLabel": "Close",
-    "Reemplazar": "Replace"
+    "Reemplazar": "Replace",
+    "home_page": {
+        "hero": {
+            "welcome_badge": "Free early access · No credit card",
+            "title": "Your welcome guide answers for you",
+            "subtitle": "Create it in 2 minutes, 100% free, with all the information your guests need about your vacation rental: house rules, schedules, local recommendations, chatbot, automatic translation, and much more.",
+            "rating": "Hosts from all over the world have already created their guide with us",
+            "action_label": "See a real guide",
+            "slide_01_alt": "View of the welcome panel of the digital guide with local recommendations",
+            "slide_01_label": "Direct link",
+            "slide_02_alt": "Check-in and check-out schedule section in the accommodation guide",
+            "slide_02_label": "Welcome guide",
+            "slide_03_alt": "Time-of-day recommendations widget",
+            "slide_03_label": "Time-based recommendations",
+            "slide_04_alt": "Virtual assistant answering guest questions within the guide",
+            "slide_04_label": "Virtual assistant",
+            "slide_05_alt": "Featured restaurant and leisure recommendations near the accommodation",
+            "slide_05_label": "Favorites and Must-see"
+        },
+        "section_02": {
+            "welcome_badge": "Simple and fast · We do it for you",
+            "title": "This easy: in just 2 minutes",
+            "subtitle": "The experience starts right away",
+            "feature_01_title": "Enter your vacation rental's address",
+            "feature_01_body": "Our AI automatically creates a guide with basic content in seconds. 100% free, no credit card, instantly.",
+            "feature_02_title": "Personalize your guests' vacation experience",
+            "feature_02_body": "Suggest restaurants, edit the house rules, the wifi, how to use the barbecue... there are hundreds of options!",
+            "feature_03_title": "Share your guide's link when they book",
+            "feature_03_body": "All the information they need about your property, on their phone, to check whenever they want, no apps or sign-ups needed.",
+            "feature_04_title": "WhatsApp",
+            "feature_05_title": "Email",
+            "feature_06_title": "Social media",
+            "feature_07_title": "QR code",
+            "feature_claim": "WhatsApp, email, Airbnb/Booking messaging, social media, or a QR code to print at the property.",
+            "action_label": "Create my free guide"
+        },
+        "section_03": {
+            "welcome_badge": "A guest by your side · Closeness",
+            "title": "A living guide that's with your guest at every moment",
+            "subtitle": "It's not just information. It's feeling that someone is looking out for them, even when you're not there.",
+            "feature_01_title": "Plans tailored to them",
+            "feature_01_body": "Your guests decide what they want to do, when, and how. Your guide instantly creates personalized plans with itineraries ready to open in Google Maps.",
+            "feature_02_title": "Recommendations based on the time of day",
+            "feature_02_body": "Breakfast, lunch, dinner, drinks, plans for a walk or a night out. Your guide keeps updating its recommendations based on local time.",
+            "feature_03_title": "The best shows nearby",
+            "feature_03_body": "Musicals, stand-up comedy, plays, and much more. All the nearby shows at a glance, with a direct link to buy tickets.",
+            "feature_04_title": "Automatic translations",
+            "feature_04_body": "Your content is automatically translated and your guests see it in their own language. We keep adding more languages, so it reaches more travelers every day.",
+            "feature_rest_title": "And there's even more...",
+            "feature_rest_subtitle": "It's the small details that earn the best reviews",
+            "feature_05": "A smart bot inside the guide that answers your guests for you",
+            "feature_06": "Multi-property: Create different guides for more than one property, completely free.",
+            "feature_07": "Your way: Personalize your guide with your photos. Add your favorite restaurants, cafés, pubs...",
+            "feature_08": "All kinds of clear categories so your guests never miss any information",
+            "feature_09": "Will it rain during the trip? Includes today's and the upcoming days' weather forecast.",
+            "feature_claim": "WhatsApp, email, Airbnb/Booking messaging, social media, or a QR code to print at the property.",
+            "action_label": "Create my free guide"
+        },
+        "section_04": {
+            "welcome_badge": "Got questions?",
+            "title": "Frequently asked questions",
+            "faq_01_title": "Is there any cost or trial period?",
+            "faq_01_body": "No, BNBexplorer is 100% free for both hosts and guests. There are no hidden fees, no credit card required to get started, and no features are limited after a few days of use.",
+            "faq_02_title": "Do my guests need to download an app or sign up to use the guide?",
+            "faq_02_body": "No. The guide works through a simple web link or QR code. Your travelers just need to click or scan it from their phone and they'll get instant access, no app installation or account creation needed.",
+            "faq_03_title": "What languages is the guide available in for my guests?",
+            "faq_03_body": "Yes, your guide is multilingual. All the content you add is automatically translated, and each guest sees it in their language when available. We keep expanding the number of supported languages, so coverage will only keep growing.",
+            "faq_04_title": "Can I manage several properties if I have more than one vacation rental?",
+            "faq_04_body": "Yes, absolutely. From your dashboard you can add and manage as many properties as you want independently, creating a unique, personalized digital guide for each one, completely free.",
+            "faq_05_title": "Can I use BNBexplorer if I rent out a room or a countryside house instead of a city apartment?",
+            "faq_05_body": "Yes, it works for any type of vacation accommodation: city apartments, countryside houses, villas, rooms, or bungalows. Local recommendations and instructions adapt to your property's exact location.",
+            "action_label": "Create my free guide"
+        },
+        "call_to_action": {
+            "title": "Your next 5-star review starts here",
+            "subtitle": "Create your free guide in 2 minutes. No credit card. No downloads or sign-ups for your guests.",
+            "action_label": "Create my free guide"
+        },
+        "footer": {
+            "description": "The tool for Airbnb hosts to create personalized digital guides for their properties, with AI, interactive maps, and unique links for their guests."
+        }
+    }
 }
