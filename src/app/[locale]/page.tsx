@@ -403,7 +403,7 @@ export default function Home() {
                             </Typography>
                             <FaqSection
                                 items={faqItems}
-                                defaultActiveId="coste-prueba"
+                                defaultActiveId="FAQ_01"
                             />
                             <ButtonLink
                                 label={t("home_page.section_04.action_label")}
