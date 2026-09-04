@@ -32,9 +32,6 @@ export function HeroCarousel({ slides, className = "" }: HeroCarouselProps) {
         >
             {slides.map((slide, index) => (
                 <CarouselSlide key={slide.id}>
-                    {/* La proporción se deriva de las dimensiones reales de CADA
-                        imagen (StaticImageData.width/height), no de un valor
-                        fijo adivinado — evita recortes por desajuste de ratio. */}
                     <div
                         className="relative w-full"
                         style={{

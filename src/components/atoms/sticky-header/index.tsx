@@ -15,9 +15,6 @@ export function StickyHeader({ children, className = "" }: StickyHeaderProps) {
         const sentinel = sentinelRef.current;
         if (!sentinel) return;
 
-        // Cuando el centinela (colocado justo antes del header, en lo
-        // más alto de la página) deja de intersectar con el viewport,
-        // significa que el usuario ha hecho scroll.
         const observer = new IntersectionObserver(
             ([entry]) => setIsScrolled(!entry.isIntersecting),
             { threshold: 0 },
@@ -32,7 +29,9 @@ export function StickyHeader({ children, className = "" }: StickyHeaderProps) {
             <div ref={sentinelRef} aria-hidden="true" className="h-px w-full" />
             <header
                 className={`sticky top-0 z-50 transition-shadow duration-200 ${
-                    isScrolled ? "shadow-xs" : "shadow-none"
+                    isScrolled
+                        ? "shadow-xs bg-white/80"
+                        : "shadow-none bg-white"
                 } ${className}`}
             >
                 {children}

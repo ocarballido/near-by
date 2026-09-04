@@ -4,53 +4,26 @@ import { useTranslations } from "next-intl";
 import Image from "next/image";
 
 import rooftopCentered from "../../../public/static/img/rooftop-centered.png";
-import multyProperty from "../../../public/static/img/multy-property-2x.webp";
 import blur from "../../../public/static/img/home/blur.webp";
 import bluredBubbles from "../../../public/static/img/blured-bubbles.png";
-import how from "../../../public/static/img/home/how_bnbexplorer.webp";
-import guestChat from "../../../public/static/img/home/chatbot.webp";
 import welcome from "../../../public/static/img/home/welcome.png";
-
-import categories from "../../../public/static/img/categories-2x.webp";
-import uiEdit from "../../../public/static/img/ui-edit-2x.webp";
-import publicUi from "../../../public/static/img/public-property.webp";
-import testimony01 from "../../../public/static/img/testimony-01.webp";
-import testimony02 from "../../../public/static/img/testimony-02.webp";
-import testimony03 from "../../../public/static/img/testimony-03.webp";
 
 import LandingAppBar from "@/components/organisms/landing-appbar";
 import ButtonLink from "@/components/molecules/button-link";
-import PlaceTooltip from "@/components/atoms/place-tooltip";
-import IconAccountCircle from "@/components/atoms/icon/account-circle";
-import FilterCategories from "@/components/templates/filter-categories";
 import ChimneyEffect from "@/components/atoms/chimney";
 
 import IconChatBubble from "@/components/atoms/icon/chat-bubble";
-import IconStarShine from "@/components/atoms/icon/star-shine";
-import IconCheckCircle from "@/components/atoms/icon/check-circle";
 import IconFavorite from "@/components/atoms/icon/favorite";
 import IconInterests from "@/components/atoms/icon/interests";
 
 import Feature from "@/components/molecules/card/feature";
-import ListItem from "@/components/molecules/list-item";
-import FancyBadge from "@/components/atoms/fancy-badge";
-import BadgeCheck from "@/components/atoms/BadgeCheck";
-import IconCancel from "@/components/atoms/icon/cancel";
-import Quote from "@/components/molecules/quote";
-import DemoHomeModal from "@/components/organisms/supademo/home-modal";
-import HomeCarousel from "@/components/molecules/home-carousel";
-import TimeWindowShowcaseSection from "@/components/organisms/time-window-showcase/TimeWindowShowcaseSection";
 
-import { DEMOS } from "@/config/config-constants";
-
-import styles from "./page.module.css";
 import Typography from "@/components/atoms/typography";
-import IconBookOpened from "@/components/atoms/icon/book-opened";
 
 import BadgeMarketing from "@/components/atoms/badge-marketing";
 import IconOpenInNew from "@/components/atoms/icon/open-in-new";
 import Rating from "@/components/molecules/rating";
-import { heroSlides } from "@/components/organisms/hero-carousel/hero-slides";
+import { getHeroSlides } from "@/components/organisms/hero-carousel/hero-slides";
 import { HeroCarousel } from "@/components/organisms/hero-carousel";
 import { StickyHeader } from "@/components/atoms/sticky-header";
 import FancyIcon from "@/components/atoms/icon/fancy-icon";
@@ -66,42 +39,39 @@ import { FaqSection, type FaqItem } from "@/components/organisms/faq-section";
 
 export default function Home() {
     const t = useTranslations();
+    const heroSlides = getHeroSlides(t);
 
     const faqItems: FaqItem[] = [
         {
-            id: "coste-prueba",
-            question: "¿Tiene algún coste o periodo de prueba?",
-            answer: "No, BNBexplorer es 100% gratuito tanto para el anfitrión como para los huéspedes. No hay pagos ocultos, no necesitas introducir ninguna tarjeta de crédito para empezar ni se limita el número de funcionalidades tras unos días de uso.",
+            id: "FAQ_01",
+            question: t("home_page.section_04.faq_01_title"),
+            answer: t("home_page.section_04.faq_01_body"),
         },
         {
-            id: "app-registro",
-            question:
-                "¿Mis huéspedes tienen que descargarse una app o registrarse para usar la guía?",
-            answer: "No. La guía funciona a través de un simple enlace web o código QR. Tus viajeros solo tienen que hacer clic o escanearlo desde su teléfono y accederán al instante sin tener que instalar ninguna app ni crear una cuenta.",
+            id: "FAQ_02",
+            question: t("home_page.section_04.faq_02_title"),
+            answer: t("home_page.section_04.faq_02_body"),
         },
         {
-            id: "idiomas",
-            question:
-                "¿En qué idiomas está disponible la guía para mis huéspedes?",
-            answer: "La guía incluye traducción automática multilingüe y un chatbot con IA que responde a las dudas de tus viajeros en su propio idioma (español, inglés, francés, entre otros), sin que tú tengas que redactar el contenido varias veces.",
+            id: "FAQ_03",
+            question: t("home_page.section_04.faq_03_title"),
+            answer: t("home_page.section_04.faq_03_body"),
         },
         {
-            id: "multi-propiedad",
-            question:
-                "¿Puedo gestionar varias propiedades si tengo más de un alquiler vacacional?",
-            answer: "Sí, totalmente. Desde tu panel de control puedes añadir y gestionar todas las propiedades que quieras de forma independiente, creando una guía digital única y personalizada para cada una de ellas, totalmente gratis.",
+            id: "FAQ_04",
+            question: t("home_page.section_04.faq_04_title"),
+            answer: t("home_page.section_04.faq_04_body"),
         },
         {
-            id: "habitacion-rural",
-            question:
-                "¿Puedo usar BNBexplorer si alquilo una habitación o una casa rural en lugar de un piso en la ciudad?",
-            answer: "Sí, sirve para cualquier tipo de alojamiento vacacional: apartamentos urbanos, casas rurales, villas, habitaciones o bungalows. Las recomendaciones locales e instrucciones de uso se adaptan a la ubicación exacta de tu propiedad.",
+            id: "FAQ_05",
+            question: t("home_page.section_04.faq_05_title"),
+            answer: t("home_page.section_04.faq_05_body"),
         },
     ];
 
     return (
         <>
-            <StickyHeader className="bg-white/80 backdrop-blur-md">
+            <StickyHeader className="backdrop-blur-md">
                 <LandingAppBar className="mx-auto rounded-none shadow-none! max-w-7xl" />
             </StickyHeader>
             <main className="bg-white">
@@ -111,7 +81,7 @@ export default function Home() {
                 >
                     <BadgeMarketing
                         className="px-4"
-                        label="Acceso anticipado gratuito · Sin tarjeta"
+                        label={t("home_page.hero.welcome_badge")}
                     />
                     <div className="flex flex-col gap-4 justify-center w-full max-w-[800px] mx-auto px-4">
                         <Typography
@@ -122,23 +92,19 @@ export default function Home() {
                             color="black"
                             id="welcomeGuide"
                         >
-                            Tu guía de bienvenida responde por tí
+                            {t("home_page.hero.title")}
                         </Typography>
                         <Typography
                             className="text-center text-lg sm:text-2xl! text-gray-900/60"
                             fontFamily="base"
                             weight="light"
                         >
-                            Créala en 2 minutos, 100% gratis, con toda la
-                            información que necesitan tus huéspedes sobre tu
-                            alquiler vacacional: normas, horarios,
-                            recomendaciones locales, chatbot, traducción
-                            automática y mucho más.
+                            {t("home_page.hero.subtitle")}
                         </Typography>
                     </div>
                     <Rating
-                        label="+500 anfitriones ya la usan"
-                        className="px-4"
+                        label={t("home_page.hero.rating")}
+                        className="px-4 max-w-xs text-center"
                     />
                     <div className="px-4 flex flex-col items-center gap-6 relative w-full pb-12">
                         <Image
@@ -147,14 +113,23 @@ export default function Home() {
                             className="object-cover object-top z-0"
                             alt="BBNexplorer"
                         />
-                        <ButtonLink
-                            href="#"
-                            label="Ver una guía real"
-                            size="lg"
-                            color="white"
-                            className="shadow z-5 border border-primary-200"
-                            iconRight={<IconOpenInNew />}
-                        />
+                        <div className="flex flex-col sm:flex-row gap-2">
+                            <ButtonLink
+                                href="#"
+                                label={t("home_page.hero.action_label")}
+                                size="lg"
+                                color="white"
+                                className="shadow-xs z-5 border border-primary-200"
+                                iconRight={<IconOpenInNew />}
+                            />
+                            <ButtonLink
+                                label={t("home_page.section_04.action_label")}
+                                href="/app"
+                                size="lg"
+                                iconRight={<IconArrowRightAlt />}
+                                className="shadow-xs z-5"
+                            />
+                        </div>
                         <div className="max-w-[1100px] w-full mx-auto">
                             <HeroCarousel slides={heroSlides} />
                         </div>
@@ -167,12 +142,12 @@ export default function Home() {
                     <Image
                         src={blur}
                         fill={true}
-                        alt="Blur image"
+                        alt="Background Blured image"
                         className="z-0 object-cover object-center md:object-fill md:h-full md:w-auto opacity-30"
                     />
                     <BadgeMarketing
                         className="px-4 relative"
-                        label="Simple y rápido · Lo hacemos por tí"
+                        label={t("home_page.section_02.welcome_badge")}
                     />
                     <div className="flex flex-col gap-2 justify-center w-full max-w-[800px] mx-auto relative">
                         <Typography
@@ -183,36 +158,36 @@ export default function Home() {
                             color="black"
                             id="easyToUse"
                         >
-                            Así de fácil: en sólo 2 minutos
+                            {t("home_page.section_02.title")}
                         </Typography>
                         <Typography
                             className="text-center text-lg sm:text-2xl! text-gray-900/60"
                             fontFamily="base"
                             weight="light"
                         >
-                            La experiencia empieza en el minuto cero
+                            {t("home_page.section_02.subtitle")}
                         </Typography>
                     </div>
                     <div className="grid grid-cols-1 grid-rows-1 sm:grid-cols-2 sm:grid-rows-2 gap-2 max-w-[800px] w-full">
                         <Feature
                             color="gradient"
                             number={1}
-                            title="Introduce la dirección de tu alquiler vacacional"
-                            body="Nuestra IA crea automáticamente una guía con contenido básico en segundos. 100% gratis, sin tarjetas de crédito y al momento."
+                            title={t("home_page.section_02.feature_01_title")}
+                            body={t("home_page.section_02.feature_01_body")}
                             className="border border-gray-100"
                         />
                         <Feature
                             color="gradient"
                             number={2}
-                            title="Personaliza la experiencia vacacional de tus huéspedes"
-                            body="Sugiere restaurantes, edita las normas, el wifi, cómo usar la barbacoa… ¡hay cientos de opciones!"
+                            title={t("home_page.section_02.feature_02_title")}
+                            body={t("home_page.section_02.feature_02_body")}
                             className="sm:col-start-1 sm:row-start-2 border border-gray-100"
                         />
                         <Feature
                             color="gradient"
                             number={3}
-                            title="Comparte el link de tu guía cuando reserven"
-                            body="Toda la información que necesitan sobre tu propiedad, en su móvil, para consultar cuando quieran, sin apps ni registros."
+                            title={t("home_page.section_02.feature_03_title")}
+                            body={t("home_page.section_02.feature_03_body")}
                             className="sm:row-span-2 sm:col-start-2 sm:row-start-1 border border-gray-100"
                             isFeatured
                             image={welcome.src}
@@ -225,28 +200,36 @@ export default function Home() {
                                 icon={<IconChatBubble color="white" />}
                                 color="primary"
                             />
-                            <p className="text-sm font-body">WhatsApp</p>
+                            <p className="text-sm font-body">
+                                {t("home_page.section_02.feature_04_title")}
+                            </p>
                         </div>
                         <div className="flex flex-col gap-3 items-center">
                             <FancyIcon
                                 icon={<IconMail color="white" />}
                                 color="primary"
                             />
-                            <p className="text-sm font-body">Email</p>
+                            <p className="text-sm font-body">
+                                {t("home_page.section_02.feature_05_title")}
+                            </p>
                         </div>
                         <div className="flex flex-col gap-3 items-center">
                             <FancyIcon
                                 icon={<IconChatBubble color="white" />}
                                 color="primary"
                             />
-                            <p className="text-sm font-body">Redes</p>
+                            <p className="text-sm font-body">
+                                {t("home_page.section_02.feature_06_title")}
+                            </p>
                         </div>
                         <div className="flex flex-col gap-3 items-center">
                             <FancyIcon
                                 icon={<IconChatBubble color="white" />}
                                 color="primary"
                             />
-                            <p className="text-sm font-body">Código QR</p>
+                            <p className="text-sm font-body">
+                                {t("home_page.section_02.feature_07_title")}
+                            </p>
                         </div>
                     </div>
                     <Typography
@@ -254,11 +237,10 @@ export default function Home() {
                         size="sm"
                         className="w-full max-w-[400px] mx-auto text-center"
                     >
-                        WhatsApp, email, mensajería de Airbnb/Booking, redes
-                        sociales, o código QR para imprimir en la propiedad.
+                        {t("home_page.section_02.feature_claim")}
                     </Typography>
                     <ButtonLink
-                        label={t("page_home.mainAction")}
+                        label={t("home_page.section_02.action_label")}
                         href="/app"
                         size="lg"
                         iconRight={<IconArrowRightAlt />}
@@ -271,7 +253,7 @@ export default function Home() {
                 >
                     <BadgeMarketing
                         className="px-4 relative"
-                        label="Huésped acompañado · Cercanía"
+                        label={t("home_page.section_03.welcome_badge")}
                     />
                     <div className="flex flex-col gap-2 justify-center w-full max-w-[800px] mx-auto relative">
                         <Typography
@@ -282,50 +264,56 @@ export default function Home() {
                             color="black"
                             id="features"
                         >
-                            Una guía viva, que acompaña a tu huésped en todo
-                            momento
+                            {t("home_page.section_03.title")}
                         </Typography>
                         <Typography
                             className="text-center text-lg sm:text-2xl! text-gray-900/60"
                             fontFamily="base"
                             weight="light"
                         >
-                            No es solo información. Es sentir que alguien está
-                            pendiente de él, aunque tú no estés.
+                            {t("home_page.section_03.subtitle")}
                         </Typography>
                         <div className="relative grid grid-cols-1 md:grid-cols-2 gap-2 w-full max-w-[800px] py-3">
                             <Feature
                                 color="gradient"
                                 icon={<IconDirections color="white" />}
-                                title="Planes a su medida"
-                                body="Tus huéspedes deciden qué quieren hacer, cuándo y cómo. Tu guía crea planes personalizados al momento con itinerarios listos para abrir en Google Maps."
+                                title={t(
+                                    "home_page.section_03.feature_01_title",
+                                )}
+                                body={t("home_page.section_03.feature_01_body")}
                                 className="border border-gray-100"
                             />
                             <Feature
                                 color="gradient"
                                 icon={<IconAlarm color="white" />}
-                                title="Recomendaciones según la hora del día"
-                                body="Desayuno, comida, cena, aperitivo, planes para pasear o salir de fiesta. Tu guía va cambiando sus recomendaciones en función de la hora local."
+                                title={t(
+                                    "home_page.section_03.feature_02_title",
+                                )}
+                                body={t("home_page.section_03.feature_02_body")}
                                 className="border border-gray-100"
                             />
                             <Feature
                                 color="gradient"
                                 icon={<IconNightLife color="white" />}
-                                title="Los mejores shows cercanos"
-                                body="Musicales, monólogos, obras de teatro y mucho más. Todos los espectáculos cercanos de un vistazo con enlace directo a la compra de entradas."
+                                title={t(
+                                    "home_page.section_03.feature_03_title",
+                                )}
+                                body={t("home_page.section_03.feature_03_body")}
                                 className="border border-gray-100"
                             />
                             <Feature
                                 color="gradient"
                                 icon={<IconLanguage color="white" />}
-                                title="Traducciones automáticas"
-                                body="Tu guía se adapta al idioma de cada huésped, al instante, sin que tú tengas que traducir nada."
+                                title={t(
+                                    "home_page.section_03.feature_04_title",
+                                )}
+                                body={t("home_page.section_03.feature_04_body")}
                                 className="border border-gray-100"
                             />
                         </div>
                     </div>
                     <ButtonLink
-                        label={t("page_home.mainAction")}
+                        label={t("home_page.section_03.action_label")}
                         href="/app"
                         size="lg"
                         iconRight={<IconArrowRightAlt />}
@@ -336,14 +324,13 @@ export default function Home() {
                             fontFamily="base"
                             component="h3"
                         >
-                            Y aún hay más...
+                            {t("home_page.section_03.feature_rest_title")}
                         </Typography>
                         <Typography
                             className="text-center text-sm font-medium text-gray-900/60 max-w-[400px]"
                             weight="light"
                         >
-                            Los pequeños detalles son los que hacen conseguir
-                            las mejores valoraciones
+                            {t("home_page.section_03.feature_rest_subtitle")}
                         </Typography>
                     </div>
                     <div className="relative grid grid-cols-2 md:grid-cols-4 lg:grid-flow-col lg:auto-cols-fr w-full max-w-[1000px] py-4 gap-4 items-center">
@@ -353,8 +340,7 @@ export default function Home() {
                                 color="primary"
                             />
                             <p className="text-sm font-body text-center">
-                                Un bot inteligente dentro de la guía que
-                                responde por ti a tus huéspedes
+                                {t("home_page.section_03.feature_05")}
                             </p>
                         </div>
                         <div className="flex flex-col gap-3 items-center">
@@ -363,8 +349,7 @@ export default function Home() {
                                 color="primary"
                             />
                             <p className="text-sm font-body text-center">
-                                Multialojamiento: Crea diferentes guías para más
-                                de una propiedad totalmente gratis.
+                                {t("home_page.section_03.feature_06")}
                             </p>
                         </div>
                         <div className="flex flex-col gap-3 items-center">
@@ -373,8 +358,7 @@ export default function Home() {
                                 color="primary"
                             />
                             <p className="text-sm font-body text-center">
-                                A tu gusto: Personaliza tu guía con tus fotos.
-                                Añade tus restaurantes favoritos, cafés, pubs...
+                                {t("home_page.section_03.feature_07")}
                             </p>
                         </div>
                         <div className="flex flex-col gap-3 items-center">
@@ -383,8 +367,7 @@ export default function Home() {
                                 color="primary"
                             />
                             <p className="text-sm font-body text-center">
-                                Todo tipo de categorías claras para que no les
-                                falte nada de información a tus huéspedes
+                                {t("home_page.section_03.feature_08")}
                             </p>
                         </div>
                         <div className="flex flex-col gap-3 items-center col-span-full lg:col-span-1 max-w-[300px] mx-auto">
@@ -393,9 +376,7 @@ export default function Home() {
                                 color="primary"
                             />
                             <p className="text-sm font-body text-center">
-                                ¿Lloverá durante las vacaciones? Incluye la
-                                previsión meteorológica de hoy y los próximos
-                                días.
+                                {t("home_page.section_03.feature_09")}
                             </p>
                         </div>
                     </div>
@@ -406,7 +387,7 @@ export default function Home() {
                 >
                     <BadgeMarketing
                         className="px-4 relative z-1"
-                        label="Huésped acompañado · Cercanía"
+                        label={t("home_page.section_04.welcome_badge")}
                     />
                     <div className="flex flex-col md:flex-row gap-4 max-w-[1280px]">
                         <div className="flex flex-col gap-4 order-2 md:order-1 w-full">
@@ -418,14 +399,14 @@ export default function Home() {
                                 color="black"
                                 id="faq"
                             >
-                                Preguntas frecuentes
+                                {t("home_page.section_04.title")}
                             </Typography>
                             <FaqSection
                                 items={faqItems}
                                 defaultActiveId="coste-prueba"
                             />
                             <ButtonLink
-                                label={t("page_home.mainAction")}
+                                label={t("home_page.section_04.action_label")}
                                 href="/app"
                                 size="lg"
                                 iconRight={<IconArrowRightAlt />}
@@ -478,19 +459,18 @@ export default function Home() {
                             color="black"
                             id="cta"
                         >
-                            Tu próxima reseña de 5 estrellas empieza aquí
+                            {t("home_page.call_to_action.title")}
                         </Typography>
                         <Typography
                             className="text-center text-lg sm:text-2xl! max-w-[600px] mx-auto"
                             fontFamily="base"
                             weight="light"
                         >
-                            Crea tu guía gratis en 2 minutos. Sin tarjeta. Sin
-                            descargas ni registros para tus huéspedes.
+                            {t("home_page.call_to_action.subtitle")}
                         </Typography>
                     </div>
                     <ButtonLink
-                        label={t("page_home.mainAction")}
+                        label={t("home_page.call_to_action.action_label")}
                         href="/app"
                         size="lg"
                         iconRight={<IconArrowRightAlt />}

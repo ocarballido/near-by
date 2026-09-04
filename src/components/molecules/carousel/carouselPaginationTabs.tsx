@@ -19,11 +19,21 @@ export function CarouselPaginationTabs({
 }: CarouselPaginationTabsProps) {
     const { selectedIndex, scrollTo } = useCarousel();
     const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
+    const isFirstRender = useRef(true);
 
     // Garantiza que el pill activo esté siempre visible dentro del
     // contenedor, sin arrastrar el scroll vertical de la página
     // (block: 'nearest' evita que scrollIntoView "salte" la página entera).
     useEffect(() => {
+        // En el montaje inicial el tab activo ya está correctamente
+        // posicionado por defecto — no hay ninguna acción del usuario
+        // que justifique desplazar la página. Solo desplazamos cuando
+        // selectedIndex cambia por una interacción real posterior.
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
+
         tabRefs.current[selectedIndex]?.scrollIntoView({
             behavior: "smooth",
             inline: "nearest",

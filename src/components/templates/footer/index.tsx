@@ -38,10 +38,7 @@ const Footer = () => {
                             <span className="font-bold">
                                 BNBexplorer &#169; {new Date().getFullYear()}:
                             </span>{" "}
-                            La herramienta para anfitriones de Airbnb que
-                            permite crear guías digitales personalizadas para
-                            tus alojamientos, con IA, mapas interactivos y
-                            enlaces únicos para tus huéspedes.
+                            {t("home_page.footer.description")}
                         </p>
                         <ShareMenu
                             url="https://bnbexplorer.com"
