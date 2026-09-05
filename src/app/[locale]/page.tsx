@@ -1,5 +1,5 @@
 import React from "react";
-import { useTranslations } from "next-intl";
+import { getTranslations, getLocale } from "next-intl/server";
 
 import Image from "next/image";
 
@@ -23,7 +23,10 @@ import Typography from "@/components/atoms/typography";
 import BadgeMarketing from "@/components/atoms/badge-marketing";
 import IconOpenInNew from "@/components/atoms/icon/open-in-new";
 import Rating from "@/components/molecules/rating";
-import { getHeroSlides } from "@/components/organisms/hero-carousel/hero-slides";
+import {
+    getHeroSlides,
+    type Locale,
+} from "@/components/organisms/hero-carousel/hero-slides";
 import { HeroCarousel } from "@/components/organisms/hero-carousel";
 import { StickyHeader } from "@/components/atoms/sticky-header";
 import FancyIcon from "@/components/atoms/icon/fancy-icon";
@@ -40,9 +43,10 @@ import IconQrCode from "@/components/atoms/icon/qr-code";
 import IconShare from "@/components/atoms/icon/share";
 import IconWhatsapp from "@/components/atoms/icon/whatsapp";
 
-export default function Home() {
-    const t = useTranslations();
-    const heroSlides = getHeroSlides(t);
+export default async function Home() {
+    const t = await getTranslations();
+    const locale = (await getLocale()) as Locale;
+    const heroSlides = getHeroSlides(t, locale);
 
     const faqItems: FaqItem[] = [
         {
@@ -74,16 +78,24 @@ export default function Home() {
 
     return (
         <>
-            <StickyHeader className="backdrop-blur-md">
+            <StickyHeader className="backdrop-blur-md pt-3 md:pt-0">
+                <ButtonLink
+                    href="https://www.bnbexplorer.com/es/public/37a03a95-cd39-4d40-a22b-7628cbb50245/welcome/highlights"
+                    label={t("home_page.hero.action_label")}
+                    color="white"
+                    target="_blank"
+                    className="shadow-xs z-5 border border-primary-200 flex md:hidden mx-3"
+                    iconRight={<IconOpenInNew />}
+                />
                 <LandingAppBar className="mx-auto rounded-none shadow-none! max-w-7xl" />
             </StickyHeader>
             <main className="bg-white">
                 <section
                     aria-labelledby="welcomeGuide"
-                    className="bg-white flex flex-col gap-8 justify-center items-center pt-3 border-b border-gray-100"
+                    className="bg-white flex flex-col gap-8 justify-center items-center pt-3 border-b border-gray-200"
                 >
                     <BadgeMarketing
-                        className="px-4"
+                        className="mx-4!"
                         label={t("home_page.hero.welcome_badge")}
                     />
                     <div className="flex flex-col gap-4 justify-center w-full max-w-[800px] mx-auto px-4">
@@ -105,6 +117,7 @@ export default function Home() {
                             {t("home_page.hero.subtitle")}
                         </Typography>
                     </div>
+
                     <Rating
                         label={t("home_page.hero.rating")}
                         className="px-4 max-w-xs text-center"
@@ -126,20 +139,11 @@ export default function Home() {
                         <div className="max-w-[1100px] w-full mx-auto relative">
                             <HeroCarousel slides={heroSlides} />
                         </div>
-                        <ButtonLink
-                            href="https://www.bnbexplorer.com/es/public/37a03a95-cd39-4d40-a22b-7628cbb50245/welcome/highlights"
-                            label={t("home_page.hero.action_label")}
-                            size="lg"
-                            color="white"
-                            target="_blank"
-                            className="shadow-xs z-5 border border-primary-200"
-                            iconRight={<IconOpenInNew />}
-                        />
                     </div>
                 </section>
                 <section
                     aria-labelledby="easyToUse"
-                    className="bg-white flex flex-col gap-8 justify-center items-center py-12 border-b border-gray-100 relative bg-radial-[circle_at_bottom] from-primary-50 to-white px-4"
+                    className="bg-white flex flex-col gap-8 justify-center items-center py-12 border-b border-gray-200 relative bg-radial-[circle_at_bottom] from-primary-50 to-white px-4"
                 >
                     <Image
                         src={blur}
@@ -176,21 +180,21 @@ export default function Home() {
                             number={1}
                             title={t("home_page.section_02.feature_01_title")}
                             body={t("home_page.section_02.feature_01_body")}
-                            className="border border-gray-100"
+                            className="border border-gray-200"
                         />
                         <Feature
                             color="gradient"
                             number={2}
                             title={t("home_page.section_02.feature_02_title")}
                             body={t("home_page.section_02.feature_02_body")}
-                            className="sm:col-start-1 sm:row-start-2 border border-gray-100"
+                            className="sm:col-start-1 sm:row-start-2 border border-gray-200"
                         />
                         <Feature
                             color="gradient"
                             number={3}
                             title={t("home_page.section_02.feature_03_title")}
                             body={t("home_page.section_02.feature_03_body")}
-                            className="sm:row-span-2 sm:col-start-2 sm:row-start-1 border border-gray-100"
+                            className="sm:row-span-2 sm:col-start-2 sm:row-start-1 border border-gray-200"
                             isFeatured
                             image={welcome.src}
                         />
@@ -261,7 +265,7 @@ export default function Home() {
                 </section>
                 <section
                     aria-labelledby="features"
-                    className="bg-white flex flex-col gap-8 justify-center items-center py-12 border-b border-gray-100 relative px-4"
+                    className="bg-white flex flex-col gap-8 justify-center items-center py-12 border-b border-gray-200 relative px-4"
                 >
                     <BadgeMarketing
                         className="px-4 relative"
@@ -293,7 +297,7 @@ export default function Home() {
                                     "home_page.section_03.feature_01_title",
                                 )}
                                 body={t("home_page.section_03.feature_01_body")}
-                                className="border border-gray-100"
+                                className="border border-gray-200"
                             />
                             <Feature
                                 color="gradient"
@@ -302,7 +306,7 @@ export default function Home() {
                                     "home_page.section_03.feature_02_title",
                                 )}
                                 body={t("home_page.section_03.feature_02_body")}
-                                className="border border-gray-100"
+                                className="border border-gray-200"
                             />
                             <Feature
                                 color="gradient"
@@ -311,7 +315,7 @@ export default function Home() {
                                     "home_page.section_03.feature_03_title",
                                 )}
                                 body={t("home_page.section_03.feature_03_body")}
-                                className="border border-gray-100"
+                                className="border border-gray-200"
                             />
                             <Feature
                                 color="gradient"
@@ -320,7 +324,7 @@ export default function Home() {
                                     "home_page.section_03.feature_04_title",
                                 )}
                                 body={t("home_page.section_03.feature_04_body")}
-                                className="border border-gray-100"
+                                className="border border-gray-200"
                             />
                         </div>
                     </div>
@@ -425,7 +429,7 @@ export default function Home() {
                 </section>
                 <section
                     aria-labelledby="faq"
-                    className="bg-white flex flex-col gap-8 justify-center items-center py-12 border-b border-gray-100 relative px-4 overflow-hidden"
+                    className="bg-white flex flex-col gap-8 justify-center items-center py-12 border-b border-gray-200 relative px-4 overflow-hidden"
                 >
                     <BadgeMarketing
                         className="px-4 relative z-1"
@@ -484,7 +488,7 @@ export default function Home() {
                 </section>
                 <section
                     aria-labelledby="cta"
-                    className="bg-gray-100 flex flex-col gap-8 justify-center items-center pt-12 border-b border-gray-100 relative px-4"
+                    className="bg-gray-100 flex flex-col gap-8 justify-center items-center pt-12 border-b border-gray-200 relative px-4"
                 >
                     <Image
                         src={blur}
