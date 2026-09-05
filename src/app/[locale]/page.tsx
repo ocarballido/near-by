@@ -95,7 +95,7 @@ export default async function Home() {
                     className="bg-white flex flex-col gap-8 justify-center items-center pt-3 border-b border-gray-200"
                 >
                     <BadgeMarketing
-                        className="px-4"
+                        className="mx-4!"
                         label={t("home_page.hero.welcome_badge")}
                     />
                     <div className="flex flex-col gap-4 justify-center w-full max-w-[800px] mx-auto px-4">
