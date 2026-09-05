@@ -36,6 +36,9 @@ import IconLanguage from "@/components/atoms/icon/language";
 import IconApartment from "@/components/atoms/icon/apartment";
 import IconLightMode from "@/components/atoms/icon/light-mode";
 import { FaqSection, type FaqItem } from "@/components/organisms/faq-section";
+import IconQrCode from "@/components/atoms/icon/qr-code";
+import IconShare from "@/components/atoms/icon/share";
+import IconWhatsapp from "@/components/atoms/icon/whatsapp";
 
 export default function Home() {
     const t = useTranslations();
@@ -113,26 +116,25 @@ export default function Home() {
                             className="object-cover object-top z-0"
                             alt="BBNexplorer"
                         />
-                        <div className="flex flex-col sm:flex-row gap-2">
-                            <ButtonLink
-                                href="#"
-                                label={t("home_page.hero.action_label")}
-                                size="lg"
-                                color="white"
-                                className="shadow-xs z-5 border border-primary-200"
-                                iconRight={<IconOpenInNew />}
-                            />
-                            <ButtonLink
-                                label={t("home_page.section_04.action_label")}
-                                href="/app"
-                                size="lg"
-                                iconRight={<IconArrowRightAlt />}
-                                className="shadow-xs z-5"
-                            />
-                        </div>
-                        <div className="max-w-[1100px] w-full mx-auto">
+                        <ButtonLink
+                            label={t("home_page.section_04.action_label")}
+                            href="/app"
+                            size="lg"
+                            iconRight={<IconArrowRightAlt />}
+                            className="shadow-xs z-5"
+                        />
+                        <div className="max-w-[1100px] w-full mx-auto relative">
                             <HeroCarousel slides={heroSlides} />
                         </div>
+                        <ButtonLink
+                            href="https://www.bnbexplorer.com/es/public/37a03a95-cd39-4d40-a22b-7628cbb50245/welcome/highlights"
+                            label={t("home_page.hero.action_label")}
+                            size="lg"
+                            color="white"
+                            target="_blank"
+                            className="shadow-xs z-5 border border-primary-200"
+                            iconRight={<IconOpenInNew />}
+                        />
                     </div>
                 </section>
                 <section
@@ -194,10 +196,34 @@ export default function Home() {
                         />
                     </div>
 
-                    <div className="relative grid grid-cols-2 md:grid-cols-4 lg:grid-flow-col lg:auto-cols-fr w-full max-w-[800px] py-3 gap-4">
+                    <ButtonLink
+                        label={t("home_page.section_02.action_label")}
+                        href="/app"
+                        size="lg"
+                        iconRight={<IconArrowRightAlt />}
+                        className="z-1"
+                    />
+
+                    <div className="flex flex-col gap-2 items-center">
+                        <Typography
+                            className="text-center text-base sm:text-xl!"
+                            fontFamily="base"
+                            component="h3"
+                        >
+                            {t("home_page.section_02.feature_claim_title")}
+                        </Typography>
+                        <Typography
+                            className="text-center text-sm font-medium text-gray-900/60 max-w-[400px]"
+                            weight="light"
+                        >
+                            {t("home_page.section_02.feature_claim")}
+                        </Typography>
+                    </div>
+
+                    <div className="relative grid grid-cols-2 md:grid-cols-4 lg:grid-flow-col lg:auto-cols-fr w-full max-w-[800px] gap-4">
                         <div className="flex flex-col gap-3 items-center">
                             <FancyIcon
-                                icon={<IconChatBubble color="white" />}
+                                icon={<IconWhatsapp color="white" />}
                                 color="primary"
                             />
                             <p className="text-sm font-body">
@@ -215,7 +241,7 @@ export default function Home() {
                         </div>
                         <div className="flex flex-col gap-3 items-center">
                             <FancyIcon
-                                icon={<IconChatBubble color="white" />}
+                                icon={<IconShare color="white" />}
                                 color="primary"
                             />
                             <p className="text-sm font-body">
@@ -224,7 +250,7 @@ export default function Home() {
                         </div>
                         <div className="flex flex-col gap-3 items-center">
                             <FancyIcon
-                                icon={<IconChatBubble color="white" />}
+                                icon={<IconQrCode color="white" />}
                                 color="primary"
                             />
                             <p className="text-sm font-body">
@@ -232,20 +258,6 @@ export default function Home() {
                             </p>
                         </div>
                     </div>
-                    <Typography
-                        weight="medium"
-                        size="sm"
-                        className="w-full max-w-[400px] mx-auto text-center"
-                    >
-                        {t("home_page.section_02.feature_claim")}
-                    </Typography>
-                    <ButtonLink
-                        label={t("home_page.section_02.action_label")}
-                        href="/app"
-                        size="lg"
-                        iconRight={<IconArrowRightAlt />}
-                        className="z-1"
-                    />
                 </section>
                 <section
                     aria-labelledby="features"
@@ -340,7 +352,13 @@ export default function Home() {
                                 color="primary"
                             />
                             <p className="text-sm font-body text-center">
-                                {t("home_page.section_03.feature_05")}
+                                {t.rich("home_page.section_03.feature_05", {
+                                    bold: (chunks) => (
+                                        <strong className="font-bold">
+                                            {chunks}
+                                        </strong>
+                                    ),
+                                })}
                             </p>
                         </div>
                         <div className="flex flex-col gap-3 items-center">
@@ -349,7 +367,13 @@ export default function Home() {
                                 color="primary"
                             />
                             <p className="text-sm font-body text-center">
-                                {t("home_page.section_03.feature_06")}
+                                {t.rich("home_page.section_03.feature_06", {
+                                    bold: (chunks) => (
+                                        <strong className="font-bold">
+                                            {chunks}
+                                        </strong>
+                                    ),
+                                })}
                             </p>
                         </div>
                         <div className="flex flex-col gap-3 items-center">
@@ -358,7 +382,13 @@ export default function Home() {
                                 color="primary"
                             />
                             <p className="text-sm font-body text-center">
-                                {t("home_page.section_03.feature_07")}
+                                {t.rich("home_page.section_03.feature_07", {
+                                    bold: (chunks) => (
+                                        <strong className="font-bold">
+                                            {chunks}
+                                        </strong>
+                                    ),
+                                })}
                             </p>
                         </div>
                         <div className="flex flex-col gap-3 items-center">
@@ -367,7 +397,13 @@ export default function Home() {
                                 color="primary"
                             />
                             <p className="text-sm font-body text-center">
-                                {t("home_page.section_03.feature_08")}
+                                {t.rich("home_page.section_03.feature_08", {
+                                    bold: (chunks) => (
+                                        <strong className="font-bold">
+                                            {chunks}
+                                        </strong>
+                                    ),
+                                })}
                             </p>
                         </div>
                         <div className="flex flex-col gap-3 items-center col-span-full lg:col-span-1 max-w-[300px] mx-auto">
@@ -376,7 +412,13 @@ export default function Home() {
                                 color="primary"
                             />
                             <p className="text-sm font-body text-center">
-                                {t("home_page.section_03.feature_09")}
+                                {t.rich("home_page.section_03.feature_09", {
+                                    bold: (chunks) => (
+                                        <strong className="font-bold">
+                                            {chunks}
+                                        </strong>
+                                    ),
+                                })}
                             </p>
                         </div>
                     </div>

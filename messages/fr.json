@@ -1254,7 +1254,7 @@
     "Reemplazar": "Remplacer",
     "home_page": {
         "hero": {
-            "welcome_badge": "Accès anticipé gratuit · Sans carte bancaire",
+            "welcome_badge": "Gratuit pour les hôtes et les voyageurs. Sans carte bancaire",
             "title": "Votre guide de bienvenue répond à votre place",
             "subtitle": "Créez-le en 2 minutes, 100 % gratuit, avec toutes les informations dont vos voyageurs ont besoin sur votre location de vacances : règlement intérieur, horaires, recommandations locales, chatbot, traduction automatique et bien plus encore.",
             "rating": "Des hôtes du monde entier ont déjà créé leur guide avec nous",
@@ -1273,7 +1273,7 @@
         "section_02": {
             "welcome_badge": "Simple et rapide · On s'occupe de tout",
             "title": "Aussi simple que ça : en seulement 2 minutes",
-            "subtitle": "L'expérience démarre immédiatement",
+            "subtitle": "L'expérience commence dès la réservation",
             "feature_01_title": "Indiquez l'adresse de votre location de vacances",
             "feature_01_body": "Notre IA crée automatiquement un guide avec un contenu de base en quelques secondes. 100 % gratuit, sans carte bancaire, immédiat.",
             "feature_02_title": "Personnalisez l'expérience de vos voyageurs",
@@ -1284,11 +1284,12 @@
             "feature_05_title": "Email",
             "feature_06_title": "Réseaux sociaux",
             "feature_07_title": "Code QR",
+            "feature_claim_title": "Partagez votre guide comme vous le souhaitez",
             "feature_claim": "WhatsApp, email, messagerie Airbnb/Booking, réseaux sociaux, ou code QR à imprimer dans le logement.",
             "action_label": "Créer mon guide gratuit"
         },
         "section_03": {
-            "welcome_badge": "Voyageur accompagné · Proximité",
+            "welcome_badge": "Proximité · Meilleurs Avis",
             "title": "Un guide vivant, qui accompagne votre voyageur à tout moment",
             "subtitle": "Ce n'est pas seulement de l'information. C'est le sentiment que quelqu'un veille sur lui, même en votre absence.",
             "feature_01_title": "Des plans sur mesure",
@@ -1301,11 +1302,11 @@
             "feature_04_body": "Votre contenu est traduit automatiquement et vos voyageurs le consultent dans leur propre langue. Nous ajoutons régulièrement de nouvelles langues, pour toucher toujours plus de voyageurs.",
             "feature_rest_title": "Et ce n'est pas tout...",
             "feature_rest_subtitle": "Ce sont les petits détails qui font les meilleurs avis",
-            "feature_05": "Un assistant intelligent intégré au guide qui répond à vos voyageurs à votre place",
-            "feature_06": "Multi-logements : créez différents guides pour plusieurs logements, entièrement gratuit.",
-            "feature_07": "À votre image : personnalisez votre guide avec vos photos. Ajoutez vos restaurants, cafés, bars préférés...",
-            "feature_08": "Des catégories claires pour que vos voyageurs ne manquent d'aucune information",
-            "feature_09": "Va-t-il pleuvoir pendant les vacances ? Inclut les prévisions météo du jour et des prochains jours.",
+            "feature_05": "Un <bold>bot intelligent</bold> intégré au guide qui répond à vos voyageurs à votre place",
+            "feature_06": "<bold>Multi-logements :</bold> créez différents guides pour plusieurs logements, entièrement gratuit.",
+            "feature_07": "À votre image : <bold>personnalisez</bold> votre guide avec vos photos. Ajoutez vos restaurants, cafés, bars préférés...",
+            "feature_08": "Des <bold>catégories</bold> claires pour que vos voyageurs ne manquent d'aucune information",
+            "feature_09": "Va-t-il pleuvoir pendant les vacances ? Inclut les <bold>prévisions météo</bold> du jour et des prochains jours.",
             "feature_claim": "WhatsApp, email, messagerie Airbnb/Booking, réseaux sociaux, ou code QR à imprimer dans le logement.",
             "action_label": "Créer mon guide gratuit"
         },

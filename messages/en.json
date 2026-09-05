@@ -1250,7 +1250,7 @@
     "Reemplazar": "Replace",
     "home_page": {
         "hero": {
-            "welcome_badge": "Free early access · No credit card",
+            "welcome_badge": "Free for hosts and guests. No credit card",
             "title": "Your welcome guide answers for you",
             "subtitle": "Create it in 2 minutes, 100% free, with all the information your guests need about your vacation rental: house rules, schedules, local recommendations, chatbot, automatic translation, and much more.",
             "rating": "Hosts from all over the world have already created their guide with us",
@@ -1269,7 +1269,7 @@
         "section_02": {
             "welcome_badge": "Simple and fast · We do it for you",
             "title": "This easy: in just 2 minutes",
-            "subtitle": "The experience starts right away",
+            "subtitle": "The experience starts the moment they book",
             "feature_01_title": "Enter your vacation rental's address",
             "feature_01_body": "Our AI automatically creates a guide with basic content in seconds. 100% free, no credit card, instantly.",
             "feature_02_title": "Personalize your guests' vacation experience",
@@ -1280,11 +1280,12 @@
             "feature_05_title": "Email",
             "feature_06_title": "Social media",
             "feature_07_title": "QR code",
+            "feature_claim_title": "Share your guide however you like",
             "feature_claim": "WhatsApp, email, Airbnb/Booking messaging, social media, or a QR code to print at the property.",
             "action_label": "Create my free guide"
         },
         "section_03": {
-            "welcome_badge": "A guest by your side · Closeness",
+            "welcome_badge": "Closeness · Better Reviews",
             "title": "A living guide that's with your guest at every moment",
             "subtitle": "It's not just information. It's feeling that someone is looking out for them, even when you're not there.",
             "feature_01_title": "Plans tailored to them",
@@ -1297,11 +1298,11 @@
             "feature_04_body": "Your content is automatically translated and your guests see it in their own language. We keep adding more languages, so it reaches more travelers every day.",
             "feature_rest_title": "And there's even more...",
             "feature_rest_subtitle": "It's the small details that earn the best reviews",
-            "feature_05": "A smart bot inside the guide that answers your guests for you",
-            "feature_06": "Multi-property: Create different guides for more than one property, completely free.",
-            "feature_07": "Your way: Personalize your guide with your photos. Add your favorite restaurants, cafés, pubs...",
-            "feature_08": "All kinds of clear categories so your guests never miss any information",
-            "feature_09": "Will it rain during the trip? Includes today's and the upcoming days' weather forecast.",
+            "feature_05": "A <bold>smart bot</bold> inside the guide that answers your guests for you",
+            "feature_06": "<bold>Multi-property:</bold> Create different guides for more than one property, completely free.",
+            "feature_07": "Your way: <bold>Personalize</bold> your guide with your photos. Add your favorite restaurants, cafés, pubs...",
+            "feature_08": "All kinds of clear <bold>categories</bold> so your guests never miss any information",
+            "feature_09": "Will it rain during the trip? Includes today's and the upcoming days' <bold>weather forecast</bold>.",
             "feature_claim": "WhatsApp, email, Airbnb/Booking messaging, social media, or a QR code to print at the property.",
             "action_label": "Create my free guide"
         },

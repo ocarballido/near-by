@@ -63,10 +63,10 @@ export function CarouselPaginationTabs({
                         role="tab"
                         aria-selected={isActive}
                         onClick={() => scrollTo(index)}
-                        className={`shrink-0 whitespace-nowrap rounded-full px-4 py-2 text-xs font-semibold transition-colors duration-200 ${
+                        className={`shrink-0 whitespace-nowrap rounded-full px-4 py-2 text-sm font-semibold transition-colors duration-200 hover:cursor-pointer ${
                             isActive
                                 ? "bg-emerald-100 text-emerald-900"
-                                : "text-neutral-600 hover:bg-neutral-100"
+                                : "text-neutral-500 hover:bg-neutral-100"
                         }`}
                     >
                         {item.label}
