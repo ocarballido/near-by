@@ -1,5 +1,5 @@
 import React from "react";
-import { useTranslations } from "next-intl";
+import { getTranslations, getLocale } from "next-intl/server";
 
 import Image from "next/image";
 
@@ -23,7 +23,10 @@ import Typography from "@/components/atoms/typography";
 import BadgeMarketing from "@/components/atoms/badge-marketing";
 import IconOpenInNew from "@/components/atoms/icon/open-in-new";
 import Rating from "@/components/molecules/rating";
-import { getHeroSlides } from "@/components/organisms/hero-carousel/hero-slides";
+import {
+    getHeroSlides,
+    type Locale,
+} from "@/components/organisms/hero-carousel/hero-slides";
 import { HeroCarousel } from "@/components/organisms/hero-carousel";
 import { StickyHeader } from "@/components/atoms/sticky-header";
 import FancyIcon from "@/components/atoms/icon/fancy-icon";
@@ -40,9 +43,10 @@ import IconQrCode from "@/components/atoms/icon/qr-code";
 import IconShare from "@/components/atoms/icon/share";
 import IconWhatsapp from "@/components/atoms/icon/whatsapp";
 
-export default function Home() {
-    const t = useTranslations();
-    const heroSlides = getHeroSlides(t);
+export default async function Home() {
+    const t = await getTranslations();
+    const locale = (await getLocale()) as Locale;
+    const heroSlides = getHeroSlides(t, locale);
 
     const faqItems: FaqItem[] = [
         {

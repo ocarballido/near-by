@@ -1,0 +1,9 @@
+.frame {
+    aspect-ratio: var(--mobile-ratio);
+}
+
+@media (min-width: 768px) {
+    .frame {
+        aspect-ratio: var(--desktop-ratio);
+    }
+}
