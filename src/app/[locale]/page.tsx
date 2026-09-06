@@ -296,55 +296,55 @@ export default async function Home() {
                         <BasicCard
                             title={t("home_page.section_03.feature_01_title")}
                             body={t("home_page.section_03.feature_01_body")}
-                            className="border border-gray-200"
+                            className="shadow-lg shadow-gray-100 my-6"
                             image="/static/img/home/features/feature_01.png"
                         />
                         <BasicCard
                             title={t("home_page.section_03.feature_02_title")}
                             body={t("home_page.section_03.feature_02_body")}
-                            className="border border-gray-200"
+                            className="shadow-lg shadow-gray-100 my-6"
                             image="/static/img/home/features/feature_02.png"
                         />
                         <BasicCard
                             title={t("home_page.section_03.feature_03_title")}
                             body={t("home_page.section_03.feature_03_body")}
-                            className="border border-gray-200"
+                            className="shadow-lg shadow-gray-100 my-6"
                             image="/static/img/home/features/feature_03.png"
                         />
                         <BasicCard
                             title={t("home_page.section_03.feature_04_title")}
                             body={t("home_page.section_03.feature_04_body")}
-                            className="border border-gray-200"
+                            className="shadow-lg shadow-gray-100 my-6"
                             image="/static/img/home/features/feature_04.png"
                         />
                         <BasicCard
                             title={t("home_page.section_03.feature_05_title")}
                             body={t("home_page.section_03.feature_05_body")}
-                            className="border border-gray-200"
+                            className="shadow-lg shadow-gray-100 my-6"
                             image="/static/img/home/features/feature_05.png"
                         />
                         <BasicCard
                             title={t("home_page.section_03.feature_06_title")}
                             body={t("home_page.section_03.feature_06_body")}
-                            className="border border-gray-200"
+                            className="shadow-lg shadow-gray-100 my-6"
                             image="/static/img/home/features/feature_06.png"
                         />
                         <BasicCard
                             title={t("home_page.section_03.feature_07_title")}
                             body={t("home_page.section_03.feature_07_body")}
-                            className="border border-gray-200"
+                            className="shadow-lg shadow-gray-100 my-6"
                             image="/static/img/home/features/feature_07.png"
                         />
                         <BasicCard
                             title={t("home_page.section_03.feature_08_title")}
                             body={t("home_page.section_03.feature_08_body")}
-                            className="border border-gray-200"
+                            className="shadow-lg shadow-gray-100 my-6"
                             image="/static/img/home/features/feature_08.png"
                         />
                         <BasicCard
                             title={t("home_page.section_03.feature_09_title")}
                             body={t("home_page.section_03.feature_09_body")}
-                            className="border border-gray-200"
+                            className="shadow-lg shadow-gray-100 my-6"
                             image="/static/img/home/features/feature_09.png"
                         />
                     </FeaturesCarousel>
