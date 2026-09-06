@@ -1308,7 +1308,17 @@
             "feature_08": "Des <bold>catégories</bold> claires pour que vos voyageurs ne manquent d'aucune information",
             "feature_09": "Va-t-il pleuvoir pendant les vacances ? Inclut les <bold>prévisions météo</bold> du jour et des prochains jours.",
             "feature_claim": "WhatsApp, email, messagerie Airbnb/Booking, réseaux sociaux, ou code QR à imprimer dans le logement.",
-            "action_label": "Créer mon guide gratuit"
+            "action_label": "Créer mon guide gratuit",
+            "feature_05_title": "Recherche rapide",
+            "feature_05_body": "Vos voyageurs recherchent par catégorie — restaurants, pharmacies, loisirs — et trouvent leurs réponses sans avoir à vous écrire.",
+            "feature_06_title": "Multi-logements",
+            "feature_06_body": "Créez différents guides pour plusieurs logements, entièrement gratuit.",
+            "feature_07_title": "À votre image",
+            "feature_07_body": "Personnalisez votre guide avec vos photos. Ajoutez vos restaurants, cafés, bars préférés...",
+            "feature_08_title": "Multi-catégories",
+            "feature_08_body": "Des catégories claires pour que vos voyageurs ne manquent d'aucune information",
+            "feature_09_title": "La météo",
+            "feature_09_body": "Va-t-il pleuvoir pendant les vacances ? Inclut les prévisions météo du jour et des prochains jours."
         },
         "section_04": {
             "welcome_badge": "Des questions ?",
