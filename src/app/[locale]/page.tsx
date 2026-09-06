@@ -488,7 +488,7 @@ export default async function Home() {
                 </section>
                 <section
                     aria-labelledby="cta"
-                    className="bg-gray-100 flex flex-col gap-8 justify-center items-center pt-12 border-b border-gray-200 relative px-4"
+                    className="bg-gray-100 flex flex-col gap-8 justify-center items-center pt-12 relative px-4"
                 >
                     <Image
                         src={blur}

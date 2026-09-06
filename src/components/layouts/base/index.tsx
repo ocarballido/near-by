@@ -4,7 +4,6 @@ import { OUTFIT } from "@/config/fonts";
 import CookieConsent from "@/components/Cookies";
 import { GoogleTagManager } from "@next/third-parties/google";
 import { GtmTracker } from "@/components/analytics/gtm-tracker";
-import GoogleMapsScript from "@/components/providers/GoogleMapsScript";
 import Footer from "@/components/templates/footer";
 import { getMaintenanceConfig } from "@/lib/maintenance";
 import { getMessagesForLocale } from "@/i18n/get-messages-for-locale";
@@ -28,7 +27,6 @@ const BaseLayout: React.FC<BaseProps> = async ({ children, locale }) => {
                     className={`${OUTFIT.className} ${ROBOTO.className} antialiased`}
                 >
                     {gtmID && <GoogleTagManager gtmId={gtmID} />}
-                    <GoogleMapsScript />
                     {children}
                     <CookieConsent />
                     <GtmTracker />

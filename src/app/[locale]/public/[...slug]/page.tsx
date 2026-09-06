@@ -17,7 +17,10 @@ import {
     fetchInfoSectionsData,
     fetchArrivalGuideData,
     fetchTimeWindowWidgetData,
+    fetchWelcomeHighlightsTabsData,
+    type HighlightGroup,
 } from "./_data";
+import { fetchWeather } from "@/components/templates/weather-widget/_data";
 import WelcomeSection from "./WelcomeSection";
 import SubcategorySection from "./SubcategorySection";
 import PublicAppBar from "@/components/organisms/public-appbar";
@@ -27,13 +30,17 @@ import { CATEGORIES_SUB_CATEGORIES } from "@/config/config-constants";
 import PublicInfoContentBootstrap from "@/components/providers/PublicInfoContentBootstrap";
 import PublicCountsBootstrap from "@/components/providers/PublicCountsBootstrap";
 import { getPropertySubCategoryCounts } from "@/utils/get-property-subcategory-counts";
-import { fetchPropertyTimezone } from "@/utils/fetch-property-timezone";
 import GuestChat from "@/components/organisms/guest-chat/GuestChat";
 import ArrivalGuide from "@/components/organisms/arrival-guide/ArrivalGuide";
 import TimeWindowSection from "@/components/molecules/time-window-section";
 import { SidebarProvider } from "@/lib/context/SidebarContext";
 
 type PageMode = "welcome" | "custom-plans" | "subcategory" | "lodging";
+
+type HighlightsData = {
+    featuredGroups: HighlightGroup[];
+    mustVisitGroups: HighlightGroup[];
+};
 
 interface GenerateMetadataProps {
     params: Promise<{ locale: string; slug: string[] }>;
@@ -112,6 +119,10 @@ export default async function Property({ params, searchParams }: PageProps) {
     const { open } = (await searchParams) ?? {};
     const [propertyId, categoryId, subCategoryId] = slug;
 
+    // Se calcula aquí (antes del Promise.all) porque decide qué fetches
+    // extra hacen falta — mode nunca depende de ningún dato remoto.
+    const mode = getMode(categoryId);
+
     // Analytics: no bloqueamos render
     void trackEvent({
         event: "tenant_visit_public_page",
@@ -136,24 +147,48 @@ export default async function Property({ params, searchParams }: PageProps) {
 
     const propertyPromise = fetchPropertyBase(propertyId);
 
-    // Shared data — en paralelo
+    // Un único fetch a Open-Meteo (weather ya incluye el timezone) en vez
+    // de dos llamadas separadas al mismo servicio para la misma propiedad.
+    const weatherPromise = propertyPromise.then(({ lat, lng }) =>
+        fetchWeather(lat, lng),
+    );
+
+    // Condicional: solo pagamos esta consulta cuando realmente hace falta
+    // (modo "welcome"), pero sigue viviendo DENTRO del Promise.all para
+    // no reintroducir un escalón secuencial cuando sí aplica.
+    const highlightsPromise: Promise<HighlightsData | null> =
+        mode === "welcome"
+            ? fetchWelcomeHighlightsTabsData(propertyId, locale)
+            : Promise.resolve(null);
+
     const [
         sidebarData,
         { property, lat, lng },
         infoGroups,
         counts,
+        weather,
         timeWindowData,
+        arrivalGuideData,
+        highlightsData,
     ] = await Promise.all([
         getPublicSidebarData(propertyId),
         propertyPromise,
         fetchInfoSectionsData(propertyId, locale),
         getPropertySubCategoryCounts(propertyId),
-        propertyPromise.then(async ({ lat, lng }) => {
-            const timezone = await fetchPropertyTimezone(lat, lng);
-            return timezone
-                ? fetchTimeWindowWidgetData(propertyId, timezone, locale)
-                : null;
-        }),
+        weatherPromise,
+        weatherPromise.then((weather) =>
+            weather
+                ? fetchTimeWindowWidgetData(
+                      propertyId,
+                      weather.timezone,
+                      locale,
+                  )
+                : null,
+        ),
+        propertyPromise.then(({ property }) =>
+            fetchArrivalGuideData(propertyId, property, locale),
+        ),
+        highlightsPromise,
     ]);
 
     if (timeWindowData) {
@@ -164,14 +199,7 @@ export default async function Property({ params, searchParams }: PageProps) {
         }).catch((e) => console.error("Mixpanel trackEvent failed:", e));
     }
 
-    const arrivalGuideData = await fetchArrivalGuideData(
-        propertyId,
-        property,
-        locale,
-    );
-
     const hasInfoContent = infoGroups.length > 0;
-    const mode = getMode(categoryId);
 
     return (
         <SidebarProvider>
@@ -207,13 +235,16 @@ export default async function Property({ params, searchParams }: PageProps) {
                         )}
                     </div>
                     <div className="p-4 font-roboto flex flex-col grow gap-4">
-                        {mode === "welcome" && (
+                        {mode === "welcome" && highlightsData && (
                             <WelcomeSection
                                 propertyId={propertyId}
                                 categoryId={categoryId}
                                 lat={lat}
                                 lng={lng}
                                 infoGroups={infoGroups}
+                                weather={weather}
+                                featuredGroups={highlightsData.featuredGroups}
+                                mustVisitGroups={highlightsData.mustVisitGroups}
                             />
                         )}
                         {mode === "custom-plans" && (

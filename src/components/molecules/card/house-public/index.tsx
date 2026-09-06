@@ -60,6 +60,7 @@ const HousePublic = ({
                     className="absolute inset-0 object-cover z-0 transition-transform duration-300 ease-out group-hover:scale-105"
                     src={image === null ? "/static/img/heroMobile.webp" : image}
                     fill={true}
+                    sizes="320px"
                     placeholder="blur"
                     blurDataURL={grayDataUrl}
                     alt={name}

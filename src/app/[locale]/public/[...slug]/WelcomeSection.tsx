@@ -1,11 +1,11 @@
-import { getTranslations, getLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 
 import WelcomeTabs from "@/components/templates/welcome-tabs";
 import WeatherWidget from "@/components/templates/weather-widget";
 import InfoShortcuts from "@/components/molecules/info-shortcuts";
-import { fetchWeather } from "@/components/templates/weather-widget/_data";
+import type { WeatherData } from "@/components/templates/weather-widget/_data";
 
-import { fetchWelcomeHighlightsTabsData, type InfoGroup } from "./_data";
+import type { InfoGroup, HighlightGroup } from "./_data";
 
 type Props = {
     propertyId: string;
@@ -13,6 +13,9 @@ type Props = {
     lat: number;
     lng: number;
     infoGroups: InfoGroup[];
+    weather: WeatherData | null;
+    featuredGroups: HighlightGroup[];
+    mustVisitGroups: HighlightGroup[];
 };
 
 export default async function WelcomeSection({
@@ -21,15 +24,11 @@ export default async function WelcomeSection({
     lng,
     categoryId,
     infoGroups,
+    weather,
+    featuredGroups,
+    mustVisitGroups,
 }: Props) {
-    const locale = await getLocale();
-
     const t = await getTranslations();
-
-    const [{ featuredGroups, mustVisitGroups }, weather] = await Promise.all([
-        fetchWelcomeHighlightsTabsData(propertyId, locale),
-        fetchWeather(lat, lng),
-    ]);
 
     return (
         <>
