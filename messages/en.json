@@ -1304,7 +1304,17 @@
             "feature_08": "All kinds of clear <bold>categories</bold> so your guests never miss any information",
             "feature_09": "Will it rain during the trip? Includes today's and the upcoming days' <bold>weather forecast</bold>.",
             "feature_claim": "WhatsApp, email, Airbnb/Booking messaging, social media, or a QR code to print at the property.",
-            "action_label": "Create my free guide"
+            "action_label": "Create my free guide",
+            "feature_05_title": "Quick search",
+            "feature_05_body": "Your guests search by category — restaurants, pharmacies, leisure — and get answers without messaging you.",
+            "feature_06_title": "Multi-property",
+            "feature_06_body": "Create different guides for more than one property, completely free.",
+            "feature_07_title": "Your way",
+            "feature_07_body": "Personalize your guide with your photos. Add your favorite restaurants, cafés, pubs...",
+            "feature_08_title": "Multi-category",
+            "feature_08_body": "All kinds of clear categories so your guests never miss any information",
+            "feature_09_title": "The weather",
+            "feature_09_body": "Will it rain during the trip? Includes today's and the upcoming days' weather forecast."
         },
         "section_04": {
             "welcome_badge": "Got questions?",

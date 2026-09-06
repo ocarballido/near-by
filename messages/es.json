@@ -1308,7 +1308,17 @@
             "feature_08": "Todo tipo de <bold>categorías</bold> claras para que no les falte nada de información a tus huéspedes",
             "feature_09": "¿Lloverá durante las vacaciones? Incluye la <bold>previsión meteorológica</bold> de hoy y los próximos días.",
             "feature_claim": "WhatsApp, email, mensajería de Airbnb/Booking, redes sociales, o código QR para imprimir en la propiedad.",
-            "action_label": "Crear mi guía gratis"
+            "action_label": "Crear mi guía gratis",
+            "feature_05_title": "Búsqueda rápida",
+            "feature_05_body": "Tus huéspedes buscan por categorías —restaurantes, farmacias, ocio— y resuelven sus dudas sin tener que escribirte a ti.",
+            "feature_06_title": "Multialojamiento",
+            "feature_06_body": "Crea diferentes guías para más de una propiedad totalmente gratis.",
+            "feature_07_title": "A tu gusto",
+            "feature_07_body": "Personaliza tu guía con tus fotos. Añade tus restaurantes favoritos, cafés, pubs...",
+            "feature_08_title": "Multi-categorías",
+            "feature_08_body": "Todo tipo de categorías claras para que no les falte nada de información a tus huéspedes",
+            "feature_09_title": "El tiempo",
+            "feature_09_body": "¿Lloverá durante las vacaciones? Incluye la previsión meteorológica de hoy y los próximos días."
         },
         "section_04": {
             "welcome_badge": "¿Tienes dudas?",

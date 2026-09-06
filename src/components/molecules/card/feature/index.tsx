@@ -19,7 +19,7 @@ type FeaturePropType = {
 const Feature = ({
     icon,
     color = "gradient",
-    number = 1,
+    number,
     isFeatured = false,
     title,
     body,
@@ -32,12 +32,14 @@ const Feature = ({
         <div
             className={`flex flex-1 flex-col p-1 bg-white rounded-2xl items-center justify-center text-center relative ${className}`}
         >
-            <FancyIcon
-                icon={icon}
-                color={color}
-                isFeatured={isFeatured}
-                number={number}
-            />
+            {icon || number ? (
+                <FancyIcon
+                    icon={icon}
+                    color={color}
+                    isFeatured={isFeatured}
+                    number={number}
+                />
+            ) : null}
             {isFeatured && (
                 <div
                     className="relative grow h-full w-full rounded-xl overflow-hidden bg-gradient-to-tr from-[#ffa263] to-[#6cffc9]"

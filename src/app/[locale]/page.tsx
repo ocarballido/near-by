@@ -42,6 +42,8 @@ import { FaqSection, type FaqItem } from "@/components/organisms/faq-section";
 import IconQrCode from "@/components/atoms/icon/qr-code";
 import IconShare from "@/components/atoms/icon/share";
 import IconWhatsapp from "@/components/atoms/icon/whatsapp";
+import BasicCard from "@/components/molecules/card/basic";
+import { FeaturesCarousel } from "@/components/organisms/features-carousel";
 
 export default async function Home() {
     const t = await getTranslations();
@@ -289,51 +291,63 @@ export default async function Home() {
                         >
                             {t("home_page.section_03.subtitle")}
                         </Typography>
-                        <div className="relative grid grid-cols-1 md:grid-cols-2 gap-2 w-full max-w-[800px] py-3">
-                            <Feature
-                                color="gradient"
-                                icon={<IconDirections color="white" />}
-                                title={t(
-                                    "home_page.section_03.feature_01_title",
-                                )}
-                                body={t("home_page.section_03.feature_01_body")}
-                                className="border border-gray-200"
-                            />
-                            <Feature
-                                color="gradient"
-                                icon={<IconAlarm color="white" />}
-                                title={t(
-                                    "home_page.section_03.feature_02_title",
-                                )}
-                                body={t("home_page.section_03.feature_02_body")}
-                                className="border border-gray-200"
-                            />
-                            <Feature
-                                color="gradient"
-                                icon={<IconNightLife color="white" />}
-                                title={t(
-                                    "home_page.section_03.feature_03_title",
-                                )}
-                                body={t("home_page.section_03.feature_03_body")}
-                                className="border border-gray-200"
-                            />
-                            <Feature
-                                color="gradient"
-                                icon={<IconLanguage color="white" />}
-                                title={t(
-                                    "home_page.section_03.feature_04_title",
-                                )}
-                                body={t("home_page.section_03.feature_04_body")}
-                                className="border border-gray-200"
-                            />
-                        </div>
                     </div>
-                    <ButtonLink
-                        label={t("home_page.section_03.action_label")}
-                        href="/app"
-                        size="lg"
-                        iconRight={<IconArrowRightAlt />}
-                    />
+                    <FeaturesCarousel>
+                        <BasicCard
+                            title={t("home_page.section_03.feature_01_title")}
+                            body={t("home_page.section_03.feature_01_body")}
+                            className="border border-gray-200"
+                            image="/static/img/home/features/feature_01.png"
+                        />
+                        <BasicCard
+                            title={t("home_page.section_03.feature_02_title")}
+                            body={t("home_page.section_03.feature_02_body")}
+                            className="border border-gray-200"
+                            image="/static/img/home/features/feature_02.png"
+                        />
+                        <BasicCard
+                            title={t("home_page.section_03.feature_03_title")}
+                            body={t("home_page.section_03.feature_03_body")}
+                            className="border border-gray-200"
+                            image="/static/img/home/features/feature_03.png"
+                        />
+                        <BasicCard
+                            title={t("home_page.section_03.feature_04_title")}
+                            body={t("home_page.section_03.feature_04_body")}
+                            className="border border-gray-200"
+                            image="/static/img/home/features/feature_04.png"
+                        />
+                        <BasicCard
+                            title={t("home_page.section_03.feature_05_title")}
+                            body={t("home_page.section_03.feature_05_body")}
+                            className="border border-gray-200"
+                            image="/static/img/home/features/feature_05.png"
+                        />
+                        <BasicCard
+                            title={t("home_page.section_03.feature_06_title")}
+                            body={t("home_page.section_03.feature_06_body")}
+                            className="border border-gray-200"
+                            image="/static/img/home/features/feature_06.png"
+                        />
+                        <BasicCard
+                            title={t("home_page.section_03.feature_07_title")}
+                            body={t("home_page.section_03.feature_07_body")}
+                            className="border border-gray-200"
+                            image="/static/img/home/features/feature_07.png"
+                        />
+                        <BasicCard
+                            title={t("home_page.section_03.feature_08_title")}
+                            body={t("home_page.section_03.feature_08_body")}
+                            className="border border-gray-200"
+                            image="/static/img/home/features/feature_08.png"
+                        />
+                        <BasicCard
+                            title={t("home_page.section_03.feature_09_title")}
+                            body={t("home_page.section_03.feature_09_body")}
+                            className="border border-gray-200"
+                            image="/static/img/home/features/feature_09.png"
+                        />
+                    </FeaturesCarousel>
                     <div className="flex flex-col gap-2 items-center">
                         <Typography
                             className="text-center text-base sm:text-xl!"
@@ -349,83 +363,12 @@ export default async function Home() {
                             {t("home_page.section_03.feature_rest_subtitle")}
                         </Typography>
                     </div>
-                    <div className="relative grid grid-cols-2 md:grid-cols-4 lg:grid-flow-col lg:auto-cols-fr w-full max-w-[1000px] py-4 gap-4 items-center">
-                        <div className="flex flex-col gap-3 items-center">
-                            <FancyIcon
-                                icon={<IconChatBubble color="white" />}
-                                color="primary"
-                            />
-                            <p className="text-sm font-body text-center">
-                                {t.rich("home_page.section_03.feature_05", {
-                                    bold: (chunks) => (
-                                        <strong className="font-bold">
-                                            {chunks}
-                                        </strong>
-                                    ),
-                                })}
-                            </p>
-                        </div>
-                        <div className="flex flex-col gap-3 items-center">
-                            <FancyIcon
-                                icon={<IconApartment color="white" />}
-                                color="primary"
-                            />
-                            <p className="text-sm font-body text-center">
-                                {t.rich("home_page.section_03.feature_06", {
-                                    bold: (chunks) => (
-                                        <strong className="font-bold">
-                                            {chunks}
-                                        </strong>
-                                    ),
-                                })}
-                            </p>
-                        </div>
-                        <div className="flex flex-col gap-3 items-center">
-                            <FancyIcon
-                                icon={<IconFavorite color="white" />}
-                                color="primary"
-                            />
-                            <p className="text-sm font-body text-center">
-                                {t.rich("home_page.section_03.feature_07", {
-                                    bold: (chunks) => (
-                                        <strong className="font-bold">
-                                            {chunks}
-                                        </strong>
-                                    ),
-                                })}
-                            </p>
-                        </div>
-                        <div className="flex flex-col gap-3 items-center">
-                            <FancyIcon
-                                icon={<IconInterests color="white" />}
-                                color="primary"
-                            />
-                            <p className="text-sm font-body text-center">
-                                {t.rich("home_page.section_03.feature_08", {
-                                    bold: (chunks) => (
-                                        <strong className="font-bold">
-                                            {chunks}
-                                        </strong>
-                                    ),
-                                })}
-                            </p>
-                        </div>
-                        <div className="flex flex-col gap-3 items-center col-span-full lg:col-span-1 max-w-[300px] mx-auto">
-                            <FancyIcon
-                                icon={<IconLightMode color="white" />}
-                                color="primary"
-                            />
-                            <p className="text-sm font-body text-center">
-                                {t.rich("home_page.section_03.feature_09", {
-                                    bold: (chunks) => (
-                                        <strong className="font-bold">
-                                            {chunks}
-                                        </strong>
-                                    ),
-                                })}
-                            </p>
-                        </div>
-                    </div>
+                    <ButtonLink
+                        label={t("home_page.section_03.action_label")}
+                        href="/app"
+                        size="lg"
+                        iconRight={<IconArrowRightAlt />}
+                    />
                 </section>
                 <section
                     aria-labelledby="faq"
@@ -488,7 +431,7 @@ export default async function Home() {
                 </section>
                 <section
                     aria-labelledby="cta"
-                    className="bg-gray-100 flex flex-col gap-8 justify-center items-center pt-12 border-b border-gray-200 relative px-4"
+                    className="bg-gray-100 flex flex-col gap-8 justify-center items-center pt-12 relative px-4"
                 >
                     <Image
                         src={blur}

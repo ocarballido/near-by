@@ -159,6 +159,7 @@ const PlacePublic = ({
                     src={src}
                     fill={true}
                     placeholder="blur"
+                    sizes="(min-width: 1536px) calc((100vw - 320px) / 4), (min-width: 1280px) calc((100vw - 320px) / 3), (min-width: 1024px) calc((100vw - 320px) / 2), (min-width: 768px) calc(100vw - 320px), 100vw"
                     blurDataURL={grayDataUrl}
                     alt={name}
                 />
