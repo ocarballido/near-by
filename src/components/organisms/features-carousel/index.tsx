@@ -19,7 +19,9 @@ export function FeaturesCarousel({
     className = "",
 }: FeaturesCarouselProps) {
     return (
-        <div className={`w-full max-w-[1280px] mx-auto ${className}`}>
+        <div
+            className={`w-full max-w-[1280px] mx-auto pb-6 bg-primary-50 rounded-2xl border border-gray-100 ${className}`}
+        >
             <Carousel
                 options={{ loop: true, align: "center" }}
                 gap={SLIDE_GAP}
