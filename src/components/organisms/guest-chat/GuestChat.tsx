@@ -12,9 +12,40 @@ interface Message {
 interface GuestChatProps {
     propertyId: string;
     locale: string;
+    anonId: string;
+    timezone?: string;
 }
 
-export default function GuestChat({ propertyId, locale }: GuestChatProps) {
+// Convierte cualquier URL suelta en el texto en un enlace clicable, con
+// una etiqueta corta en vez del texto crudo de la URL — así se resuelven
+// a la vez el "no es un enlace" y el "se desborda" (una URL larga sin
+// espacios no envuelve dentro de la burbuja aunque el contenedor sí lo
+// permita para el resto del texto).
+function renderMessageText(text: string, directionsLabel: string) {
+    const parts = text.split(/(https?:\/\/[^\s]+)/g);
+    return parts.map((part, i) =>
+        part.startsWith("http") ? (
+            <a
+                key={i}
+                href={part}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline font-medium"
+            >
+                {directionsLabel}
+            </a>
+        ) : (
+            <span key={i}>{part}</span>
+        ),
+    );
+}
+
+export default function GuestChat({
+    propertyId,
+    locale,
+    anonId,
+    timezone,
+}: GuestChatProps) {
     const t = useTranslations("GuestChat");
 
     const containerRef = useRef<HTMLDivElement>(null);
@@ -64,7 +95,17 @@ export default function GuestChat({ propertyId, locale }: GuestChatProps) {
             const res = await fetch("/api/chat", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ message: text, propertyId, locale }),
+                body: JSON.stringify({
+                    message: text,
+                    propertyId,
+                    locale,
+                    anonId,
+                    timezone,
+                    // Ventana corta de historial, para preguntas de
+                    // seguimiento ("¿y para cenar?") — el backend solo usa
+                    // las últimas 4 en la clasificación.
+                    history: messages.slice(-4),
+                }),
             });
             const { reply } = await res.json();
             setMessages((prev) => [...prev, { role: "bot", text: reply }]);
@@ -83,10 +124,8 @@ export default function GuestChat({ propertyId, locale }: GuestChatProps) {
             ref={containerRef}
             className="fixed bottom-6 right-4 z-50 flex flex-col items-end gap-3"
         >
-            {/* Panel de chat */}
             {open && (
                 <div className="flex flex-col w-80 h-96 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">
-                    {/* Header */}
                     <div className="flex items-center justify-between px-4 py-3 bg-primary-500">
                         <div className="flex items-center gap-2">
                             <span className="text-xl">🏠</span>
@@ -103,7 +142,6 @@ export default function GuestChat({ propertyId, locale }: GuestChatProps) {
                         </button>
                     </div>
 
-                    {/* Mensajes */}
                     <div className="flex flex-col gap-3 p-4 overflow-y-auto flex-1">
                         {messages.map((msg, i) => (
                             <div
@@ -117,7 +155,10 @@ export default function GuestChat({ propertyId, locale }: GuestChatProps) {
                                             : "bg-gray-100 text-gray-800 rounded-bl-sm"
                                     }`}
                                 >
-                                    {msg.text}
+                                    {renderMessageText(
+                                        msg.text,
+                                        t("directionsLabel"),
+                                    )}
                                 </div>
                             </div>
                         ))}
@@ -135,7 +176,6 @@ export default function GuestChat({ propertyId, locale }: GuestChatProps) {
                         <div ref={bottomRef} />
                     </div>
 
-                    {/* Input */}
                     <div className="flex items-center gap-2 px-3 py-3 border-t border-gray-100">
                         <TextField
                             label=""
@@ -168,7 +208,6 @@ export default function GuestChat({ propertyId, locale }: GuestChatProps) {
                 </div>
             )}
 
-            {/* Botón flotante */}
             <button
                 onClick={() => setOpen((prev) => !prev)}
                 className="flex items-center gap-2 px-3.5 h-12 rounded-full bg-gradient-to-r from-orange-400 to-green-400 text-white shadow-lg hover:opacity-90 transition-opacity hover:cursor-pointer"

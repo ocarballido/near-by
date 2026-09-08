@@ -278,7 +278,12 @@ export default async function Property({ params, searchParams }: PageProps) {
                     propertyId={propertyId}
                     address={property.address}
                 />
-                <GuestChat propertyId={propertyId} locale={locale} />
+                <GuestChat
+                    propertyId={propertyId}
+                    locale={locale}
+                    anonId={anonId}
+                    timezone={weather?.timezone}
+                />
             </EditPublicMenuProvider>
         </SidebarProvider>
     );
