@@ -1092,7 +1092,9 @@
         "featuredNotFound": "L'hôte n'a pas encore marqué de lieu comme favori.",
         "mustVisitNotFound": "L'hôte n'a pas encore marqué de lieu incontournable.",
         "featuredPrefix": "⭐ Lieux favoris de l'hôte :",
-        "mustVisitPrefix": "🔥 Lieux incontournables selon l'hôte :"
+        "mustVisitPrefix": "🔥 Lieux incontournables selon l'hôte :",
+        "butlerFallback": "Je suis l'assistant de ce guide et je ne peux vous aider que pour des questions liées au logement et ses environs. Pour toute autre recherche, je vous recommande votre moteur de recherche habituel 😊",
+        "directionsLabel": "Itinéraire 🧭"
     },
     "ArrivalGuide": {
         "triggerLabel": "Guide d'arrivée",

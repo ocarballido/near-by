@@ -1088,7 +1088,9 @@
         "featuredNotFound": "The host hasn't marked any place as a favourite yet.",
         "mustVisitNotFound": "The host hasn't marked any must-visit place yet.",
         "featuredPrefix": "⭐ Host's favourite places:",
-        "mustVisitPrefix": "🔥 Must-visit places according to the host:"
+        "mustVisitPrefix": "🔥 Must-visit places according to the host:",
+        "butlerFallback": "I'm the assistant for this guide, and I can only help with questions about the property and its surroundings. For anything else, I'd recommend your usual search engine 😊",
+        "directionsLabel": "Get directions 🧭"
     },
     "ArrivalGuide": {
         "triggerLabel": "Arrival guide",

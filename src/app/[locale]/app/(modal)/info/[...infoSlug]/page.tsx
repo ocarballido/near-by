@@ -47,6 +47,8 @@ export default async function InfoPage({ params }: PageProps) {
         (item) => item.id === subCategoryId,
     );
 
+    const aiGenerationEnabled = process.env.PUBLIC_INFO_LLM_ENABLED === "true";
+
     return (
         <AppContentTemplate showSidebar={false}>
             <div className="p-1.5 font-roboto flex flex-col grow items-center gap-3 py-6">
@@ -56,6 +58,7 @@ export default async function InfoPage({ params }: PageProps) {
                     subCategoryId={subCategoryId}
                     name={subcategory?.name ?? null}
                     initialContent={info?.description ?? ""}
+                    aiGenerationEnabled={aiGenerationEnabled}
                 />
             </div>
         </AppContentTemplate>

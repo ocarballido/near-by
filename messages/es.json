@@ -1092,7 +1092,9 @@
         "featuredNotFound": "El propietario no ha marcado ningún lugar como favorito todavía.",
         "mustVisitNotFound": "El propietario no ha marcado ningún lugar como imprescindible todavía.",
         "featuredPrefix": "⭐ Lugares favoritos del anfitrión:",
-        "mustVisitPrefix": "🔥 Lugares imprescindibles según el anfitrión:"
+        "mustVisitPrefix": "🔥 Lugares imprescindibles según el anfitrión:",
+        "butlerFallback": "Soy el asistente de esta guía y solo puedo ayudarte con temas del alojamiento y sus alrededores. Para otro tipo de búsquedas, te recomiendo tu buscador habitual 😊",
+        "directionsLabel": "Cómo llegar 🧭"
     },
     "ArrivalGuide": {
         "triggerLabel": "Guía de llegada",

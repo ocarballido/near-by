@@ -30,6 +30,7 @@ type AddInfoFormProps = {
     subCategoryId: string;
     name: string | null;
     initialContent?: string;
+    aiGenerationEnabled: boolean;
 };
 
 type FormValues = {
@@ -53,6 +54,7 @@ const UpdateInfoForm = ({
     subCategoryId,
     name,
     initialContent = "",
+    aiGenerationEnabled,
 }: AddInfoFormProps) => {
     const t = useTranslations();
 
@@ -123,7 +125,7 @@ const UpdateInfoForm = ({
         setGenerating(true);
         setAlert(null);
 
-        const result = await generateAIContent(prompt);
+        const result = await generateAIContent(prompt, propertyId);
 
         if (result.error) {
             setAlert({ type: "error", message: result.error });
@@ -213,66 +215,72 @@ const UpdateInfoForm = ({
                     />
                 </div>
 
-                <div className="flex flex-col gap-4 p-4 border-b border-gray-200">
-                    <DashboardData
-                        label={
-                            <Typography
-                                size="sm"
-                                weight="medium"
-                                className="flex gap-2 items-center"
-                            >
-                                <span className="w-9 h-9 flex justify-center items-center rounded-full bg-primary-100 font-bold text-primary-800 text-base">
-                                    2
-                                </span>
-                                {t("Generar con IA")}
-                            </Typography>
-                        }
-                        action={
-                            <Typography
-                                weight="medium"
-                                className="flex gap-2 items-center text-xs!"
-                            >
-                                {t("Opcional")}
-                            </Typography>
-                        }
-                    />
-                    <TextArea
-                        label={t("Describe lo que quieres que la IA escriba")}
-                        value={prompt}
-                        onChange={(e) => setPrompt(e.target.value)}
-                        rows={4}
-                        placeholder={t(
-                            "Instrucciones para el uso del aire acondicionado y te ayudaremos a redactarlo",
-                        )}
-                    />
+                {aiGenerationEnabled ? (
+                    <div className="flex flex-col gap-4 p-4 border-b border-gray-200">
+                        <DashboardData
+                            label={
+                                <Typography
+                                    size="sm"
+                                    weight="medium"
+                                    className="flex gap-2 items-center"
+                                >
+                                    <span className="w-9 h-9 flex justify-center items-center rounded-full bg-primary-100 font-bold text-primary-800 text-base">
+                                        2
+                                    </span>
+                                    {t("Generar con IA")}
+                                </Typography>
+                            }
+                            action={
+                                <Typography
+                                    weight="medium"
+                                    className="flex gap-2 items-center text-xs!"
+                                >
+                                    {t("Opcional")}
+                                </Typography>
+                            }
+                        />
+                        <TextArea
+                            label={t(
+                                "Describe lo que quieres que la IA escriba",
+                            )}
+                            value={prompt}
+                            onChange={(e) => setPrompt(e.target.value)}
+                            rows={4}
+                            placeholder={t(
+                                "Instrucciones para el uso del aire acondicionado y te ayudaremos a redactarlo",
+                            )}
+                        />
 
-                    <ButtonMagic
-                        label={
-                            generating ? t("Generando") : t("Generar con IA")
-                        }
-                        disabled={!prompt || generating || remaining === 0}
-                        className="w-full shadow-none ml-auto mr-auto my-2"
-                        onClick={generateAI}
-                    />
+                        <ButtonMagic
+                            label={
+                                generating
+                                    ? t("Generando")
+                                    : t("Generar con IA")
+                            }
+                            disabled={!prompt || generating || remaining === 0}
+                            className="w-full shadow-none ml-auto mr-auto my-2"
+                            onClick={generateAI}
+                        />
 
-                    {remaining !== null &&
-                        (remaining === 0 ? (
-                            <p className="text-xs text-error-500 font-medium py-1 px-3 w-full text-center uppercase">
-                                {t("Has alcanzado el límite diario de IA")}
-                            </p>
-                        ) : (
-                            <p className="text-xs flex justify-center items-center text-gray-600 font-medium py-1 px-3 w-full text-center uppercase">
-                                <span>
-                                    {t(
-                                        "Número de consultas restantes de la AI",
-                                    )}
-                                </span>
-                                <span
-                                    className={`font-bold w-6 h-6 inline-flex items-center justify-center rounded-full ml-1 ${remainingColor}`}
-                                >{` ${remaining}`}</span>
-                            </p>
-                        ))}
-                </div>
+                        {remaining !== null &&
+                            (remaining === 0 ? (
+                                <p className="text-xs text-error-500 font-medium py-1 px-3 w-full text-center uppercase">
+                                    {t("Has alcanzado el límite diario de IA")}
+                                </p>
+                            ) : (
+                                <p className="text-xs flex justify-center items-center text-gray-600 font-medium py-1 px-3 w-full text-center uppercase">
+                                    <span>
+                                        {t(
+                                            "Número de consultas restantes de la AI",
+                                        )}
+                                    </span>
+                                    <span
+                                        className={`font-bold w-6 h-6 inline-flex items-center justify-center rounded-full ml-1 ${remainingColor}`}
+                                    >{` ${remaining}`}</span>
+                                </p>
+                            ))}
+                    </div>
+                ) : null}
 
                 <div className="flex flex-col gap-4 p-4">
                     <div className="flex flex-col gap-2">
