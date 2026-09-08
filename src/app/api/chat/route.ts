@@ -84,16 +84,22 @@ export async function POST(req: Request) {
         const supabase = await createServerAdminClient();
         const db = supabase as unknown as SupabaseClient<Database>;
 
-        // 1) Vía determinista existente — coste cero, siempre se intenta primero.
+        // 1) Vía determinista existente — coste cero, se intenta primero.
+        //    Si devuelve null, significa "match de keyword pero sin datos
+        //    en esa subcategoría concreta" — se cede el turno al LLM en vez
+        //    de darlo por "no existe".
         const keywordIntent = detectIntent(message);
         if (keywordIntent !== null) {
-            return await resolveDeterministicReply(
+            const deterministicResponse = await resolveDeterministicReply(
                 db,
                 propertyId,
                 keywordIntent,
                 messages,
                 t,
             );
+            if (deterministicResponse !== null) {
+                return deterministicResponse;
+            }
         }
 
         if (!anonId) {
@@ -112,9 +118,6 @@ export async function POST(req: Request) {
 
         const propertyName = await getPropertyName(db, propertyId);
 
-        // 3) Qué tiene esta propiedad REALMENTE configurado — el esquema
-        //    del clasificador se construye a partir de esto, nunca de una
-        //    lista fija.
         const availableCategories = await fetchAvailableCategories(
             db,
             propertyId,
@@ -159,19 +162,9 @@ export async function POST(req: Request) {
             availableCategories,
         );
         if (responseKind === null) {
-            // Defensivo: el esquema solo permite valores que
-            // resolveResponseKind sabe interpretar, así que esto no
-            // debería ocurrir nunca — pero si ocurre, mejor un fallback
-            // silencioso que un error visible para el huésped.
-            console.error(
-                "chatbot: valor clasificado sin ResponseKind:",
-                classifiedValue,
-            );
             return Response.json({ reply: t("fallback") });
         }
 
-        // Contenido ya redactado por el propietario (property_details) —
-        // se sirve tal cual, sin generar ni consultar property_data.
         if (responseKind === "detail") {
             const { data: detail } = await db
                 .from("property_details")
@@ -222,9 +215,6 @@ export async function POST(req: Request) {
             responseKind === "featured" ||
             responseKind === "must_visit"
         ) {
-            // Datos exactos (horario) o colecciones curadas por el
-            // propietario (featured/must_visit) — se resuelven siempre con
-            // la plantilla determinista, no con redacción natural.
             return Response.json({
                 reply: buildResponse(
                     responseKind,
@@ -235,7 +225,6 @@ export async function POST(req: Request) {
             });
         }
 
-        // info | location, con datos: aquí sí tiene sentido redactar.
         const generateResult = await generateGroundedReply({
             message,
             propertyName,
@@ -255,10 +244,6 @@ export async function POST(req: Request) {
             calculateCostUsd(LLM_MODEL, generateResult.usage),
         );
 
-        // Solo se enlaza lo que el modelo mencionó de verdad en su
-        // respuesta — si descartó una fila (como en el caso "ningún hecho
-        // encaja"), no debe aparecer un botón de "cómo llegar" contradiciendo
-        // ese mensaje.
         const mentionedRows = rows.filter(
             (r) => r.name && generateResult.text.includes(r.name),
         );
@@ -275,10 +260,6 @@ export async function POST(req: Request) {
     }
 }
 
-// Punto de entrada único para las filas de property_data, usado tanto por
-// la vía por keywords como por la vía LLM — la única diferencia entre
-// ambas es de dónde sale el subCategoryId (de INTENTS en un caso, del
-// propio valor clasificado en el otro).
 function fetchRowsForResponseKind(
     db: SupabaseClient<Database>,
     propertyId: string,
@@ -296,9 +277,6 @@ function fetchRowsForResponseKind(
             .eq(responseKind, true);
     }
 
-    // 'schedule' guarda su texto libre bajo type='info', igual que
-    // cualquier otra subcategoría informativa — el dato ESTRUCTURADO del
-    // horario se trae aparte, desde `properties`, no de aquí.
     const dbType = responseKind === "location" ? "location" : "info";
 
     return db
@@ -324,7 +302,7 @@ async function resolveDeterministicReply(
     intent: IntentType,
     messages: ChatbotMessages,
     t: Awaited<ReturnType<typeof getTranslations>>,
-): Promise<Response> {
+): Promise<Response | null> {
     const responseKind = intentTypeToResponseKind(intent);
     const subCategoryId = INTENTS[intent].subCategoryId;
 
@@ -348,6 +326,10 @@ async function resolveDeterministicReply(
 
     const rows = (rowsResult.data ?? []) as PropertyDataRow[];
     const schedule = scheduleResult.data as PropertySchedule | null;
+
+    if (responseKind === "location" && rows.length === 0) {
+        return null;
+    }
 
     return Response.json({
         reply: buildResponse(

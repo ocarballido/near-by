@@ -57,7 +57,7 @@ export async function classifyIntent({
             text: {
                 format: zodTextFormat(schema, "chat_classification"),
             },
-            reasoning: { effort: "none" },
+            reasoning: { effort: "low" },
             max_output_tokens: 150,
         });
 
