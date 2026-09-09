@@ -1399,3 +1399,23 @@ export const PROPERTY_TIER_SCORING = {
 export type PropertyTier = (typeof PROPERTY_TIER_SCORING)["order"][number];
 
 export const MAX_LOGO_SIZE = 300 * 1024; // 300 KB — debe coincidir con file_size_limit del bucket property-logos
+
+export type CountryPresence = {
+    isoCode: string;
+};
+
+// Países con al menos una propiedad publicada. Mantenida a mano.
+// Actualizar corriendo scripts/check-countries-presence.ts y desplegar.
+// Última revisión: 2026-09-09.
+export const COUNTRIES_PRESENCE: CountryPresence[] = [
+    { isoCode: "ES" },
+    { isoCode: "US" },
+    { isoCode: "AU" },
+    { isoCode: "PE" },
+    { isoCode: "MX" },
+    { isoCode: "VE" },
+    { isoCode: "PT" },
+    { isoCode: "EC" },
+    { isoCode: "CL" },
+    { isoCode: "HN" },
+];

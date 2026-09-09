@@ -1344,6 +1344,10 @@
         },
         "footer": {
             "description": "L'outil pour les hôtes Airbnb permettant de créer des guides numériques personnalisés pour leurs logements, avec IA, cartes interactives et liens uniques pour leurs voyageurs."
+        },
+        "international_presence": {
+            "title": "Presencia internacional",
+            "subtitle": "Personas de todo el mundo ya usan nuestra guía"
         }
     }
 }

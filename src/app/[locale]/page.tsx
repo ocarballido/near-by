@@ -12,10 +12,6 @@ import LandingAppBar from "@/components/organisms/landing-appbar";
 import ButtonLink from "@/components/molecules/button-link";
 import ChimneyEffect from "@/components/atoms/chimney";
 
-import IconChatBubble from "@/components/atoms/icon/chat-bubble";
-import IconFavorite from "@/components/atoms/icon/favorite";
-import IconInterests from "@/components/atoms/icon/interests";
-
 import Feature from "@/components/molecules/card/feature";
 
 import Typography from "@/components/atoms/typography";
@@ -32,18 +28,13 @@ import { StickyHeader } from "@/components/atoms/sticky-header";
 import FancyIcon from "@/components/atoms/icon/fancy-icon";
 import IconMail from "@/components/atoms/icon/mail";
 import IconArrowRightAlt from "@/components/atoms/icon/arrow-right-alt";
-import IconDirections from "@/components/atoms/icon/directions";
-import IconAlarm from "@/components/atoms/icon/alarm";
-import IconNightLife from "@/components/atoms/icon/nightlife";
-import IconLanguage from "@/components/atoms/icon/language";
-import IconApartment from "@/components/atoms/icon/apartment";
-import IconLightMode from "@/components/atoms/icon/light-mode";
 import { FaqSection, type FaqItem } from "@/components/organisms/faq-section";
 import IconQrCode from "@/components/atoms/icon/qr-code";
 import IconShare from "@/components/atoms/icon/share";
 import IconWhatsapp from "@/components/atoms/icon/whatsapp";
 import BasicCard from "@/components/molecules/card/basic";
 import { FeaturesCarousel } from "@/components/organisms/features-carousel";
+import { InternationalPresenceSection } from "@/components/organisms/international-presence-section";
 
 export default async function Home() {
     const t = await getTranslations();
@@ -370,6 +361,7 @@ export default async function Home() {
                         iconRight={<IconArrowRightAlt />}
                     />
                 </section>
+                <InternationalPresenceSection />
                 <section
                     aria-labelledby="faq"
                     className="bg-white flex flex-col gap-8 justify-center items-center py-12 border-b border-gray-200 relative px-4 overflow-hidden"
@@ -429,6 +421,7 @@ export default async function Home() {
                         </div>
                     </div>
                 </section>
+
                 <section
                     aria-labelledby="cta"
                     className="bg-gray-100 flex flex-col gap-8 justify-center items-center pt-12 relative px-4"
