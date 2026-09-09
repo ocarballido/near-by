@@ -26,6 +26,7 @@ export function FeaturesCarousel({
                 options={{ loop: true, align: "center" }}
                 gap={SLIDE_GAP}
                 className="w-full"
+                autoplay
                 showArrows={<CarouselArrows className="justify-center mt-6" />}
             >
                 {Children.toArray(children).map((child) => (

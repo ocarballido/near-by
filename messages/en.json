@@ -1340,6 +1340,10 @@
         },
         "footer": {
             "description": "The tool for Airbnb hosts to create personalized digital guides for their properties, with AI, interactive maps, and unique links for their guests."
+        },
+        "international_presence": {
+            "title": "International presence",
+            "subtitle": "People from all over the world already use our guide"
         }
     }
 }
