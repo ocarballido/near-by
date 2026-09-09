@@ -1153,7 +1153,9 @@
         "ownerAction": "Ajoutez plus de contenu : plus votre guide est complet, moins vous recevrez de questions, plus vos locataires seront satisfaits et plus ils seront susceptibles de recommander votre logement et de vous laisser 5 étoiles.",
         "trigger": {
             "label": "Vue du locataire"
-        }
+        },
+        "skippedTitle": "Pas de souci !",
+        "skippedSubtitle": "Vous pouvez ajouter des lieux recommandés à tout moment depuis l'éditeur de votre propriété."
     },
     "Requerido": "Demandé",
     "Opcional": "Facultatif",
@@ -1349,5 +1351,22 @@
             "title": "Presencia internacional",
             "subtitle": "Personas de todo el mundo ya usan nuestra guía"
         }
-    }
+    },
+    "auto-modal-unexpected-error": "Une erreur inattendue s'est produite. Veuillez réessayer.",
+    "auto-modal-option-pharmacies": "Pharmacies",
+    "auto-modal-option-restaurants": "Restaurants",
+    "auto-modal-option-cafes": "Cafés",
+    "auto-modal-option-supermarkets": "Supermarchés",
+    "auto-modal-option-emergency": "Urgences",
+    "auto-modal-option-police-stations": "Commissariats",
+    "auto-modal-option-bars": "Bars",
+    "auto-modal-option-parkings": "Parkings",
+    "auto-modal-option-bakeries": "Boulangeries",
+    "auto-modal-option-monuments": "Monuments",
+    "auto-modal-option-museums": "Musées",
+    "auto-modal-option-urban-parks": "Parcs urbains",
+    "auto-modal-option-shopping-malls": "Centres commerciaux",
+    "auto-modal-option-train-stations": "Gares",
+    "auto-modal-option-metro-stations": "Stations de métro",
+    "auto-modal-option-nightclubs": "Boîtes de nuit"
 }

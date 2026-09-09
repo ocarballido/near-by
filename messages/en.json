@@ -1149,7 +1149,9 @@
         "ownerAction": "Add more content: the more complete your guide, the fewer questions you'll receive, the more satisfied your guests will be, and the more likely they are to recommend your property and leave you 5 stars.",
         "trigger": {
             "label": "Guest view"
-        }
+        },
+        "skippedTitle": "No worries!",
+        "skippedSubtitle": "You can add recommended places anytime from your property editor."
     },
     "Requerido": "Required",
     "Opcional": "Optional",
@@ -1345,5 +1347,22 @@
             "title": "International presence",
             "subtitle": "People from all over the world already use our guide"
         }
-    }
+    },
+    "auto-modal-unexpected-error": "Something went wrong. Please try again.",
+    "auto-modal-option-pharmacies": "Pharmacies",
+    "auto-modal-option-restaurants": "Restaurants",
+    "auto-modal-option-cafes": "Cafes",
+    "auto-modal-option-supermarkets": "Supermarkets",
+    "auto-modal-option-emergency": "Emergencies",
+    "auto-modal-option-police-stations": "Police Stations",
+    "auto-modal-option-bars": "Bars",
+    "auto-modal-option-parkings": "Parking",
+    "auto-modal-option-bakeries": "Bakeries",
+    "auto-modal-option-monuments": "Monuments",
+    "auto-modal-option-museums": "Museums",
+    "auto-modal-option-urban-parks": "Urban Parks",
+    "auto-modal-option-shopping-malls": "Shopping Centers",
+    "auto-modal-option-train-stations": "Train Stations",
+    "auto-modal-option-metro-stations": "Subway Stations",
+    "auto-modal-option-nightclubs": "Nightclubs"
 }
