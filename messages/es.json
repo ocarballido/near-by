@@ -1153,7 +1153,9 @@
         "ownerAction": "Añade más contenido: cuanto más completa esté tu guía, menos preguntas recibirás, más satisfechos estarán tus inquilinos y más probable es que recomienden tu propiedad y te dejen 5 estrellas.",
         "trigger": {
             "label": "Vista del inquilino"
-        }
+        },
+        "skippedTitle": "¡Sin problema!",
+        "skippedSubtitle": "Puedes añadir lugares recomendados cuando quieras desde el editor de tu propiedad."
     },
     "Requerido": "Requerido",
     "Opcional": "Opcional",
@@ -1349,5 +1351,22 @@
             "title": "Presencia internacional",
             "subtitle": "Personas de todo el mundo ya usan nuestra guía"
         }
-    }
+    },
+    "auto-modal-unexpected-error": "Ha ocurrido un error inesperado. Inténtalo de nuevo.",
+    "auto-modal-option-pharmacies": "Farmacias",
+    "auto-modal-option-restaurants": "Restaurantes",
+    "auto-modal-option-cafes": "Cafeterías",
+    "auto-modal-option-supermarkets": "Supermercados",
+    "auto-modal-option-emergency": "Urgencias",
+    "auto-modal-option-police-stations": "Estaciones de policía",
+    "auto-modal-option-bars": "Bares",
+    "auto-modal-option-parkings": "Aparcamientos",
+    "auto-modal-option-bakeries": "Panaderías",
+    "auto-modal-option-monuments": "Monumentos",
+    "auto-modal-option-museums": "Museos",
+    "auto-modal-option-urban-parks": "Parques urbanos",
+    "auto-modal-option-shopping-malls": "Centros comerciales",
+    "auto-modal-option-train-stations": "Estaciones de tren",
+    "auto-modal-option-metro-stations": "Estaciones de metro",
+    "auto-modal-option-nightclubs": "Discotecas"
 }
