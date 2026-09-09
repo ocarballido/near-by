@@ -918,11 +918,24 @@ export const CATEGORIES_SUB_CATEGORIES = {
 // Fuente única de verdad, derivada de CATEGORIES_SUB_CATEGORIES.
 // ─────────────────────────────────────────────────────────────
 
+export const AUTO_LOCATION_COUNT_RANGE = {
+    min: 1,
+    max: 5,
+    default: 2,
+} as const;
+
 export type AutoLocationOption = {
     categoryId: string;
     subCategoryId: string;
     name: string;
+    i18nKey: string; // clave estable de traducción, independiente del copy en español
     defaultChecked: boolean;
+    defaultCount: number;
+};
+
+export type AutoLocationSelection = {
+    subCategoryId: string;
+    count: number;
 };
 
 export const AUTO_LOCATIONS_ONBOARDING_OPTIONS: AutoLocationOption[] = [
@@ -934,7 +947,9 @@ export const AUTO_LOCATIONS_ONBOARDING_OPTIONS: AutoLocationOption[] = [
                 .PHARMACIES.id,
         name: CATEGORIES_SUB_CATEGORIES.HEALTH_AND_WELLNESS.SUB_CATEGORIES
             .PHARMACIES.name,
+        i18nKey: "auto-modal-option-pharmacies",
         defaultChecked: true,
+        defaultCount: AUTO_LOCATION_COUNT_RANGE.default,
     },
     {
         categoryId: CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.id,
@@ -943,7 +958,9 @@ export const AUTO_LOCATIONS_ONBOARDING_OPTIONS: AutoLocationOption[] = [
                 .id,
         name: CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.SUB_CATEGORIES
             .RESTAURANTS.name,
+        i18nKey: "auto-modal-option-restaurants",
         defaultChecked: true,
+        defaultCount: AUTO_LOCATION_COUNT_RANGE.default,
     },
     {
         categoryId: CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.id,
@@ -951,7 +968,9 @@ export const AUTO_LOCATIONS_ONBOARDING_OPTIONS: AutoLocationOption[] = [
             CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.SUB_CATEGORIES.CAFES.id,
         name: CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.SUB_CATEGORIES.CAFES
             .name,
+        i18nKey: "auto-modal-option-cafes",
         defaultChecked: true,
+        defaultCount: AUTO_LOCATION_COUNT_RANGE.default,
     },
     {
         categoryId: CATEGORIES_SUB_CATEGORIES.SHOPPING.id,
@@ -959,7 +978,9 @@ export const AUTO_LOCATIONS_ONBOARDING_OPTIONS: AutoLocationOption[] = [
             CATEGORIES_SUB_CATEGORIES.SHOPPING.SUB_CATEGORIES.SUPERMARKETS.id,
         name: CATEGORIES_SUB_CATEGORIES.SHOPPING.SUB_CATEGORIES.SUPERMARKETS
             .name,
+        i18nKey: "auto-modal-option-supermarkets",
         defaultChecked: true,
+        defaultCount: AUTO_LOCATION_COUNT_RANGE.default,
     },
     {
         categoryId: CATEGORIES_SUB_CATEGORIES.HEALTH_AND_WELLNESS.id,
@@ -968,7 +989,9 @@ export const AUTO_LOCATIONS_ONBOARDING_OPTIONS: AutoLocationOption[] = [
                 .EMERGENCY.id,
         name: CATEGORIES_SUB_CATEGORIES.HEALTH_AND_WELLNESS.SUB_CATEGORIES
             .EMERGENCY.name,
+        i18nKey: "auto-modal-option-emergency",
         defaultChecked: true,
+        defaultCount: AUTO_LOCATION_COUNT_RANGE.default,
     },
 
     // --- Opt-in: el usuario las activa si le aportan valor ---
@@ -979,21 +1002,27 @@ export const AUTO_LOCATIONS_ONBOARDING_OPTIONS: AutoLocationOption[] = [
                 .POLICE_STATIONS.id,
         name: CATEGORIES_SUB_CATEGORIES.SECURITY_AND_EMERGENCIES.SUB_CATEGORIES
             .POLICE_STATIONS.name,
+        i18nKey: "auto-modal-option-police-stations",
         defaultChecked: false,
+        defaultCount: AUTO_LOCATION_COUNT_RANGE.default,
     },
     {
         categoryId: CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.id,
         subCategoryId:
             CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.SUB_CATEGORIES.BARS.id,
         name: CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.SUB_CATEGORIES.BARS.name,
+        i18nKey: "auto-modal-option-bars",
         defaultChecked: false,
+        defaultCount: AUTO_LOCATION_COUNT_RANGE.default,
     },
     {
         categoryId: CATEGORIES_SUB_CATEGORIES.SERVICES.id,
         subCategoryId:
             CATEGORIES_SUB_CATEGORIES.SERVICES.SUB_CATEGORIES.PARKINGS.id,
         name: CATEGORIES_SUB_CATEGORIES.SERVICES.SUB_CATEGORIES.PARKINGS.name,
+        i18nKey: "auto-modal-option-parkings",
         defaultChecked: false,
+        defaultCount: AUTO_LOCATION_COUNT_RANGE.default,
     },
     {
         categoryId: CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.id,
@@ -1001,7 +1030,9 @@ export const AUTO_LOCATIONS_ONBOARDING_OPTIONS: AutoLocationOption[] = [
             CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.SUB_CATEGORIES.BAKERIES.id,
         name: CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.SUB_CATEGORIES.BAKERIES
             .name,
+        i18nKey: "auto-modal-option-bakeries",
         defaultChecked: false,
+        defaultCount: AUTO_LOCATION_COUNT_RANGE.default,
     },
     {
         categoryId: CATEGORIES_SUB_CATEGORIES.ARTS_AND_CULTURE.id,
@@ -1010,7 +1041,9 @@ export const AUTO_LOCATIONS_ONBOARDING_OPTIONS: AutoLocationOption[] = [
                 .id,
         name: CATEGORIES_SUB_CATEGORIES.ARTS_AND_CULTURE.SUB_CATEGORIES
             .MONUMENTS.name,
+        i18nKey: "auto-modal-option-monuments",
         defaultChecked: false,
+        defaultCount: AUTO_LOCATION_COUNT_RANGE.default,
     },
     {
         categoryId: CATEGORIES_SUB_CATEGORIES.ARTS_AND_CULTURE.id,
@@ -1019,7 +1052,9 @@ export const AUTO_LOCATIONS_ONBOARDING_OPTIONS: AutoLocationOption[] = [
                 .id,
         name: CATEGORIES_SUB_CATEGORIES.ARTS_AND_CULTURE.SUB_CATEGORIES.MUSEUMS
             .name,
+        i18nKey: "auto-modal-option-museums",
         defaultChecked: false,
+        defaultCount: AUTO_LOCATION_COUNT_RANGE.default,
     },
     {
         categoryId: CATEGORIES_SUB_CATEGORIES.PARKS_AND_NATURE.id,
@@ -1028,7 +1063,9 @@ export const AUTO_LOCATIONS_ONBOARDING_OPTIONS: AutoLocationOption[] = [
                 .URBAN_PARKS.id,
         name: CATEGORIES_SUB_CATEGORIES.PARKS_AND_NATURE.SUB_CATEGORIES
             .URBAN_PARKS.name,
+        i18nKey: "auto-modal-option-urban-parks",
         defaultChecked: false,
+        defaultCount: AUTO_LOCATION_COUNT_RANGE.default,
     },
     {
         categoryId: CATEGORIES_SUB_CATEGORIES.SHOPPING.id,
@@ -1036,7 +1073,9 @@ export const AUTO_LOCATIONS_ONBOARDING_OPTIONS: AutoLocationOption[] = [
             CATEGORIES_SUB_CATEGORIES.SHOPPING.SUB_CATEGORIES.SHOPPING_MALLS.id,
         name: CATEGORIES_SUB_CATEGORIES.SHOPPING.SUB_CATEGORIES.SHOPPING_MALLS
             .name,
+        i18nKey: "auto-modal-option-shopping-malls",
         defaultChecked: false,
+        defaultCount: AUTO_LOCATION_COUNT_RANGE.default,
     },
     {
         categoryId: CATEGORIES_SUB_CATEGORIES.TRANSPORTATION.id,
@@ -1045,7 +1084,9 @@ export const AUTO_LOCATIONS_ONBOARDING_OPTIONS: AutoLocationOption[] = [
                 .TRAIN_STATIONS.id,
         name: CATEGORIES_SUB_CATEGORIES.TRANSPORTATION.SUB_CATEGORIES
             .TRAIN_STATIONS.name,
+        i18nKey: "auto-modal-option-train-stations",
         defaultChecked: false,
+        defaultCount: AUTO_LOCATION_COUNT_RANGE.default,
     },
     {
         categoryId: CATEGORIES_SUB_CATEGORIES.TRANSPORTATION.id,
@@ -1054,7 +1095,9 @@ export const AUTO_LOCATIONS_ONBOARDING_OPTIONS: AutoLocationOption[] = [
                 .METRO_STATIONS.id,
         name: CATEGORIES_SUB_CATEGORIES.TRANSPORTATION.SUB_CATEGORIES
             .METRO_STATIONS.name,
+        i18nKey: "auto-modal-option-metro-stations",
         defaultChecked: false,
+        defaultCount: AUTO_LOCATION_COUNT_RANGE.default,
     },
     {
         categoryId: CATEGORIES_SUB_CATEGORIES.ENTERTAINMENT_AND_NIGHTLIFE.id,
@@ -1063,7 +1106,9 @@ export const AUTO_LOCATIONS_ONBOARDING_OPTIONS: AutoLocationOption[] = [
                 .NIGHTCLUBS.id,
         name: CATEGORIES_SUB_CATEGORIES.ENTERTAINMENT_AND_NIGHTLIFE
             .SUB_CATEGORIES.NIGHTCLUBS.name,
+        i18nKey: "auto-modal-option-nightclubs",
         defaultChecked: false,
+        defaultCount: AUTO_LOCATION_COUNT_RANGE.default,
     },
 ];
 

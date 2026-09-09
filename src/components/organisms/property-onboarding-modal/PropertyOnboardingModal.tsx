@@ -1,20 +1,16 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
-
 import Modal from "@/components/organisms/modal";
-import BadgeCheck from "@/components/atoms/BadgeCheck";
+import BadgeCheckCount from "@/components/atoms/badge-check-count";
 import Alert from "@/components/molecules/alert";
 import Typography from "@/components/atoms/typography";
 
-import { useLoading } from "@/lib/context/LoadingContext";
-import { useGlobal } from "@/lib/context/GlobalContext";
+import {
+    AUTO_LOCATIONS_ONBOARDING_OPTIONS as OPTIONS,
+    AUTO_LOCATION_COUNT_RANGE,
+} from "@/config/config-constants";
 
-import { AUTO_LOCATIONS_ONBOARDING_OPTIONS as OPTIONS } from "@/config/config-constants";
-import { generateAutoLocations } from "@/app/actions/locations/generate-auto-locations";
-import { trackClientEvent } from "@/lib/analytics/trackClient";
+import { usePropertyOnboardingFlow } from "@/hooks/usePropertyOnboardingFlow";
 
 import { WowStatsRow } from "./WowStatsRow";
 import { WowPreviewList } from "./WowPreviewList";
@@ -22,8 +18,6 @@ import ButtonLink from "@/components/molecules/button-link";
 import IconOpenInNew from "@/components/atoms/icon/open-in-new";
 import { ShareMenu } from "@/components/molecules/button-share";
 import ButtonQr from "@/components/molecules/button-qr";
-
-type Step = "auto-content" | "wow";
 
 type PreviewLocation = {
     id: string;
@@ -45,107 +39,23 @@ const PropertyOnboardingModal = ({
     previewLocations,
     totalInfo,
 }: Props) => {
-    const t = useTranslations();
-    const router = useRouter();
-    const { openLoading, closeLoading } = useLoading();
-    const { user } = useGlobal();
-
-    const storageKey = `editor:autoPlacesModalDismissed:${propertyId}`;
-
-    const [step, setStep] = useState<Step>("auto-content");
-    const [dismissed, setDismissed] = useState(false);
-    const [isGenerating, setIsGenerating] = useState(false);
-    const [totalLocations, setTotalLocations] = useState(0);
-
-    const [alert, setAlert] = useState<{
-        type: "error" | "success";
-        message: string;
-    } | null>(null);
-
-    useEffect(() => {
-        const val = sessionStorage.getItem(storageKey);
-        if (val === "1") setDismissed(true);
-    }, [storageKey]);
-
-    const autoContentOpen = useMemo(() => {
-        return !initialHasLocations && !dismissed && step === "auto-content";
-    }, [initialHasLocations, dismissed, step]);
-
-    const wowOpen = step === "wow";
-
-    // OPTIONS ahora vive en config-constants.ts (AUTO_LOCATIONS_ONBOARDING_OPTIONS):
-    // es una lista estática, no depende de props/state, así que no necesita useMemo
-    // ni recrearse en cada render del componente.
-    const [selectedSubCategoryIds, setSelectedSubCategoryIds] = useState<
-        string[]
-    >(() =>
-        OPTIONS.filter((x) => x.defaultChecked).map((x) => x.subCategoryId),
-    );
-
-    const toggle = (subCategoryId: string) => {
-        setSelectedSubCategoryIds((prev) =>
-            prev.includes(subCategoryId)
-                ? prev.filter((id) => id !== subCategoryId)
-                : [...prev, subCategoryId],
-        );
-    };
-
-    const canGenerate = selectedSubCategoryIds.length > 0;
-
-    // Cerrar auto-content sin generar → mostrar wow
-    const dismiss = () => {
-        setDismissed(true);
-        sessionStorage.setItem(storageKey, "1");
-        setTotalLocations(0);
-        setStep("wow");
-    };
-
-    // Cerrar wow
-    const handleWowClose = () => {
-        setStep("auto-content");
-
-        if (user?.id) {
-            trackClientEvent({
-                event: "wow_modal_dismissed",
-                distinctId: user.id,
-                props: { property_id: propertyId },
-            });
-        }
-    };
-
-    const handleGenerate = async () => {
-        if (!canGenerate || isGenerating) return;
-
-        setIsGenerating(true);
-        setAlert(null);
-        openLoading();
-
-        const res = await generateAutoLocations(
-            propertyId,
-            selectedSubCategoryIds,
-        );
-
-        closeLoading();
-        setIsGenerating(false);
-
-        if (res.errors?.server?.[0]) {
-            setAlert({ type: "error", message: res.errors.server[0] });
-            return;
-        }
-
-        setAlert({
-            type: "success",
-            message: t("auto-modal-success-message"),
-        });
-
-        setTotalLocations(res.inserted ?? 0);
-
-        sessionStorage.removeItem(storageKey);
-        setDismissed(true);
-        setStep("wow");
-
-        router.refresh();
-    };
+    const {
+        t,
+        user,
+        autoContentOpen,
+        wowOpen,
+        alert,
+        selections,
+        canGenerate,
+        isGenerating,
+        toggleOption,
+        updateOptionCount,
+        handleGenerate,
+        dismiss,
+        wowVariant,
+        totalLocations,
+        handleWowClose,
+    } = usePropertyOnboardingFlow({ propertyId, initialHasLocations });
 
     const publicUrl = `${process.env.NEXT_PUBLIC_APP_URL}/public/${propertyId}/welcome/highlights`;
 
@@ -184,7 +94,7 @@ const PropertyOnboardingModal = ({
                             : t("auto-modal-primary-button-label")
                     }
                     primaryButtonAction={handleGenerate}
-                    primaryButtonDisabled={!canGenerate}
+                    primaryButtonDisabled={!canGenerate || isGenerating}
                     secondaryButtonAction={() => {
                         if (isGenerating) return;
                         dismiss();
@@ -205,13 +115,28 @@ const PropertyOnboardingModal = ({
 
                         <div className="flex flex-wrap gap-1">
                             {OPTIONS.map((opt) => (
-                                <BadgeCheck
+                                <BadgeCheckCount
                                     key={opt.subCategoryId}
-                                    label={t(opt.name)}
-                                    checked={selectedSubCategoryIds.includes(
-                                        opt.subCategoryId,
-                                    )}
-                                    onToggle={() => toggle(opt.subCategoryId)}
+                                    label={t(opt.i18nKey)}
+                                    checked={opt.subCategoryId in selections}
+                                    count={
+                                        selections[opt.subCategoryId] ??
+                                        opt.defaultCount
+                                    }
+                                    min={AUTO_LOCATION_COUNT_RANGE.min}
+                                    max={AUTO_LOCATION_COUNT_RANGE.max}
+                                    onToggle={() =>
+                                        toggleOption(
+                                            opt.subCategoryId,
+                                            opt.defaultCount,
+                                        )
+                                    }
+                                    onCountChange={(count) =>
+                                        updateOptionCount(
+                                            opt.subCategoryId,
+                                            count,
+                                        )
+                                    }
                                 />
                             ))}
                         </div>
@@ -236,25 +161,39 @@ const PropertyOnboardingModal = ({
                 >
                     <div className="flex flex-col gap-4 w-full text-left">
                         <div className="flex flex-col items-center justify-center gap-1 py-4 text-center">
-                            <span className="text-5xl">🎉</span>
+                            <span className="text-5xl">
+                                {wowVariant === "generated" ? "🎉" : "👍"}
+                            </span>
                             <h3 className="text-[1.618rem] font-bold leading-normal font-heading text-gray-800 mb-2">
-                                {t("wow.contentTitle")}
+                                {wowVariant === "generated"
+                                    ? t("wow.contentTitle")
+                                    : t("wow.skippedTitle")}
                             </h3>
                             <Typography component="p" lineHeight="relaxed">
-                                {t.rich("wow.subtitle", {
-                                    name: propertyName,
-                                    bold: (chunks) => <strong>{chunks}</strong>,
-                                })}
+                                {wowVariant === "generated"
+                                    ? t.rich("wow.subtitle", {
+                                          name: propertyName,
+                                          bold: (chunks) => (
+                                              <strong>{chunks}</strong>
+                                          ),
+                                      })
+                                    : t("wow.skippedSubtitle")}
                             </Typography>
                         </div>
-                        <WowStatsRow
-                            totalLocations={totalLocations}
-                            totalInfo={totalInfo}
-                        />
-                        <WowPreviewList
-                            locations={previewLocations}
-                            total={totalLocations}
-                        />
+
+                        {wowVariant === "generated" && (
+                            <>
+                                <WowStatsRow
+                                    totalLocations={totalLocations}
+                                    totalInfo={totalInfo}
+                                />
+                                <WowPreviewList
+                                    locations={previewLocations}
+                                    total={totalLocations}
+                                />
+                            </>
+                        )}
+
                         <div className="flex flex-col gap-2">
                             <div className="flex gap-1">
                                 <ButtonLink
