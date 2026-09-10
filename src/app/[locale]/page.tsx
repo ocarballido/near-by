@@ -111,10 +111,6 @@ export default async function Home() {
                         </Typography>
                     </div>
 
-                    <Rating
-                        label={t("home_page.hero.rating")}
-                        className="px-4 max-w-xs text-center"
-                    />
                     <div className="px-4 flex flex-col items-center gap-6 relative w-full pb-12">
                         <Image
                             src="/static/img/home/hero/radar.svg"

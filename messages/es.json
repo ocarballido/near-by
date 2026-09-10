@@ -1155,7 +1155,8 @@
             "label": "Vista del inquilino"
         },
         "skippedTitle": "¡Sin problema!",
-        "skippedSubtitle": "Puedes añadir lugares recomendados cuando quieras desde el editor de tu propiedad."
+        "skippedSubtitle": "Puedes añadir lugares recomendados cuando quieras desde el editor de tu propiedad.",
+        "shortfallOf": "de"
     },
     "Requerido": "Requerido",
     "Opcional": "Opcional",
@@ -1368,5 +1369,7 @@
     "auto-modal-option-shopping-malls": "Centros comerciales",
     "auto-modal-option-train-stations": "Estaciones de tren",
     "auto-modal-option-metro-stations": "Estaciones de metro",
-    "auto-modal-option-nightclubs": "Discotecas"
+    "auto-modal-option-nightclubs": "Discotecas",
+    "magic-finder-title-with-name": "Buscador mágico · {name}",
+    "magic-finder-description-with-name": "Añadiremos automáticamente los lugares mejor valorados de esta categoría cerca de tu propiedad."
 }

@@ -55,6 +55,7 @@ const PropertyOnboardingModal = ({
         wowVariant,
         totalLocations,
         handleWowClose,
+        shortfalls,
     } = usePropertyOnboardingFlow({ propertyId, initialHasLocations });
 
     const publicUrl = `${process.env.NEXT_PUBLIC_APP_URL}/public/${propertyId}/welcome/highlights`;
@@ -191,6 +192,25 @@ const PropertyOnboardingModal = ({
                                     locations={previewLocations}
                                     total={totalLocations}
                                 />
+                                {shortfalls.length > 0 && (
+                                    <ul className="text-xs text-gray-600 space-y-0.5">
+                                        {shortfalls.map((s) => {
+                                            const opt = OPTIONS.find(
+                                                (o) =>
+                                                    o.subCategoryId ===
+                                                    s.subCategoryId,
+                                            );
+                                            if (!opt) return null;
+                                            return (
+                                                <li key={s.subCategoryId}>
+                                                    {t(opt.i18nKey)}: {s.found}{" "}
+                                                    {t("wow.shortfallOf")}{" "}
+                                                    {s.requested}
+                                                </li>
+                                            );
+                                        })}
+                                    </ul>
+                                )}
                             </>
                         )}
 
