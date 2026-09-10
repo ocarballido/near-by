@@ -1,6 +1,5 @@
 "use client";
 
-import Autoplay from "embla-carousel-autoplay";
 import {
     Carousel,
     CarouselSlide,
@@ -42,7 +41,7 @@ export function CountryPinsCarousel({
                     }}
                 >
                     <div className="flex flex-col items-center gap-2">
-                        <CountryPin isoCode={isoCode} />
+                        <CountryPin isoCode={isoCode} size={80} />
                         <span className="text-xs font-bold text-center uppercase">
                             {getLocalizedCountryName(isoCode, locale)}
                         </span>

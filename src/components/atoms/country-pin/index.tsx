@@ -7,17 +7,30 @@ function getStableColor(isoCode: string): string {
 
 interface CountryPinProps {
     isoCode: string;
+    /** Tamaño del componente en px (ancho y alto, siempre cuadrado). Default: 54. */
+    size?: number;
 }
 
-export function CountryPin({ isoCode }: CountryPinProps) {
+export function CountryPin({ isoCode, size = 54 }: CountryPinProps) {
     const color = getStableColor(isoCode);
 
+    // El aro (54x54) escala directamente vía width/height del <svg>, sin tocar
+    // el viewBox ni el path. El pin interior tiene su propio viewBox (14x17)
+    // y necesita este factor para mantener la misma proporción respecto al aro.
+    const scale = size / 54;
+    const pinWidth = 14 * scale;
+    const pinHeight = 17 * scale;
+
     return (
-        <div className="relative w-[54px] h-[54px]" aria-hidden="true">
+        <div
+            className="relative"
+            style={{ width: size, height: size }}
+            aria-hidden="true"
+        >
             {/* Aro ondulado */}
             <svg
-                width="54"
-                height="54"
+                width={size}
+                height={size}
                 viewBox="0 0 54 54"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -32,9 +45,9 @@ export function CountryPin({ isoCode }: CountryPinProps) {
             {/* Pin, centrado sobre el aro */}
             <div className="absolute inset-0 flex items-center justify-center">
                 <svg
-                    width="14"
-                    height="17"
-                    viewBox="0 0 14 17"
+                    width={pinWidth}
+                    height={pinHeight}
+                    viewBox="0 0 12 17"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                 >
