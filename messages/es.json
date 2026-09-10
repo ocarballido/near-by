@@ -1369,5 +1369,7 @@
     "auto-modal-option-shopping-malls": "Centros comerciales",
     "auto-modal-option-train-stations": "Estaciones de tren",
     "auto-modal-option-metro-stations": "Estaciones de metro",
-    "auto-modal-option-nightclubs": "Discotecas"
+    "auto-modal-option-nightclubs": "Discotecas",
+    "magic-finder-title-with-name": "Buscador mágico · {name}",
+    "magic-finder-description-with-name": "Añadiremos automáticamente los lugares mejor valorados de esta categoría cerca de tu propiedad."
 }

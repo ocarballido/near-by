@@ -1365,5 +1365,7 @@
     "auto-modal-option-shopping-malls": "Shopping Centers",
     "auto-modal-option-train-stations": "Train Stations",
     "auto-modal-option-metro-stations": "Subway Stations",
-    "auto-modal-option-nightclubs": "Nightclubs"
+    "auto-modal-option-nightclubs": "Nightclubs",
+    "magic-finder-title-with-name": "Magic Finder · {name}",
+    "magic-finder-description-with-name": "We'll automatically add the best-rated places in this category near your property."
 }

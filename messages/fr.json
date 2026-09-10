@@ -1369,5 +1369,7 @@
     "auto-modal-option-shopping-malls": "Centres commerciaux",
     "auto-modal-option-train-stations": "Gares",
     "auto-modal-option-metro-stations": "Stations de métro",
-    "auto-modal-option-nightclubs": "Boîtes de nuit"
+    "auto-modal-option-nightclubs": "Boîtes de nuit",
+    "magic-finder-title-with-name": "Recherche magique · {name}",
+    "magic-finder-description-with-name": "Nous ajouterons automatiquement les lieux les mieux notés de cette catégorie près de votre propriété."
 }
