@@ -1155,7 +1155,8 @@
             "label": "Vista del inquilino"
         },
         "skippedTitle": "¡Sin problema!",
-        "skippedSubtitle": "Puedes añadir lugares recomendados cuando quieras desde el editor de tu propiedad."
+        "skippedSubtitle": "Puedes añadir lugares recomendados cuando quieras desde el editor de tu propiedad.",
+        "shortfallOf": "de"
     },
     "Requerido": "Requerido",
     "Opcional": "Opcional",

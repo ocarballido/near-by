@@ -1155,7 +1155,8 @@
             "label": "Vue du locataire"
         },
         "skippedTitle": "Pas de souci !",
-        "skippedSubtitle": "Vous pouvez ajouter des lieux recommandés à tout moment depuis l'éditeur de votre propriété."
+        "skippedSubtitle": "Vous pouvez ajouter des lieux recommandés à tout moment depuis l'éditeur de votre propriété.",
+        "shortfallOf": "sur"
     },
     "Requerido": "Demandé",
     "Opcional": "Facultatif",

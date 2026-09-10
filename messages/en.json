@@ -1151,7 +1151,8 @@
             "label": "Guest view"
         },
         "skippedTitle": "No worries!",
-        "skippedSubtitle": "You can add recommended places anytime from your property editor."
+        "skippedSubtitle": "You can add recommended places anytime from your property editor.",
+        "shortfallOf": "of"
     },
     "Requerido": "Required",
     "Opcional": "Optional",

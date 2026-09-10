@@ -128,11 +128,11 @@ const BadgeCheckCount = ({
         >
             {checked ? (
                 <span className="shrink-0">
-                    <IconCheckCircle color={iconColor} size={20} />
+                    <IconCheckCircle color={iconColor} />
                 </span>
             ) : (
                 <span className="opacity-50 shrink-0">
-                    <IconCircle color="light" size={20} />
+                    <IconCircle color="light" />
                 </span>
             )}
             <span>{label}</span>
@@ -150,7 +150,7 @@ const BadgeCheckCount = ({
             >
                 <ListboxButton
                     aria-label={countAriaLabel ?? `Cantidad para ${label}`}
-                    className="inline-flex items-center gap-0.5 pl-2 pr-1.5 py-1 rounded-full font-bold text-xs cursor-pointer disabled:cursor-not-allowed outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+                    className="inline-flex items-center gap-0.5 pl-3 pr-2 py-1.5 rounded-full font-bold text-xs cursor-pointer disabled:cursor-not-allowed outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
                 >
                     {count}
                     <IconKeyboardArrowDown size={16} />

@@ -28,6 +28,8 @@ type UsePropertyOnboardingFlowParams = {
     initialHasLocations: boolean;
 };
 
+type Shortfall = { subCategoryId: string; requested: number; found: number };
+
 const buildInitialSelections = (): SubCategorySelections =>
     OPTIONS.reduce<SubCategorySelections>((acc, opt) => {
         if (opt.defaultChecked) {
@@ -53,6 +55,7 @@ export function usePropertyOnboardingFlow({
     const [totalLocations, setTotalLocations] = useState(0);
     const [wowVariant, setWowVariant] = useState<WowVariant>("generated");
     const [alert, setAlert] = useState<AlertState>(null);
+    const [shortfalls, setShortfalls] = useState<Shortfall[]>([]);
 
     useEffect(() => {
         const val = sessionStorage.getItem(storageKey);
@@ -133,6 +136,9 @@ export function usePropertyOnboardingFlow({
             });
 
             setTotalLocations(res.inserted ?? 0);
+            setShortfalls(res.shortfalls ?? []);
+            setWowVariant("generated");
+            setTotalLocations(res.inserted ?? 0);
             setWowVariant("generated");
 
             sessionStorage.removeItem(storageKey);
@@ -171,5 +177,6 @@ export function usePropertyOnboardingFlow({
         wowVariant,
         totalLocations,
         handleWowClose,
+        shortfalls,
     };
 }

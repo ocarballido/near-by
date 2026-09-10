@@ -38,6 +38,7 @@ export type GenerateAutoLocationsState = {
     success?: boolean;
     message?: string;
     inserted?: number;
+    shortfalls?: { subCategoryId: string; requested: number; found: number }[];
 };
 
 const RADIUS_METERS = 2000;
@@ -172,18 +173,30 @@ export async function generateAutoLocations(
                     subCategoryId,
                     mode: "magic",
                     radius: RADIUS_METERS,
-                    language: undefined, // aquí no tienes locale; si quieres, lo añadimos como param opcional
-                    debugTag: undefined, // evita logs en prod
+                    language: undefined,
+                    debugTag: undefined,
                 });
 
-                return found.slice(0, count).map((p) => ({
+                return {
                     subCategoryId,
-                    place: p,
-                }));
+                    requested: count,
+                    found: found.length, // ← nuevo: cuántos había disponibles en total
+                    places: found
+                        .slice(0, count)
+                        .map((p) => ({ subCategoryId, place: p })),
+                };
             },
         );
 
-        const flattened = lists.flat();
+        const shortfalls = lists
+            .filter(({ requested, found }) => found < requested)
+            .map(({ subCategoryId, requested, found }) => ({
+                subCategoryId,
+                requested,
+                found,
+            }));
+
+        const flattened = lists.flatMap((l) => l.places);
 
         const insertables: TablesInsert<"property_data">[] = flattened
             .map(({ subCategoryId, place }) => {
@@ -247,6 +260,7 @@ export async function generateAutoLocations(
             success: true,
             message: "Lugares generados correctamente.",
             inserted: insertables.length,
+            shortfalls: shortfalls.length > 0 ? shortfalls : undefined,
         };
     } catch (err) {
         console.error("Error inesperado generateAutoLocations:", err);

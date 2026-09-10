@@ -949,7 +949,7 @@ export const AUTO_LOCATIONS_ONBOARDING_OPTIONS: AutoLocationOption[] = [
             .PHARMACIES.name,
         i18nKey: "auto-modal-option-pharmacies",
         defaultChecked: true,
-        defaultCount: AUTO_LOCATION_COUNT_RANGE.default,
+        defaultCount: 1,
     },
     {
         categoryId: CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.id,
@@ -960,7 +960,7 @@ export const AUTO_LOCATIONS_ONBOARDING_OPTIONS: AutoLocationOption[] = [
             .RESTAURANTS.name,
         i18nKey: "auto-modal-option-restaurants",
         defaultChecked: true,
-        defaultCount: AUTO_LOCATION_COUNT_RANGE.default,
+        defaultCount: 4, // media real: 4.47
     },
     {
         categoryId: CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.id,
@@ -970,7 +970,7 @@ export const AUTO_LOCATIONS_ONBOARDING_OPTIONS: AutoLocationOption[] = [
             .name,
         i18nKey: "auto-modal-option-cafes",
         defaultChecked: true,
-        defaultCount: AUTO_LOCATION_COUNT_RANGE.default,
+        defaultCount: 3, // media real: 2.81
     },
     {
         categoryId: CATEGORIES_SUB_CATEGORIES.SHOPPING.id,
@@ -980,7 +980,7 @@ export const AUTO_LOCATIONS_ONBOARDING_OPTIONS: AutoLocationOption[] = [
             .name,
         i18nKey: "auto-modal-option-supermarkets",
         defaultChecked: true,
-        defaultCount: AUTO_LOCATION_COUNT_RANGE.default,
+        defaultCount: 2, // media real: 2.43
     },
     {
         categoryId: CATEGORIES_SUB_CATEGORIES.HEALTH_AND_WELLNESS.id,
@@ -991,7 +991,7 @@ export const AUTO_LOCATIONS_ONBOARDING_OPTIONS: AutoLocationOption[] = [
             .EMERGENCY.name,
         i18nKey: "auto-modal-option-emergency",
         defaultChecked: true,
-        defaultCount: AUTO_LOCATION_COUNT_RANGE.default,
+        defaultCount: 2, // media real: 2.02
     },
 
     // --- Opt-in: el usuario las activa si le aportan valor ---
@@ -1004,7 +1004,7 @@ export const AUTO_LOCATIONS_ONBOARDING_OPTIONS: AutoLocationOption[] = [
             .POLICE_STATIONS.name,
         i18nKey: "auto-modal-option-police-stations",
         defaultChecked: false,
-        defaultCount: AUTO_LOCATION_COUNT_RANGE.default,
+        defaultCount: 1, // media real: 1.47
     },
     {
         categoryId: CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.id,
@@ -1013,7 +1013,7 @@ export const AUTO_LOCATIONS_ONBOARDING_OPTIONS: AutoLocationOption[] = [
         name: CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.SUB_CATEGORIES.BARS.name,
         i18nKey: "auto-modal-option-bars",
         defaultChecked: false,
-        defaultCount: AUTO_LOCATION_COUNT_RANGE.default,
+        defaultCount: 3, // media real: 3.03
     },
     {
         categoryId: CATEGORIES_SUB_CATEGORIES.SERVICES.id,
@@ -1022,7 +1022,7 @@ export const AUTO_LOCATIONS_ONBOARDING_OPTIONS: AutoLocationOption[] = [
         name: CATEGORIES_SUB_CATEGORIES.SERVICES.SUB_CATEGORIES.PARKINGS.name,
         i18nKey: "auto-modal-option-parkings",
         defaultChecked: false,
-        defaultCount: AUTO_LOCATION_COUNT_RANGE.default,
+        defaultCount: 2, // media real: 2.36
     },
     {
         categoryId: CATEGORIES_SUB_CATEGORIES.FOOD_AND_DRINK.id,
@@ -1032,7 +1032,7 @@ export const AUTO_LOCATIONS_ONBOARDING_OPTIONS: AutoLocationOption[] = [
             .name,
         i18nKey: "auto-modal-option-bakeries",
         defaultChecked: false,
-        defaultCount: AUTO_LOCATION_COUNT_RANGE.default,
+        defaultCount: 2, // media real: 2.40
     },
     {
         categoryId: CATEGORIES_SUB_CATEGORIES.ARTS_AND_CULTURE.id,
@@ -1043,7 +1043,7 @@ export const AUTO_LOCATIONS_ONBOARDING_OPTIONS: AutoLocationOption[] = [
             .MONUMENTS.name,
         i18nKey: "auto-modal-option-monuments",
         defaultChecked: false,
-        defaultCount: AUTO_LOCATION_COUNT_RANGE.default,
+        defaultCount: 5, // media real: 5.00 (en el tope del rango 1-5)
     },
     {
         categoryId: CATEGORIES_SUB_CATEGORIES.ARTS_AND_CULTURE.id,
@@ -1054,7 +1054,7 @@ export const AUTO_LOCATIONS_ONBOARDING_OPTIONS: AutoLocationOption[] = [
             .name,
         i18nKey: "auto-modal-option-museums",
         defaultChecked: false,
-        defaultCount: AUTO_LOCATION_COUNT_RANGE.default,
+        defaultCount: 3, // media real: 3.09
     },
     {
         categoryId: CATEGORIES_SUB_CATEGORIES.PARKS_AND_NATURE.id,
@@ -1065,7 +1065,7 @@ export const AUTO_LOCATIONS_ONBOARDING_OPTIONS: AutoLocationOption[] = [
             .URBAN_PARKS.name,
         i18nKey: "auto-modal-option-urban-parks",
         defaultChecked: false,
-        defaultCount: AUTO_LOCATION_COUNT_RANGE.default,
+        defaultCount: 5, // media real: 5.77 (capado al máximo del rango 1-5)
     },
     {
         categoryId: CATEGORIES_SUB_CATEGORIES.SHOPPING.id,
@@ -1075,7 +1075,7 @@ export const AUTO_LOCATIONS_ONBOARDING_OPTIONS: AutoLocationOption[] = [
             .name,
         i18nKey: "auto-modal-option-shopping-malls",
         defaultChecked: false,
-        defaultCount: AUTO_LOCATION_COUNT_RANGE.default,
+        defaultCount: 4, // media real: 3.67
     },
     {
         categoryId: CATEGORIES_SUB_CATEGORIES.TRANSPORTATION.id,
@@ -1086,7 +1086,7 @@ export const AUTO_LOCATIONS_ONBOARDING_OPTIONS: AutoLocationOption[] = [
             .TRAIN_STATIONS.name,
         i18nKey: "auto-modal-option-train-stations",
         defaultChecked: false,
-        defaultCount: AUTO_LOCATION_COUNT_RANGE.default,
+        defaultCount: 3, // media real: 3.00
     },
     {
         categoryId: CATEGORIES_SUB_CATEGORIES.TRANSPORTATION.id,
@@ -1097,7 +1097,7 @@ export const AUTO_LOCATIONS_ONBOARDING_OPTIONS: AutoLocationOption[] = [
             .METRO_STATIONS.name,
         i18nKey: "auto-modal-option-metro-stations",
         defaultChecked: false,
-        defaultCount: AUTO_LOCATION_COUNT_RANGE.default,
+        defaultCount: 3, // media real: 3.00
     },
     {
         categoryId: CATEGORIES_SUB_CATEGORIES.ENTERTAINMENT_AND_NIGHTLIFE.id,
@@ -1108,7 +1108,7 @@ export const AUTO_LOCATIONS_ONBOARDING_OPTIONS: AutoLocationOption[] = [
             .SUB_CATEGORIES.NIGHTCLUBS.name,
         i18nKey: "auto-modal-option-nightclubs",
         defaultChecked: false,
-        defaultCount: AUTO_LOCATION_COUNT_RANGE.default,
+        defaultCount: 3, // media real: 3.43
     },
 ];
 
