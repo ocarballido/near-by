@@ -427,14 +427,9 @@ const AddPropertyForm = ({
 
         didCompleteRef.current = true;
 
-        closeLoading();
-
         if (!isEdit) incrementPropertyCount();
 
-        setAlert({
-            type: "success",
-            message: "Propiedad creada correctamente",
-        });
+        closeLoading();
 
         if (result.redirectTo) {
             router.push(result.redirectTo);

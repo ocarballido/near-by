@@ -121,11 +121,6 @@ const MagicFinderForm = ({
             return;
         }
 
-        setAlert({
-            type: "success",
-            message: result.message || t("Lugares añadidos correctamente"),
-        });
-
         if (result.redirectTo) {
             router.push(
                 `${result.redirectTo}/${propertyId}/${categoryId}/${subCategoryId}`,

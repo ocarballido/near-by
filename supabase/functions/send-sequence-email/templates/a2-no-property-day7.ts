@@ -1,80 +1,102 @@
-export type Locale = 'es' | 'en' | 'fr';
+export type Locale = "es" | "en" | "fr" | "pt" | "it";
 
 type Copy = {
-	subject: string;
-	preheader: string;
-	title: string;
-	body1: string;
-	body2: string;
-	body3: string;
-	buttonLabel: string;
-	footerUnsubscribe: string;
-	footerIgnore: string;
+    subject: string;
+    preheader: string;
+    title: string;
+    body1: string;
+    body2: string;
+    body3: string;
+    buttonLabel: string;
+    footerUnsubscribe: string;
+    footerIgnore: string;
 };
 
 const MESSAGES: Record<Locale, Copy> = {
-	es: {
-		subject: '¿Puedo ayudarte con algo?',
-		preheader: 'Llevo un tiempo sin verte por aquí.',
-		title: '¿Todavía no has creado una guía para tu alojamiento? ¡Es gratis!',
-		body1: 'Ya has hecho lo más difícil. Te has registrado en BNBexplorer porque quieres convertirte en un anfitrión de 5 estrellas. ¿Por qué no nos dejas ayudarte? ¡Crear tu primera guía digital es totalmente gratis!',
-		body2: 'Prueba BNBexplorer y en menos de tres minutos tendrás una web profesional con toda la información que necesitan tus huéspedes para sacar el máximo partido a su estancia: normas de la casa, horarios, clave de wifi, restaurantes cercanos, farmacias, museos, hospitales y mucho más. Después, les pasas el link y podrán acceder a la guía desde su móvil siempre que necesiten. ¡Hasta pueden crear itinerarios personalizados en base a sus preferencias gracias a nuestra potente IA!',
-		body3: 'Crea ya tu primera guía digital y conviértete en el anfitrión 2.0 que necesitan tus inquilinos.',
-		buttonLabel: 'Crea tu guía gratis',
-		footerUnsubscribe: 'No quiero recibir más emails',
-		footerIgnore: 'Si no reconoces este email, puedes ignorarlo.',
-	},
-	en: {
-		subject: 'Can I help you with anything?',
-		preheader: "Haven't seen you around for a while.",
-		title: "Haven't created a guide for your property yet? It's free!",
-		body1: "You've already done the hard part. You signed up for BNBexplorer because you want to become a 5-star host. Why not let us help you? Creating your first digital guide is completely free!",
-		body2: 'Try BNBexplorer and in less than three minutes you’ll have a professional website with all the information your guests need to make the most of their stay: house rules, schedules, Wi-Fi password, nearby restaurants, pharmacies, museums, hospitals, and much more. Then, just send them the link and they’ll be able to access the guide from their phone whenever they need it. They can even create personalized itineraries based on their preferences thanks to our powerful AI!',
-		body3: 'Create your first digital guide now and become the 2.0 host your guests need.',
-		buttonLabel: 'Create your guide for free',
-		footerUnsubscribe: 'Unsubscribe from these emails',
-		footerIgnore: "If you don't recognise this email, you can ignore it.",
-	},
-	fr: {
-		subject: 'Puis-je vous aider?',
-		preheader: 'Je ne vous ai pas vu depuis un moment.',
-		title: 'Vous n’avez pas encore créé de guide pour votre logement ? C’est gratuit !',
-		body1: 'Vous avez déjà fait le plus difficile. Vous vous êtes inscrit sur BNBexplorer parce que vous voulez devenir un hôte 5 étoiles. Alors pourquoi ne pas nous laisser vous aider ? Créer votre premier guide numérique est totalement gratuit !',
-		body2: 'Essayez BNBexplorer et, en moins de trois minutes, vous aurez un site web professionnel avec toutes les informations dont vos voyageurs ont besoin pour profiter au maximum de leur séjour : règles de la maison, horaires, mot de passe Wi-Fi, restaurants à proximité, pharmacies, musées, hôpitaux et bien plus encore. Ensuite, il vous suffit de leur envoyer le lien et ils pourront accéder au guide depuis leur téléphone chaque fois qu’ils en auront besoin. Ils peuvent même créer des itinéraires personnalisés en fonction de leurs préférences grâce à notre puissante IA !',
-		body3: 'Créez dès maintenant votre premier guide numérique et devenez l’hôte 2.0 dont vos locataires ont besoin.',
-		buttonLabel: 'Créez votre guide gratuitement',
-		footerUnsubscribe: 'Se désabonner de ces emails',
-		footerIgnore:
-			"Si vous ne reconnaissez pas cet email, vous pouvez l'ignorer.",
-	},
+    es: {
+        subject: "¿Puedo ayudarte con algo?",
+        preheader: "Llevo un tiempo sin verte por aquí.",
+        title: "¿Todavía no has creado una guía para tu alojamiento? ¡Es gratis!",
+        body1: "Ya has hecho lo más difícil. Te has registrado en BNBexplorer porque quieres convertirte en un anfitrión de 5 estrellas. ¿Por qué no nos dejas ayudarte? ¡Crear tu primera guía digital es totalmente gratis!",
+        body2: "Prueba BNBexplorer y en menos de tres minutos tendrás una web profesional con toda la información que necesitan tus huéspedes para sacar el máximo partido a su estancia: normas de la casa, horarios, clave de wifi, restaurantes cercanos, farmacias, museos, hospitales y mucho más. Después, les pasas el link y podrán acceder a la guía desde su móvil siempre que necesiten. ¡Hasta pueden crear itinerarios personalizados en base a sus preferencias gracias a nuestra potente IA!",
+        body3: "Crea ya tu primera guía digital y conviértete en el anfitrión 2.0 que necesitan tus inquilinos.",
+        buttonLabel: "Crea tu guía gratis",
+        footerUnsubscribe: "No quiero recibir más emails",
+        footerIgnore: "Si no reconoces este email, puedes ignorarlo.",
+    },
+    en: {
+        subject: "Can I help you with anything?",
+        preheader: "Haven't seen you around for a while.",
+        title: "Haven't created a guide for your property yet? It's free!",
+        body1: "You've already done the hard part. You signed up for BNBexplorer because you want to become a 5-star host. Why not let us help you? Creating your first digital guide is completely free!",
+        body2: "Try BNBexplorer and in less than three minutes you’ll have a professional website with all the information your guests need to make the most of their stay: house rules, schedules, Wi-Fi password, nearby restaurants, pharmacies, museums, hospitals, and much more. Then, just send them the link and they’ll be able to access the guide from their phone whenever they need it. They can even create personalized itineraries based on their preferences thanks to our powerful AI!",
+        body3: "Create your first digital guide now and become the 2.0 host your guests need.",
+        buttonLabel: "Create your guide for free",
+        footerUnsubscribe: "Unsubscribe from these emails",
+        footerIgnore: "If you don't recognise this email, you can ignore it.",
+    },
+    fr: {
+        subject: "Puis-je vous aider?",
+        preheader: "Je ne vous ai pas vu depuis un moment.",
+        title: "Vous n’avez pas encore créé de guide pour votre logement ? C’est gratuit !",
+        body1: "Vous avez déjà fait le plus difficile. Vous vous êtes inscrit sur BNBexplorer parce que vous voulez devenir un hôte 5 étoiles. Alors pourquoi ne pas nous laisser vous aider ? Créer votre premier guide numérique est totalement gratuit !",
+        body2: "Essayez BNBexplorer et, en moins de trois minutes, vous aurez un site web professionnel avec toutes les informations dont vos voyageurs ont besoin pour profiter au maximum de leur séjour : règles de la maison, horaires, mot de passe Wi-Fi, restaurants à proximité, pharmacies, musées, hôpitaux et bien plus encore. Ensuite, il vous suffit de leur envoyer le lien et ils pourront accéder au guide depuis leur téléphone chaque fois qu’ils en auront besoin. Ils peuvent même créer des itinéraires personnalisés en fonction de leurs préférences grâce à notre puissante IA !",
+        body3: "Créez dès maintenant votre premier guide numérique et devenez l’hôte 2.0 dont vos locataires ont besoin.",
+        buttonLabel: "Créez votre guide gratuitement",
+        footerUnsubscribe: "Se désabonner de ces emails",
+        footerIgnore:
+            "Si vous ne reconnaissez pas cet email, vous pouvez l'ignorer.",
+    },
+    pt: {
+        subject: "Posso ajudar em alguma coisa?",
+        preheader: "Há algum tempo que não o vemos por aqui.",
+        title: "Ainda não criou um guia para o seu alojamento? É grátis!",
+        body1: "Já fez a parte mais difícil. Registou-se no BNBexplorer porque quer tornar-se um anfitrião 5 estrelas. Porque não deixa que o ajudemos? Criar o seu primeiro guia digital é totalmente grátis!",
+        body2: "Experimente o BNBexplorer e em menos de três minutos terá um site profissional com toda a informação que os seus hóspedes precisam para aproveitar ao máximo a sua estadia: regras da casa, horários, palavra-passe do wifi, restaurantes próximos, farmácias, museus, hospitais e muito mais. Depois, basta enviar-lhes o link e poderão aceder ao guia a partir do telemóvel sempre que precisarem. Podem até criar itinerários personalizados com base nas suas preferências graças à nossa poderosa IA!",
+        body3: "Crie já o seu primeiro guia digital e torne-se no anfitrião 2.0 que os seus inquilinos precisam.",
+        buttonLabel: "Crie o seu guia grátis",
+        footerUnsubscribe: "Não quero receber mais e-mails",
+        footerIgnore: "Se não reconhece este e-mail, pode ignorá-lo.",
+    },
+    it: {
+        subject: "Posso aiutarti con qualcosa?",
+        preheader: "È da un po' che non ti vediamo qui.",
+        title: "Non hai ancora creato una guida per il tuo alloggio? È gratis!",
+        body1: "Hai già fatto la parte più difficile. Ti sei registrato su BNBexplorer perché vuoi diventare un host 5 stelle. Perché non lasci che ti aiutiamo? Creare la tua prima guida digitale è completamente gratuito!",
+        body2: "Prova BNBexplorer e in meno di tre minuti avrai un sito web professionale con tutte le informazioni di cui i tuoi ospiti hanno bisogno per godersi al massimo il soggiorno: regole della casa, orari, password del wifi, ristoranti nelle vicinanze, farmacie, musei, ospedali e molto altro. Poi, ti basta inviare loro il link e potranno accedere alla guida dal telefono ogni volta che ne avranno bisogno. Possono anche creare itinerari personalizzati in base alle loro preferenze grazie alla nostra potente IA!",
+        body3: "Crea subito la tua prima guida digitale e diventa l'host 2.0 di cui i tuoi ospiti hanno bisogno.",
+        buttonLabel: "Crea la tua guida gratis",
+        footerUnsubscribe: "Non voglio più ricevere queste email",
+        footerIgnore: "Se non riconosci questa email, puoi ignorarla.",
+    },
 };
 
 function getCopy(locale: string): Copy {
-	const normalized = (locale || 'en').split('-')[0] as Locale;
-	return MESSAGES[normalized] ?? MESSAGES.en;
+    const normalized = (locale || "en").split("-")[0] as Locale;
+    return MESSAGES[normalized] ?? MESSAGES.en;
 }
 
 type Params = {
-	locale: string;
-	appUrl: string;
-	heroUrl: string;
-	logoSymbolUrl: string;
-	footerLogoUrl: string;
-	unsubscribeUrl: string;
+    locale: string;
+    appUrl: string;
+    heroUrl: string;
+    logoSymbolUrl: string;
+    footerLogoUrl: string;
+    unsubscribeUrl: string;
 };
 
 export function renderA2NoPropertyDay7({
-	locale,
-	appUrl,
-	heroUrl,
-	logoSymbolUrl,
-	footerLogoUrl,
-	unsubscribeUrl,
+    locale,
+    appUrl,
+    heroUrl,
+    logoSymbolUrl,
+    footerLogoUrl,
+    unsubscribeUrl,
 }: Params): { subject: string; html: string } {
-	const copy = getCopy(locale);
-	const ctaUrl = `${appUrl}/${locale}/app/properties/new`;
+    const copy = getCopy(locale);
+    const ctaUrl = `${appUrl}/${locale}/app/properties/new`;
 
-	const html = `<!DOCTYPE html>
+    const html = `<!DOCTYPE html>
 <html lang="${locale}" xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="UTF-8" />
@@ -201,5 +223,5 @@ export function renderA2NoPropertyDay7({
   </body>
 </html>`;
 
-	return { subject: copy.subject, html };
+    return { subject: copy.subject, html };
 }

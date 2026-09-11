@@ -52,6 +52,18 @@ const buildMealTypeGuidance = (poiList: POI[], locale: string): string => {
             withoutMeals:
                 "La liste de lieux n'inclut AUCUN établissement de restauration. Tous les blocs de l'itinéraire doivent être de type \"activity\". N'invente pas et ne suggère pas de lieux pour manger qui ne figurent pas dans la liste.",
         },
+        pt: {
+            withMeals:
+                'A lista de locais inclui estabelecimentos de refeições. Quando um bloco corresponder a um destes e o horário for coerente com pequeno-almoço, almoço ou jantar, marca-o como "breakfast", "lunch" ou "dinner", conforme o caso. Todos os outros blocos devem ser do tipo "activity".',
+            withoutMeals:
+                'A lista de locais NÃO inclui estabelecimentos de refeições. Todos os blocos do itinerário devem ser do tipo "activity". Não inventes nem sugiras locais para comer que não estejam na lista.',
+        },
+        it: {
+            withMeals:
+                'L\'elenco dei luoghi include locali per pasti. Quando un blocco corrisponde a uno di questi e l\'orario è coerente con colazione, pranzo o cena, contrassegnalo come "breakfast", "lunch" o "dinner", secondo il caso. Tutti gli altri blocchi devono essere di tipo "activity".',
+            withoutMeals:
+                "L'elenco dei luoghi NON include locali per pasti. Tutti i blocchi dell'itinerario devono essere di tipo \"activity\". Non inventare né suggerire luoghi per mangiare che non siano nell'elenco.",
+        },
     };
 
     const localeGuidance = guidance[locale] || guidance["en"];
@@ -135,6 +147,54 @@ Règles de contenu :
 - Répartis les lieux disponibles sur {{dayCount}} jour(s) de façon cohérente ; ne répète pas le même lieu sur plusieurs jours.
 
 Réponds uniquement avec les données respectant la structure requise. Rédige tout le contenu en français.
+`,
+        pt: `
+Tu és um assistente de viagens que gera um itinerário personalizado como dados estruturados, com base na localização do alojamento, nos interesses do hóspede, no tempo disponível e nos locais próximos.
+
+Alojamento: {{location}}
+Tempo disponível: {{duration}}
+Preferências: {{preferences}}
+Transporte: {{transport}}
+Número de dias a planear: {{dayCount}}
+
+Locais de interesse próximos (usa APENAS estes; não inventes locais, nomes nem coordenadas):
+{{poiList}}
+
+Regras de conteúdo:
+- Usa uma linguagem neutra, simples e direta. Sem emojis, sem frases exageradas como "joia escondida".
+- Cada bloco deve referenciar um local real da lista acima, com o seu nome, latitude e longitude exatos.
+- Ordena os blocos de forma cronológica e lógica por proximidade dentro de cada dia.
+- {{mealTypeGuidance}}
+- Se o transporte selecionado for "transporte público", menciona-o apenas se conseguires indicar uma linha, paragem ou estação concreta; caso contrário, omite os detalhes de transporte.
+- shortDescription deve ser uma única frase curta por bloco — não mais.
+- closingNote deve ser uma única frase de encerramento simpática e neutra para todo o itinerário.
+- Distribui os locais disponíveis pelos {{dayCount}} dia(s) de forma sensata; não repitas o mesmo local em vários dias.
+
+Responde apenas com os dados que sigam a estrutura solicitada. Escreve todo o conteúdo em português.
+`,
+        it: `
+Sei un assistente di viaggio che genera un itinerario personalizzato come dati strutturati, in base alla posizione dell'alloggio, agli interessi dell'ospite, al tempo disponibile e ai luoghi nelle vicinanze.
+
+Alloggio: {{location}}
+Tempo disponibile: {{duration}}
+Preferenze: {{preferences}}
+Trasporto: {{transport}}
+Numero di giorni da pianificare: {{dayCount}}
+
+Punti di interesse nelle vicinanze (usa SOLO questi; non inventare luoghi, nomi o coordinate):
+{{poiList}}
+
+Regole di contenuto:
+- Usa un linguaggio neutro, semplice e diretto. Niente emoji, niente frasi esagerate come "gemma nascosta".
+- Ogni blocco deve fare riferimento a un luogo reale dell'elenco sopra, con il suo nome, latitudine e longitudine esatti.
+- Ordina i blocchi in modo cronologico e logico per vicinanza all'interno di ogni giornata.
+- {{mealTypeGuidance}}
+- Se il trasporto selezionato è "trasporto pubblico", menzionalo solo se puoi indicare una linea, fermata o stazione specifica; altrimenti omettine i dettagli.
+- shortDescription deve essere un'unica breve frase per blocco — non più.
+- closingNote deve essere un'unica frase di chiusura cortese e neutra per l'intero itinerario.
+- Distribuisci i luoghi disponibili tra {{dayCount}} giorno/i in modo sensato; non ripetere lo stesso luogo in giorni diversi.
+
+Rispondi esclusivamente con i dati conformi alla struttura richiesta. Scrivi tutto il contenuto in italiano.
 `,
     };
 

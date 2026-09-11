@@ -1,4 +1,4 @@
-export type Locale = string;
+export type Locale = "es" | "en" | "fr" | "pt" | "it";
 
 export type MagicLinkCopy = {
     subject: string;
@@ -11,7 +11,7 @@ export type MagicLinkCopy = {
     footerText: string;
 };
 
-export const MAGIC_LINK_MESSAGES: Record<string, MagicLinkCopy> = {
+export const MAGIC_LINK_MESSAGES: Record<Locale, MagicLinkCopy> = {
     en: {
         subject: "Your login link",
         preheader: "Click the button to access your account.",
@@ -32,10 +32,41 @@ export const MAGIC_LINK_MESSAGES: Record<string, MagicLinkCopy> = {
         buttonLabel: "Acceder",
         footerText: "Si no has solicitado este correo, puedes ignorarlo.",
     },
+    fr: {
+        subject: "Votre lien de connexion",
+        preheader: "Cliquez sur le bouton pour accéder à votre compte.",
+        title: "Bienvenue sur BNB Explorer,",
+        intro: "Vous venez de faire le premier pas vers devenir un hôte 5 étoiles !",
+        text1: "Découvrez comment créer votre propre guide en ligne pour votre hébergement grâce à l'IA, avec les services, des conseils utiles, des recommandations à proximité et toutes les informations dont vous avez besoin.",
+        text2: "Créez gratuitement le site de votre hébergement en quelques secondes et partagez le lien avec vos voyageurs à chaque réservation. Vos avis ne cesseront de s'améliorer !",
+        buttonLabel: "Se connecter",
+        footerText:
+            "Si vous n'avez pas demandé cet email, vous pouvez l'ignorer.",
+    },
+    pt: {
+        subject: "O seu link de acesso",
+        preheader: "Clique no botão para aceder à sua conta.",
+        title: "Bem-vindo/a ao BNB Explorer,",
+        intro: "Acabou de dar o primeiro passo para se tornar um Anfitrião 5 estrelas!",
+        text1: "Descubra como criar o seu próprio guia online para o alojamento com a ajuda da IA, incluindo serviços, dicas úteis, recomendações próximas e toda a informação necessária.",
+        text2: "Crie o site do alojamento GRÁTIS em poucos segundos e partilhe o link com os hóspedes sempre que reservarem. As avaliações não vão parar de crescer!",
+        buttonLabel: "Aceder",
+        footerText: "Se não solicitou este e-mail, pode ignorá-lo.",
+    },
+    it: {
+        subject: "Il tuo link di accesso",
+        preheader: "Clicca sul pulsante per accedere al tuo account.",
+        title: "Benvenuto/a su BNB Explorer,",
+        intro: "Hai appena fatto il primo passo per diventare un Host 5 stelle!",
+        text1: "Scopri come creare la tua guida online per il tuo alloggio con l'aiuto dell'IA, inclusi servizi, consigli utili, raccomandazioni nelle vicinanze e tutte le informazioni di cui hai bisogno.",
+        text2: "Crea gratuitamente il sito del tuo alloggio in pochi secondi e condividi il link con i tuoi ospiti ogni volta che prenotano. Le tue recensioni continueranno a crescere!",
+        buttonLabel: "Accedi",
+        footerText: "Se non hai richiesto questa email, puoi ignorarla.",
+    },
 };
 
-function getMagicLinkCopy(locale: Locale): MagicLinkCopy {
-    const normalized = (locale || "en").split("-")[0];
+function getMagicLinkCopy(locale: string): MagicLinkCopy {
+    const normalized = (locale || "en").split("-")[0] as Locale;
     return MAGIC_LINK_MESSAGES[normalized] ?? MAGIC_LINK_MESSAGES.en;
 }
 
