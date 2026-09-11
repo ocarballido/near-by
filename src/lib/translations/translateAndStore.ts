@@ -26,9 +26,14 @@ export async function translateAndStore(
         process.env.PRIVATE_SUPABASE_SERVICE_KEY!,
     );
 
-    const validFields = fields.filter(
-        (f) => f.value && f.value.trim().length > 10 && f.value !== "EMPTY",
-    );
+    // Los nombres propios son legítimamente cortos (p. ej. "Pig House",
+    // "Bar Sol") — el umbral de longitud de 10 caracteres solo tiene
+    // sentido para descripciones triviales o vacías, no para nombres.
+    const validFields = fields.filter((f) => {
+        if (!f.value || f.value === "EMPTY") return false;
+        if (f.fieldKey === "name") return f.value.trim().length > 0;
+        return f.value.trim().length > 10;
+    });
     if (validFields.length === 0) return;
 
     const totalChars = validFields.reduce((acc, f) => acc + f.value.length, 0);

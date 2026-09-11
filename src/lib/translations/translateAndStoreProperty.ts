@@ -26,9 +26,12 @@ export async function translateAndStoreProperty(
         process.env.PRIVATE_SUPABASE_SERVICE_KEY!,
     );
 
-    const validFields = fields.filter(
-        (f) => f.value && f.value.trim().length > 10,
-    );
+    // translateAndStoreProperty.ts
+    const validFields = fields.filter((f) => {
+        if (!f.value) return false;
+        if (f.fieldKey === "name") return f.value.trim().length > 0;
+        return f.value.trim().length > 10;
+    });
     if (validFields.length === 0) return;
 
     const totalChars = validFields.reduce((acc, f) => acc + f.value.length, 0);
