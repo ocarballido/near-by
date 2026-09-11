@@ -13,6 +13,13 @@ type DenoEnv = {
 };
 declare const Deno: DenoEnv;
 
+const SUPPORTED_LOCALES = ["es", "en", "fr", "pt", "it"] as const;
+type Locale = (typeof SUPPORTED_LOCALES)[number];
+
+function isSupportedLocale(value: unknown): value is Locale {
+    return SUPPORTED_LOCALES.includes(value as Locale);
+}
+
 const APP_URL = "https://bnbexplorer.com";
 const LOGO_SYMBOL_URL =
     "https://bnbexplorer.com/static/img/mail/symbol_shadow_colored.png";
@@ -261,10 +268,10 @@ export type BroadcastContent = {
     ctaLabel?: string;
 };
 
-export type SendBroadcastPayload = {
-    es: BroadcastContent;
-    en: BroadcastContent;
-    fr: BroadcastContent;
+// Record exhaustivo sobre Locale: si mañana añadís un 6º idioma, este
+// tipo obliga a incluirlo en el payload — deno check falla en vez de
+// que un destinatario reciba el newsletter en el idioma equivocado.
+export type SendBroadcastPayload = Record<Locale, BroadcastContent> & {
     imageUrl?: string;
     ctaUrl?: string;
     emailType?: "newsletter" | "survey" | "announcement";
@@ -342,12 +349,7 @@ export async function sendBroadcast(payload: SendBroadcastPayload): Promise<{
 
         const unsubscribeUrl = `${APP_URL}/unsubscribe?token=${profile.unsubscribe_token}`;
         const locale = profile.locale ?? "en";
-
-        const localeKey =
-            locale === "es" || locale === "en" || locale === "fr"
-                ? locale
-                : "en";
-
+        const localeKey: Locale = isSupportedLocale(locale) ? locale : "en";
         const content = payload[localeKey];
 
         const { subject, html } = renderE1Broadcast({

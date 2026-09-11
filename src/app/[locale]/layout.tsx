@@ -22,6 +22,8 @@ export async function generateMetadata({
         es: "es_ES",
         en: "en_US",
         fr: "fr_FR",
+        pt: "pt_PT",
+        it: "it_IT",
     };
 
     const ogLocale = localeMap[locale] ?? `${locale}_${locale.toUpperCase()}`;

@@ -1,88 +1,112 @@
-export type Locale = 'es' | 'en' | 'fr';
+export type Locale = "es" | "en" | "fr" | "pt" | "it";
 
 type Copy = {
-	subject: string;
-	preheader: string;
-	title: string;
-	body1: string;
-	body2: string;
-	body3: string;
-	body4: string;
-	buttonLabel: string;
-	footerUnsubscribe: string;
-	footerIgnore: string;
+    subject: string;
+    preheader: string;
+    title: string;
+    body1: string;
+    body2: string;
+    body3: string;
+    body4: string;
+    buttonLabel: string;
+    footerUnsubscribe: string;
+    footerIgnore: string;
 };
 
 const MESSAGES: Record<Locale, Copy> = {
-	es: {
-		subject: 'Tus inquilinos merecen la mejor guía',
-		preheader: 'Tu alojamiento lleva 2 semanas sin completarse.',
-		title: 'Estás a sólo 3 minutos de convertirte en un mejor anfitrión',
-		body1: 'Siguen pasando los días y aún no has completado la guía digital de tu alojamiento en BNBexplorer. ¡Es gratis y no te llevará más de 3 minutos!',
-		body2: '¿Sabías que los anfitriones que han completado sus guías en nuestra plataforma han conseguido mejorar sus valoraciones en un 87%?',
-		body3: 'Empieza por añadir la información básica sobre la casa, las normas y horarios y unos pocos lugares cercanos. Nuestra plataforma te ofrecerá sugerencias para hacer el proceso más rápido y sencillo. En cuestión de segundos dispondrás de una web profesional para compartir con tus huéspedes.',
-		body4: 'Convertirte en un anfitrión 5 estrellas es mucho más fácil de lo que crees.',
-		buttonLabel: 'Completar mi alojamiento ahora',
-		footerUnsubscribe: 'No quiero recibir más emails',
-		footerIgnore: 'Si no reconoces este email, puedes ignorarlo.',
-	},
-	en: {
-		subject: 'Your guests deserve the best guide',
-		preheader: 'Your property has been incomplete for 2 weeks.',
-		title: 'You’re just 3 minutes away from becoming a better host',
-		body1: 'The days keep passing, and you still haven’t completed your property’s digital guide on BNBexplorer. It’s free and won’t take more than 3 minutes!',
-		body2: 'Did you know that hosts who have completed their guides on our platform have seen their ratings improve by 87%?',
-		body3: 'Start by adding basic information about the house, the rules and schedules, and a few nearby places. Our platform will offer suggestions to make the process faster and easier. In a matter of seconds, you’ll have a professional website to share with your guests.',
-		body4: 'Becoming a 5-star host is much easier than you think.',
-		buttonLabel: 'Complete my property now',
-		footerUnsubscribe: 'Unsubscribe from these emails',
-		footerIgnore: "If you don't recognise this email, you can ignore it.",
-	},
-	fr: {
-		subject: 'Vos locataires méritent le meilleur guide',
-		preheader: 'Votre hébergement est incomplet depuis 2 semaines.',
-		title: 'Vous n’êtes plus qu’à 3 minutes de devenir un meilleur hôte',
-		body1: 'Les jours passent et vous n’avez toujours pas terminé le guide numérique de votre logement sur BNBexplorer. C’est gratuit et cela ne vous prendra pas plus de 3 minutes !',
-		body2: 'Saviez-vous que les hôtes qui ont complété leur guide sur notre plateforme ont vu leurs notes s’améliorer de 87 % ?',
-		body3: 'Commencez par ajouter les informations de base sur le logement, les règles et les horaires, ainsi que quelques lieux à proximité. Notre plateforme vous proposera des suggestions pour rendre le processus plus rapide et plus simple. En quelques secondes, vous aurez un site web professionnel à partager avec vos voyageurs.',
-		body4: 'Devenir un hôte 5 étoiles est beaucoup plus facile que vous ne le pensez.',
-		buttonLabel: 'Compléter mon hébergement maintenant',
-		footerUnsubscribe: 'Se désabonner de ces emails',
-		footerIgnore:
-			"Si vous ne reconnaissez pas cet email, vous pouvez l'ignorer.",
-	},
+    es: {
+        subject: "Tus inquilinos merecen la mejor guía",
+        preheader: "Tu alojamiento lleva 2 semanas sin completarse.",
+        title: "Estás a sólo 3 minutos de convertirte en un mejor anfitrión",
+        body1: "Siguen pasando los días y aún no has completado la guía digital de tu alojamiento en BNBexplorer. ¡Es gratis y no te llevará más de 3 minutos!",
+        body2: "¿Sabías que los anfitriones que han completado sus guías en nuestra plataforma han conseguido mejorar sus valoraciones en un 87%?",
+        body3: "Empieza por añadir la información básica sobre la casa, las normas y horarios y unos pocos lugares cercanos. Nuestra plataforma te ofrecerá sugerencias para hacer el proceso más rápido y sencillo. En cuestión de segundos dispondrás de una web profesional para compartir con tus huéspedes.",
+        body4: "Convertirte en un anfitrión 5 estrellas es mucho más fácil de lo que crees.",
+        buttonLabel: "Completar mi alojamiento ahora",
+        footerUnsubscribe: "No quiero recibir más emails",
+        footerIgnore: "Si no reconoces este email, puedes ignorarlo.",
+    },
+    en: {
+        subject: "Your guests deserve the best guide",
+        preheader: "Your property has been incomplete for 2 weeks.",
+        title: "You’re just 3 minutes away from becoming a better host",
+        body1: "The days keep passing, and you still haven’t completed your property’s digital guide on BNBexplorer. It’s free and won’t take more than 3 minutes!",
+        body2: "Did you know that hosts who have completed their guides on our platform have seen their ratings improve by 87%?",
+        body3: "Start by adding basic information about the house, the rules and schedules, and a few nearby places. Our platform will offer suggestions to make the process faster and easier. In a matter of seconds, you’ll have a professional website to share with your guests.",
+        body4: "Becoming a 5-star host is much easier than you think.",
+        buttonLabel: "Complete my property now",
+        footerUnsubscribe: "Unsubscribe from these emails",
+        footerIgnore: "If you don't recognise this email, you can ignore it.",
+    },
+    fr: {
+        subject: "Vos locataires méritent le meilleur guide",
+        preheader: "Votre hébergement est incomplet depuis 2 semaines.",
+        title: "Vous n’êtes plus qu’à 3 minutes de devenir un meilleur hôte",
+        body1: "Les jours passent et vous n’avez toujours pas terminé le guide numérique de votre logement sur BNBexplorer. C’est gratuit et cela ne vous prendra pas plus de 3 minutes !",
+        body2: "Saviez-vous que les hôtes qui ont complété leur guide sur notre plateforme ont vu leurs notes s’améliorer de 87 % ?",
+        body3: "Commencez par ajouter les informations de base sur le logement, les règles et les horaires, ainsi que quelques lieux à proximité. Notre plateforme vous proposera des suggestions pour rendre le processus plus rapide et plus simple. En quelques secondes, vous aurez un site web professionnel à partager avec vos voyageurs.",
+        body4: "Devenir un hôte 5 étoiles est beaucoup plus facile que vous ne le pensez.",
+        buttonLabel: "Compléter mon hébergement maintenant",
+        footerUnsubscribe: "Se désabonner de ces emails",
+        footerIgnore:
+            "Si vous ne reconnaissez pas cet email, vous pouvez l'ignorer.",
+    },
+    pt: {
+        subject: "Os seus inquilinos merecem o melhor guia",
+        preheader: "O seu alojamento está incompleto há 2 semanas.",
+        title: "Está a apenas 3 minutos de se tornar um melhor anfitrião",
+        body1: "Os dias vão passando e ainda não completou o guia digital do seu alojamento no BNBexplorer. É grátis e não vai demorar mais de 3 minutos!",
+        body2: "Sabia que os anfitriões que completaram os seus guias na nossa plataforma conseguiram melhorar as suas avaliações em 87%?",
+        body3: "Comece por adicionar a informação básica sobre a casa, as regras e horários e alguns locais próximos. A nossa plataforma vai oferecer sugestões para tornar o processo mais rápido e simples. Em questão de segundos terá um site profissional para partilhar com os seus hóspedes.",
+        body4: "Tornar-se um anfitrião 5 estrelas é muito mais fácil do que pensa.",
+        buttonLabel: "Completar o meu alojamento agora",
+        footerUnsubscribe: "Não quero receber mais e-mails",
+        footerIgnore: "Se não reconhece este e-mail, pode ignorá-lo.",
+    },
+    it: {
+        subject: "I tuoi ospiti meritano la guida migliore",
+        preheader: "Il tuo alloggio è incompleto da 2 settimane.",
+        title: "Sei a soli 3 minuti dal diventare un host migliore",
+        body1: "I giorni continuano a passare e non hai ancora completato la guida digitale del tuo alloggio su BNBexplorer. È gratis e non ti prenderà più di 3 minuti!",
+        body2: "Sapevi che gli host che hanno completato le loro guide sulla nostra piattaforma hanno visto le loro recensioni migliorare dell'87%?",
+        body3: "Inizia aggiungendo le informazioni di base sulla casa, le regole e gli orari e qualche luogo nelle vicinanze. La nostra piattaforma ti offrirà suggerimenti per rendere il processo più rapido e semplice. In pochi secondi avrai un sito web professionale da condividere con i tuoi ospiti.",
+        body4: "Diventare un host 5 stelle è molto più facile di quanto pensi.",
+        buttonLabel: "Completa il mio alloggio ora",
+        footerUnsubscribe: "Non voglio più ricevere queste email",
+        footerIgnore: "Se non riconosci questa email, puoi ignorarla.",
+    },
 };
 
 function getCopy(locale: string): Copy {
-	const normalized = (locale || 'en').split('-')[0] as Locale;
-	return MESSAGES[normalized] ?? MESSAGES.en;
+    const normalized = (locale || "en").split("-")[0] as Locale;
+    return MESSAGES[normalized] ?? MESSAGES.en;
 }
 
 type Params = {
-	locale: string;
-	appUrl: string;
-	heroUrl: string;
-	propertyId: string;
-	propertyName: string;
-	logoSymbolUrl: string;
-	footerLogoUrl: string;
-	unsubscribeUrl: string;
+    locale: string;
+    appUrl: string;
+    heroUrl: string;
+    propertyId: string;
+    propertyName: string;
+    logoSymbolUrl: string;
+    footerLogoUrl: string;
+    unsubscribeUrl: string;
 };
 
 export function renderB2IncompleteDay14({
-	locale,
-	appUrl,
-	heroUrl,
-	propertyId,
-	propertyName,
-	logoSymbolUrl,
-	footerLogoUrl,
-	unsubscribeUrl,
+    locale,
+    appUrl,
+    heroUrl,
+    propertyId,
+    propertyName,
+    logoSymbolUrl,
+    footerLogoUrl,
+    unsubscribeUrl,
 }: Params): { subject: string; html: string } {
-	const copy = getCopy(locale);
-	const ctaUrl = `${appUrl}/${locale}/app/properties/${propertyId}/4581a08a-3e78-4800-b16c-575f5da81cba/4fc3c0a8-3bb5-4b3b-8de3-6230a07df8a7`;
+    const copy = getCopy(locale);
+    const ctaUrl = `${appUrl}/${locale}/app/properties/${propertyId}/4581a08a-3e78-4800-b16c-575f5da81cba/4fc3c0a8-3bb5-4b3b-8de3-6230a07df8a7`;
 
-	const html = `<!DOCTYPE html>
+    const html = `<!DOCTYPE html>
 <html lang="${locale}" xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="UTF-8" />
@@ -223,5 +247,5 @@ export function renderB2IncompleteDay14({
   </body>
 </html>`;
 
-	return { subject: copy.subject, html };
+    return { subject: copy.subject, html };
 }

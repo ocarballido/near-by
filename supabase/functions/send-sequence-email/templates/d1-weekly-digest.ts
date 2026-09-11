@@ -1,6 +1,4 @@
-// supabase/functions/send-sequence-email/templates/d1-weekly-digest.ts
-
-export type Locale = "es" | "en" | "fr";
+export type Locale = "es" | "en" | "fr" | "pt" | "it";
 
 type PropertyVisit = {
     property_name: string;
@@ -60,6 +58,32 @@ const MESSAGES: Record<Locale, Copy> = {
         footerUnsubscribe: "Se désabonner de ces emails",
         footerIgnore:
             "Si vous ne reconnaissez pas cet email, vous pouvez l'ignorer.",
+    },
+    pt: {
+        subject: "Os seus inquilinos visitaram o seu guia",
+        preheader: "Descubra quantas visitas os seus alojamentos receberam.",
+        title: "Os seus guias",
+        body1: "Aqui tem um resumo das visitas que os seus alojamentos receberam desde o seu último resumo.",
+        visitsLabel: "visitas",
+        noVisitsMessage:
+            "Não recebeu visitas desde o seu último resumo. Partilhe o seu guia com os seus próximos inquilinos.",
+        tipTitle: "Dica do mês",
+        buttonLabel: "Ver as minhas propriedades",
+        footerUnsubscribe: "Não quero receber mais e-mails",
+        footerIgnore: "Se não reconhece este e-mail, pode ignorá-lo.",
+    },
+    it: {
+        subject: "I tuoi ospiti hanno visitato la tua guida",
+        preheader: "Scopri quante visite hanno ricevuto i tuoi alloggi.",
+        title: "Le tue guide",
+        body1: "Ecco un riepilogo delle visite che i tuoi alloggi hanno ricevuto dal tuo ultimo riepilogo.",
+        visitsLabel: "visite",
+        noVisitsMessage:
+            "Non hai ricevuto visite dal tuo ultimo riepilogo. Condividi la tua guida con i tuoi prossimi ospiti.",
+        tipTitle: "Consiglio del mese",
+        buttonLabel: "Vedi le mie proprietà",
+        footerUnsubscribe: "Non voglio più ricevere queste email",
+        footerIgnore: "Se non riconosci questa email, puoi ignorarla.",
     },
 };
 

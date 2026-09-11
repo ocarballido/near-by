@@ -1,4 +1,8 @@
 import { HeroSlide, HeroSlideImages } from ".";
+import { DEFAULT_LOCALE, type Locale } from "@/config/config-constants";
+
+// Re-exportado por compatibilidad, por si algo importa `Locale` desde aquí.
+export type { Locale };
 
 // hero-01
 import hero01EsDesktop from "../../../../public/static/img/home/hero/ui-01_es.png";
@@ -40,10 +44,11 @@ import hero05EnMobile from "../../../../public/static/img/home/hero/ui-05_en_mob
 import hero05FrDesktop from "../../../../public/static/img/home/hero/ui-05_fr.png";
 import hero05FrMobile from "../../../../public/static/img/home/hero/ui-05_fr_mobile.png";
 
-export type Locale = "es" | "en" | "fr";
 type Translator = (key: string) => string;
 
-type ImagesByLocale = Record<Locale, HeroSlideImages>;
+// Partial: no todos los locales tienen capturas propias todavía (pt/it
+// no las tienen aún). resolveImages() cae a DEFAULT_LOCALE cuando falta.
+type ImagesByLocale = Partial<Record<Locale, HeroSlideImages>>;
 
 const hero01Images: ImagesByLocale = {
     es: { desktop: hero01EsDesktop, mobile: hero01EsMobile },
@@ -71,35 +76,46 @@ const hero05Images: ImagesByLocale = {
     fr: { desktop: hero05FrDesktop, mobile: hero05FrMobile },
 };
 
+// Las capturas de producto solo existen en es/en/fr por ahora. Hasta que
+// haya capturas nativas para pt/it, mostramos las de DEFAULT_LOCALE en
+// vez de romper el carrusel: son mockups ilustrativos, no texto a traducir.
+// El `!` es seguro: DEFAULT_LOCALE ("en") siempre está poblado en los 5 mapas de arriba.
+function resolveImages(
+    images: ImagesByLocale,
+    locale: Locale,
+): HeroSlideImages {
+    return images[locale] ?? images[DEFAULT_LOCALE]!;
+}
+
 export function getHeroSlides(t: Translator, locale: Locale): HeroSlide[] {
     return [
         {
             id: "hero-01",
-            images: hero01Images[locale],
+            images: resolveImages(hero01Images, locale),
             alt: t("home_page.hero.slide_01_alt"),
             label: t("home_page.hero.slide_01_label"),
         },
         {
             id: "hero-02",
-            images: hero02Images[locale],
+            images: resolveImages(hero02Images, locale),
             alt: t("home_page.hero.slide_02_alt"),
             label: t("home_page.hero.slide_02_label"),
         },
         {
             id: "hero-03",
-            images: hero03Images[locale],
+            images: resolveImages(hero03Images, locale),
             alt: t("home_page.hero.slide_03_alt"),
             label: t("home_page.hero.slide_03_label"),
         },
         {
             id: "hero-04",
-            images: hero04Images[locale],
+            images: resolveImages(hero04Images, locale),
             alt: t("home_page.hero.slide_04_alt"),
             label: t("home_page.hero.slide_04_label"),
         },
         {
             id: "hero-05",
-            images: hero05Images[locale],
+            images: resolveImages(hero05Images, locale),
             alt: t("home_page.hero.slide_05_alt"),
             label: t("home_page.hero.slide_05_label"),
         },

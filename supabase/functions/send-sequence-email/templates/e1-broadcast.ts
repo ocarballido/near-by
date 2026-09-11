@@ -1,91 +1,99 @@
-// supabase/functions/send-sequence-email/templates/e1-broadcast.ts
-
-export type Locale = 'es' | 'en' | 'fr';
+export type Locale = "es" | "en" | "fr" | "pt" | "it";
 
 type FooterCopy = {
-	footerUnsubscribe: string;
-	footerIgnore: string;
-	defaultCtaLabel: string;
+    footerUnsubscribe: string;
+    footerIgnore: string;
+    defaultCtaLabel: string;
 };
 
 const FOOTER_MESSAGES: Record<Locale, FooterCopy> = {
-	es: {
-		defaultCtaLabel: 'Visita BNBexplorer',
-		footerUnsubscribe: 'No quiero recibir más emails',
-		footerIgnore: 'Si no reconoces este email, puedes ignorarlo.',
-	},
-	en: {
-		defaultCtaLabel: 'Visit BNBexplorer',
-		footerUnsubscribe: 'Unsubscribe from these emails',
-		footerIgnore: "If you don't recognise this email, you can ignore it.",
-	},
-	fr: {
-		defaultCtaLabel: 'Visiter BNBexplorer',
-		footerUnsubscribe: 'Se désabonner de ces emails',
-		footerIgnore:
-			"Si vous ne reconnaissez pas cet email, vous pouvez l'ignorer.",
-	},
+    es: {
+        defaultCtaLabel: "Visita BNBexplorer",
+        footerUnsubscribe: "No quiero recibir más emails",
+        footerIgnore: "Si no reconoces este email, puedes ignorarlo.",
+    },
+    en: {
+        defaultCtaLabel: "Visit BNBexplorer",
+        footerUnsubscribe: "Unsubscribe from these emails",
+        footerIgnore: "If you don't recognise this email, you can ignore it.",
+    },
+    fr: {
+        defaultCtaLabel: "Visiter BNBexplorer",
+        footerUnsubscribe: "Se désabonner de ces emails",
+        footerIgnore:
+            "Si vous ne reconnaissez pas cet email, vous pouvez l'ignorer.",
+    },
+    pt: {
+        defaultCtaLabel: "Visitar o BNBexplorer",
+        footerUnsubscribe: "Não quero receber mais e-mails",
+        footerIgnore: "Se não reconhece este e-mail, pode ignorá-lo.",
+    },
+    it: {
+        defaultCtaLabel: "Visita BNBexplorer",
+        footerUnsubscribe: "Non voglio più ricevere queste email",
+        footerIgnore: "Se non riconosci questa email, puoi ignorarla.",
+    },
 };
 
 function getFooterCopy(locale: string): FooterCopy {
-	const normalized = (locale || 'en').split('-')[0] as Locale;
-	return FOOTER_MESSAGES[normalized] ?? FOOTER_MESSAGES.en;
+    const normalized = (locale || "en").split("-")[0] as Locale;
+    return FOOTER_MESSAGES[normalized] ?? FOOTER_MESSAGES.en;
 }
 
 export type BroadcastParams = {
-	locale: string;
-	appUrl: string;
-	logoSymbolUrl: string;
-	footerLogoUrl: string;
-	unsubscribeUrl: string;
-	// Obligatorios
-	subject: string;
-	preheader: string;
-	title: string;
-	mainText: string;
-	// Opcionales
-	imageUrl?: string;
-	alertText?: string;
-	bullets?: string[];
-	ctaLabel?: string;
-	ctaUrl?: string;
-	emailType?: 'newsletter' | 'survey' | 'announcement';
+    locale: string;
+    appUrl: string;
+    logoSymbolUrl: string;
+    footerLogoUrl: string;
+    unsubscribeUrl: string;
+    // Obligatorios
+    subject: string;
+    preheader: string;
+    title: string;
+    mainText: string;
+    // Opcionales
+    imageUrl?: string;
+    alertText?: string;
+    bullets?: string[];
+    ctaLabel?: string;
+    ctaUrl?: string;
+    emailType?: "newsletter" | "survey" | "announcement";
 };
 
 export function renderE1Broadcast({
-	locale,
-	appUrl,
-	logoSymbolUrl,
-	footerLogoUrl,
-	unsubscribeUrl,
-	subject,
-	preheader,
-	title,
-	mainText,
-	imageUrl,
-	alertText,
-	bullets,
-	ctaLabel,
-	ctaUrl,
+    locale,
+    appUrl,
+    logoSymbolUrl,
+    footerLogoUrl,
+    unsubscribeUrl,
+    subject,
+    preheader,
+    title,
+    mainText,
+    imageUrl,
+    alertText,
+    bullets,
+    ctaLabel,
+    ctaUrl,
 }: BroadcastParams): { subject: string; html: string } {
-	const footer = getFooterCopy(locale);
+    const footer = getFooterCopy(locale);
 
-	const resolvedCtaUrl = ctaUrl ?? appUrl;
-	const resolvedCtaLabel = ctaLabel ?? footer.defaultCtaLabel;
+    const resolvedCtaUrl = ctaUrl ?? appUrl;
+    const resolvedCtaLabel = ctaLabel ?? footer.defaultCtaLabel;
 
-	// Bloque hero image — solo si hay imageUrl
-	const heroBlock = imageUrl
-		? `
+    // Bloque hero image — solo si hay imageUrl
+    const heroBlock = imageUrl
+        ? `
 		<!-- Hero -->
 		<a href="${resolvedCtaUrl}" style="text-decoration: none; display: block;">
 			<img class="img" src="${imageUrl}" alt="BNBexplorer" style="width: 100%; max-width: 600px; display: block;" />
 		</a>
 		<!-- /Hero -->`
-		: '';
+        : "";
 
-	// Bloque alert — solo si hay alertText
-	const alertBlock = alertText
-		? `
+    // Bloque alert — solo si hay alertText
+    const alertBlock = alertText
+        ? `
 		<!-- Alert -->
 		<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 16px;">
 			<tbody>
@@ -97,18 +105,18 @@ export function renderE1Broadcast({
 			</tbody>
 		</table>
 		<!-- /Alert -->`
-		: '';
+        : "";
 
-	// Bloque bullets — solo si hay bullets y tiene items
-	const bulletsBlock =
-		bullets && bullets.length > 0
-			? `
+    // Bloque bullets — solo si hay bullets y tiene items
+    const bulletsBlock =
+        bullets && bullets.length > 0
+            ? `
 		<!-- Bullets -->
 		<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 16px;">
 			<tbody>
 				${bullets
-					.map(
-						(bullet) => `
+                    .map(
+                        (bullet) => `
 				<tr>
 					<td style="padding: 6px 0; vertical-align: top; width: 20px; text-align: left;">
               <span style="color: #0E9F6E; font-size: 15px; font-weight: bold;">·</span>
@@ -117,14 +125,14 @@ export function renderE1Broadcast({
               ${bullet}
           </td>
 				</tr>`,
-					)
-					.join('')}
+                    )
+                    .join("")}
 			</tbody>
 		</table>
 		<!-- /Bullets -->`
-			: '';
+            : "";
 
-	const html = `<!DOCTYPE html>
+    const html = `<!DOCTYPE html>
 <html lang="${locale}" xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="UTF-8" />
@@ -250,5 +258,5 @@ export function renderE1Broadcast({
   </body>
 </html>`;
 
-	return { subject, html };
+    return { subject, html };
 }

@@ -1,93 +1,119 @@
-export type Locale = 'es' | 'en' | 'fr';
+export type Locale = "es" | "en" | "fr" | "pt" | "it";
 
 type Copy = {
-	subject: string;
-	preheader: string;
-	title: string;
-	body1: string;
-	body2: string;
-	list1: string;
-	list2: string;
-	tip: string;
-	buttonLabel: string;
-	footerUnsubscribe: string;
-	footerIgnore: string;
+    subject: string;
+    preheader: string;
+    title: string;
+    body1: string;
+    body2: string;
+    list1: string;
+    list2: string;
+    tip: string;
+    buttonLabel: string;
+    footerUnsubscribe: string;
+    footerIgnore: string;
 };
 
 const MESSAGES: Record<Locale, Copy> = {
-	es: {
-		subject: '¿Cuáles son tus lugares favoritos?',
-		preheader: 'Destaca los mejores lugares para tus inquilinos.',
-		title: 'Aún puedes mejorar la experiencia de tus huéspedes',
-		body1: 'Has añadido localizaciones en tu guía, pero ninguna está etiquetada como Favorita o Visita Obligatoria. Cuando las etiquetes, esos serán los primeros lugares que verán tus inquilinos al abrir la guía. Así podrás ofrecer a tus huéspedes una experiencia personalizada, ayudándoles a sacar el máximo partido a su estancia en base a tu experiencia.',
-		body2: 'Recuerda que tienes dos maneras de etiquetar las localizaciones:',
-		list1: 'Destacado → Sitios guays en los alrededores.',
-		list2: 'Visita obligatoria → ¡Los musts!. Esos lugares que no se pueden perder.',
-		buttonLabel: 'Etiqueta tus lugares favoritos',
-		footerUnsubscribe: 'No quiero recibir más emails',
-		footerIgnore: 'Si no reconoces este email, puedes ignorarlo.',
-		tip: '💡 Destacado → lugares que recomiendas especialmente.<br/>⭐ Visita obligatoria → lugares que no se pueden perder.',
-	},
-	en: {
-		subject: 'Which are your favourite places?',
-		preheader: 'Highlight the best places for your guests.',
-		title: "You can still improve your guests' experience",
-		body1: "You've added locations to your guide, but none are tagged as a Favorite or Must-Visit. When you tag them, those will be the first places your guests see when they open the guide. This way, you can offer your guests a personalized experience, helping them make the most of their stay based on your expertise.",
-		body2: 'Remember that you have two ways to tag locations:',
-		list1: 'Featured → Cool spots in the area.',
-		list2: 'Must-Visit → The must-sees! Those places you can’t miss.',
-		buttonLabel: 'Tag your favorite places',
-		footerUnsubscribe: 'Unsubscribe from these emails',
-		footerIgnore: "If you don't recognise this email, you can ignore it.",
-		tip: '💡 Featured → places you especially recommend.<br/>⭐ Must Visit → places they cannot miss.',
-	},
-	fr: {
-		subject: 'Quels sont vos endroits préférés?',
-		preheader:
-			'Mettez en avant les meilleurs endroits pour vos locataires.',
-		title: 'Vous pouvez encore améliorer l’expérience de vos voyageurs',
-		body1: 'Vous avez ajouté des lieux dans votre guide, mais aucun n’est étiqueté comme Favori ou Incontournable. Lorsque vous les étiqueterez, ce seront les premiers endroits que vos locataires verront en ouvrant le guide. Vous pourrez ainsi offrir à vos voyageurs une expérience personnalisée et les aider à profiter au maximum de leur séjour grâce à votre expérience.',
-		body2: 'N’oubliez pas que vous avez deux façons d’étiqueter les lieux :',
-		list1: 'À la une → Des endroits sympas dans les environs.',
-		list2: 'Incontournable → Les musts ! Les lieux à ne surtout pas manquer.',
-		buttonLabel: 'Étiquetez vos lieux favoris',
-		footerUnsubscribe: 'Se désabonner de ces emails',
-		footerIgnore:
-			"Si vous ne reconnaissez pas cet email, vous pouvez l'ignorer.",
-		tip: '💡 En vedette → lieux que vous recommandez particulièrement.<br/>⭐ À ne pas manquer → lieux incontournables.',
-	},
+    es: {
+        subject: "¿Cuáles son tus lugares favoritos?",
+        preheader: "Destaca los mejores lugares para tus inquilinos.",
+        title: "Aún puedes mejorar la experiencia de tus huéspedes",
+        body1: "Has añadido localizaciones en tu guía, pero ninguna está etiquetada como Favorita o Visita Obligatoria. Cuando las etiquetes, esos serán los primeros lugares que verán tus inquilinos al abrir la guía. Así podrás ofrecer a tus huéspedes una experiencia personalizada, ayudándoles a sacar el máximo partido a su estancia en base a tu experiencia.",
+        body2: "Recuerda que tienes dos maneras de etiquetar las localizaciones:",
+        list1: "Destacado → Sitios guays en los alrededores.",
+        list2: "Visita obligatoria → ¡Los musts!. Esos lugares que no se pueden perder.",
+        buttonLabel: "Etiqueta tus lugares favoritos",
+        footerUnsubscribe: "No quiero recibir más emails",
+        footerIgnore: "Si no reconoces este email, puedes ignorarlo.",
+        tip: "💡 Destacado → lugares que recomiendas especialmente.<br/>⭐ Visita obligatoria → lugares que no se pueden perder.",
+    },
+    en: {
+        subject: "Which are your favourite places?",
+        preheader: "Highlight the best places for your guests.",
+        title: "You can still improve your guests' experience",
+        body1: "You've added locations to your guide, but none are tagged as a Favorite or Must-Visit. When you tag them, those will be the first places your guests see when they open the guide. This way, you can offer your guests a personalized experience, helping them make the most of their stay based on your expertise.",
+        body2: "Remember that you have two ways to tag locations:",
+        list1: "Featured → Cool spots in the area.",
+        list2: "Must-Visit → The must-sees! Those places you can’t miss.",
+        buttonLabel: "Tag your favorite places",
+        footerUnsubscribe: "Unsubscribe from these emails",
+        footerIgnore: "If you don't recognise this email, you can ignore it.",
+        tip: "💡 Featured → places you especially recommend.<br/>⭐ Must Visit → places they cannot miss.",
+    },
+    fr: {
+        subject: "Quels sont vos endroits préférés?",
+        preheader:
+            "Mettez en avant les meilleurs endroits pour vos locataires.",
+        title: "Vous pouvez encore améliorer l’expérience de vos voyageurs",
+        body1: "Vous avez ajouté des lieux dans votre guide, mais aucun n’est étiqueté comme Favori ou Incontournable. Lorsque vous les étiqueterez, ce seront les premiers endroits que vos locataires verront en ouvrant le guide. Vous pourrez ainsi offrir à vos voyageurs une expérience personnalisée et les aider à profiter au maximum de leur séjour grâce à votre expérience.",
+        body2: "N’oubliez pas que vous avez deux façons d’étiqueter les lieux :",
+        list1: "À la une → Des endroits sympas dans les environs.",
+        list2: "Incontournable → Les musts ! Les lieux à ne surtout pas manquer.",
+        buttonLabel: "Étiquetez vos lieux favoris",
+        footerUnsubscribe: "Se désabonner de ces emails",
+        footerIgnore:
+            "Si vous ne reconnaissez pas cet email, vous pouvez l'ignorer.",
+        tip: "💡 En vedette → lieux que vous recommandez particulièrement.<br/>⭐ À ne pas manquer → lieux incontournables.",
+    },
+    pt: {
+        subject: "Quais são os seus locais favoritos?",
+        preheader: "Destaque os melhores locais para os seus inquilinos.",
+        title: "Ainda pode melhorar a experiência dos seus hóspedes",
+        body1: "Adicionou localizações ao seu guia, mas nenhuma está marcada como Favorita ou Visita Obrigatória. Quando as marcar, esses serão os primeiros locais que os inquilinos verão ao abrir o guia. Assim poderá oferecer aos hóspedes uma experiência personalizada, ajudando-os a aproveitar ao máximo a estadia com base na sua experiência.",
+        body2: "Lembre-se de que tem duas formas de marcar as localizações:",
+        list1: "Destaque → Locais interessantes nas imediações.",
+        list2: "Visita obrigatória → Os imperdíveis! Esses locais que não se podem perder.",
+        buttonLabel: "Marque os seus locais favoritos",
+        footerUnsubscribe: "Não quero receber mais e-mails",
+        footerIgnore: "Se não reconhece este e-mail, pode ignorá-lo.",
+        tip: "💡 Destaque → locais que recomenda especialmente.<br/>⭐ Visita obrigatória → locais que não se podem perder.",
+    },
+    it: {
+        subject: "Quali sono i tuoi luoghi preferiti?",
+        preheader: "Metti in evidenza i posti migliori per i tuoi ospiti.",
+        title: "Puoi ancora migliorare l'esperienza dei tuoi ospiti",
+        body1: "Hai aggiunto delle località alla tua guida, ma nessuna è contrassegnata come Preferita o Da non perdere. Quando le contrassegnerai, saranno i primi luoghi che i tuoi ospiti vedranno all'apertura della guida. Così potrai offrire ai tuoi ospiti un'esperienza personalizzata, aiutandoli a sfruttare al meglio il soggiorno grazie alla tua esperienza.",
+        body2: "Ricorda che hai due modi per contrassegnare le località:",
+        list1: "In evidenza → Posti interessanti nella zona.",
+        list2: "Da non perdere → I must! I luoghi che non puoi perdere.",
+        buttonLabel: "Contrassegna i tuoi luoghi preferiti",
+        footerUnsubscribe: "Non voglio più ricevere queste email",
+        footerIgnore: "Se non riconosci questa email, puoi ignorarla.",
+        tip: "💡 In evidenza → luoghi che raccomandi in particolare.<br/>⭐ Da non perdere → luoghi imperdibili.",
+    },
 };
 
 function getCopy(locale: string): Copy {
-	const normalized = (locale || 'en').split('-')[0] as Locale;
-	return MESSAGES[normalized] ?? MESSAGES.en;
+    const normalized = (locale || "en").split("-")[0] as Locale;
+    return MESSAGES[normalized] ?? MESSAGES.en;
 }
 
 type Params = {
-	locale: string;
-	appUrl: string;
-	heroUrl: string;
-	propertyId: string;
-	propertyName: string;
-	logoSymbolUrl: string;
-	footerLogoUrl: string;
-	unsubscribeUrl: string;
+    locale: string;
+    appUrl: string;
+    heroUrl: string;
+    propertyId: string;
+    propertyName: string;
+    logoSymbolUrl: string;
+    footerLogoUrl: string;
+    unsubscribeUrl: string;
 };
 
 export function renderC1NoFeaturedDay5({
-	locale,
-	appUrl,
-	heroUrl,
-	propertyId,
-	propertyName,
-	logoSymbolUrl,
-	footerLogoUrl,
-	unsubscribeUrl,
+    locale,
+    appUrl,
+    heroUrl,
+    propertyId,
+    propertyName,
+    logoSymbolUrl,
+    footerLogoUrl,
+    unsubscribeUrl,
 }: Params): { subject: string; html: string } {
-	const copy = getCopy(locale);
-	const ctaUrl = `${appUrl}/${locale}/app/properties/${propertyId}/4581a08a-3e78-4800-b16c-575f5da81cba/4fc3c0a8-3bb5-4b3b-8de3-6230a07df8a7`;
+    const copy = getCopy(locale);
+    const ctaUrl = `${appUrl}/${locale}/app/properties/${propertyId}/4581a08a-3e78-4800-b16c-575f5da81cba/4fc3c0a8-3bb5-4b3b-8de3-6230a07df8a7`;
 
-	const html = `<!DOCTYPE html>
+    const html = `<!DOCTYPE html>
 <html lang="${locale}" xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="UTF-8" />
@@ -237,5 +263,5 @@ export function renderC1NoFeaturedDay5({
   </body>
 </html>`;
 
-	return { subject: copy.subject, html };
+    return { subject: copy.subject, html };
 }

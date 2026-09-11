@@ -1,80 +1,100 @@
-export type Locale = 'es' | 'en' | 'fr';
+export type Locale = "es" | "en" | "fr" | "pt" | "it";
 
 type Copy = {
-	subject: string;
-	preheader: string;
-	title: string;
-	body1: string;
-	body2: string;
-	buttonLabel: string;
-	footerUnsubscribe: string;
-	footerIgnore: string;
+    subject: string;
+    preheader: string;
+    title: string;
+    body1: string;
+    body2: string;
+    buttonLabel: string;
+    footerUnsubscribe: string;
+    footerIgnore: string;
 };
 
 const MESSAGES: Record<Locale, Copy> = {
-	es: {
-		subject: 'Tu alojamiento tiene trabajo pendiente',
-		preheader: 'Tu guía aún no está completa.',
-		title: 'Completa ya tu guía digital gratuita y conviértete en un anfitrión 5 estrellas',
-		body1: '¿Tuviste algún problema? Hemos visto que has empezado a crear una guía para tu alojamiento en BNBexplorer pero no terminaste de incluir toda la información relevante. Una guía completa con toda la información sobre tu propiedad, te evitará responder cientos de consultas, mejorando la comunicación con tus huéspedes sin esfuerzo, al tiempo que les ofreces una mejor experiencia.',
-		body2: 'Completa la información de tu alojamiento y genera tu link personalizado para compartir con tus inquilinos. ¡No te llevará más de 3 minutos y es totalmente gratis!',
-		buttonLabel: 'Termina tu guía gratis',
-		footerUnsubscribe: 'No quiero recibir más emails',
-		footerIgnore: 'Si no reconoces este email, puedes ignorarlo.',
-	},
-	en: {
-		subject: 'Your property has pending work',
-		preheader: 'Your guide is not complete yet.',
-		title: 'Complete your free digital guide now and become a 5-star host',
-		body1: 'Did you run into any issues? We noticed that you started creating a guide for your listing on BNBexplorer but didn’t finish adding all the relevant information. A complete guide with all the information about your property will save you from having to answer hundreds of questions, effortlessly improving communication with your guests while offering them a better experience.',
-		body2: 'Complete your property information and generate your personalized link to share with your guests. It won’t take more than 3 minutes and it’s completely free!',
-		buttonLabel: 'Finish your free guide',
-		footerUnsubscribe: 'Unsubscribe from these emails',
-		footerIgnore: "If you don't recognise this email, you can ignore it.",
-	},
-	fr: {
-		subject: 'Votre hébergement a du travail en attente',
-		preheader: "Votre guide n'est pas encore complet.",
-		title: 'Complétez dès maintenant votre guide numérique gratuit et devenez un hôte 5 étoiles',
-		body1: 'Avez-vous rencontré un problème ? Nous avons remarqué que vous avez commencé à créer un guide pour votre logement sur BNBexplorer, mais que vous n’avez pas terminé d’y inclure toutes les informations importantes. Un guide complet avec toutes les informations sur votre propriété vous évitera de répondre à des centaines de questions, améliorera la communication avec vos voyageurs sans effort et leur offrira en même temps une meilleure expérience.',
-		body2: 'Complétez les informations de votre logement et générez votre lien personnalisé à partager avec vos locataires. Cela ne vous prendra pas plus de 3 minutes et c’est totalement gratuit !',
-		buttonLabel: 'Terminez votre guide gratuitement',
-		footerUnsubscribe: 'Se désabonner de ces emails',
-		footerIgnore:
-			"Si vous ne reconnaissez pas cet email, vous pouvez l'ignorer.",
-	},
+    es: {
+        subject: "Tu alojamiento tiene trabajo pendiente",
+        preheader: "Tu guía aún no está completa.",
+        title: "Completa ya tu guía digital gratuita y conviértete en un anfitrión 5 estrellas",
+        body1: "¿Tuviste algún problema? Hemos visto que has empezado a crear una guía para tu alojamiento en BNBexplorer pero no terminaste de incluir toda la información relevante. Una guía completa con toda la información sobre tu propiedad, te evitará responder cientos de consultas, mejorando la comunicación con tus huéspedes sin esfuerzo, al tiempo que les ofreces una mejor experiencia.",
+        body2: "Completa la información de tu alojamiento y genera tu link personalizado para compartir con tus inquilinos. ¡No te llevará más de 3 minutos y es totalmente gratis!",
+        buttonLabel: "Termina tu guía gratis",
+        footerUnsubscribe: "No quiero recibir más emails",
+        footerIgnore: "Si no reconoces este email, puedes ignorarlo.",
+    },
+    en: {
+        subject: "Your property has pending work",
+        preheader: "Your guide is not complete yet.",
+        title: "Complete your free digital guide now and become a 5-star host",
+        body1: "Did you run into any issues? We noticed that you started creating a guide for your listing on BNBexplorer but didn’t finish adding all the relevant information. A complete guide with all the information about your property will save you from having to answer hundreds of questions, effortlessly improving communication with your guests while offering them a better experience.",
+        body2: "Complete your property information and generate your personalized link to share with your guests. It won’t take more than 3 minutes and it’s completely free!",
+        buttonLabel: "Finish your free guide",
+        footerUnsubscribe: "Unsubscribe from these emails",
+        footerIgnore: "If you don't recognise this email, you can ignore it.",
+    },
+    fr: {
+        subject: "Votre hébergement a du travail en attente",
+        preheader: "Votre guide n'est pas encore complet.",
+        title: "Complétez dès maintenant votre guide numérique gratuit et devenez un hôte 5 étoiles",
+        body1: "Avez-vous rencontré un problème ? Nous avons remarqué que vous avez commencé à créer un guide pour votre logement sur BNBexplorer, mais que vous n’avez pas terminé d’y inclure toutes les informations importantes. Un guide complet avec toutes les informations sur votre propriété vous évitera de répondre à des centaines de questions, améliorera la communication avec vos voyageurs sans effort et leur offrira en même temps une meilleure expérience.",
+        body2: "Complétez les informations de votre logement et générez votre lien personnalisé à partager avec vos locataires. Cela ne vous prendra pas plus de 3 minutes et c’est totalement gratuit !",
+        buttonLabel: "Terminez votre guide gratuitement",
+        footerUnsubscribe: "Se désabonner de ces emails",
+        footerIgnore:
+            "Si vous ne reconnaissez pas cet email, vous pouvez l'ignorer.",
+    },
+    pt: {
+        subject: "O seu alojamento tem trabalho pendente",
+        preheader: "O seu guia ainda não está completo.",
+        title: "Complete já o seu guia digital gratuito e torne-se um anfitrião 5 estrelas",
+        body1: "Teve algum problema? Reparámos que começou a criar um guia para o seu alojamento no BNBexplorer mas não terminou de incluir toda a informação relevante. Um guia completo com toda a informação sobre a propriedade vai evitar-lhe responder a centenas de perguntas, melhorando a comunicação com os hóspedes sem esforço, ao mesmo tempo que lhes oferece uma melhor experiência.",
+        body2: "Complete a informação do seu alojamento e gere o seu link personalizado para partilhar com os inquilinos. Não vai demorar mais de 3 minutos e é totalmente grátis!",
+        buttonLabel: "Termine o seu guia grátis",
+        footerUnsubscribe: "Não quero receber mais e-mails",
+        footerIgnore: "Se não reconhece este e-mail, pode ignorá-lo.",
+    },
+    it: {
+        subject: "Il tuo alloggio ha del lavoro in sospeso",
+        preheader: "La tua guida non è ancora completa.",
+        title: "Completa subito la tua guida digitale gratuita e diventa un host 5 stelle",
+        body1: "Hai avuto qualche problema? Abbiamo notato che hai iniziato a creare una guida per il tuo alloggio su BNBexplorer ma non hai finito di inserire tutte le informazioni rilevanti. Una guida completa con tutte le informazioni sulla tua struttura ti evita di rispondere a centinaia di domande, migliorando senza sforzo la comunicazione con i tuoi ospiti e offrendo loro un'esperienza migliore.",
+        body2: "Completa le informazioni del tuo alloggio e genera il tuo link personalizzato da condividere con i tuoi ospiti. Non ti prenderà più di 3 minuti ed è completamente gratis!",
+        buttonLabel: "Termina la tua guida gratis",
+        footerUnsubscribe: "Non voglio più ricevere queste email",
+        footerIgnore: "Se non riconosci questa email, puoi ignorarla.",
+    },
 };
 
 function getCopy(locale: string): Copy {
-	const normalized = (locale || 'en').split('-')[0] as Locale;
-	return MESSAGES[normalized] ?? MESSAGES.en;
+    const normalized = (locale || "en").split("-")[0] as Locale;
+    return MESSAGES[normalized] ?? MESSAGES.en;
 }
 
 type Params = {
-	locale: string;
-	appUrl: string;
-	heroUrl: string;
-	propertyId: string;
-	propertyName: string;
-	logoSymbolUrl: string;
-	footerLogoUrl: string;
-	unsubscribeUrl: string;
+    locale: string;
+    appUrl: string;
+    heroUrl: string;
+    propertyId: string;
+    propertyName: string;
+    logoSymbolUrl: string;
+    footerLogoUrl: string;
+    unsubscribeUrl: string;
 };
 
 export function renderB1IncompleteDay3({
-	locale,
-	appUrl,
-	heroUrl,
-	propertyId,
-	propertyName,
-	logoSymbolUrl,
-	footerLogoUrl,
-	unsubscribeUrl,
+    locale,
+    appUrl,
+    heroUrl,
+    propertyId,
+    propertyName,
+    logoSymbolUrl,
+    footerLogoUrl,
+    unsubscribeUrl,
 }: Params): { subject: string; html: string } {
-	const copy = getCopy(locale);
-	const ctaUrl = `${appUrl}/${locale}/app/properties/${propertyId}/4581a08a-3e78-4800-b16c-575f5da81cba/4fc3c0a8-3bb5-4b3b-8de3-6230a07df8a7`;
+    const copy = getCopy(locale);
+    const ctaUrl = `${appUrl}/${locale}/app/properties/${propertyId}/4581a08a-3e78-4800-b16c-575f5da81cba/4fc3c0a8-3bb5-4b3b-8de3-6230a07df8a7`;
 
-	const html = `<!DOCTYPE html>
+    const html = `<!DOCTYPE html>
 <html lang="${locale}" xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="UTF-8" />
@@ -214,5 +234,5 @@ export function renderB1IncompleteDay3({
   </body>
 </html>`;
 
-	return { subject: copy.subject, html };
+    return { subject: copy.subject, html };
 }
