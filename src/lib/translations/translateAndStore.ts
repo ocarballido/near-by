@@ -19,6 +19,7 @@ type ClaudeTranslationResult = {
 export async function translateAndStore(
     propertyDataId: string,
     fields: FieldToTranslate[],
+    targetLangs: readonly SupportedLang[] = LOCALES,
 ): Promise<void> {
     const supabase = createClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -39,9 +40,9 @@ export async function translateAndStore(
         if (!result) continue;
 
         const { source_lang, translations } = result;
-        const targetLangs = LOCALES.filter((l) => l !== source_lang);
+        const langsToStore = targetLangs.filter((l) => l !== source_lang);
 
-        const upsertRows = targetLangs.map((lang) => ({
+        const upsertRows = langsToStore.map((lang) => ({
             property_data_id: propertyDataId,
             lang,
             field_key: field.fieldKey,
@@ -49,6 +50,8 @@ export async function translateAndStore(
             source_lang,
             updated_at: new Date().toISOString(),
         }));
+
+        if (upsertRows.length === 0) continue;
 
         const { error } = await supabase
             .from("property_data_translations")
