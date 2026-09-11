@@ -1,6 +1,5 @@
 {
-	"imports": {
-		"./templates/magicLinkTemplate": "./templates/magicLinkTemplate.ts",
-		"./templates/messages": "./templates/messages.ts"
-	}
+    "imports": {
+        "./templates/magicLinkTemplate": "./templates/magicLinkTemplate.ts"
+    }
 }
