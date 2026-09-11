@@ -19,6 +19,7 @@ type ClaudeTranslationResult = {
 export async function translateAndStoreProperty(
     propertyId: string,
     fields: FieldToTranslate[],
+    targetLangs: readonly SupportedLang[] = LOCALES,
 ): Promise<void> {
     const supabase = createClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -39,9 +40,14 @@ export async function translateAndStoreProperty(
         if (!result) continue;
 
         const { source_lang, translations } = result;
-        const targetLangs = LOCALES.filter((l) => l !== source_lang);
+        // Se descarta el idioma origen (nunca se traduce a sí mismo) y se
+        // restringe a los idiomas que el caller pidió realmente rellenar
+        // — por defecto, todos. Esto es lo que permite reanudar un backfill
+        // parcial sin regenerar (y sin re-facturar) los idiomas que ya
+        // estaban completos.
+        const langsToStore = targetLangs.filter((l) => l !== source_lang);
 
-        const upsertRows = targetLangs.map((lang) => ({
+        const upsertRows = langsToStore.map((lang) => ({
             property_id: propertyId,
             lang,
             field_key: field.fieldKey,
@@ -49,6 +55,8 @@ export async function translateAndStoreProperty(
             source_lang,
             updated_at: new Date().toISOString(),
         }));
+
+        if (upsertRows.length === 0) continue;
 
         const { error } = await supabase
             .from("property_translations")
