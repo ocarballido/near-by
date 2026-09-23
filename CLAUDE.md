@@ -13,12 +13,11 @@ BNBexplorer: Next.js 15 (App Router) + React 19 + TypeScript + Tailwind 4, con S
 - Clases de Tailwind como literales completos; nunca concatenadas dinámicamente.
 - Componentes: una carpeta por componente con `index.tsx`, jerarquía atoms/molecules/organisms/templates.
 - Identificadores en inglés y camelCase; el español solo en contenido de texto.
-- Ejecutar `npx tsc --noEmit` tras cambios significativos (sin salida = OK).
 - Indentación: `.prettierrc` fija 4 espacios, pero Prettier no está instalado ni hay script de formato, y algunos ficheros usan tabs (p. ej. `tsconfig.json`, `routing.ts`). Respetar la indentación del fichero que se edita.
 
 ## Verificación
 
-No hay tests ni CI de checks. Antes de dar un cambio por terminado: `npm run lint`, `npx tsc --noEmit` y `npm run build` (la skill `/verify` los ejecuta en orden). `supabase/` está excluido de tsc porque es Deno.
+No hay tests ni CI de checks. Tras cambios significativos ejecuta `npx tsc --noEmit` (sin salida = OK). La verificación completa (lint, tsc y build) la lanzo yo con `/verify`; no ejecutes `npm run build` por tu cuenta.
 
 ## Comandos
 
@@ -27,7 +26,7 @@ No hay tests ni CI de checks. Antes de dar un cambio por terminado: `npm run lin
 
 ## Entorno
 
-- Nunca leer, modificar ni referenciar ficheros `.env*` (excepto `.env.template`); un hook PreToolUse lo bloquea en Read/Edit/Write/Bash. Nunca apuntar el entorno local a producción.
+- Nunca leer, modificar ni referenciar ficheros `.env*` (excepto `.env.template`); un hook PreToolUse lo bloquea en Read/Edit/Write/Grep/Bash. Nunca apuntar el entorno local a producción.
 - `.env.template` está desactualizado (viene de la plantilla original); no es la lista real de variables.
 - El service key se llama `PRIVATE_SUPABASE_SERVICE_KEY` (código y CI), no `SUPABASE_SERVICE_ROLE_KEY` como dice `README-local.md`.
 
@@ -43,7 +42,7 @@ Orden: next-intl → si `MAINTENANCE_MODE` está activo, rewrite a `/[locale]/ma
 
 - `createSSRClient()`: auth / identidad del usuario (getUser) y lecturas sujetas a RLS.
 - `createServerAdminClient()` (service_role): escrituras en Storage y operaciones admin en Server Actions, SIEMPRE después de verificar auth con el cliente SSR. Nunca importarlo en código cliente.
-- `createSSRSassClient()`: solo en el callback de auth existente. No usarlo en código nuevo de datos.
+- `createSSRSassClient()`: hoy se usa en el callback de auth (`src/app/api/auth/callback/route.ts`) y en `src/app/api/properties/route.ts`. No usarlo en código nuevo.
 
 ### Cliente (componentes "use client")
 
@@ -67,7 +66,7 @@ Orden: next-intl → si `MAINTENANCE_MODE` está activo, rewrite a `/[locale]/ma
 
 ## i18n (next-intl)
 
-- Idiomas: es, en, fr, pt, it. `LOCALES` en `config-constants.ts` es la única fuente de verdad; no declarar uniones de locales locales en otros ficheros.
+- Idiomas: es, en, fr, pt, it. `LOCALES` en `src/config/config-constants.ts` es la única fuente de verdad; no declarar uniones de locales locales en otros ficheros.
 - Todo texto de UI nuevo se añade a los 5 ficheros de `messages/` (en.json, es.json, fr.json, it.json, pt.json).
 - Claves planas en camelCase.
 - Navegación: usar `Link`, `redirect`, `useRouter`, `usePathname` y `getPathname` de `@/i18n/routing` en lugar de `next/link` / `next/navigation`. Lo que `@/i18n/routing` no exporta (`useSearchParams`, `useParams`, `notFound`...) sigue viniendo de `next/navigation`.
@@ -76,14 +75,14 @@ Orden: next-intl → si `MAINTENANCE_MODE` está activo, rewrite a `/[locale]/ma
 
 ### Añadir un idioma nuevo
 
-1. Añadirlo a `LOCALES` en `config-constants.ts`.
+1. Añadirlo a `LOCALES` en `src/config/config-constants.ts`.
 2. Crear `messages/<locale>.json` traduciendo desde es.json o en.json.
 3. Traducir las plantillas de email en `supabase/functions/`:
    - send-email/templates/magicLinkTemplate.ts
    - send-sequence-email/templates/: a1-no-property-day2, a2-no-property-day7, b1-incomplete-day3, b2-incomplete-day14, c1-no-featured-day5, d1-weekly-digest, e1-broadcast
    - weekly-digest/index.ts, send-broadcast/index.ts
    - _shared/send-email.ts: revisar, normalmente no requiere cambios
-4. Revisar el servicio de envío de `/admin/broadcast/` para que contemple todos los idiomas.
+4. Revisar el envío de broadcast (`src/app/[locale]/admin/broadcast/` y su route handler `src/app/api/broadcast/route.ts`) para que contemple todos los idiomas.
 5. Actualizar los prompts del itinerario en `src/config/prompt.ts`.
 6. Revisar `src/app/[locale]/layout.tsx`.
 7. Tras el despliegue: recordarme lanzar los workflows de GitHub Actions (ver Despliegue).
@@ -97,7 +96,7 @@ Orden: next-intl → si `MAINTENANCE_MODE` está activo, rewrite a `/[locale]/ma
   - `send-sequence-email`: envío individual de cada email de secuencia.
   - `weekly-digest`: resumen semanal (lunes 9:00 UTC).
   - `send-broadcast`: envíos masivos.
-  - `run-email-job`
+  - `run-email-job`: copia de `email-job` solo para pruebas locales (simula el paso de los días con `EMAIL_TEST_DAYS_OFFSET`, sin auth de cron). Nunca se despliega en producción. Los cambios de lógica de secuencias se aplican en las dos.
 - `_shared/` se empaqueta dentro de cada función al desplegar: si cambia algo en `_shared/`, hay que redesplegar TODAS las funciones que lo importan.
 - Secretos: se gestionan con `npx supabase secrets set`, nunca en código ni en el `.env` del frontend.
 - Probar en local con `npx supabase functions serve <nombre>` antes de desplegar.
@@ -108,3 +107,8 @@ Orden: next-intl → si `MAINTENANCE_MODE` está activo, rewrite a `/[locale]/ma
 1. Rama `develop-local` → commits convencionales agrupados por capa → PR a `main` → merge → deploy automático de Vercel.
 2. Las Edge Functions NO se despliegan con Vercel: ver sección "Edge Functions".
 3. No hay CI de checks, pero sí workflows manuales (`workflow_dispatch`) en GitHub Actions: "Migrate Translations" y "Migrate Property Translations". Se lanzan desde la rama `main` al añadir un idioma. No puedes lanzarlos tú: recuérdamelo.
+
+## Producción y git
+
+- Nunca ejecutes comandos que afecten a producción sin mi confirmación explícita: `npx supabase db push` (sin `--dry-run`), `npx supabase functions deploy`, `npx supabase secrets set`. Indícame el comando y espera.
+- No hagas commits, push ni PRs: los hago yo. Puedes proponer el mensaje de commit.
