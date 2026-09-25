@@ -47,7 +47,8 @@
             "Bash(git add -A *)",
             "Bash(git add --all *)",
             "Bash(git commit -a *)",
-            "Bash(git commit -am *)"
+            "Bash(git commit -am *)",
+            "Bash(npx supabase functions deploy run-email-job *)"
         ]
     },
     "hooks": {
@@ -58,6 +59,26 @@
                     {
                         "type": "command",
                         "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/block-env.sh"
+                    }
+                ]
+            },
+            {
+                "matcher": "Edit|Write",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/protect-migrations.sh"
+                    }
+                ]
+            }
+        ],
+        "Notification": [
+            {
+                "matcher": "permission_prompt",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "osascript -e 'display notification \"Claude Code necesita tu aprobación\" with title \"Claude Code\"'"
                     }
                 ]
             }
