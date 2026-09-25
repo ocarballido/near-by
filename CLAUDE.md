@@ -4,6 +4,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 BNBexplorer: Next.js 15 (App Router) + React 19 + TypeScript + Tailwind 4, con Supabase (auth, Postgres, storage, Edge Functions en Deno). Gestor de paquetes: npm. No es un monorepo.
 
+## Producto
+
+- SaaS B2B para anfitriones de alquiler vacacional: crean guías digitales para sus propiedades. No es un directorio ni un buscador de alojamientos.
+- Dos tipos de usuario:
+    - Anfitrión (owner): gestiona sus propiedades desde el dashboard autenticado (`/app/...`).
+    - Huésped (guest): accede sin login a la guía pública de cada propiedad (`/public/...`), con recomendaciones locales, información del alojamiento (WiFi, check-in/out, normas), chatbot IA, planificador de itinerarios y widget contextual según la hora del día.
+- Las páginas públicas del huésped son donde se entrega el valor; el dashboard es la capa de gestión.
+- Modelo freemium: el plan gratuito permite 1 propiedad.
+- Principio de producto "cero fricción": nada en el dashboard debe comunicar una carencia al anfitrión, aunque se formule en positivo. Ante una propuesta que pueda chocar con esto, señálamelo antes de escribir código.
+- No inventar contenido de prueba social (testimonios, cifras de uso): usar placeholders hasta tener datos reales.
+
 ## Convenciones de trabajo
 
 - Entrega incremental: un fichero cada vez y confirmación explícita antes de pasar al siguiente.
@@ -14,6 +25,16 @@ BNBexplorer: Next.js 15 (App Router) + React 19 + TypeScript + Tailwind 4, con S
 - Componentes: una carpeta por componente con `index.tsx`, jerarquía atoms/molecules/organisms/templates.
 - Identificadores en inglés y camelCase; el español solo en contenido de texto.
 - Indentación: `.prettierrc` fija 4 espacios, pero Prettier no está instalado ni hay script de formato, y algunos ficheros usan tabs (p. ej. `tsconfig.json`, `routing.ts`). Respetar la indentación del fichero que se edita.
+
+## APIs de librerías
+
+- No uses APIs de memoria cuando haya dudas: comprueba la versión en `package.json` y los tipos en `node_modules`. Si sigue habiendo dudas, consulta la documentación oficial de esa versión. Nada de patrones obsoletos ni deprecados.
+- Cambios de versión que hay que respetar:
+    - Next.js 15: `params`, `searchParams`, `cookies()` y `headers()` son asíncronos (await).
+    - React 19: `useActionState` (no `useFormState`); Server Actions con `"use server"`.
+    - Tailwind v4: configuración en CSS con `@theme`; no existe `tailwind.config.js` como fuente de tokens.
+    - Supabase: `@supabase/ssr` con cookies `getAll`/`setAll`; en servidor, autenticar con `getUser()`, nunca con `getSession()`.
+    - next-intl: navegación creada con `createNavigation` (ver `@/i18n/routing`).
 
 ## Verificación
 
@@ -78,10 +99,10 @@ Orden: next-intl → si `MAINTENANCE_MODE` está activo, rewrite a `/[locale]/ma
 1. Añadirlo a `LOCALES` en `src/config/config-constants.ts`.
 2. Crear `messages/<locale>.json` traduciendo desde es.json o en.json.
 3. Traducir las plantillas de email en `supabase/functions/`:
-   - send-email/templates/magicLinkTemplate.ts
-   - send-sequence-email/templates/: a1-no-property-day2, a2-no-property-day7, b1-incomplete-day3, b2-incomplete-day14, c1-no-featured-day5, d1-weekly-digest, e1-broadcast
-   - weekly-digest/index.ts, send-broadcast/index.ts
-   - _shared/send-email.ts: revisar, normalmente no requiere cambios
+    - send-email/templates/magicLinkTemplate.ts
+    - send-sequence-email/templates/: a1-no-property-day2, a2-no-property-day7, b1-incomplete-day3, b2-incomplete-day14, c1-no-featured-day5, d1-weekly-digest, e1-broadcast
+    - weekly-digest/index.ts, send-broadcast/index.ts
+    - \_shared/send-email.ts: revisar, normalmente no requiere cambios
 4. Revisar el envío de broadcast (`src/app/[locale]/admin/broadcast/` y su route handler `src/app/api/broadcast/route.ts`) para que contemple todos los idiomas.
 5. Actualizar los prompts del itinerario en `src/config/prompt.ts`.
 6. Revisar `src/app/[locale]/layout.tsx`.
@@ -91,12 +112,12 @@ Orden: next-intl → si `MAINTENANCE_MODE` está activo, rewrite a `/[locale]/ma
 
 - Runtime Deno, no Node: nada de APIs de Node; usar los imports/`deno.json` existentes como referencia. Excluidas de tsc.
 - Funciones de email:
-  - `send-email`: emails transaccionales (Auth Hook).
-  - `email-job`: cron diario (10:00 UTC) que evalúa y dispara las secuencias. Prioridad: tipo B (propiedad incompleta) sobre tipo C (sin destacados). `MAX_EMAILS_PER_RUN` es un control de seguridad: no eliminarlo ni subirlo sin confirmarlo conmigo.
-  - `send-sequence-email`: envío individual de cada email de secuencia.
-  - `weekly-digest`: resumen semanal (lunes 9:00 UTC).
-  - `send-broadcast`: envíos masivos.
-  - `run-email-job`: copia de `email-job` solo para pruebas locales (simula el paso de los días con `EMAIL_TEST_DAYS_OFFSET`, sin auth de cron). Nunca se despliega en producción. Los cambios de lógica de secuencias se aplican en las dos.
+    - `send-email`: emails transaccionales (Auth Hook).
+    - `email-job`: cron diario (10:00 UTC) que evalúa y dispara las secuencias. Prioridad: tipo B (propiedad incompleta) sobre tipo C (sin destacados). `MAX_EMAILS_PER_RUN` es un control de seguridad: no eliminarlo ni subirlo sin confirmarlo conmigo.
+    - `send-sequence-email`: envío individual de cada email de secuencia.
+    - `weekly-digest`: resumen semanal (lunes 9:00 UTC).
+    - `send-broadcast`: envíos masivos.
+    - `run-email-job`: copia de `email-job` solo para pruebas locales (simula el paso de los días con `EMAIL_TEST_DAYS_OFFSET`, sin auth de cron). Nunca se despliega en producción. Los cambios de lógica de secuencias se aplican en las dos.
 - `_shared/` se empaqueta dentro de cada función al desplegar: si cambia algo en `_shared/`, hay que redesplegar TODAS las funciones que lo importan.
 - Secretos: se gestionan con `npx supabase secrets set`, nunca en código ni en el `.env` del frontend.
 - Probar en local con `npx supabase functions serve <nombre>` antes de desplegar.
@@ -111,4 +132,9 @@ Orden: next-intl → si `MAINTENANCE_MODE` está activo, rewrite a `/[locale]/ma
 ## Producción y git
 
 - Nunca ejecutes comandos que afecten a producción sin mi confirmación explícita: `npx supabase db push` (sin `--dry-run`), `npx supabase functions deploy`, `npx supabase secrets set`. Indícame el comando y espera.
-- No hagas commits, push ni PRs: los hago yo. Puedes proponer el mensaje de commit.
+- Puedes hacer commits y push, siempre con mi aprobación. Nunca PRs: las hago yo desde la web.
+- Micro commits: agrupa en un mismo commit solo ficheros relacionados entre sí (una misma unidad de cambio). Nunca un commit con muchos ficheros sin relación.
+- Antes de commitear, propón el plan: qué commits, qué ficheros en cada uno y el mensaje (commits convencionales). Espera mi confirmación.
+- Añade los ficheros de forma explícita (`git add <fichero>`); nunca `git add .`, `-A` ni `git commit -a`.
+- Push solo a `develop-local`; nunca a `main` ni con `--force`.
+- Antes de proponer commits, `npx tsc --noEmit` debe pasar.
