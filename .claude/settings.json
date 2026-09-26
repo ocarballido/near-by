@@ -6,6 +6,7 @@
             "Bash(git status *)",
             "Bash(git diff *)",
             "Bash(git log *)",
+            "Bash(git grep *)",
             "Bash(npm audit *)",
             "Bash(npm ls *)",
             "Bash(ls *)",
