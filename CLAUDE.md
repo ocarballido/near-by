@@ -48,6 +48,7 @@ No hay tests ni CI de checks. Tras cambios significativos ejecuta `npx tsc --noE
 ## Entorno
 
 - Nunca leer, modificar ni referenciar ficheros `.env*` (excepto `.env.template`); un hook PreToolUse lo bloquea en Read/Edit/Write/Grep/Bash. Nunca apuntar el entorno local a producción.
+- Para buscar en el código usa `git grep`, no `grep -r` ni `rg`: git grep nunca lee ficheros ignorados por git (incluidos los .env). Si necesitas buscar en ficheros sin seguimiento, léelos con Read.
 - `.env.template` está desactualizado (viene de la plantilla original); no es la lista real de variables.
 - El service key se llama `PRIVATE_SUPABASE_SERVICE_KEY` (código y CI), no `SUPABASE_SERVICE_ROLE_KEY` como dice `README-local.md`.
 
@@ -138,3 +139,7 @@ Orden: next-intl → si `MAINTENANCE_MODE` está activo, rewrite a `/[locale]/ma
 - Añade los ficheros de forma explícita (`git add <fichero>`); nunca `git add .`, `-A` ni `git commit -a`.
 - Push solo a `develop-local`; nunca a `main` ni con `--force`.
 - Antes de proponer commits, `npx tsc --noEmit` debe pasar.
+- Antes de proponer los commits de una feature, pasa el subagente code-reviewer y enséñame su informe.
+- Si los cambios tocan src/app/api, Server Actions con cliente admin, supabase/migrations, supabase/functions, páginas /public o la integración de IA, pasa también security-reviewer.
+- No corrijas los hallazgos de los revisores sin que yo te diga cuáles.
+- Después de cada push a develop-local, y siempre que te diga que voy a abrir una PR, recuérdame pasar security-reviewer sobre main...develop-local.
