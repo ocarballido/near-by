@@ -1,0 +1,88 @@
+{
+    "permissions": {
+        "allow": [
+            "Bash(npx tsc --noEmit *)",
+            "Bash(npm run lint *)",
+            "Bash(git status *)",
+            "Bash(git diff *)",
+            "Bash(git log *)",
+            "Bash(git grep *)",
+            "Bash(npm audit *)",
+            "Bash(npm ls *)",
+            "Bash(ls *)",
+            "Bash(wc *)",
+            "Bash(head *)",
+            "Bash(tail *)"
+        ],
+        "ask": [
+            "Bash(npx supabase db push *)",
+            "Bash(npx supabase functions deploy *)",
+            "Bash(npx supabase secrets set *)",
+            "Bash(npx supabase db reset *)",
+            "Bash(npm audit fix *)",
+            "Bash(npm install *)",
+            "Bash(npm i *)",
+            "Bash(npm uninstall *)",
+            "Bash(npm update *)",
+            "Bash(curl *)",
+            "Bash(wget *)",
+            "Bash(git add *)",
+            "Bash(git commit *)",
+            "Bash(git push *)"
+        ],
+        "deny": [
+            "Bash(npm audit fix --force *)",
+            "Bash(sudo *)",
+            "Bash(rm -rf *)",
+            "Bash(rm -fr *)",
+            "Bash(chmod 777 *)",
+            "Bash(git reset --hard *)",
+            "Bash(git clean *)",
+            "Bash(git restore . *)",
+            "Bash(git checkout . *)",
+            "Bash(git push --force *)",
+            "Bash(git push -f *)",
+            "Bash(git push --force-with-lease *)",
+            "Bash(git push origin main *)",
+            "Bash(git add . *)",
+            "Bash(git add -A *)",
+            "Bash(git add --all *)",
+            "Bash(git commit -a *)",
+            "Bash(git commit -am *)",
+            "Bash(npx supabase functions deploy run-email-job *)"
+        ]
+    },
+    "hooks": {
+        "PreToolUse": [
+            {
+                "matcher": "Read|Edit|Write|Grep|Bash",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/block-env.sh"
+                    }
+                ]
+            },
+            {
+                "matcher": "Edit|Write",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/protect-migrations.sh"
+                    }
+                ]
+            }
+        ],
+        "Notification": [
+            {
+                "matcher": "permission_prompt",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "osascript -e 'display notification \"Claude Code necesita tu aprobación\" with title \"Claude Code\"'"
+                    }
+                ]
+            }
+        ]
+    }
+}
