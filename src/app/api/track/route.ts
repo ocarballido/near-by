@@ -1,34 +1,31 @@
 import { NextRequest, NextResponse } from "next/server";
 import { trackEvent, type EventName } from "@/lib/analytics/mixpanel";
 
+// Only events emitted from the client via trackClientEvent.
+// Server-only events (onboarding_start, create_property_completed,
+// tenant_visit_public_page, property_deleted, time_window_widget_shown...)
+// are tracked directly with trackEvent and must not be accepted here.
 const ALLOWED_EVENTS: ReadonlySet<EventName> = new Set([
-    "onboarding_start",
-    "create_property_completed",
-    "tenant_visit_public_page",
-    "create_property_started",
-    "property_progress_updated",
     "share_clicked",
-    "property_deleted",
+    "wow_modal_dismissed",
+
+    // ✅ Create property
+    "create_property_address_selected",
+    "create_property_submit_clicked",
+    "create_property_blocked_no_address_selection",
     "create_property_failed",
     "create_property_abandoned",
-    "wow_modal_dismissed",
 
     // ✅ Feedback
     "feedback_opened",
     "feedback_submitted",
     "feedback_cancelled",
     "feedback_submit_failed",
-    "create_property_submit_clicked",
-    "create_property_address_selected",
-    "create_property_blocked_no_address_selection",
-    // (si más adelante quieres)
-    // 'feedback_abandoned',
 
     // ✅ Itinerary
     "itinerary_generate_clicked",
 
     // ✅ Time window widget
-    "time_window_widget_shown",
     "time_window_pill_clicked",
     "time_window_directions_clicked",
 ]);

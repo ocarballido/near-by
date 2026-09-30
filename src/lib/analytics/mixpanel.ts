@@ -1,5 +1,3 @@
-"use server";
-
 import { headers } from "next/headers";
 
 export type EventName =
@@ -51,6 +49,31 @@ function normalizeCountryCode(rawCountryCode: string | null): string | null {
     return trimmed.length === 2 ? trimmed.toUpperCase() : trimmed;
 }
 
+// Keys set by trackEvent itself or reserved by Mixpanel (time, $*, mp_*):
+// props must never override them.
+const RESERVED_PROP_KEYS: ReadonlySet<string> = new Set([
+    "token",
+    "distinct_id",
+    "ip",
+    "time",
+    "user_country",
+    "user_agent",
+    "referer",
+]);
+
+function sanitizeProps(
+    props: Record<string, unknown>,
+): Record<string, unknown> {
+    return Object.fromEntries(
+        Object.entries(props).filter(
+            ([key]) =>
+                !RESERVED_PROP_KEYS.has(key) &&
+                !key.startsWith("$") &&
+                !key.startsWith("mp_"),
+        ),
+    );
+}
+
 function isMixpanelEnabled(): boolean {
     return process.env.MIXPANEL_ENABLED === "true";
 }
@@ -100,6 +123,8 @@ export async function trackEvent({
             {
                 event,
                 properties: {
+                    ...sanitizeProps(props),
+
                     token: mixpanelToken,
                     distinct_id: distinctId,
 
@@ -109,7 +134,6 @@ export async function trackEvent({
 
                     ...(userCountry ? { user_country: userCountry } : {}),
 
-                    ...props,
                     user_agent: userAgent,
                     referer,
                 },

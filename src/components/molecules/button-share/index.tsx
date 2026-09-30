@@ -9,7 +9,7 @@ import {
 	WhatsappIcon,
 } from 'react-share';
 
-import { trackEvent } from '@/lib/analytics/mixpanel';
+import { trackClientEvent } from '@/lib/analytics/trackClient';
 
 import Button from '@/components/molecules/button';
 
@@ -58,22 +58,18 @@ export function ShareMenu({
 		channel: ShareChannel,
 		extra?: Record<string, unknown>,
 	) => {
-		// server action: no bloqueamos UX si falla
-		try {
-			await trackEvent({
-				event: 'share_clicked',
-				distinctId,
-				props: {
-					channel,
-					surface,
-					url: shareUrl,
-					...props,
-					...extra,
-				},
-			});
-		} catch {
-			// nunca romper el flujo
-		}
+		// trackClientEvent nunca lanza: no bloqueamos UX si falla
+		await trackClientEvent({
+			event: 'share_clicked',
+			distinctId,
+			props: {
+				channel,
+				surface,
+				url: shareUrl,
+				...props,
+				...extra,
+			},
+		});
 	};
 
 	const onCopyLink = async () => {
