@@ -37,7 +37,8 @@ En conjunto forman el embudo de creación de la primera propiedad.
 
 | Evento | Origen | Cuándo se dispara | Props | Para qué sirve |
 |---|---|---|---|---|
-| `onboarding_start` | Servidor · `src/app/[locale]/app/properties/page.tsx` | Un usuario recién autenticado sin propiedades llega al listado y se le lleva a crear la primera | `page`, `fromAuth` | Primer paso del embudo |
+| `new_user` | Servidor · `src/app/[locale]/app/layout.tsx` | Primera entrada autenticada al dashboard de un usuario nuevo. Se envía una sola vez por usuario: un update atómico rellena `profiles.signup_tracked_at` y solo si estaba vacío se emite el evento | `signup_method` (`user.app_metadata.provider`: `email`, `google`...), `locale` | Altas reales (email confirmado), sin contar los logins |
+| `onboarding_start` | Servidor · `src/app/[locale]/app/properties/page.tsx` | El usuario llega al listado con `fromAuth=1`, es decir, tras cualquier login con magic link (no solo en el alta) | `page`, `fromAuth` | Entradas al dashboard desde el login. Para contar altas, usar `new_user` |
 | `create_property_address_selected` | Cliente · `src/components/organisms/form/property/index.tsx` | Elige una dirección del autocompletado | — | Cuántos completan el paso de la dirección |
 | `create_property_submit_clicked` | Cliente · mismo formulario | Pulsa enviar al crear (no al editar) | `has_name`, `has_selected_address` | Intención de crear |
 | `create_property_blocked_no_address_selection` | Cliente · mismo formulario | Envía sin haber elegido una dirección sugerida | `has_name` | Cuántos se atascan por escribir la dirección a mano |
