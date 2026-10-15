@@ -4,6 +4,7 @@ export type EventName =
     | "onboarding_start"
     | "create_property_completed"
     | "tenant_visit_public_page"
+    | "pilot_property_visited"
     | "create_property_started"
     | "property_progress_updated"
     | "share_clicked"

@@ -26,7 +26,10 @@ import SubcategorySection from "./SubcategorySection";
 import PublicAppBar from "@/components/organisms/public-appbar";
 import LodgingSection from "./LodgingSection";
 import { getDisplayZoneFromString } from "@/utils/get-zone";
-import { CATEGORIES_SUB_CATEGORIES } from "@/config/config-constants";
+import {
+    CATEGORIES_SUB_CATEGORIES,
+    PILOT_PROPERTY_ID,
+} from "@/config/config-constants";
 import PublicInfoContentBootstrap from "@/components/providers/PublicInfoContentBootstrap";
 import PublicCountsBootstrap from "@/components/providers/PublicCountsBootstrap";
 import { getPropertySubCategoryCounts } from "@/utils/get-property-subcategory-counts";
@@ -123,9 +126,13 @@ export default async function Property({ params, searchParams }: PageProps) {
     // extra hacen falta — mode nunca depende de ningún dato remoto.
     const mode = getMode(categoryId);
 
-    // Analytics: no bloqueamos render
+    // Analytics: no bloqueamos render. La propiedad piloto tiene su propio
+    // evento para no mezclar sus visitas con las de las guías reales.
     void trackEvent({
-        event: "tenant_visit_public_page",
+        event:
+            propertyId === PILOT_PROPERTY_ID
+                ? "pilot_property_visited"
+                : "tenant_visit_public_page",
         distinctId: anonId,
         props: { property_id: propertyId, page: "public_property" },
     }).catch((e) => console.error("Mixpanel trackEvent failed:", e));
