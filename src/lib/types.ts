@@ -335,6 +335,7 @@ export type Database = {
           email_opt_out: boolean
           full_name: string | null
           locale: string
+          signup_tracked_at: string | null
           unsubscribe_token: string
           updated_at: string
           user_id: string
@@ -344,6 +345,7 @@ export type Database = {
           email_opt_out?: boolean
           full_name?: string | null
           locale?: string
+          signup_tracked_at?: string | null
           unsubscribe_token?: string
           updated_at?: string
           user_id: string
@@ -353,6 +355,7 @@ export type Database = {
           email_opt_out?: boolean
           full_name?: string | null
           locale?: string
+          signup_tracked_at?: string | null
           unsubscribe_token?: string
           updated_at?: string
           user_id?: string
