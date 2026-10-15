@@ -7,6 +7,7 @@ import LandingAuthButton from "../landing-auth-buttons/LandingAuthButton";
 import ButtonLink from "@/components/molecules/button-link";
 import { useTransition } from "react";
 import IconOpenInNew from "@/components/atoms/icon/open-in-new";
+import { PILOT_PROPERTY_ID } from "@/config/config-constants";
 
 type LandingAppBarProps = {
     className?: string;
@@ -34,7 +35,7 @@ const LandingAppBar = ({ className = "" }: LandingAppBarProps) => {
                 </h1>
             </Link>
             <ButtonLink
-                href="https://www.bnbexplorer.com/es/public/37a03a95-cd39-4d40-a22b-7628cbb50245/welcome/highlights"
+                href={`https://www.bnbexplorer.com/es/public/${PILOT_PROPERTY_ID}/welcome/highlights`}
                 label={t("home_page.hero.action_label")}
                 color="white"
                 target="_blank"

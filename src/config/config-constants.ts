@@ -276,6 +276,9 @@ export const FIRST_CATEGORY_ID = "4581a08a-3e78-4800-b16c-575f5da81cba";
 export const FIRST_CATEGORY_SUBCATEGORY_ID =
     "4fc3c0a8-3bb5-4b3b-8de3-6230a07df8a7";
 
+// Propiedad de ejemplo que se enseña a posibles anfitriones
+export const PILOT_PROPERTY_ID = "37a03a95-cd39-4d40-a22b-7628cbb50245";
+
 export const CATEGORIES_SUB_CATEGORIES = {
     LODGING: {
         id: "4581a08a-3e78-4800-b16c-575f5da81cba",
