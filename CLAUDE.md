@@ -142,4 +142,4 @@ Orden: next-intl → si `MAINTENANCE_MODE` está activo, rewrite a `/[locale]/ma
 - Antes de proponer los commits de una feature, pasa el subagente code-reviewer y enséñame su informe.
 - Si los cambios tocan src/app/api, Server Actions con cliente admin, supabase/migrations, supabase/functions, páginas /public o la integración de IA, pasa también security-reviewer.
 - No corrijas los hallazgos de los revisores sin que yo te diga cuáles.
-- Después de cada push a develop-local, y siempre que te diga que voy a abrir una PR, recuérdame pasar security-reviewer sobre main...develop-local.
+- Antes de cada push a develop-local, pasa security-reviewer sobre main...develop-local y enséñame su informe. Si te digo que voy a abrir una PR, recuérdame pasarlo si no se ha hecho tras el último commit.

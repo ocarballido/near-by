@@ -8,6 +8,7 @@ export type MagicLinkCopy = {
     text1: string;
     text2: string;
     buttonLabel: string;
+    fallbackText: string;
     footerText: string;
 };
 
@@ -20,6 +21,8 @@ export const MAGIC_LINK_MESSAGES: Record<Locale, MagicLinkCopy> = {
         text1: "Discover how to create your own online guide for your accommodation with the help of AI, including services, useful tips, nearby recommendations and all the information you need.",
         text2: "Design your own accommodation website for FREE in just a few seconds and share the link with your guests every time they book. Your ratings will keep growing!",
         buttonLabel: "Sign in",
+        fallbackText:
+            "If the button doesn't work, copy and paste this link into the browser where you requested it:",
         footerText: "If you did not request this email, ignore it.",
     },
     es: {
@@ -30,6 +33,8 @@ export const MAGIC_LINK_MESSAGES: Record<Locale, MagicLinkCopy> = {
         text1: "Descubre cómo crear una guía online propia para tus alojamientos con ayuda de la IA, incluyendo los servicios, consejos útiles, recomendaciones cercanas y toda la información que necesites.",
         text2: "Diseña tú mismo la web de tu alojamiento GRATIS y en sólo unos segundos y comparte el enlace con tus huéspedes cada vez que reserven. ¡Tus valoraciones no pararán de crecer!",
         buttonLabel: "Acceder",
+        fallbackText:
+            "Si el botón no funciona, copia y pega este enlace en el navegador desde el que lo solicitaste:",
         footerText: "Si no has solicitado este correo, puedes ignorarlo.",
     },
     fr: {
@@ -40,6 +45,8 @@ export const MAGIC_LINK_MESSAGES: Record<Locale, MagicLinkCopy> = {
         text1: "Découvrez comment créer votre propre guide en ligne pour votre hébergement grâce à l'IA, avec les services, des conseils utiles, des recommandations à proximité et toutes les informations dont vous avez besoin.",
         text2: "Créez gratuitement le site de votre hébergement en quelques secondes et partagez le lien avec vos voyageurs à chaque réservation. Vos avis ne cesseront de s'améliorer !",
         buttonLabel: "Se connecter",
+        fallbackText:
+            "Si le bouton ne fonctionne pas, copiez et collez ce lien dans le navigateur depuis lequel vous l'avez demandé :",
         footerText:
             "Si vous n'avez pas demandé cet email, vous pouvez l'ignorer.",
     },
@@ -51,6 +58,8 @@ export const MAGIC_LINK_MESSAGES: Record<Locale, MagicLinkCopy> = {
         text1: "Descubra como criar o seu próprio guia online para o alojamento com a ajuda da IA, incluindo serviços, dicas úteis, recomendações próximas e toda a informação necessária.",
         text2: "Crie o site do alojamento GRÁTIS em poucos segundos e partilhe o link com os hóspedes sempre que reservarem. As avaliações não vão parar de crescer!",
         buttonLabel: "Aceder",
+        fallbackText:
+            "Se o botão não funcionar, copie e cole este link no navegador a partir do qual o pediu:",
         footerText: "Se não solicitou este e-mail, pode ignorá-lo.",
     },
     it: {
@@ -61,6 +70,8 @@ export const MAGIC_LINK_MESSAGES: Record<Locale, MagicLinkCopy> = {
         text1: "Scopri come creare la tua guida online per il tuo alloggio con l'aiuto dell'IA, inclusi servizi, consigli utili, raccomandazioni nelle vicinanze e tutte le informazioni di cui hai bisogno.",
         text2: "Crea gratuitamente il sito del tuo alloggio in pochi secondi e condividi il link con i tuoi ospiti ogni volta che prenotano. Le tue recensioni continueranno a crescere!",
         buttonLabel: "Accedi",
+        fallbackText:
+            "Se il pulsante non funziona, copia e incolla questo link nel browser da cui l'hai richiesto:",
         footerText: "Se non hai richiesto questa email, puoi ignorarla.",
     },
 };
@@ -68,6 +79,14 @@ export const MAGIC_LINK_MESSAGES: Record<Locale, MagicLinkCopy> = {
 function getMagicLinkCopy(locale: string): MagicLinkCopy {
     const normalized = (locale || "en").split("-")[0] as Locale;
     return MAGIC_LINK_MESSAGES[normalized] ?? MAGIC_LINK_MESSAGES.en;
+}
+
+function escapeHtml(value: string): string {
+    return value
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
 }
 
 type RenderMagicLinkParams = {
@@ -90,7 +109,7 @@ export function renderMagicLinkEmail({
     videoImageUrl,
     footerLogoUrl,
     appUrl,
-}: RenderMagicLinkParams): { subject: string; html: string } {
+}: RenderMagicLinkParams): { subject: string; html: string; text: string } {
     const copy = getMagicLinkCopy(locale);
 
     const subject = copy.subject;
@@ -266,26 +285,6 @@ export function renderMagicLinkEmail({
         text-transform: capitalize;
       }
 
-      .btn-primary {
-        background-color: #0E9F6E;
-        border-radius: 48px;
-        color: #ffffff;
-        font-weight: bold;
-        padding: 16px;
-      }
-
-      .btn-primary a {
-        background-color: #3498db;
-        border-color: #3498db;
-        color: #ffffff;
-      }
-
-      .btn-span-shadow {
-        text-align: center;
-        display: block;
-        line-height: 48px;
-      }
-
       .preheader {
         color: transparent;
         display: none;
@@ -366,10 +365,6 @@ export function renderMagicLinkEmail({
           font-weight: inherit;
           line-height: inherit;
         }
-        .btn-primary a:hover {
-          background-color: #34495e !important;
-          border-color: #34495e !important;
-        }
       }
     </style>
   </head>
@@ -377,7 +372,7 @@ export function renderMagicLinkEmail({
     <!-- Preheader text -->
     <span class="preheader">${copy.preheader}</span>
 
-    <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body" lang="${locale}" dir="ltr">
       <tbody>
         <tr>
           <td>&nbsp;</td>
@@ -409,9 +404,19 @@ export function renderMagicLinkEmail({
 
             <!-- Button -->
             <div class="content">
-              <div class="btn-span-shadow">
-                <a href="${magicLink}" target="_blank" class="btn-primary" style="box-shadow: 0px 0px 0px 4px #F3F4F6; text-decoration: none; display: inline-block; color: white">${copy.buttonLabel}</a>
-              </div>
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="width: auto; margin: 16px auto;">
+                <tbody>
+                  <tr>
+                    <td align="center" bgcolor="#0E9F6E" style="background-color: #0E9F6E; border-radius: 48px; box-shadow: 0px 0px 0px 4px #F3F4F6; mso-padding-alt: 16px 40px; vertical-align: middle;">
+                      <a href="${magicLink}" target="_blank" translate="no" class="notranslate" style="display: inline-block; padding: 16px 40px; color: #ffffff; font-family: sans-serif; font-size: 16px; font-weight: bold; line-height: 16px; text-decoration: none; border-radius: 48px;">${copy.buttonLabel}</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <p style="margin: 8px 0 4px; font-size: 12px; color: #6B7280;">${copy.fallbackText}</p>
+              <p style="margin: 0; font-size: 12px; word-break: break-all;">
+                <a href="${magicLink}" target="_blank" translate="no" class="notranslate" style="color: #0E9F6E; text-decoration: underline;">${escapeHtml(magicLink)}</a>
+              </p>
             </div>
             <!-- /Button -->
 
@@ -469,5 +474,15 @@ export function renderMagicLinkEmail({
   </body>
 </html>`;
 
-    return { subject, html };
+    const text = [
+        copy.title,
+        "",
+        copy.intro,
+        "",
+        `${copy.buttonLabel}: ${magicLink}`,
+        "",
+        copy.footerText,
+    ].join("\n");
+
+    return { subject, html, text };
 }

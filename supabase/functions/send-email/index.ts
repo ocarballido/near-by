@@ -22,6 +22,7 @@ function headersToObject(headers: HeadersWithForEach): Record<string, string> {
 import { Webhook } from 'https://esm.sh/standardwebhooks@1.0.0';
 import { Resend } from 'npm:resend';
 import { renderMagicLinkEmail } from './templates/magicLinkTemplate';
+import { resolveEmailLocale } from './resolve-locale.ts';
 
 const resend = new Resend(Deno.env.get('RESEND_API_KEY')!);
 
@@ -53,17 +54,11 @@ Deno.serve(async (req: Request) => {
 			};
 		};
 
-		// Locale: from metadata or from redirect_to (?locale=es)
-		const locale =
-			user.user_metadata?.language ??
-			(() => {
-				try {
-					const url = new URL(email_data.redirect_to);
-					return url.searchParams.get('locale') ?? 'en';
-				} catch {
-					return 'en';
-				}
-			})();
+		// Locale: from redirect_to (direct or nested ?locale=es), then metadata
+		const locale = resolveEmailLocale(
+			email_data.redirect_to,
+			user.user_metadata?.language,
+		);
 
 		// URL base del proyecto Supabase (la expone el runtime, como en el ejemplo oficial)
 		const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? '';
@@ -76,7 +71,7 @@ Deno.serve(async (req: Request) => {
 			email_data.email_action_type,
 		)}&redirect_to=${encodeURIComponent(email_data.redirect_to)}`;
 
-		const { subject, html } = renderMagicLinkEmail({
+		const { subject, html, text } = renderMagicLinkEmail({
 			locale,
 			magicLink,
 			productName: 'BNBexplorer',
@@ -94,6 +89,8 @@ Deno.serve(async (req: Request) => {
 			to: [user.email],
 			subject,
 			html,
+			text,
+			headers: { 'Content-Language': locale },
 		});
 
 		if (error) {
