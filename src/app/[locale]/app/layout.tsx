@@ -8,6 +8,9 @@ import EditorModalStorageCleaner from '@/components/cleanup/auto-content-modal-c
 
 import { createSSRClient } from '@/lib/supabase/server';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
+import { trackEvent } from '@/lib/analytics/mixpanel';
+import type { Database } from '@/lib/types';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 import { PaywallProvider } from '@/lib/context/PaywallContext';
 import { getPaywallPhase } from '@/lib/paywall/getPaywallPhase';
@@ -37,6 +40,35 @@ export default async function Layout({
 		.from('profiles')
 		.update({ locale } as never)
 		.eq('user_id', user.id);
+
+	// Alta nueva: el update solo afecta a la fila si signup_tracked_at sigue
+	// vacío, así que new_user se envía una única vez por usuario aunque haya
+	// varias cargas a la vez.
+	const db = supabase as unknown as SupabaseClient<Database>;
+	const { data: newSignupRows } = await db
+		.from('profiles')
+		.update({ signup_tracked_at: new Date().toISOString() })
+		.eq('user_id', user.id)
+		.is('signup_tracked_at', null)
+		.select('user_id')
+		.overrideTypes<{ user_id: string }[], { merge: false }>();
+
+	// Se espera al envío: la fila ya está marcada y no habrá otro intento,
+	// así que no puede quedar a medias si la función termina antes.
+	if (newSignupRows && newSignupRows.length > 0) {
+		try {
+			await trackEvent({
+				event: 'new_user',
+				distinctId: user.id,
+				props: {
+					signup_method: user.app_metadata?.provider ?? 'unknown',
+					locale,
+				},
+			});
+		} catch (e) {
+			console.error('Mixpanel trackEvent failed:', e);
+		}
+	}
 
 	const { count } = await supabase
 		.from('properties')

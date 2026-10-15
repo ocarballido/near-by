@@ -2,6 +2,7 @@ import { headers } from "next/headers";
 
 export type EventName =
     | "onboarding_start"
+    | "new_user"
     | "create_property_completed"
     | "tenant_visit_public_page"
     | "pilot_property_visited"
