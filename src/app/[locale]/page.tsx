@@ -35,6 +35,7 @@ import IconWhatsapp from "@/components/atoms/icon/whatsapp";
 import BasicCard from "@/components/molecules/card/basic";
 import { FeaturesCarousel } from "@/components/organisms/features-carousel";
 import { InternationalPresenceSection } from "@/components/organisms/international-presence-section";
+import { PILOT_PROPERTY_ID } from "@/config/config-constants";
 
 export default async function Home() {
     const t = await getTranslations();
@@ -73,7 +74,7 @@ export default async function Home() {
         <>
             <StickyHeader className="backdrop-blur-md pt-3 md:pt-0">
                 <ButtonLink
-                    href="https://www.bnbexplorer.com/es/public/37a03a95-cd39-4d40-a22b-7628cbb50245/welcome/highlights"
+                    href={`https://www.bnbexplorer.com/es/public/${PILOT_PROPERTY_ID}/welcome/highlights`}
                     label={t("home_page.hero.action_label")}
                     color="white"
                     target="_blank"
