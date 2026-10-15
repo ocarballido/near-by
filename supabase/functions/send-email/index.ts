@@ -71,7 +71,7 @@ Deno.serve(async (req: Request) => {
 			email_data.email_action_type,
 		)}&redirect_to=${encodeURIComponent(email_data.redirect_to)}`;
 
-		const { subject, html } = renderMagicLinkEmail({
+		const { subject, html, text } = renderMagicLinkEmail({
 			locale,
 			magicLink,
 			productName: 'BNBexplorer',
@@ -89,6 +89,8 @@ Deno.serve(async (req: Request) => {
 			to: [user.email],
 			subject,
 			html,
+			text,
+			headers: { 'Content-Language': locale },
 		});
 
 		if (error) {
