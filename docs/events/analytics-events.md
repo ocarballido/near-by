@@ -80,8 +80,8 @@ Aquí se mide el valor que recibe el huésped. `distinctId` es siempre la cookie
 |---|---|---|---|---|
 | `tenant_visit_public_page` | Servidor · `src/app/[locale]/public/[...slug]/page.tsx` | Se renderiza la guía pública de una propiedad, salvo la propiedad piloto (`PILOT_PROPERTY_ID` en `src/config/config-constants.ts`) | `property_id`, `page` | Visitas a cada guía real |
 | `pilot_property_visited` | Servidor · misma página | Se renderiza la guía de la propiedad piloto (la de ejemplo que se enseña a posibles anfitriones) | `property_id`, `page` | Interés en la demo, separado de las visitas a guías reales |
-| `time_window_widget_shown` | Servidor · misma página | La guía tiene contenido para el widget según la hora del día | `property_id` | Impresiones del widget |
-| `time_window_pill_clicked` | Cliente · `src/components/organisms/time-window-section/index.tsx` | Pulsa una pastilla del widget | `property_id`, `pill_id`, `source` (`widget` o `modal`) | Interacción con el widget |
+| `time_window_widget_shown` | Cliente · `src/components/molecules/time-window-section/index.tsx` | El widget aparece en pantalla. Se envía una vez por sesión del navegador y propiedad, y nunca para la propiedad piloto | `property_id` | Huéspedes que ven el widget (denominador del CTR de `time_window_pill_clicked`) |
+| `time_window_pill_clicked` | Cliente · `src/components/molecules/time-window-section/index.tsx` | Pulsa una pastilla del widget | `property_id`, `pill_id`, `source` (`widget` o `modal`) | Interacción con el widget |
 | `time_window_directions_clicked` | Cliente · `src/components/molecules/time-window-modal/index.tsx` | Pulsa "cómo llegar" a un lugar | `property_id`, `pill_id`, `location_id` | La acción de más valor del widget |
 | `itinerary_generate_clicked` | Cliente · `src/components/organisms/form/custom-plan/index.tsx` | Pide generar un itinerario con IA | `preferences`, `duration`, `transport` | Uso del planificador |
 

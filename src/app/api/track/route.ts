@@ -3,7 +3,7 @@ import { trackEvent, type EventName } from "@/lib/analytics/mixpanel";
 
 // Only events emitted from the client via trackClientEvent.
 // Server-only events (onboarding_start, create_property_completed,
-// tenant_visit_public_page, property_deleted, time_window_widget_shown...)
+// tenant_visit_public_page, property_deleted...)
 // are tracked directly with trackEvent and must not be accepted here.
 const ALLOWED_EVENTS: ReadonlySet<EventName> = new Set([
     "share_clicked",
@@ -26,6 +26,7 @@ const ALLOWED_EVENTS: ReadonlySet<EventName> = new Set([
     "itinerary_generate_clicked",
 
     // ✅ Time window widget
+    "time_window_widget_shown",
     "time_window_pill_clicked",
     "time_window_directions_clicked",
 ]);

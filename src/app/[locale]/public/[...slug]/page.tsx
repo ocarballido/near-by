@@ -198,14 +198,6 @@ export default async function Property({ params, searchParams }: PageProps) {
         highlightsPromise,
     ]);
 
-    if (timeWindowData) {
-        void trackEvent({
-            event: "time_window_widget_shown",
-            distinctId: anonId,
-            props: { property_id: propertyId },
-        }).catch((e) => console.error("Mixpanel trackEvent failed:", e));
-    }
-
     const hasInfoContent = infoGroups.length > 0;
 
     return (
