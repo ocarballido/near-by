@@ -11,12 +11,23 @@ import {
 
 const handleI18nRouting = createMiddleware(routing);
 
+/**
+ * La guía pública llega con prefijo de idioma (`/es/public/...`, el
+ * `localePrefix: "always"` por defecto de next-intl) o sin él
+ * (`/public/...`, los enlaces que se comparten, que next-intl redirige).
+ */
+function isPublicPath(pathname: string): boolean {
+    const segments = pathname.split("/").filter(Boolean);
+    if (segments[0] === "public") return true;
+    return isSupportedLocale(segments[0]) && segments[1] === "public";
+}
+
 function ensureAnonCookieForPublic(
     request: NextRequest,
     response: NextResponse,
 ) {
     // Solo para la URL pública
-    if (!request.nextUrl.pathname.startsWith("/public")) return response;
+    if (!isPublicPath(request.nextUrl.pathname)) return response;
 
     const existing = request.cookies.get("be_anon_id");
     if (existing?.value) return response;
