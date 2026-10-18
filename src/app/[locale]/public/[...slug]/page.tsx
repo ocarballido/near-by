@@ -284,7 +284,7 @@ export default async function Property({ params, searchParams }: PageProps) {
                     <div className="hidden lg:block sticky top-0 z-1 shrink-0">
                         <PublicGuideNav items={navItems} placement="top" />
                     </div>
-                    <div className="p-4 font-roboto flex flex-col grow gap-4 w-full max-w-[1140px] mx-auto">
+                    <div className="px-4 py-6 font-roboto flex flex-col grow gap-4 w-full max-w-[1140px] mx-auto">
                         {mode === "welcome" && highlightsData && (
                             <WelcomeSection
                                 propertyId={propertyId}
@@ -300,8 +300,12 @@ export default async function Property({ params, searchParams }: PageProps) {
                                 weather={weather}
                                 featuredGroups={highlightsData.featuredGroups}
                                 mustVisitGroups={highlightsData.mustVisitGroups}
-                                checkInDate={property.check_in_date ?? undefined}
-                                checkInTime={property.check_in_time ?? undefined}
+                                checkInDate={
+                                    property.check_in_date ?? undefined
+                                }
+                                checkInTime={
+                                    property.check_in_time ?? undefined
+                                }
                                 checkOutDate={
                                     property.check_out_date ?? undefined
                                 }

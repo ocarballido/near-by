@@ -48,8 +48,8 @@ export default async function WelcomeSection({
     return (
         <div className="flex flex-col gap-8">
             <section className="flex flex-col gap-8 md:flex-row md:items-start">
-                <div className="flex flex-col gap-4 flex-1 min-w-0">
-                    <h1 className="font-heading font-bold text-xl leading-6">
+                <div className="flex flex-col gap-6 flex-1 min-w-0">
+                    <h1 className="font-heading font-bold text-3xl leading-6 mt-3">
                         {t("¡Te damos la bienvenida con los brazos abiertos!")}
                     </h1>
 
@@ -61,7 +61,10 @@ export default async function WelcomeSection({
 
                     <WeatherWidget weather={weather} />
 
-                    <InfoShortcuts groups={infoGroups} propertyId={propertyId} />
+                    <InfoShortcuts
+                        groups={infoGroups}
+                        propertyId={propertyId}
+                    />
                 </div>
 
                 {/* Mobile: primero; desde tablet, columna derecha */}
