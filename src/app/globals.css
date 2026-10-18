@@ -153,7 +153,7 @@
     --bg-error: var(--error-500);
     --bg-error-hover: var(--error-600);
 
-    --bg-body: var(--gray-100);
+    --bg-body: #edeff1;
     --bg-page: var(--white);
 
     --font--color-primary: var(--primary-500);
