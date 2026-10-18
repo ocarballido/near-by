@@ -2,6 +2,7 @@ import clsx from "clsx";
 
 import { useTranslations } from "next-intl";
 
+import { Link } from "@/i18n/routing";
 import IconMenu from "@/components/atoms/icon/menu";
 
 import styles from "./styles.module.css";
@@ -11,6 +12,8 @@ export type SidebarRailItem = {
     label: string;
     icon: React.ReactNode;
     active?: boolean;
+    // Con href el item navega directamente en lugar de llamar a onItemClick
+    href?: string;
 };
 
 type SidebarRailProps = {
@@ -26,7 +29,7 @@ type SidebarRailProps = {
  * Versión compacta del sidebar (solo iconos) para tablet. No gestiona
  * estado propio: el menú y cada item delegan en el sidebar que lo
  * renderiza, que abre el overlay (con la sección desplegada, en el
- * caso de los items).
+ * caso de los items). Los items con `href` son enlaces de navegación.
  */
 const SidebarRail = ({
     items,
@@ -53,23 +56,41 @@ const SidebarRail = ({
             >
                 <IconMenu />
             </button>
-            {items.map((item) => (
-                <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => onItemClick(item.id)}
-                    aria-label={item.label}
-                    aria-current={item.active ? "true" : undefined}
-                    className={clsx(
-                        "flex items-center justify-center p-2 my-1 rounded-full cursor-pointer transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500",
-                        item.active
-                            ? `bg-white ${styles["icon--primary"]}`
-                            : styles["icon--light"],
-                    )}
-                >
-                    {item.icon}
-                </button>
-            ))}
+            {items.map((item) => {
+                const itemStyles = clsx(
+                    "flex items-center justify-center p-2 my-1 rounded-full cursor-pointer transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500",
+                    item.active
+                        ? `bg-white ${styles["icon--primary"]}`
+                        : styles["icon--light"],
+                );
+
+                if (item.href !== undefined) {
+                    return (
+                        <Link
+                            key={item.id}
+                            href={item.href}
+                            aria-label={item.label}
+                            aria-current={item.active ? "page" : undefined}
+                            className={itemStyles}
+                        >
+                            {item.icon}
+                        </Link>
+                    );
+                }
+
+                return (
+                    <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => onItemClick(item.id)}
+                        aria-label={item.label}
+                        aria-current={item.active ? "true" : undefined}
+                        className={itemStyles}
+                    >
+                        {item.icon}
+                    </button>
+                );
+            })}
         </nav>
     );
 };
