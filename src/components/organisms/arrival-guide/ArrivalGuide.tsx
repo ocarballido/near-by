@@ -80,7 +80,7 @@ export default function ArrivalGuide({ data, propertyId, address }: Props) {
 
     return (
         <>
-            <div className="fixed bottom-19 right-4 z-40">
+            <div className="fixed bottom-39 right-4 z-40">
                 <div className={isPulsing ? "animate-bounce" : ""}>
                     {isPulsing && (
                         <span className="absolute -inset-6 rounded-full bg-primary-400 animate-ping opacity-75 pointer-events-none" />

@@ -122,7 +122,7 @@ export default function GuestChat({
     return (
         <div
             ref={containerRef}
-            className="fixed bottom-6 right-4 z-50 flex flex-col items-end gap-3"
+            className="fixed bottom-26 right-4 z-50 flex flex-col items-end gap-3"
         >
             {open && (
                 <div className="flex flex-col w-80 h-96 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">
