@@ -1371,5 +1371,9 @@
     "auto-modal-option-metro-stations": "Stazioni della metro",
     "auto-modal-option-nightclubs": "Discoteche",
     "magic-finder-title-with-name": "Ricerca magica · {name}",
-    "magic-finder-description-with-name": "Aggiungeremo automaticamente i luoghi meglio valutati di questa categoria vicino alla tua proprietà."
+    "magic-finder-description-with-name": "Aggiungeremo automaticamente i luoghi meglio valutati di questa categoria vicino alla tua proprietà.",
+    "guideNavHome": "Home",
+    "guideNavPlaces": "Esplora",
+    "guideNavPlans": "Itinerario",
+    "guideNavLabel": "Navigazione della guida"
 }
