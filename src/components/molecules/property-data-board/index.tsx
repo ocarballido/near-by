@@ -44,7 +44,9 @@ const PropertyDataBoard = ({
                     <div className="shrink-0 flex justify-center items-center p-1.5 rounded-full bg-primary-100">
                         <IconHome size={18} color="primary" />
                     </div>
-                    <p className="text-sm font-medium">{propertyName}</p>
+                    <p className="text-md font-bold font-heading">
+                        {propertyName}
+                    </p>
                 </div>
 
                 {(propertyCheckInDate || propertyCheckInTime) && (
