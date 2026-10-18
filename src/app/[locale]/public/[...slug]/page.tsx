@@ -30,13 +30,16 @@ import {
     CATEGORIES_SUB_CATEGORIES,
     PILOT_PROPERTY_ID,
 } from "@/config/config-constants";
-import PublicInfoContentBootstrap from "@/components/providers/PublicInfoContentBootstrap";
 import PublicCountsBootstrap from "@/components/providers/PublicCountsBootstrap";
 import { getPropertySubCategoryCounts } from "@/utils/get-property-subcategory-counts";
 import GuestChat from "@/components/organisms/guest-chat/GuestChat";
 import ArrivalGuide from "@/components/organisms/arrival-guide/ArrivalGuide";
 import TimeWindowSection from "@/components/molecules/time-window-section";
 import { SidebarProvider } from "@/lib/context/SidebarContext";
+import PublicBottomNav, {
+    type PublicNavItem,
+} from "@/components/organisms/public-bottom-nav";
+import SidebarMenuBar from "@/components/organisms/sidebar/sidebar-menu-bar";
 
 type PageMode = "welcome" | "custom-plans" | "subcategory" | "lodging";
 
@@ -200,6 +203,49 @@ export default async function Property({ params, searchParams }: PageProps) {
 
     const hasInfoContent = infoGroups.length > 0;
 
+    // "Explorar" entra por la primera subcategoría con contenido (sidebarData
+    // ya viene filtrado y ordenado) y sigue activo en cualquier subcategoría
+    const firstPlacesCategory = sidebarData[0];
+    const firstPlacesSubCategory = firstPlacesCategory?.sub_categories[0];
+
+    const navItems: PublicNavItem[] = [
+        {
+            id: "welcome",
+            href: `/public/${propertyId}/welcome/highlights`,
+            active: mode === "welcome",
+        },
+        ...(hasInfoContent
+            ? [
+                  {
+                      id: "lodging",
+                      href: `/public/${propertyId}/${CATEGORIES_SUB_CATEGORIES.LODGING.id}/info`,
+                      active: mode === "lodging",
+                  } satisfies PublicNavItem,
+              ]
+            : []),
+        ...(firstPlacesCategory && firstPlacesSubCategory
+            ? [
+                  {
+                      id: "places",
+                      href: `/public/${propertyId}/${firstPlacesCategory.id}/${firstPlacesSubCategory.id}`,
+                      active: mode === "subcategory",
+                  } satisfies PublicNavItem,
+              ]
+            : []),
+        {
+            id: "plans",
+            href: `/public/${propertyId}/custom-plans/create-plan`,
+            active: mode === "custom-plans",
+        },
+    ];
+
+    // Categoría activa en "Explorar": da nombre a la barra del sidebar en mobile
+    const activePlacesCategory =
+        mode === "subcategory"
+            ? sidebarData.find((category) => category.id === categoryId)
+            : undefined;
+    const t = await getTranslations();
+
     return (
         <SidebarProvider>
             <EditPublicMenuProvider initialData={sidebarData}>
@@ -208,35 +254,45 @@ export default async function Property({ params, searchParams }: PageProps) {
                     propertyName={property.name}
                     propertyLogoUrl={property.logo_url}
                 />
-                <PublicInfoContentBootstrap hasInfoContent={hasInfoContent} />
                 <PublicCountsBootstrap counts={counts} />
                 <PublicContentTemplate
-                    address={getDisplayZoneFromString(property.address)}
                     propertyId={propertyId}
                     categoryId={categoryId}
                     subCategoryId={subCategoryId}
-                    name={property.name}
-                    latitude={lat}
-                    longitude={lng}
-                    checkInDate={property.check_in_date ?? ""}
-                    checkInTime={property.check_in_time ?? ""}
-                    checkOutDate={property.check_out_date ?? ""}
-                    checkOutTime={property.check_out_time ?? ""}
-                    image={property.image_url}
+                    navItems={navItems}
                 >
-                    <div className="px-0.5 pt-0.5">
-                        {timeWindowData && (
-                            <TimeWindowSection
-                                data={timeWindowData}
-                                propertyId={propertyId}
-                                anonId={anonId}
-                            />
-                        )}
+                    {/* Cabecera a sangre: el contenedor redondeado la recorta */}
+                    {(timeWindowData || activePlacesCategory) && (
+                        <div className="shrink-0">
+                            {timeWindowData && (
+                                <TimeWindowSection
+                                    data={timeWindowData}
+                                    propertyId={propertyId}
+                                    anonId={anonId}
+                                />
+                            )}
+                            {activePlacesCategory && (
+                                <SidebarMenuBar
+                                    label={t(activePlacesCategory.name)}
+                                />
+                            )}
+                        </div>
+                    )}
+                    {/* Desktop: nav bajo el widget, fijo arriba al hacer scroll.
+                        z-1 lo pone sobre el contenido sin tapar el overlay del
+                        sidebar (z-10). En mobile/tablet va al pie (template) */}
+                    <div className="hidden lg:block sticky top-0 z-1 shrink-0">
+                        <PublicBottomNav items={navItems} placement="top" />
                     </div>
-                    <div className="p-4 font-roboto flex flex-col grow gap-4">
+                    <div className="p-4 font-roboto flex flex-col grow gap-4 w-full max-w-[1140px] mx-auto">
                         {mode === "welcome" && highlightsData && (
                             <WelcomeSection
                                 propertyId={propertyId}
+                                propertyName={property.name}
+                                address={getDisplayZoneFromString(
+                                    property.address,
+                                )}
+                                image={property.image_url}
                                 categoryId={categoryId}
                                 lat={lat}
                                 lng={lng}
@@ -244,6 +300,14 @@ export default async function Property({ params, searchParams }: PageProps) {
                                 weather={weather}
                                 featuredGroups={highlightsData.featuredGroups}
                                 mustVisitGroups={highlightsData.mustVisitGroups}
+                                checkInDate={property.check_in_date ?? undefined}
+                                checkInTime={property.check_in_time ?? undefined}
+                                checkOutDate={
+                                    property.check_out_date ?? undefined
+                                }
+                                checkOutTime={
+                                    property.check_out_time ?? undefined
+                                }
                             />
                         )}
                         {mode === "custom-plans" && (

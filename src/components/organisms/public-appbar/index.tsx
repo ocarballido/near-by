@@ -2,7 +2,6 @@ import Image from "next/image";
 
 import Link from "next/link";
 import LanguageSelector from "@/components/molecules/language-selector";
-import MenuIconButton from "../appbar/menu-icon-button";
 
 type PublicAppBarProps = {
     className?: string;
@@ -28,8 +27,11 @@ const PublicAppBar = ({
         <div
             className={`w-full ml-auto mr-auto flex gap-1 items-center justify-between p-4 transition-all ${className}`}
         >
-            <Link href={publicUrl} className="flex items-center w-fit gap-2">
-                <div className="relative w-[40px] h-[40px] rounded-lg overflow-hidden">
+            <Link
+                href={publicUrl}
+                className="flex items-center w-fit min-w-0 gap-2"
+            >
+                <div className="relative shrink-0 w-[40px] h-[40px] rounded-lg overflow-hidden">
                     <Image
                         src={logoSrc}
                         fill
@@ -38,13 +40,12 @@ const PublicAppBar = ({
                         style={{ objectFit: "cover" }}
                     />
                 </div>
-                <h1 className="hidden md:block font-heading font-bold text-lg">
+                <h1 className="truncate font-heading font-bold text-base leading-5 md:text-lg">
                     {propertyName || "BNBexplorer"}
                 </h1>
             </Link>
-            <div className="w-fit justify-end md:justify-end flex gap-1">
+            <div className="w-fit shrink-0 justify-end md:justify-end flex gap-1">
                 <LanguageSelector triggerColor="secondary" />
-                <MenuIconButton />
             </div>
         </div>
     );

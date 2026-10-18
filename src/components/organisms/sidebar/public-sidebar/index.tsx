@@ -24,15 +24,10 @@ import IconClose from "@/components/atoms/icon/close";
 import CategoryAccordion from "@/components/molecules/category-accordion";
 import Button from "@/components/molecules/button";
 import GroupItem from "@/components/molecules/group-item";
-import IconHome from "@/components/atoms/icon/home";
-import IconMap from "@/components/atoms/icon/map";
-import HousePublic from "@/components/molecules/card/house-public";
 import SidebarRail, {
     type SidebarRailItem,
 } from "@/components/molecules/sidebar-rail";
 import SidebarShell, { SIDEBAR_PANEL_ID } from "../sidebar-shell";
-
-import { CATEGORIES_SUB_CATEGORIES } from "@/config/config-constants";
 
 const ICON_COMPONENTS = {
     IconHealing,
@@ -57,40 +52,22 @@ type PublicSidebarProps = {
     propertyId?: string;
     categoryId?: string;
     subCategoryId?: string;
-    address: string;
-    image?: string | null;
-    latitude: number;
-    longitude: number;
-    name: string;
-    checkInDate?: string;
-    checkInTime?: string;
-    checkOutDate?: string;
-    checkOutTime?: string;
 };
 
+/**
+ * Sidebar de categorías de localizaciones ("Explorar"). El resto de
+ * secciones de la guía se navegan desde el PublicBottomNav.
+ */
 const PublicSidebar = ({
     propertyId,
     categoryId,
     subCategoryId,
-    address,
-    latitude,
-    longitude,
-    name,
-    checkInDate,
-    checkInTime,
-    checkOutDate,
-    checkOutTime,
-    image = "/static/img/default-property-2x.webp",
 }: PublicSidebarProps) => {
     const t = useTranslations();
     const router = useRouter();
     const { isOpen: isSidebarOpen, openSidebar, closeSidebar } = useSidebar();
-    const {
-        sidebarData,
-        setActiveSubCategoryType,
-        hasInfoContent,
-        subCategoryCounts,
-    } = usePublicSidebarData();
+    const { sidebarData, setActiveSubCategoryType, subCategoryCounts } =
+        usePublicSidebarData();
 
     const [openCategoryId, setOpenCategoryId] = useState<string | null>(
         categoryId ?? null,
@@ -109,27 +86,9 @@ const PublicSidebar = ({
         openSidebar();
     };
 
-    // Mismo orden y condiciones que los acordeones del árbol
-    const railItems: SidebarRailItem[] = [
-        {
-            id: "welcome",
-            label: "Welcome",
-            icon: <IconHome />,
-            active: isCategoryActive("welcome"),
-        },
-        ...(hasInfoContent
-            ? [
-                  {
-                      id: CATEGORIES_SUB_CATEGORIES.LODGING.id,
-                      label: t("El Alojamiento"),
-                      icon: <IconApartment />,
-                      active: isCategoryActive(
-                          CATEGORIES_SUB_CATEGORIES.LODGING.id,
-                      ),
-                  },
-              ]
-            : []),
-        ...(sidebarData ?? []).map((category) => {
+    // Mismo orden que los acordeones del árbol
+    const railItems: SidebarRailItem[] = (sidebarData ?? []).map(
+        (category) => {
             const IconComponent = ICON_COMPONENTS[category.icon as IconName];
 
             return {
@@ -138,14 +97,8 @@ const PublicSidebar = ({
                 icon: <IconComponent />,
                 active: isCategoryActive(category.id),
             };
-        }),
-        {
-            id: "custom-plans",
-            label: t("Planes personalizados"),
-            icon: <IconMap />,
-            active: isCategoryActive("custom-plans"),
         },
-    ];
+    );
 
     return (
         <SidebarShell
@@ -159,18 +112,6 @@ const PublicSidebar = ({
                 />
             }
         >
-            <HousePublic
-                address={address}
-                latitude={latitude}
-                longitude={longitude}
-                name={name}
-                image={image}
-                checkInDate={checkInDate}
-                checkInTime={checkInTime}
-                checkOutDate={checkOutDate}
-                checkOutTime={checkOutTime}
-                className="hidden lg:flex"
-            />
             <div className="flex gap-2 items-start justify-end lg:hidden">
                 <Button
                     color="text"
@@ -180,57 +121,6 @@ const PublicSidebar = ({
                     className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"
                 />
             </div>
-
-            <CategoryAccordion
-                open={isCategoryOpen("welcome")}
-                active={isCategoryActive("welcome")}
-                name="Welcome"
-                onClick={() => handleCategoryToggle("welcome")}
-                icon={<IconHome />}
-            >
-                <GroupItem
-                    label="Highlights"
-                    active={subCategoryId === "highlights"}
-                    onClick={() => {
-                        closeSidebar();
-                        router.push(
-                            `/public/${propertyId}/welcome/highlights`,
-                        );
-                    }}
-                />
-            </CategoryAccordion>
-
-            {hasInfoContent && (
-                <CategoryAccordion
-                    open={isCategoryOpen(
-                        CATEGORIES_SUB_CATEGORIES.LODGING.id,
-                    )}
-                    active={isCategoryActive(
-                        CATEGORIES_SUB_CATEGORIES.LODGING.id,
-                    )}
-                    name={t("El Alojamiento")}
-                    onClick={() =>
-                        handleCategoryToggle(
-                            CATEGORIES_SUB_CATEGORIES.LODGING.id,
-                        )
-                    }
-                    icon={<IconApartment />}
-                >
-                    <GroupItem
-                        label={t("El Alojamiento")}
-                        active={
-                            categoryId ===
-                            CATEGORIES_SUB_CATEGORIES.LODGING.id
-                        }
-                        onClick={() => {
-                            closeSidebar();
-                            router.push(
-                                `/public/${propertyId}/${CATEGORIES_SUB_CATEGORIES.LODGING.id}/info`,
-                            );
-                        }}
-                    />
-                </CategoryAccordion>
-            )}
 
             {sidebarData &&
                 sidebarData.map((category) => {
@@ -274,25 +164,6 @@ const PublicSidebar = ({
                         </CategoryAccordion>
                     );
                 })}
-
-            <CategoryAccordion
-                open={isCategoryOpen("custom-plans")}
-                active={isCategoryActive("custom-plans")}
-                name={t("Planes personalizados")}
-                onClick={() => handleCategoryToggle("custom-plans")}
-                icon={<IconMap />}
-            >
-                <GroupItem
-                    label={t("Crear plan")}
-                    active={subCategoryId === "create-plan"}
-                    onClick={() => {
-                        closeSidebar();
-                        router.push(
-                            `/public/${propertyId}/custom-plans/create-plan`,
-                        );
-                    }}
-                />
-            </CategoryAccordion>
         </SidebarShell>
     );
 };
