@@ -19,7 +19,7 @@ const AppbarTitle = () => {
 
     return (
         withPageTitle.showTitle && (
-            <h2 className="font-heading font-bold grow-0 text-md hidden sm:flex">
+            <h2 className="font-heading font-bold grow-0 text-base hidden sm:flex">
                 {t(withPageTitle.title)}
             </h2>
         )
