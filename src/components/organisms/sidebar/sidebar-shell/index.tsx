@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
-
 import { useSidebar } from "@/lib/context/SidebarContext";
 
 // Una sola carcasa por página: id estable para el aria-controls del rail
@@ -21,18 +19,6 @@ type SidebarShellProps = {
  */
 const SidebarShell = ({ rail, children }: SidebarShellProps) => {
     const { isOpen, closeSidebar } = useSidebar();
-
-    // Escape cierra el overlay; el listener solo existe mientras está abierto
-    useEffect(() => {
-        if (!isOpen) return;
-
-        const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.key === "Escape") closeSidebar();
-        };
-
-        window.addEventListener("keydown", handleKeyDown);
-        return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [isOpen, closeSidebar]);
 
     return (
         <>
