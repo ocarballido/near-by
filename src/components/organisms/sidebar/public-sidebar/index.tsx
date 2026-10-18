@@ -22,7 +22,7 @@ import IconInterests from "@/components/atoms/icon/interests";
 import IconShoppingBag from "@/components/atoms/icon/shopping-bag";
 import IconClose from "@/components/atoms/icon/close";
 import CategoryAccordion from "@/components/molecules/category-accordion";
-import ButtonIcon from "@/components/atoms/button-icon";
+import Button from "@/components/molecules/button";
 import GroupItem from "@/components/molecules/group-item";
 import IconHome from "@/components/atoms/icon/home";
 import IconMap from "@/components/atoms/icon/map";
@@ -172,11 +172,11 @@ const PublicSidebar = ({
                 className="hidden lg:flex"
             />
             <div className="flex gap-2 items-start justify-end lg:hidden">
-                <ButtonIcon
-                    color="secondary"
-                    icon={<IconClose />}
+                <Button
+                    color="text"
+                    label={t("Cerrar")}
+                    iconLeft={<IconClose />}
                     onClick={closeSidebar}
-                    ariaLabel={t("closeMenu")}
                     className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"
                 />
             </div>
