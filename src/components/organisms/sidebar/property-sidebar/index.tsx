@@ -28,6 +28,10 @@ import ButtonLink from "@/components/molecules/button-link";
 import IconOpenInNew from "@/components/atoms/icon/open-in-new";
 import Button from "@/components/molecules/button";
 import IconClose from "@/components/atoms/icon/close";
+import SidebarRail, {
+    type SidebarRailItem,
+} from "@/components/molecules/sidebar-rail";
+import SidebarShell from "../sidebar-shell";
 
 const ICON_COMPONENTS = {
     IconHealing,
@@ -61,7 +65,7 @@ const PropertySidebar = ({
 }: PropertySidebarProps) => {
     const t = useTranslations();
     const { sidebarData, subCategoryCounts } = useSidebarData();
-    const { closeSidebar } = useSidebar();
+    const { isOpen: isSidebarOpen, openSidebar, closeSidebar } = useSidebar();
     const router = useRouter();
 
     const [openCategoryId, setOpenCategoryId] = useState<string | null>(
@@ -72,11 +76,40 @@ const PropertySidebar = ({
         setOpenCategoryId((prev) => (prev === id ? null : id));
     };
 
+    // Desde el rail: abre el overlay con esa sección desplegada (sin toggle)
+    const openCategory = (id: string) => {
+        setOpenCategoryId(id);
+        openSidebar();
+    };
+
+    const railItems: SidebarRailItem[] = (sidebarData ?? []).map(
+        (category) => {
+            const IconComponent = ICON_COMPONENTS[category.icon as IconName];
+
+            return {
+                id: category.id,
+                label: t(category.name),
+                icon: <IconComponent />,
+                active: category.id === categoryId,
+            };
+        },
+    );
+
     const publicUrl = `${process.env.NEXT_PUBLIC_APP_URL}/public/${propertyId}/welcome/highlights`;
 
     return (
-        <>
-            <div className="flex gap-1 items-center md:hidden">
+        <SidebarShell
+            rail={
+                <SidebarRail
+                    items={railItems}
+                    isExpanded={isSidebarOpen}
+                    onMenuClick={openSidebar}
+                    onItemClick={openCategory}
+                    className="flex"
+                />
+            }
+        >
+            <div className="flex gap-1 items-center lg:hidden">
                 <Button
                     label={t("Ocultar menú")}
                     color="primary"
@@ -149,7 +182,7 @@ const PropertySidebar = ({
                         </CategoryAccordion>
                     );
                 })}
-        </>
+        </SidebarShell>
     );
 };
 
