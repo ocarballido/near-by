@@ -26,7 +26,7 @@ const PublicAppBar = ({
 
     return (
         <div
-            className={`w-full shadow-xs ml-auto mr-auto flex gap-1 items-center justify-between rounded-lg p-4 bg-white transition-all ${className}`}
+            className={`w-full ml-auto mr-auto flex gap-1 items-center justify-between p-4 transition-all ${className}`}
         >
             <Link href={publicUrl} className="flex items-center w-fit gap-2">
                 <div className="relative w-[40px] h-[40px] rounded-lg overflow-hidden">
@@ -43,7 +43,7 @@ const PublicAppBar = ({
                 </h1>
             </Link>
             <div className="w-fit justify-end md:justify-end flex gap-1">
-                <LanguageSelector triggerColor="white" />
+                <LanguageSelector triggerColor="secondary" />
                 <MenuIconButton />
             </div>
         </div>

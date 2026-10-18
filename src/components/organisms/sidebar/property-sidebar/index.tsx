@@ -82,18 +82,16 @@ const PropertySidebar = ({
         openSidebar();
     };
 
-    const railItems: SidebarRailItem[] = (sidebarData ?? []).map(
-        (category) => {
-            const IconComponent = ICON_COMPONENTS[category.icon as IconName];
+    const railItems: SidebarRailItem[] = (sidebarData ?? []).map((category) => {
+        const IconComponent = ICON_COMPONENTS[category.icon as IconName];
 
-            return {
-                id: category.id,
-                label: t(category.name),
-                icon: <IconComponent />,
-                active: category.id === categoryId,
-            };
-        },
-    );
+        return {
+            id: category.id,
+            label: t(category.name),
+            icon: <IconComponent />,
+            active: category.id === categoryId,
+        };
+    });
 
     const publicUrl = `${process.env.NEXT_PUBLIC_APP_URL}/public/${propertyId}/welcome/highlights`;
 

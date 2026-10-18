@@ -32,7 +32,7 @@ const AppContentTemplate = ({
 }: AppContentTemplateProps) => {
     return (
         <div className="flex flex-col gap-2 items-stretch w-full font-body overflow-hidden grow min-h-0">
-            <div className="flex flex-auto gap-2 min-h-0 relative w-full">
+            <div className="flex flex-auto min-h-0 relative w-full pr-4 pb-4 pl-4 md:pl-0">
                 {showSidebar && (
                     <Sidebar
                         sidebar={sidebar}
