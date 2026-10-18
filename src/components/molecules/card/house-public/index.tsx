@@ -53,7 +53,7 @@ const HousePublic = ({
 
     return (
         <div
-            className={`group shrink-0 relative flex flex-col justify-start rounded-2xl overflow-hidden shadow-[0_1px_2px_rgba(5,122,85,0.06),0_12px_32px_-8px_rgba(5,122,85,0.22)] bg-white h-fit ${className}`}
+            className={`group shrink-0 relative flex flex-col justify-start rounded-2xl overflow-hidden shadow-card-primary bg-white h-fit ${className}`}
         >
             <div className="aspect-[4/3] p-1 overflow-hidden relative rounded-xl mx-1 mt-1 bg-gradient-to-tr from-[#ffa263] to-[#6cffc9]">
                 <Image

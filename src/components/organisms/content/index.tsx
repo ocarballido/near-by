@@ -14,14 +14,14 @@ const Content = ({
 }) => {
     if (!footer) {
         return (
-            <main className="flex flex-col gap-2 w-full grow min-h-0 rounded-xl bg-gray-50 p-0.5 overflow-y-auto overscroll-contain shadow-[0_1px_2px_rgba(16,24,40,0.05),0_4px_12px_-2px_rgba(16,24,40,0.06)]">
+            <main className="flex flex-col gap-2 w-full grow min-h-0 rounded-xl bg-gray-50 p-0.5 overflow-y-auto overscroll-contain shadow-main">
                 {children}
             </main>
         );
     }
 
     return (
-        <div className="flex flex-col w-full grow min-h-0 rounded-xl bg-gray-50 overflow-hidden shadow-[0_1px_2px_rgba(16,24,40,0.05),0_4px_12px_-2px_rgba(16,24,40,0.06)]">
+        <div className="flex flex-col w-full grow min-h-0 rounded-xl bg-gray-50 overflow-hidden shadow-main">
             <main className="flex flex-col grow min-h-0 overflow-y-auto overscroll-contain">
                 {children}
             </main>
