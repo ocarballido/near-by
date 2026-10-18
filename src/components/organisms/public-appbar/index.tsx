@@ -25,7 +25,7 @@ const PublicAppBar = ({
 
     return (
         <div
-            className={`w-full ml-auto mr-auto flex gap-1 items-center justify-between p-4 transition-all ${className}`}
+            className={`w-full ml-auto mr-auto flex gap-1 items-center justify-between p-4 transition-all bg-white md:bg-transparent ${className}`}
         >
             <Link
                 href={publicUrl}
