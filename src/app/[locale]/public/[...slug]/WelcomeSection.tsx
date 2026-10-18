@@ -78,7 +78,7 @@ export default async function WelcomeSection({
                     checkInTime={checkInTime}
                     checkOutDate={checkOutDate}
                     checkOutTime={checkOutTime}
-                    className="w-full max-w-[360px] md:max-w-[300px] lg:max-w-[360px] order-first self-center md:order-last md:self-start"
+                    className="w-full max-w-[460px] md:max-w-[340px] lg:max-w-[420px] xl:max-w-[460px] order-first self-center md:order-last md:self-start"
                 />
             </section>
 
