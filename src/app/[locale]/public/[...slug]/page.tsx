@@ -36,9 +36,9 @@ import GuestChat from "@/components/organisms/guest-chat/GuestChat";
 import ArrivalGuide from "@/components/organisms/arrival-guide/ArrivalGuide";
 import TimeWindowSection from "@/components/molecules/time-window-section";
 import { SidebarProvider } from "@/lib/context/SidebarContext";
-import PublicBottomNav, {
+import PublicGuideNav, {
     type PublicNavItem,
-} from "@/components/organisms/public-bottom-nav";
+} from "@/components/organisms/public-guide-nav";
 import SidebarMenuBar from "@/components/organisms/sidebar/sidebar-menu-bar";
 
 type PageMode = "welcome" | "custom-plans" | "subcategory" | "lodging";
@@ -282,7 +282,7 @@ export default async function Property({ params, searchParams }: PageProps) {
                         z-1 lo pone sobre el contenido sin tapar el overlay del
                         sidebar (z-10). En mobile/tablet va al pie (template) */}
                     <div className="hidden lg:block sticky top-0 z-1 shrink-0">
-                        <PublicBottomNav items={navItems} placement="top" />
+                        <PublicGuideNav items={navItems} placement="top" />
                     </div>
                     <div className="p-4 font-roboto flex flex-col grow gap-4 w-full max-w-[1140px] mx-auto">
                         {mode === "welcome" && highlightsData && (

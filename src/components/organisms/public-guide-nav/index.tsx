@@ -15,7 +15,7 @@ export type PublicNavItem = {
     active: boolean;
 };
 
-type PublicBottomNavProps = {
+type PublicGuideNavProps = {
     items: PublicNavItem[];
     // "bottom": al pie del main (mobile/tablet); "top": bajo la cabecera (desktop)
     placement?: "top" | "bottom";
@@ -26,10 +26,10 @@ type PublicBottomNavProps = {
  * Los destinos son fijos (icono y texto se resuelven aquí por id); quien
  * la renderiza decide cuáles se muestran, su href y cuál está activo.
  */
-const PublicBottomNav = ({
+const PublicGuideNav = ({
     items,
     placement = "bottom",
-}: PublicBottomNavProps) => {
+}: PublicGuideNavProps) => {
     const t = useTranslations();
 
     const labels: Record<PublicNavItemId, string> = {
@@ -59,11 +59,11 @@ const PublicBottomNav = ({
             aria-label={t("guideNavLabel")}
             className={
                 placement === "top"
-                    ? "shrink-0 flex justify-center bg-white border-b border-gray-100 py-1"
-                    : "shrink-0 flex justify-center bg-white border-t border-gray-100 py-1"
+                    ? "shrink-0 flex justify-center bg-white shadow-xs py-1"
+                    : "shrink-0 flex justify-center shadow-[0_-1px_2px_var(--tw-shadow-color,rgba(0,0,0,0.10))] py-1"
             }
         >
-            <ul className="flex gap-1 w-full max-w-7xl">
+            <ul className="flex gap-1 w-full max-w-[1140px] lg:px-4">
                 {items.map((item) => (
                     <li key={item.id} className="flex-1 min-w-0">
                         <Link
@@ -99,4 +99,4 @@ const PublicBottomNav = ({
     );
 };
 
-export default PublicBottomNav;
+export default PublicGuideNav;

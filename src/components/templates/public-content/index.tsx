@@ -1,8 +1,8 @@
 import PublicSidebar from "@/components/organisms/sidebar/public-sidebar";
 import Content from "@/components/organisms/content";
-import PublicBottomNav, {
+import PublicGuideNav, {
     type PublicNavItem,
-} from "@/components/organisms/public-bottom-nav";
+} from "@/components/organisms/public-guide-nav";
 
 type PublicContentTemplateProps = {
     children: React.ReactNode;
@@ -44,7 +44,7 @@ const PublicContentTemplate = ({
                 <Content
                     footer={
                         <div className="lg:hidden">
-                            <PublicBottomNav items={navItems} />
+                            <PublicGuideNav items={navItems} />
                         </div>
                     }
                 >

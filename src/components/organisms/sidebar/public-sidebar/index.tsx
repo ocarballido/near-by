@@ -56,7 +56,7 @@ type PublicSidebarProps = {
 
 /**
  * Sidebar de categorías de localizaciones ("Explorar"). El resto de
- * secciones de la guía se navegan desde el PublicBottomNav.
+ * secciones de la guía se navegan desde el PublicGuideNav.
  */
 const PublicSidebar = ({
     propertyId,
