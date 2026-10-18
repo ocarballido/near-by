@@ -27,19 +27,21 @@ const GroupItem = ({
     handleEdit,
     handleDelete,
 }: GroupItemProps) => {
-    const buttonStyles = clsx({
-        "bg-[#f3f3f3]": active,
-    });
+    const buttonStyles = clsx(
+        active
+            ? "bg-secondary-200 text-secondary-800"
+            : "text-secondary-600 hover:text-secondary-800",
+    );
 
     return (
         <div
-            className={`rounded-md w-full transition-all flex items-center justify-between hover:bg-[#f3f3f3] hover:cursor-pointer disabled:pointer-events-none font-medium py-2 px-4 min-h-14 ${buttonStyles}`}
+            className={`rounded-lg w-full transition-all flex items-center justify-between hover:cursor-pointer disabled:pointer-events-none font-medium text-sm leading-4 pl-4 pr-2 min-h-10 ${buttonStyles}`}
             onClick={onClick}
         >
-            <span className="flex items-center gap-3 justify-between w-full">
+            <span className="flex items-center gap-4 justify-between w-full">
                 {label}
                 {count !== undefined && (
-                    <span className="text-xs font-semibold text-primary-600 tabular-nums py-1 px-2 rounded-full bg-primary-100">
+                    <span className="flex items-center justify-center min-h-6 px-2 rounded-full bg-white text-sm leading-4 font-medium text-primary-500 tabular-nums">
                         {count}
                     </span>
                 )}
