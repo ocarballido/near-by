@@ -12,21 +12,20 @@ import IconRecicle from "@/components/atoms/icon/recicle";
 import IconWifi from "@/components/atoms/icon/wifi";
 
 const SUB_CATEGORY_ICONS: Record<string, React.ReactNode> = {
+    // El color de los iconos lo pone el ButtonLink según su variante
     [CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.MANUAL.id]: (
-        <IconManual color="primary" />
+        <IconManual />
     ),
     [CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.RULES.id]: (
-        <IconListBullet color="primary" />
+        <IconListBullet />
     ),
     [CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.SCHEDULE.id]: (
-        <IconAlarm color="primary" />
+        <IconAlarm />
     ),
     [CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.RECYCLE.id]: (
-        <IconRecicle color="primary" />
+        <IconRecicle />
     ),
-    [CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.WIFI.id]: (
-        <IconWifi color="primary" />
-    ),
+    [CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.WIFI.id]: <IconWifi />,
 };
 
 type Props = {
@@ -42,7 +41,7 @@ const InfoShortcuts = ({ groups, propertyId }: Props) => {
     const lodgingCategoryId = CATEGORIES_SUB_CATEGORIES.LODGING.id;
 
     return (
-        <div className="flex flex-wrap gap-1 w-full">
+        <div className="flex flex-wrap gap-2 w-full">
             {groups.map((group) => {
                 const icon = SUB_CATEGORY_ICONS[group.sub_category_id] ?? (
                     <IconManual />
@@ -53,9 +52,10 @@ const InfoShortcuts = ({ groups, propertyId }: Props) => {
                         key={group.sub_category_id}
                         href={`/public/${propertyId}/${lodgingCategoryId}/info?open=${group.sub_category_id}`}
                         label={t(group.sub_category_name)}
-                        color="white"
+                        color="secondary"
+                        size="sm"
                         iconLeft={icon}
-                        className="rounded-lg shadow-xs p-4! text-black! text-nowrap flex-1 min-w-fit gap-2"
+                        className="text-nowrap"
                     />
                 );
             })}
