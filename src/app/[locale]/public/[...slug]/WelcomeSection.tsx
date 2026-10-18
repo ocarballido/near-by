@@ -49,7 +49,7 @@ export default async function WelcomeSection({
         <div className="flex flex-col gap-8">
             <section className="flex flex-col gap-8 md:flex-row md:items-start">
                 <div className="flex flex-col gap-6 flex-1 min-w-0">
-                    <h1 className="font-heading font-bold text-3xl leading-6 mt-3">
+                    <h1 className="font-heading font-bold text-2xl leading-tight text-balance mt-3 md:text-3xl">
                         {t("¡Te damos la bienvenida con los brazos abiertos!")}
                     </h1>
 
