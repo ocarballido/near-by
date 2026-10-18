@@ -28,9 +28,6 @@ const MenuIconButton = () => {
     const doShow = useMemo(() => {
         const segments = pathName.split("/").filter(Boolean);
 
-        // En /public siempre se muestra el botón normal del menú
-        if (segments.includes("public")) return true;
-
         // En /app/details siempre se muestra "Cancelar"
         if (segments.includes("app") && segments.includes("details"))
             return false;
