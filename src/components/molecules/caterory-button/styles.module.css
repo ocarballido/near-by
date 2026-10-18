@@ -1,0 +1,12 @@
+.icon--primary svg {
+	fill: var(--font--color-primary);
+}
+
+.icon--light svg {
+	fill: var(--font--color-light);
+}
+
+.icon--dark svg,
+.category-button:hover .icon--light svg {
+	fill: var(--font--color-body);
+}

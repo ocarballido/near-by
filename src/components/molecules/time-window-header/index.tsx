@@ -88,7 +88,7 @@ export default function TimeWindowHeader({
 
     return (
         <div
-            className="flex w-full min-w-0 flex-col gap-4 rounded-lg p-4"
+            className="flex w-full min-w-0 flex-col gap-4 p-4"
             style={
                 transparent
                     ? undefined

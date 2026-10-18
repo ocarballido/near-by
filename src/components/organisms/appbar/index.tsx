@@ -19,7 +19,7 @@ const AppBar = ({
 }: AppBarProps) => {
     return (
         <div
-            className={`w-full flex items-center gap-4 rounded-lg p-4 relative bg-primary-700 transition-all ${className}`}
+            className={`w-full flex items-center gap-4 rounded-lg p-4 relative transition-all ${className}`}
         >
             <MenuIconButton />
             <AppbarTitle />

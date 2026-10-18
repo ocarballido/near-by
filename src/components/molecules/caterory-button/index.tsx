@@ -1,7 +1,8 @@
 import clsx from "clsx";
 
-import ButtonIcon from "@/components/atoms/button-icon";
 import IconKeyboardArrowDown from "@/components/atoms/icon/keyboard-arrow-down";
+
+import styles from "./styles.module.css";
 
 type CategoryButtonProps = {
     open?: boolean;
@@ -9,7 +10,7 @@ type CategoryButtonProps = {
     name: string;
     active: boolean;
     hasContent?: boolean;
-    onClick?: React.MouseEventHandler<HTMLDivElement>;
+    onClick?: React.MouseEventHandler<HTMLButtonElement>;
 };
 
 const CategoryButton = ({
@@ -20,35 +21,54 @@ const CategoryButton = ({
     hasContent,
     onClick,
 }: CategoryButtonProps) => {
-    const arrowStyles = clsx({
-        "rotate-180": open,
-    });
+    const iconStyles = clsx(
+        "flex shrink-0 items-center justify-center p-2 rounded-full transition-all",
+        {
+            [`bg-white ${styles["icon--primary"]}`]: active,
+            [styles["icon--dark"]]: !active && open,
+            [styles["icon--light"]]: !active && !open,
+        },
+    );
+
+    const labelStyles = clsx(
+        "flex-1 min-w-0 text-sm leading-4 font-medium transition-colors",
+        active || open
+            ? "text-secondary-800"
+            : "text-secondary-600 group-hover:text-secondary-800",
+    );
+
+    const arrowStyles = clsx(
+        "flex shrink-0 items-center justify-center p-2 rounded-full transition-all",
+        { "rotate-180": open },
+    );
 
     return (
-        <div onClick={onClick} className={`flex w-full items-center`}>
-            <div
-                className={`flex items-center justify-center gap-2 mr-auto py-2 `}
-            >
-                <ButtonIcon
-                    className={`pointer-events-none ${active ? "bg-primary-500" : "bg-transparent opacity-70"}`}
-                    color={active ? "white" : "secondary"}
-                    icon={icon}
-                    active={open}
-                />
-                {name}
-            </div>
+        <button
+            type="button"
+            onClick={onClick}
+            aria-expanded={open}
+            className={`group flex w-full items-center gap-2 py-1 rounded-lg text-left cursor-pointer ${styles["category-button"]}`}
+        >
+            <span className={iconStyles}>{icon}</span>
+            <span className={labelStyles}>{name}</span>
             {hasContent !== undefined && (
                 <span
                     className={clsx(
-                        "w-1.5 h-1.5 rounded-full mr-2",
-                        hasContent ? "bg-green-500" : "bg-gray-300",
+                        "size-1.5 shrink-0 rounded-full",
+                        hasContent ? "bg-primary-400" : "bg-secondary-300",
                     )}
                 />
             )}
-            <div className={`transition-all ${arrowStyles}`}>
-                <IconKeyboardArrowDown />
-            </div>
-        </div>
+            <span className={arrowStyles}>
+                <IconKeyboardArrowDown
+                    className={
+                        open
+                            ? "fill-secondary-800"
+                            : "fill-secondary-600 group-hover:fill-secondary-800"
+                    }
+                />
+            </span>
+        </button>
     );
 };
 

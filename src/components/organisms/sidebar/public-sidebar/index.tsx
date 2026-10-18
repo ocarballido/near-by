@@ -6,8 +6,6 @@ import { useSidebar } from "@/lib/context/SidebarContext";
 import { usePublicSidebarData } from "@/lib/context/EditPublicMenuContext";
 import { useRouter } from "next/navigation";
 
-import clsx from "clsx";
-
 import IconApartment from "@/components/atoms/icon/apartment";
 import IconHealing from "@/components/atoms/icon/healing";
 import IconForkSpoon from "@/components/atoms/icon/fork-spoon";
@@ -26,11 +24,10 @@ import IconClose from "@/components/atoms/icon/close";
 import CategoryAccordion from "@/components/molecules/category-accordion";
 import Button from "@/components/molecules/button";
 import GroupItem from "@/components/molecules/group-item";
-import IconHome from "@/components/atoms/icon/home";
-import IconMap from "@/components/atoms/icon/map";
-import HousePublic from "@/components/molecules/card/house-public";
-
-import { CATEGORIES_SUB_CATEGORIES } from "@/config/config-constants";
+import SidebarRail, {
+    type SidebarRailItem,
+} from "@/components/molecules/sidebar-rail";
+import SidebarShell, { SIDEBAR_PANEL_ID } from "../sidebar-shell";
 
 const ICON_COMPONENTS = {
     IconHealing,
@@ -55,40 +52,22 @@ type PublicSidebarProps = {
     propertyId?: string;
     categoryId?: string;
     subCategoryId?: string;
-    address: string;
-    image?: string | null;
-    latitude: number;
-    longitude: number;
-    name: string;
-    checkInDate?: string;
-    checkInTime?: string;
-    checkOutDate?: string;
-    checkOutTime?: string;
 };
 
+/**
+ * Sidebar de categorías de localizaciones ("Explorar"). El resto de
+ * secciones de la guía se navegan desde el PublicGuideNav.
+ */
 const PublicSidebar = ({
     propertyId,
     categoryId,
     subCategoryId,
-    address,
-    latitude,
-    longitude,
-    name,
-    checkInDate,
-    checkInTime,
-    checkOutDate,
-    checkOutTime,
-    image = "/static/img/default-property-2x.webp",
 }: PublicSidebarProps) => {
     const t = useTranslations();
     const router = useRouter();
-    const { isOpen: isSidebarOpen, closeSidebar } = useSidebar();
-    const {
-        sidebarData,
-        setActiveSubCategoryType,
-        hasInfoContent,
-        subCategoryCounts,
-    } = usePublicSidebarData();
+    const { isOpen: isSidebarOpen, openSidebar, closeSidebar } = useSidebar();
+    const { sidebarData, setActiveSubCategoryType, subCategoryCounts } =
+        usePublicSidebarData();
 
     const [openCategoryId, setOpenCategoryId] = useState<string | null>(
         categoryId ?? null,
@@ -101,89 +80,52 @@ const PublicSidebar = ({
     const isCategoryOpen = (id: string): boolean => id === openCategoryId;
     const isCategoryActive = (id: string): boolean => id === categoryId;
 
-    const sidebarContentStyles = clsx(
-        { "translate-x-0": isSidebarOpen },
-        { "-translate-x-full": !isSidebarOpen },
+    // Desde el rail: abre el overlay con esa sección desplegada (sin toggle)
+    const openCategory = (id: string): void => {
+        setOpenCategoryId(id);
+        openSidebar();
+    };
+
+    // Mismo orden que los acordeones del árbol
+    const railItems: SidebarRailItem[] = (sidebarData ?? []).map(
+        (category) => {
+            const IconComponent = ICON_COMPONENTS[category.icon as IconName];
+
+            return {
+                id: category.id,
+                label: t(category.name),
+                icon: <IconComponent />,
+                active: isCategoryActive(category.id),
+            };
+        },
     );
 
     return (
-        <>
-            <aside
-                className={`fixed bottom-0 left-0 right-0 top-0 p-4 z-10 overflow-y-auto overscroll-contain md:top-0 md:p-0 md:relative md:w-full md:max-w-80 md:h-auto md:min-h-0 md:self-stretch grow flex gap-2 flex-col transition-all duration-300 md:translate-x-0 bg-[#EFEFEF] ${sidebarContentStyles}`}
-            >
-                <HousePublic
-                    address={address}
-                    latitude={latitude}
-                    longitude={longitude}
-                    name={name}
-                    image={image}
-                    checkInDate={checkInDate}
-                    checkInTime={checkInTime}
-                    checkOutDate={checkOutDate}
-                    checkOutTime={checkOutTime}
-                    className="hidden md:flex"
+        <SidebarShell
+            rail={
+                <SidebarRail
+                    items={railItems}
+                    isExpanded={isSidebarOpen}
+                    controlsId={SIDEBAR_PANEL_ID}
+                    onMenuClick={openSidebar}
+                    onItemClick={openCategory}
                 />
-                <div className="flex gap-2 items-center md:hidden">
-                    <Button
-                        label={t("Ocultar menú")}
-                        color="primary"
-                        onClick={closeSidebar}
-                        iconLeft={<IconClose />}
-                        className="grow"
-                    />
-                </div>
+            }
+        >
+            <div className="flex gap-2 items-center justify-between mb-2">
+                <h2 className="pl-2 font-body font-semibold text-xs uppercase tracking-wide text-gray-500">
+                    {t("guideNavPlaces")}
+                </h2>
+                <Button
+                    color="text"
+                    label={t("Cerrar")}
+                    iconLeft={<IconClose />}
+                    onClick={closeSidebar}
+                    className="lg:hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"
+                />
+            </div>
 
-                <CategoryAccordion
-                    open={isCategoryOpen("welcome")}
-                    active={isCategoryActive("welcome")}
-                    name="Welcome"
-                    onClick={() => handleCategoryToggle("welcome")}
-                    icon={<IconHome />}
-                >
-                    <GroupItem
-                        label="Highlights"
-                        active={subCategoryId === "highlights"}
-                        onClick={() => {
-                            closeSidebar();
-                            router.push(
-                                `/public/${propertyId}/welcome/highlights`,
-                            );
-                        }}
-                    />
-                </CategoryAccordion>
-
-                {hasInfoContent && (
-                    <CategoryAccordion
-                        open={isCategoryOpen(
-                            CATEGORIES_SUB_CATEGORIES.LODGING.id,
-                        )}
-                        active={isCategoryActive(
-                            CATEGORIES_SUB_CATEGORIES.LODGING.id,
-                        )}
-                        name={t("El Alojamiento")}
-                        onClick={() =>
-                            handleCategoryToggle(
-                                CATEGORIES_SUB_CATEGORIES.LODGING.id,
-                            )
-                        }
-                        icon={<IconApartment />}
-                    >
-                        <GroupItem
-                            label={t("El Alojamiento")}
-                            active={
-                                categoryId ===
-                                CATEGORIES_SUB_CATEGORIES.LODGING.id
-                            }
-                            onClick={() => {
-                                closeSidebar();
-                                router.push(
-                                    `/public/${propertyId}/${CATEGORIES_SUB_CATEGORIES.LODGING.id}/info`,
-                                );
-                            }}
-                        />
-                    </CategoryAccordion>
-                )}
-
+            <div className="flex flex-col gap-1">
                 {sidebarData &&
                     sidebarData.map((category) => {
                         const iconName = category.icon as IconName;
@@ -226,27 +168,8 @@ const PublicSidebar = ({
                             </CategoryAccordion>
                         );
                     })}
-
-                <CategoryAccordion
-                    open={isCategoryOpen("custom-plans")}
-                    active={isCategoryActive("custom-plans")}
-                    name={t("Planes personalizados")}
-                    onClick={() => handleCategoryToggle("custom-plans")}
-                    icon={<IconMap />}
-                >
-                    <GroupItem
-                        label={t("Crear plan")}
-                        active={subCategoryId === "create-plan"}
-                        onClick={() => {
-                            closeSidebar();
-                            router.push(
-                                `/public/${propertyId}/custom-plans/create-plan`,
-                            );
-                        }}
-                    />
-                </CategoryAccordion>
-            </aside>
-        </>
+            </div>
+        </SidebarShell>
     );
 };
 

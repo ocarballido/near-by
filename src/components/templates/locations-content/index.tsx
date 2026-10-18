@@ -228,7 +228,7 @@ export function LocationsContent({
                 />
                 <ButtonLink
                     label={t("Nuevo sitio")}
-                    color="primary"
+                    color="secondary"
                     href={`/app/location/${propertyId}/${categoryId}/${subCategoryId}`}
                     iconLeft={<IconAdd />}
                     className="w-full lg:w-fit"

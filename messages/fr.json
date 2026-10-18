@@ -91,7 +91,7 @@
     "Bienvenido": "Bienvenue",
     "Gestione múltiples propiedades sin esfuerzo": "Gérez plusieurs propriétés sans effort, personnalisez les détails au fil de l’eau et profitez d’une nouvelle perspective dans votre gestion quotidienne.",
     "Abrir menú": "Menu",
-    "Ocultar menú": "Masquer",
+    "closeMenu": "Fermer le menu",
     "Volver al dashboard": "Retour au tableau de bord",
     "Nombre de la propiedad *": "Nom de la propriété *",
     "El nombre es obligatorio": "Le nom est obligatoire",
@@ -1371,5 +1371,9 @@
     "auto-modal-option-metro-stations": "Stations de métro",
     "auto-modal-option-nightclubs": "Boîtes de nuit",
     "magic-finder-title-with-name": "Recherche magique · {name}",
-    "magic-finder-description-with-name": "Nous ajouterons automatiquement les lieux les mieux notés de cette catégorie près de votre propriété."
+    "magic-finder-description-with-name": "Nous ajouterons automatiquement les lieux les mieux notés de cette catégorie près de votre propriété.",
+    "guideNavHome": "Accueil",
+    "guideNavPlaces": "Explorer",
+    "guideNavPlans": "Itinéraire",
+    "guideNavLabel": "Navigation du guide"
 }

@@ -8,7 +8,7 @@ type AppBarUserProps = {
 const AppBarUser = ({ className = "" }: AppBarUserProps) => {
     return (
         <div className={`flex gap-1 ml-auto ${className}`}>
-            <LanguageSelector />
+            <LanguageSelector triggerColor="secondary" />
             <UserMenu />
         </div>
     );

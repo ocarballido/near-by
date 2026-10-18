@@ -2,7 +2,9 @@
 
 import React, {
     createContext,
+    useCallback,
     useContext,
+    useMemo,
     useState,
     ReactNode,
     useEffect,
@@ -30,9 +32,13 @@ export const SidebarProvider: React.FC<SidebarProviderProps> = ({
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const pathname = usePathname();
 
-    const openSidebar = (): void => setIsOpen(true);
-    const closeSidebar = (): void => setIsOpen(false);
-    const toggleSidebar = (): void => setIsOpen((prev) => !prev);
+    // Referencias estables: los consumidores solo se re-renderizan al cambiar isOpen
+    const openSidebar = useCallback((): void => setIsOpen(true), []);
+    const closeSidebar = useCallback((): void => setIsOpen(false), []);
+    const toggleSidebar = useCallback(
+        (): void => setIsOpen((prev) => !prev),
+        [],
+    );
 
     useEffect(() => {
         if (isOpen) {
@@ -42,22 +48,40 @@ export const SidebarProvider: React.FC<SidebarProviderProps> = ({
     }, [pathname]);
 
     useEffect(() => {
-        const MOBILE_BREAKPOINT = 768; // debe coincidir con tu breakpoint `md` de Tailwind
+        // Debe coincidir con el breakpoint `lg` de Tailwind: por debajo, el
+        // sidebar se abre como overlay (mobile y rail de tablet)
+        const DESKTOP_BREAKPOINT = 1024;
 
         const handleResize = () => {
-            if (isOpen && window.innerWidth >= MOBILE_BREAKPOINT) {
+            if (isOpen && window.innerWidth >= DESKTOP_BREAKPOINT) {
                 closeSidebar();
             }
         };
 
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
-    }, [isOpen]);
+    }, [isOpen, closeSidebar]);
+
+    // Escape cierra cualquier overlay del sidebar; el listener solo existe
+    // mientras está abierto
+    useEffect(() => {
+        if (!isOpen) return;
+
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === "Escape") closeSidebar();
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [isOpen, closeSidebar]);
+
+    const value = useMemo(
+        () => ({ isOpen, openSidebar, closeSidebar, toggleSidebar }),
+        [isOpen, openSidebar, closeSidebar, toggleSidebar],
+    );
 
     return (
-        <SidebarContext.Provider
-            value={{ isOpen, openSidebar, closeSidebar, toggleSidebar }}
-        >
+        <SidebarContext.Provider value={value}>
             {children}
         </SidebarContext.Provider>
     );

@@ -7,7 +7,7 @@ import styles from './styles.module.css';
 type ButtonProps = {
 	active?: boolean;
 	className?: string;
-	color?: 'primary' | 'secondary' | 'error' | 'white';
+	color?: 'primary' | 'secondary' | 'error' | 'white' | 'text';
 	disabled?: boolean;
 	form?: string;
 	formAction?: (formData: FormData) => Promise<void>;
@@ -37,6 +37,7 @@ const Button = ({
 				(iconLeft || iconRight) && color === 'white',
 			[styles['icon--secondary']]:
 				(iconLeft || iconRight) && color === 'secondary',
+			[styles['icon--text']]: (iconLeft || iconRight) && color === 'text',
 			[styles['icon--white']]:
 				((iconLeft || iconRight) && color === 'primary') ||
 				color === 'error',
@@ -71,6 +72,10 @@ const Button = ({
 		{
 			'bg-primary-100 hover:bg-primary-100 text-primary-500':
 				color === 'white' && active,
+		},
+		{
+			'bg-transparent hover:bg-black/5 focus:bg-black/5 text-secondary-600 hover:text-secondary-800 focus:text-secondary-800':
+				color === 'text',
 		}
 	);
 

@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import WelcomeTabsMenu, { TabKey } from "./menu";
 import { PropertyDataPublicBySubCategory } from "@/components/templates/property-data-public";
+import { useEvents } from "@/hooks/useEvents";
 import EventsTab from "./event-tab";
 
 type PublicItem = {
@@ -69,6 +70,16 @@ export default function WelcomeTabs({
 }: Props) {
     const hasFeatured = (featuredGroups?.length ?? 0) > 0;
     const hasMustVisit = (mustVisitGroups?.length ?? 0) > 0;
+    const hasHighlights = hasFeatured || hasMustVisit;
+
+    const eventsState = useEvents(lat, lng);
+    const { events, loading, error, manualRadius } = eventsState;
+
+    // Hay eventos si la búsqueda automática encontró alguno. Si el huésped
+    // ya cambió el radio a mano, se mantienen aunque ese radio salga vacío
+    // (verá el mensaje de vacío en lugar de perder la sección)
+    const hasEvents =
+        manualRadius !== null || (!loading && !error && events.length > 0);
 
     const defaultTab = (): TabKey => {
         if (hasFeatured) return "featured";
@@ -77,6 +88,13 @@ export default function WelcomeTabs({
     };
 
     const [tab, setTab] = useState<TabKey>(defaultTab);
+
+    // Sin destacados no hay pestañas: solo eventos (con su carga) o nada
+    if (!hasHighlights) {
+        return loading || hasEvents ? (
+            <EventsTab eventsState={eventsState} />
+        ) : null;
+    }
 
     const tabs = [
         hasFeatured
@@ -99,7 +117,7 @@ export default function WelcomeTabs({
                   ),
               }
             : null,
-        { key: "events" as const, label: labels.eventsTab },
+        hasEvents ? { key: "events" as const, label: labels.eventsTab } : null,
     ].filter(isDefined);
 
     const featuredItems = flattenGroups(featuredGroups);
@@ -109,7 +127,9 @@ export default function WelcomeTabs({
         <div className="flex flex-col gap-4">
             <WelcomeTabsMenu value={tab} onChange={setTab} tabs={tabs} />
 
-            {tab === "events" && <EventsTab lat={lat} lng={lng} />}
+            {tab === "events" && hasEvents && (
+                <EventsTab eventsState={eventsState} />
+            )}
 
             {tab === "featured" && hasFeatured && (
                 <PropertyDataPublicBySubCategory

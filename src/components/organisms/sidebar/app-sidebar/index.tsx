@@ -2,8 +2,10 @@
 
 import { useTranslations } from "next-intl";
 import { useSidebar } from "@/lib/context/SidebarContext";
+import { usePaywall } from "@/lib/context/PaywallContext";
+import { usePathname } from "@/i18n/routing";
 
-import { SIDEBAR_MENU } from "@/config/config-constants";
+import { PAGES, SIDEBAR_MENU } from "@/config/config-constants";
 
 import IconHome from "@/components/atoms/icon/home";
 import IconAccountCircle from "@/components/atoms/icon/account-circle";
@@ -19,7 +21,13 @@ import DemoHomeModal from "../../supademo/home-modal";
 import { DEMOS } from "@/config/config-constants";
 import Button from "@/components/molecules/button";
 import IconClose from "@/components/atoms/icon/close";
+import SidebarRail, {
+    type SidebarRailItem,
+} from "@/components/molecules/sidebar-rail";
+import SidebarShell, { SIDEBAR_PANEL_ID } from "../sidebar-shell";
 import Billboard from "./billboard";
+
+const FEEDBACK_URL = "/app/feedback/dashboard";
 
 const ICON_COMPONENTS = {
     IconHome,
@@ -35,17 +43,56 @@ type IconName = keyof typeof ICON_COMPONENTS;
 const AppSidebar = () => {
     const t = useTranslations();
 
-    const { closeSidebar } = useSidebar();
+    const { isOpen, openSidebar, closeSidebar } = useSidebar();
+    const { requestCreateProperty } = usePaywall();
+    const pathname = usePathname();
+
+    // Los items navegan directamente; "Nueva Propiedad" pasa por el paywall
+    // (requestCreateProperty ya navega sin modal cuando no hay restricción)
+    const railItems: SidebarRailItem[] = [
+        ...SIDEBAR_MENU.map((item) => {
+            const IconComponent = ICON_COMPONENTS[item.icon as IconName];
+
+            return {
+                id: item.url,
+                label: t(item.label),
+                icon: <IconComponent />,
+                active: item.url === pathname,
+                href: item.url === PAGES.newProperty ? undefined : item.url,
+            };
+        }),
+        {
+            id: FEEDBACK_URL,
+            label: t("feedback.cta"),
+            icon: <IconHelp />,
+            active: FEEDBACK_URL === pathname,
+            href: FEEDBACK_URL,
+        },
+    ];
+
+    const handleRailItemClick = (id: string) => {
+        if (id === PAGES.newProperty) requestCreateProperty(id);
+    };
 
     return (
-        <>
-            <div className="flex gap-1 items-center md:hidden">
+        <SidebarShell
+            rail={
+                <SidebarRail
+                    items={railItems}
+                    isExpanded={isOpen}
+                    controlsId={SIDEBAR_PANEL_ID}
+                    onMenuClick={openSidebar}
+                    onItemClick={handleRailItemClick}
+                />
+            }
+        >
+            <div className="flex gap-2 items-start justify-end lg:hidden">
                 <Button
-                    label={t("Ocultar menú")}
-                    color="primary"
-                    onClick={closeSidebar}
+                    color="text"
+                    label={t("Cerrar")}
                     iconLeft={<IconClose />}
-                    className="w-fit shrink-0"
+                    onClick={closeSidebar}
+                    className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"
                 />
             </div>
             {SIDEBAR_MENU.map((item) => {
@@ -53,11 +100,12 @@ const AppSidebar = () => {
                 const IconComponent = ICON_COMPONENTS[iconName];
                 const url = item.url;
 
-                if (url === "/app/properties/new") {
+                if (url === PAGES.newProperty) {
                     return (
                         <CreatePropertyEntry
-                            href="/app/properties/new"
+                            href={PAGES.newProperty}
                             key={item.label}
+                            className="rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"
                             link={
                                 <SidebarMenuItem
                                     key={item.label}
@@ -67,12 +115,10 @@ const AppSidebar = () => {
                                 />
                             }
                             action={
-                                <div
-                                    className={`rounded-md w-full transition-all flex items-center gap-2 hover:bg-secondary-200 hover:cursor-pointer disabled:pointer-events-none font-medium text-sm text-md py-4 px-3.5`}
-                                >
-                                    <IconAdd />
-                                    {t(item.label)}
-                                </div>
+                                <SidebarMenuItem
+                                    icon={<IconComponent />}
+                                    label={t(item.label)}
+                                />
                             }
                         />
                     );
@@ -89,12 +135,12 @@ const AppSidebar = () => {
             })}
             <SidebarMenuItem
                 icon={<IconHelp />}
-                href="/app/feedback/dashboard"
+                href={FEEDBACK_URL}
                 label={t("feedback.cta")}
             />
             <DemoHomeModal demos={DEMOS} buttonColor="secondary" />
             <Billboard />
-        </>
+        </SidebarShell>
     );
 };
 

@@ -1,38 +1,70 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const RADIUS_STEPS = [5, 15, 30, 50, 100];
+const MAX_PAGE = 4;
 
 const toTicketmasterDate = (date: Date) =>
 	date.toISOString().split('.')[0] + 'Z';
 
+// Redondeo a 2 decimales (~1 km): las coordenadas forman parte de la clave
+// de caché, y sin normalizar bastaba variar un decimal para saltársela
+const parseCoordinate = (value: string | null, limit: number): number | null => {
+	if (value === null || value.trim() === '') return null;
+	const parsed = Number(value);
+	if (!Number.isFinite(parsed) || Math.abs(parsed) > limit) return null;
+	return Math.round(parsed * 100) / 100;
+};
+
+// La URL del evento acaba en un href de la guía pública: solo http(s)
+const isHttpUrl = (value: unknown): value is string => {
+	if (typeof value !== 'string') return false;
+	try {
+		const { protocol } = new URL(value);
+		return protocol === 'https:' || protocol === 'http:';
+	} catch {
+		return false;
+	}
+};
+
 export async function GET(req: NextRequest) {
 	const { searchParams } = new URL(req.url);
-	const lat = searchParams.get('lat');
-	const lng = searchParams.get('lng');
-	const manualRadius = searchParams.get('radius');
-	const page = searchParams.get('page') ?? '0';
+	const lat = parseCoordinate(searchParams.get('lat'), 90);
+	const lng = parseCoordinate(searchParams.get('lng'), 180);
+	const radius = Number(searchParams.get('radius') ?? RADIUS_STEPS[0]);
+	const page = Number(searchParams.get('page') ?? 0);
 
-	if (!lat || !lng) {
+	if (lat === null || lng === null) {
 		return NextResponse.json(
-			{ error: 'lat and lng are required' },
+			{ error: 'Valid lat and lng are required' },
 			{ status: 400 },
 		);
 	}
 
-	const radius = manualRadius ?? String(RADIUS_STEPS[0]);
+	if (!RADIUS_STEPS.includes(radius)) {
+		return NextResponse.json({ error: 'Invalid radius' }, { status: 400 });
+	}
 
+	if (!Number.isInteger(page) || page < 0 || page > MAX_PAGE) {
+		return NextResponse.json({ error: 'Invalid page' }, { status: 400 });
+	}
+
+	// Redondeado a la hora: la URL de Ticketmaster es la clave de la caché
+	// (revalidate 3600), y con segundos nunca se repetía
 	const today = new Date();
-	const oneMonthLater = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+	today.setUTCMinutes(0, 0, 0);
+	const oneMonthLater = new Date(
+		today.getTime() + 30 * 24 * 60 * 60 * 1000,
+	);
 
 	const url = new URL(
 		'https://app.ticketmaster.com/discovery/v2/events.json',
 	);
 	url.searchParams.set('apikey', process.env.TICKETMASTER_API_KEY!);
 	url.searchParams.set('latlong', `${lat},${lng}`);
-	url.searchParams.set('radius', radius);
+	url.searchParams.set('radius', String(radius));
 	url.searchParams.set('unit', 'km');
 	url.searchParams.set('size', '20');
-	url.searchParams.set('page', page);
+	url.searchParams.set('page', String(page));
 	url.searchParams.set('sort', 'date,asc');
 	url.searchParams.set('startDateTime', toTicketmasterDate(today));
 	url.searchParams.set('endDateTime', toTicketmasterDate(oneMonthLater));
@@ -42,10 +74,12 @@ export async function GET(req: NextRequest) {
 			next: { revalidate: 3600 },
 		});
 
+		// Estado genérico: no revelar si la clave es inválida o la cuota se agotó
 		if (!res.ok) {
+			console.error('[api/events] Ticketmaster error:', res.status);
 			return NextResponse.json(
-				{ error: 'Ticketmaster error' },
-				{ status: res.status },
+				{ error: 'Upstream error' },
+				{ status: 502 },
 			);
 		}
 
@@ -70,6 +104,7 @@ export async function GET(req: NextRequest) {
 				category: e.classifications?.[0]?.segment?.name ?? null,
 			}))
 			.filter((e: any) => {
+				if (!isHttpUrl(e.url)) return false;
 				if (seen.has(e.name)) return false;
 				seen.add(e.name);
 				return true;
@@ -79,7 +114,7 @@ export async function GET(req: NextRequest) {
 			events: normalized,
 			total: data.page?.totalElements ?? 0,
 			hasMore: data.page?.number + 1 < data.page?.totalPages,
-			radiusUsed: Number(radius),
+			radiusUsed: radius,
 		});
 	} catch {
 		return NextResponse.json(

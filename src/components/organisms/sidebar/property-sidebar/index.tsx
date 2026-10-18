@@ -26,8 +26,12 @@ import GroupItem from "@/components/molecules/group-item";
 import SidebarLinkItem from "@/components/molecules/sidebar-link-item";
 import ButtonLink from "@/components/molecules/button-link";
 import IconOpenInNew from "@/components/atoms/icon/open-in-new";
-import Button from "@/components/molecules/button";
+import ButtonIcon from "@/components/atoms/button-icon";
 import IconClose from "@/components/atoms/icon/close";
+import SidebarRail, {
+    type SidebarRailItem,
+} from "@/components/molecules/sidebar-rail";
+import SidebarShell, { SIDEBAR_PANEL_ID } from "../sidebar-shell";
 
 const ICON_COMPONENTS = {
     IconHealing,
@@ -61,7 +65,7 @@ const PropertySidebar = ({
 }: PropertySidebarProps) => {
     const t = useTranslations();
     const { sidebarData, subCategoryCounts } = useSidebarData();
-    const { closeSidebar } = useSidebar();
+    const { isOpen: isSidebarOpen, openSidebar, closeSidebar } = useSidebar();
     const router = useRouter();
 
     const [openCategoryId, setOpenCategoryId] = useState<string | null>(
@@ -72,84 +76,113 @@ const PropertySidebar = ({
         setOpenCategoryId((prev) => (prev === id ? null : id));
     };
 
+    // Desde el rail: abre el overlay con esa sección desplegada (sin toggle)
+    const openCategory = (id: string) => {
+        setOpenCategoryId(id);
+        openSidebar();
+    };
+
+    const railItems: SidebarRailItem[] = (sidebarData ?? []).map((category) => {
+        const IconComponent = ICON_COMPONENTS[category.icon as IconName];
+
+        return {
+            id: category.id,
+            label: t(category.name),
+            icon: <IconComponent />,
+            active: category.id === categoryId,
+        };
+    });
+
     const publicUrl = `${process.env.NEXT_PUBLIC_APP_URL}/public/${propertyId}/welcome/highlights`;
 
     return (
-        <>
-            <div className="flex gap-1 items-center md:hidden">
-                <Button
-                    label={t("Ocultar menú")}
-                    color="primary"
-                    onClick={closeSidebar}
-                    iconLeft={<IconClose />}
-                    className="w-fit shrink-0"
+        <SidebarShell
+            rail={
+                <SidebarRail
+                    items={railItems}
+                    isExpanded={isSidebarOpen}
+                    controlsId={SIDEBAR_PANEL_ID}
+                    onMenuClick={openSidebar}
+                    onItemClick={openCategory}
                 />
+            }
+        >
+            <div className="flex gap-1 items-start justify-between lg:hidden">
                 <ButtonLink
-                    className="gap-1 w-full"
+                    className="gap-1"
                     color="primary"
                     iconRight={<IconOpenInNew />}
                     label={t("Sitio público")}
                     href={publicUrl}
                     target="_blank"
                 />
+                <ButtonIcon
+                    color="secondary"
+                    icon={<IconClose />}
+                    onClick={closeSidebar}
+                    ariaLabel={t("closeMenu")}
+                    className="shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"
+                />
             </div>
-            {sidebarData &&
-                sidebarData.map((category, index) => {
-                    const iconName = category.icon as IconName;
-                    const IconComponent = ICON_COMPONENTS[iconName];
+            <div className="flex flex-col gap-1">
+                {sidebarData &&
+                    sidebarData.map((category, index) => {
+                        const iconName = category.icon as IconName;
+                        const IconComponent = ICON_COMPONENTS[iconName];
 
-                    const isFirstCategory = index === 0;
+                        const isFirstCategory = index === 0;
 
-                    const hasContent = category.sub_categories.some(
-                        (sub) => (subCategoryCounts[sub.id] ?? 0) > 0,
-                    );
+                        const hasContent = category.sub_categories.some(
+                            (sub) => (subCategoryCounts[sub.id] ?? 0) > 0,
+                        );
 
-                    const isActive = category.id === categoryId;
-                    const isOpen = category.id === openCategoryId;
+                        const isActive = category.id === categoryId;
+                        const isOpen = category.id === openCategoryId;
 
-                    return (
-                        <CategoryAccordion
-                            key={category.name}
-                            open={isOpen}
-                            active={isActive}
-                            name={t(category.name)}
-                            hasContent={hasContent}
-                            onClick={() => handleCategoryToggle(category.id)}
-                            icon={<IconComponent />}
-                        >
-                            {isFirstCategory && propertyId && (
-                                <SidebarLinkItem
-                                    key="property-edit-link"
-                                    href={`/app/properties/edit/${propertyId}?from=manage`}
-                                    label={t("Datos del alojamiento")}
-                                    icon={<IconEdit size={24} />}
-                                    onClick={closeSidebar}
-                                />
-                            )}
-                            {category.sub_categories.map((subcategory) => {
-                                const count =
-                                    subCategoryCounts[subcategory.id] ?? 0;
-                                return (
-                                    <GroupItem
-                                        key={subcategory.id}
-                                        label={t(subcategory.name)}
-                                        count={count}
-                                        active={
-                                            subcategory.id === subCategoryId
-                                        }
-                                        onClick={() => {
-                                            closeSidebar();
-                                            router.push(
-                                                `/app/properties/${propertyId}/${category.id}/${subcategory.id}`,
-                                            );
-                                        }}
+                        return (
+                            <CategoryAccordion
+                                key={category.name}
+                                open={isOpen}
+                                active={isActive}
+                                name={t(category.name)}
+                                hasContent={hasContent}
+                                onClick={() => handleCategoryToggle(category.id)}
+                                icon={<IconComponent />}
+                            >
+                                {isFirstCategory && propertyId && (
+                                    <SidebarLinkItem
+                                        key="property-edit-link"
+                                        href={`/app/properties/edit/${propertyId}?from=manage`}
+                                        label={t("Datos del alojamiento")}
+                                        icon={<IconEdit size={24} />}
+                                        onClick={closeSidebar}
                                     />
-                                );
-                            })}
-                        </CategoryAccordion>
-                    );
-                })}
-        </>
+                                )}
+                                {category.sub_categories.map((subcategory) => {
+                                    const count =
+                                        subCategoryCounts[subcategory.id] ?? 0;
+                                    return (
+                                        <GroupItem
+                                            key={subcategory.id}
+                                            label={t(subcategory.name)}
+                                            count={count}
+                                            active={
+                                                subcategory.id === subCategoryId
+                                            }
+                                            onClick={() => {
+                                                closeSidebar();
+                                                router.push(
+                                                    `/app/properties/${propertyId}/${category.id}/${subcategory.id}`,
+                                                );
+                                            }}
+                                        />
+                                    );
+                                })}
+                            </CategoryAccordion>
+                        );
+                    })}
+            </div>
+        </SidebarShell>
     );
 };
 
