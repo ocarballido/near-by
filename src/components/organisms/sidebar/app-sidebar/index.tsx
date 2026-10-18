@@ -67,12 +67,10 @@ const AppSidebar = () => {
                                 />
                             }
                             action={
-                                <div
-                                    className={`rounded-md w-full transition-all flex items-center gap-2 hover:bg-secondary-200 hover:cursor-pointer disabled:pointer-events-none font-medium text-sm text-md py-4 px-3.5`}
-                                >
-                                    <IconAdd />
-                                    {t(item.label)}
-                                </div>
+                                <SidebarMenuItem
+                                    icon={<IconComponent />}
+                                    label={t(item.label)}
+                                />
                             }
                         />
                     );
