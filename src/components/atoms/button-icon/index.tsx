@@ -6,6 +6,7 @@ import styles from './styles.module.css';
 
 type ButtonIconProps = {
 	active?: boolean;
+	ariaLabel?: string;
 	className?: string;
 	color?: 'primary' | 'secondary' | 'error' | 'white' | 'warning';
 	disabled?: boolean;
@@ -17,6 +18,7 @@ type ButtonIconProps = {
 
 const ButtonIcon = ({
 	active = false,
+	ariaLabel,
 	className = '',
 	color = 'primary',
 	disabled = false,
@@ -77,6 +79,7 @@ const ButtonIcon = ({
 			onClick={onClick}
 			type={type}
 			disabled={disabled}
+			aria-label={ariaLabel}
 		>
 			{icon}
 		</button>
