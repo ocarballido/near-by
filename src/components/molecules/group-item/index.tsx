@@ -30,12 +30,12 @@ const GroupItem = ({
     const buttonStyles = clsx(
         active
             ? "bg-secondary-200 text-secondary-800"
-            : "text-secondary-600 hover:text-secondary-800",
+            : "text-secondary-600 hover:text-secondary-800 hover:bg-secondary-100",
     );
 
     return (
         <div
-            className={`rounded-lg w-full transition-all flex items-center justify-between hover:cursor-pointer disabled:pointer-events-none font-medium text-sm leading-4 pl-4 pr-2 min-h-10 ${buttonStyles}`}
+            className={`rounded-lg w-full transition-all flex items-center justify-between hover:cursor-pointer disabled:pointer-events-none font-medium text-sm leading-4 pl-4 pr-2 min-h-9 ${buttonStyles}`}
             onClick={onClick}
         >
             <span className="flex items-center gap-4 justify-between w-full">

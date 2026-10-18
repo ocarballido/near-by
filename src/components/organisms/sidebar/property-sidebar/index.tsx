@@ -124,62 +124,64 @@ const PropertySidebar = ({
                     className="shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"
                 />
             </div>
-            {sidebarData &&
-                sidebarData.map((category, index) => {
-                    const iconName = category.icon as IconName;
-                    const IconComponent = ICON_COMPONENTS[iconName];
+            <div className="flex flex-col gap-1">
+                {sidebarData &&
+                    sidebarData.map((category, index) => {
+                        const iconName = category.icon as IconName;
+                        const IconComponent = ICON_COMPONENTS[iconName];
 
-                    const isFirstCategory = index === 0;
+                        const isFirstCategory = index === 0;
 
-                    const hasContent = category.sub_categories.some(
-                        (sub) => (subCategoryCounts[sub.id] ?? 0) > 0,
-                    );
+                        const hasContent = category.sub_categories.some(
+                            (sub) => (subCategoryCounts[sub.id] ?? 0) > 0,
+                        );
 
-                    const isActive = category.id === categoryId;
-                    const isOpen = category.id === openCategoryId;
+                        const isActive = category.id === categoryId;
+                        const isOpen = category.id === openCategoryId;
 
-                    return (
-                        <CategoryAccordion
-                            key={category.name}
-                            open={isOpen}
-                            active={isActive}
-                            name={t(category.name)}
-                            hasContent={hasContent}
-                            onClick={() => handleCategoryToggle(category.id)}
-                            icon={<IconComponent />}
-                        >
-                            {isFirstCategory && propertyId && (
-                                <SidebarLinkItem
-                                    key="property-edit-link"
-                                    href={`/app/properties/edit/${propertyId}?from=manage`}
-                                    label={t("Datos del alojamiento")}
-                                    icon={<IconEdit size={24} />}
-                                    onClick={closeSidebar}
-                                />
-                            )}
-                            {category.sub_categories.map((subcategory) => {
-                                const count =
-                                    subCategoryCounts[subcategory.id] ?? 0;
-                                return (
-                                    <GroupItem
-                                        key={subcategory.id}
-                                        label={t(subcategory.name)}
-                                        count={count}
-                                        active={
-                                            subcategory.id === subCategoryId
-                                        }
-                                        onClick={() => {
-                                            closeSidebar();
-                                            router.push(
-                                                `/app/properties/${propertyId}/${category.id}/${subcategory.id}`,
-                                            );
-                                        }}
+                        return (
+                            <CategoryAccordion
+                                key={category.name}
+                                open={isOpen}
+                                active={isActive}
+                                name={t(category.name)}
+                                hasContent={hasContent}
+                                onClick={() => handleCategoryToggle(category.id)}
+                                icon={<IconComponent />}
+                            >
+                                {isFirstCategory && propertyId && (
+                                    <SidebarLinkItem
+                                        key="property-edit-link"
+                                        href={`/app/properties/edit/${propertyId}?from=manage`}
+                                        label={t("Datos del alojamiento")}
+                                        icon={<IconEdit size={24} />}
+                                        onClick={closeSidebar}
                                     />
-                                );
-                            })}
-                        </CategoryAccordion>
-                    );
-                })}
+                                )}
+                                {category.sub_categories.map((subcategory) => {
+                                    const count =
+                                        subCategoryCounts[subcategory.id] ?? 0;
+                                    return (
+                                        <GroupItem
+                                            key={subcategory.id}
+                                            label={t(subcategory.name)}
+                                            count={count}
+                                            active={
+                                                subcategory.id === subCategoryId
+                                            }
+                                            onClick={() => {
+                                                closeSidebar();
+                                                router.push(
+                                                    `/app/properties/${propertyId}/${category.id}/${subcategory.id}`,
+                                                );
+                                            }}
+                                        />
+                                    );
+                                })}
+                            </CategoryAccordion>
+                        );
+                    })}
+            </div>
         </SidebarShell>
     );
 };

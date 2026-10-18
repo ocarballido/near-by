@@ -24,7 +24,7 @@ const SidebarLinkItem = ({
         <Link
             href={href}
             onClick={onClick}
-            className="rounded-lg w-full transition-all flex items-center gap-4 text-secondary-600 hover:text-secondary-800 font-medium text-sm leading-4 pl-4 pr-2 min-h-10"
+            className="rounded-lg w-full transition-all flex items-center gap-4 text-secondary-600 hover:text-secondary-800 hover:bg-secondary-100 font-medium text-sm leading-4 pl-4 pr-2 min-h-9"
         >
             <span>{label}</span>
             <span

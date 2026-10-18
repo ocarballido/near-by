@@ -112,58 +112,63 @@ const PublicSidebar = ({
                 />
             }
         >
-            <div className="flex gap-2 items-start justify-end lg:hidden">
+            <div className="flex gap-2 items-center justify-between mb-2">
+                <h2 className="pl-2 font-body font-semibold text-xs uppercase tracking-wide text-gray-500">
+                    {t("guideNavPlaces")}
+                </h2>
                 <Button
                     color="text"
                     label={t("Cerrar")}
                     iconLeft={<IconClose />}
                     onClick={closeSidebar}
-                    className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"
+                    className="lg:hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"
                 />
             </div>
 
-            {sidebarData &&
-                sidebarData.map((category) => {
-                    const iconName = category.icon as IconName;
-                    const IconComponent = ICON_COMPONENTS[iconName];
+            <div className="flex flex-col gap-1">
+                {sidebarData &&
+                    sidebarData.map((category) => {
+                        const iconName = category.icon as IconName;
+                        const IconComponent = ICON_COMPONENTS[iconName];
 
-                    return (
-                        <CategoryAccordion
-                            key={category.name}
-                            open={isCategoryOpen(category.id)}
-                            active={isCategoryActive(category.id)}
-                            name={t(category.name)}
-                            onClick={() =>
-                                handleCategoryToggle(category.id)
-                            }
-                            icon={<IconComponent />}
-                        >
-                            {category.sub_categories.map((subcategory) => {
-                                const count =
-                                    subCategoryCounts[subcategory.id] ?? 0;
-                                return (
-                                    <GroupItem
-                                        key={subcategory.id}
-                                        label={t(subcategory.name)}
-                                        count={count}
-                                        active={
-                                            subcategory.id === subCategoryId
-                                        }
-                                        onClick={() => {
-                                            setActiveSubCategoryType(
-                                                subcategory.type,
-                                            );
-                                            closeSidebar();
-                                            router.push(
-                                                `/public/${propertyId}/${category.id}/${subcategory.id}`,
-                                            );
-                                        }}
-                                    />
-                                );
-                            })}
-                        </CategoryAccordion>
-                    );
-                })}
+                        return (
+                            <CategoryAccordion
+                                key={category.name}
+                                open={isCategoryOpen(category.id)}
+                                active={isCategoryActive(category.id)}
+                                name={t(category.name)}
+                                onClick={() =>
+                                    handleCategoryToggle(category.id)
+                                }
+                                icon={<IconComponent />}
+                            >
+                                {category.sub_categories.map((subcategory) => {
+                                    const count =
+                                        subCategoryCounts[subcategory.id] ?? 0;
+                                    return (
+                                        <GroupItem
+                                            key={subcategory.id}
+                                            label={t(subcategory.name)}
+                                            count={count}
+                                            active={
+                                                subcategory.id === subCategoryId
+                                            }
+                                            onClick={() => {
+                                                setActiveSubCategoryType(
+                                                    subcategory.type,
+                                                );
+                                                closeSidebar();
+                                                router.push(
+                                                    `/public/${propertyId}/${category.id}/${subcategory.id}`,
+                                                );
+                                            }}
+                                        />
+                                    );
+                                })}
+                            </CategoryAccordion>
+                        );
+                    })}
+            </div>
         </SidebarShell>
     );
 };
