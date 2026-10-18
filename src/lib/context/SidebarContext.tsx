@@ -42,10 +42,12 @@ export const SidebarProvider: React.FC<SidebarProviderProps> = ({
     }, [pathname]);
 
     useEffect(() => {
-        const MOBILE_BREAKPOINT = 768; // debe coincidir con tu breakpoint `md` de Tailwind
+        // Debe coincidir con el breakpoint `lg` de Tailwind: por debajo, el
+        // sidebar se abre como overlay (mobile y rail de tablet)
+        const DESKTOP_BREAKPOINT = 1024;
 
         const handleResize = () => {
-            if (isOpen && window.innerWidth >= MOBILE_BREAKPOINT) {
+            if (isOpen && window.innerWidth >= DESKTOP_BREAKPOINT) {
                 closeSidebar();
             }
         };
