@@ -26,7 +26,7 @@ export default function PublicLayout({
                 authHref="/auth/magic-link"
                 isLoggedIn={isLoggedIn}
             />
-            <div className="p-2 flex flex-col gap-2 items-stretch w-full h-dvh bg-[#EFEFEF] font-body overflow-hidden">
+            <div className="p-2 flex flex-col gap-2 items-stretch w-full h-dvh bg-secondary-100 font-body overflow-hidden">
                 {children}
             </div>
         </>
