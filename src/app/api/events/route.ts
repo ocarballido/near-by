@@ -15,6 +15,17 @@ const parseCoordinate = (value: string | null, limit: number): number | null => 
 	return Math.round(parsed * 100) / 100;
 };
 
+// La URL del evento acaba en un href de la guía pública: solo http(s)
+const isHttpUrl = (value: unknown): value is string => {
+	if (typeof value !== 'string') return false;
+	try {
+		const { protocol } = new URL(value);
+		return protocol === 'https:' || protocol === 'http:';
+	} catch {
+		return false;
+	}
+};
+
 export async function GET(req: NextRequest) {
 	const { searchParams } = new URL(req.url);
 	const lat = parseCoordinate(searchParams.get('lat'), 90);
@@ -93,6 +104,7 @@ export async function GET(req: NextRequest) {
 				category: e.classifications?.[0]?.segment?.name ?? null,
 			}))
 			.filter((e: any) => {
+				if (!isHttpUrl(e.url)) return false;
 				if (seen.has(e.name)) return false;
 				seen.add(e.name);
 				return true;
