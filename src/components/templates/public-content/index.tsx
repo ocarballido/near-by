@@ -29,8 +29,8 @@ const PublicContentTemplate = ({
             <div
                 className={
                     withSidebar
-                        ? "flex flex-auto min-h-0 relative w-full pr-4 pb-4 pl-4 md:pl-0"
-                        : "flex flex-auto min-h-0 relative w-full px-4 pb-4"
+                        ? "flex flex-auto min-h-0 relative w-full pr-0 pb-0 md:pr-4 md:pb-4 pl-0"
+                        : "flex flex-auto min-h-0 relative w-full px-0 md:px-4 pb-0 md:pb-4"
                 }
             >
                 {withSidebar && (
