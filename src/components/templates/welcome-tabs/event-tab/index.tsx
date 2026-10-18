@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { useEvents } from "@/hooks/useEvents";
+import type { UseEventsResult } from "@/hooks/useEvents";
 
 import BadgeCheck from "@/components/atoms/BadgeCheck";
 import { Select } from "@/components/molecules/select";
@@ -19,11 +19,11 @@ const DEFAULT_VISIBLE = 8;
 type CategoryChip = "all" | "Music" | "Sports" | "Arts & Theatre";
 
 type Props = {
-    lat: number;
-    lng: number;
+    // Los pide WelcomeTabs: necesita el resultado para decidir si hay pestaña
+    eventsState: UseEventsResult;
 };
 
-export default function EventsTab({ lat, lng }: Props) {
+export default function EventsTab({ eventsState }: Props) {
     const t = useTranslations();
 
     const CHIPS: { key: CategoryChip; label: string }[] = [
@@ -41,7 +41,7 @@ export default function EventsTab({ lat, lng }: Props) {
         manualRadius,
         setManualRadius,
         total,
-    } = useEvents(lat, lng);
+    } = eventsState;
 
     const [activeChip, setActiveChip] = useState<CategoryChip>("all");
     const [showAll, setShowAll] = useState(false);

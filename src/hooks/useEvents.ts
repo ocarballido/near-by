@@ -18,7 +18,7 @@ type Event = {
 	category?: string;
 };
 
-type UseEventsResult = {
+export type UseEventsResult = {
 	events: Event[];
 	loading: boolean;
 	error: boolean;
