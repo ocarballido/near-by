@@ -32,7 +32,7 @@ const SidebarShell = ({ rail, children }: SidebarShellProps) => {
             </div>
             <aside
                 id={SIDEBAR_PANEL_ID}
-                className={`fixed bottom-0 left-0 right-0 top-0 p-4 z-10 max-w-80 overflow-y-auto overscroll-contain grow flex gap-2 flex-col transition-transform duration-300 bg-white lg:bg-secondary-100 lg:top-0 lg:relative lg:w-full lg:h-auto lg:min-h-0 lg:self-stretch lg:translate-x-0 lg:p-3 ${isOpen ? "translate-x-0" : "-translate-x-full"}`}
+                className={`fixed bottom-0 left-0 right-0 top-0 p-4 z-10 max-w-80 overflow-y-auto overscroll-contain grow flex gap-2 flex-col transition-transform duration-300 bg-white lg:bg-transparent lg:top-0 lg:relative lg:w-full lg:h-auto lg:min-h-0 lg:self-stretch lg:translate-x-0 lg:p-3 ${isOpen ? "translate-x-0" : "-translate-x-full"}`}
             >
                 {children}
             </aside>
