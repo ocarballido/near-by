@@ -2,7 +2,6 @@
 
 import clsx from "clsx";
 
-import { useTranslations } from "next-intl";
 import { useSidebar } from "@/lib/context/SidebarContext";
 
 import PropertySidebar from "./property-sidebar";
@@ -21,16 +20,12 @@ const Sidebar = ({
     categoryId,
     subCategoryId,
 }: SidebarProps) => {
-    const t = useTranslations();
-
     const { isOpen } = useSidebar();
 
     const sidebarContentStyles = clsx(
         { "translate-x-0": isOpen },
         { "-translate-x-full": !isOpen },
     );
-
-    const publicUrl = `${process.env.NEXT_PUBLIC_APP_URL}/public/${propertyId}/welcome/highlights`;
 
     if (sidebar === "PROPERTY") {
         return (
