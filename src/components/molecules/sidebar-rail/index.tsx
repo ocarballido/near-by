@@ -16,6 +16,7 @@ export type SidebarRailItem = {
 type SidebarRailProps = {
     items: SidebarRailItem[];
     isExpanded: boolean;
+    controlsId: string;
     onMenuClick: () => void;
     onItemClick: (id: string) => void;
     className?: string;
@@ -30,6 +31,7 @@ type SidebarRailProps = {
 const SidebarRail = ({
     items,
     isExpanded,
+    controlsId,
     onMenuClick,
     onItemClick,
     className = "",
@@ -39,14 +41,15 @@ const SidebarRail = ({
     return (
         <nav
             aria-label={t("Menú")}
-            className={`flex-col items-center gap-2 ${className}`}
+            className={`flex flex-col items-center gap-2 ${className}`}
         >
             <button
                 type="button"
                 onClick={onMenuClick}
                 aria-label={t("Abrir menú")}
                 aria-expanded={isExpanded}
-                className={`flex items-center justify-center p-2 my-1 rounded-full cursor-pointer transition-all ${styles["icon--light"]}`}
+                aria-controls={controlsId}
+                className={`flex items-center justify-center p-2 my-1 rounded-full cursor-pointer transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500 ${styles["icon--light"]}`}
             >
                 <IconMenu />
             </button>
@@ -58,7 +61,7 @@ const SidebarRail = ({
                     aria-label={item.label}
                     aria-current={item.active ? "true" : undefined}
                     className={clsx(
-                        "flex items-center justify-center p-2 my-1 rounded-full cursor-pointer transition-all",
+                        "flex items-center justify-center p-2 my-1 rounded-full cursor-pointer transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500",
                         item.active
                             ? `bg-white ${styles["icon--primary"]}`
                             : styles["icon--light"],
