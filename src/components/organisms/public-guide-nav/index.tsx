@@ -60,7 +60,7 @@ const PublicGuideNav = ({
             className={
                 placement === "top"
                     ? "shrink-0 flex justify-center bg-white shadow-xs py-1"
-                    : "shrink-0 flex justify-center shadow-[0_-1px_2px_var(--tw-shadow-color,rgba(0,0,0,0.10))] py-1"
+                    : "shrink-0 flex justify-center shadow-nav-up py-1"
             }
         >
             <ul className="flex gap-1 w-full max-w-[1140px] lg:px-4">

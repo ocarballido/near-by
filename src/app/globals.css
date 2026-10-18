@@ -268,6 +268,8 @@
     --shadow-card-primary:
         0 1px 2px color-mix(in srgb, var(--primary-600) 6%, transparent),
         0 12px 32px -8px color-mix(in srgb, var(--primary-600) 22%, transparent);
+    /* Barra fija al pie (nav de la guía): sombra hacia arriba */
+    --shadow-nav-up: 0 -1px 2px color-mix(in srgb, var(--black) 10%, transparent);
 }
 
 body {
