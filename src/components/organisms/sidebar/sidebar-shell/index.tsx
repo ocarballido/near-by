@@ -11,7 +11,7 @@ type SidebarShellProps = {
 };
 
 /**
- * Carcasa común de los sidebars de propiedad (gestión y pública):
+ * Carcasa común de los sidebars (app, propiedad y público):
  * - Por debajo de `lg`: overlay de 320px con fondo oscuro, que se desliza.
  * - Tablet (`md` a `lg`): además, el rail de iconos en línea, debajo del overlay.
  * - Desde `lg`: sidebar completo en línea, sin rail.
