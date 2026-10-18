@@ -44,7 +44,7 @@ const PropertyDataBoard = ({
                     <div className="shrink-0 flex justify-center items-center p-1.5 rounded-full bg-primary-100">
                         <IconHome size={18} color="primary" />
                     </div>
-                    <p className="text-md font-bold font-heading">
+                    <p className="text-base font-bold font-heading">
                         {propertyName}
                     </p>
                 </div>
