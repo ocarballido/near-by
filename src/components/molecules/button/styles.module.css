@@ -9,3 +9,12 @@
 .icon--secondary svg {
 	fill: var(--font--color-secondary);
 }
+
+.icon--text svg {
+	fill: var(--font--color-secondary);
+}
+
+.icon--text:hover svg,
+.icon--text:focus svg {
+	fill: var(--font--color-body);
+}
