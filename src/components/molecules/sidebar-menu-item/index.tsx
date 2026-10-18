@@ -8,7 +8,6 @@ import { ReactNode } from 'react';
 import styles from './styles.module.css';
 
 type SidebarMenuItemProps = {
-	active?: boolean;
 	label: string;
 	icon?: ReactNode;
 	// Sin href se pinta como <span>: lo usa quien ya pone el elemento
@@ -17,7 +16,6 @@ type SidebarMenuItemProps = {
 };
 
 const SidebarMenuItem = ({
-	// active = false,
 	label,
 	icon,
 	href,
