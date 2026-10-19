@@ -1,6 +1,7 @@
 'use server';
 
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
+import { getCatalog } from '@/utils/get-catalog';
 import type { Tables, Enums } from '@/lib/types'; // 👈 añadimos Enums
 
 type PropertyDataType = Enums<'property_data_type'>; // 'info' | 'location'
@@ -25,17 +26,9 @@ export type PublicCategory = {
 	sub_categories: PublicSubCategory[];
 };
 
-type CategoryLite = Pick<
-	Tables<'categories'>,
-	'id' | 'name' | 'icon' | 'order_index' | 'type'
->;
 type UsedSub = Pick<
 	Tables<'property_data'>,
 	'sub_category_id' | 'name' | 'description' | 'latitude'
->;
-type SubCatRow = Pick<
-	Tables<'sub_categories'>,
-	'id' | 'name' | 'type' | 'category_id' | 'order_index'
 >;
 
 export async function getPublicSidebarData(
@@ -43,53 +36,49 @@ export async function getPublicSidebarData(
 ): Promise<PublicCategory[]> {
 	const supabase = await createServerAdminClient();
 
-	// 1. Obtener todas las categorías ordenadas
-	const { data: categories, error: catError } = await supabase
-		.from('categories')
-		.select('id, name, icon, order_index, type')
-		.eq('type', 'location')
-		.order('order_index', { ascending: true })
-		.overrideTypes<CategoryLite[], { merge: false }>();
+	// 1. Catálogo (cacheado) y subcategorías de property_data con contenido
+	// real, en paralelo
+	const [catalog, { data: usedSubCategories, error: dataError }] =
+		await Promise.all([
+			getCatalog().catch((error) => {
+				console.error('Error loading catalog:', error);
+				return null;
+			}),
+			supabase
+				.from('property_data')
+				.select('sub_category_id, name, description, latitude')
+				.eq('property_id', propertyId)
+				.or(
+					'name.not.is.null,description.not.is.null,latitude.not.is.null',
+				)
+				.overrideTypes<UsedSub[], { merge: false }>(),
+		]);
 
-	if (catError || !categories) return [];
+	if (!catalog) return [];
 
-	// 2. Obtener subcategorías de property_data con contenido real
-	const { data: usedSubCategories, error: dataError } = await supabase
-		.from('property_data')
-		.select('sub_category_id, name, description, latitude')
-		.eq('property_id', propertyId)
-		.or('name.not.is.null,description.not.is.null,latitude.not.is.null')
-		.overrideTypes<UsedSub[], { merge: false }>();
+	// El catálogo ya viene ordenado por order_index
+	const categories = catalog.categories.filter(
+		(cat) => cat.type === 'location',
+	);
 
 	if (dataError || !usedSubCategories || usedSubCategories.length === 0) {
 		console.warn('No se encontraron subcategorías con contenido');
 		return [];
 	}
 
-	const usedIds = [
-		...new Set(
-			usedSubCategories
-				.filter(
-					(item) => item.name || item.description || item.latitude,
-				)
-				.map((item) => item.sub_category_id)
-				.filter(
-					(id): id is string =>
-						typeof id === 'string' && id.length > 0,
-				),
-		),
-	];
+	const usedIds = new Set(
+		usedSubCategories
+			.filter((item) => item.name || item.description || item.latitude)
+			.map((item) => item.sub_category_id)
+			.filter(
+				(id): id is string => typeof id === 'string' && id.length > 0,
+			),
+	);
 
-	// 3. Obtener los detalles de esas subcategorías (incluyendo order)
-	const { data: subCats, error: subError } = await supabase
-		.from('sub_categories')
-		.select('id, name, type, category_id, order_index')
-		.in('id', usedIds)
-		.overrideTypes<SubCatRow[], { merge: false }>();
+	// 2. Detalles de esas subcategorías (incluyendo order), desde el catálogo
+	const subCats = catalog.subCategories.filter((sub) => usedIds.has(sub.id));
 
-	if (subError || !subCats) return [];
-
-	// 4. Agrupar subcategorías por categoría y ordenarlas por `order`
+	// 3. Agrupar subcategorías por categoría y ordenarlas por `order`
 	const subCatsByCategory: Record<string, PublicSubCategory[]> = {};
 	for (const sub of subCats) {
 		if (!subCatsByCategory[sub.category_id]) {
@@ -117,7 +106,7 @@ export async function getPublicSidebarData(
 		);
 	}
 
-	// 5. Construir la estructura final solo con categorías que tengan subcategorías válidas
+	// 4. Construir la estructura final solo con categorías que tengan subcategorías válidas
 	const result: PublicCategory[] = categories
 		.map((cat) => {
 			const subcats = subCatsByCategory[cat.id] || [];

@@ -5,6 +5,7 @@ import { createServerAdminClient } from "@/lib/supabase/serverAdminClient";
 import type { Tables } from "@/lib/types";
 import { CATEGORIES_SUB_CATEGORIES } from "@/config/config-constants";
 import { getCategoryBySubCategoryId } from "@/utils/get-category-by-subcategory";
+import { getCatalog } from "@/utils/get-catalog";
 
 import { resolveTimeWindowZone } from "@/utils/resolve-time-window-zone";
 import { getLocalHourDecimal } from "@/utils/get-local-hour-decimal";
@@ -17,13 +18,6 @@ import type {
 
 type FullProperty = Tables<"properties">;
 type PropertyDataRow = Tables<"property_data">;
-type CategoryTypeOnly = Pick<Tables<"categories">, "type">;
-type SubcatMini = Pick<Tables<"sub_categories">, "id" | "name">;
-type SubcatMiniWithOrder = {
-    id: string;
-    name: string;
-    order_index: number | null;
-};
 type TranslationRow = {
     property_data_id: string;
     field_key: string;
@@ -98,35 +92,28 @@ export async function fetchSubcategoryPageData(
 ) {
     const supabase = await createServerAdminClient();
 
-    const [
-        { data: items, error: errorPropertyData },
-        { data: typeRow, error: errorCategoryType },
-        { data: subcatRow, error: errorSubcats },
-    ] = await Promise.all([
-        supabase
-            .from("property_data")
-            .select(PROPERTY_DATA_SELECT)
-            .eq("property_id", propertyId)
-            .eq("sub_category_id", subCategoryId)
-            .order("featured", { ascending: false })
-            .order("must_visit", { ascending: false })
-            .order("name", { ascending: true })
-            .overrideTypes<PropertyDataRow[], { merge: false }>(),
-        supabase
-            .from("categories")
-            .select("type")
-            .eq("id", categoryId)
-            .single()
-            .overrideTypes<CategoryTypeOnly, { merge: false }>(),
-        supabase
-            .from("sub_categories")
-            .select("id, name")
-            .eq("id", subCategoryId)
-            .single()
-            .overrideTypes<SubcatMini, { merge: false }>(),
-    ]);
+    // Si el catálogo no se puede leer, el error llega a error.tsx: es un fallo
+    // del servidor, no un 404
+    const [{ data: items, error: errorPropertyData }, catalog] =
+        await Promise.all([
+            supabase
+                .from("property_data")
+                .select(PROPERTY_DATA_SELECT)
+                .eq("property_id", propertyId)
+                .eq("sub_category_id", subCategoryId)
+                .order("featured", { ascending: false })
+                .order("must_visit", { ascending: false })
+                .order("name", { ascending: true })
+                .overrideTypes<PropertyDataRow[], { merge: false }>(),
+            getCatalog(),
+        ]);
 
-    if (errorPropertyData || errorCategoryType || errorSubcats) notFound();
+    const category = catalog.categories.find((c) => c.id === categoryId);
+    const subCategory = catalog.subCategories.find(
+        (s) => s.id === subCategoryId,
+    );
+
+    if (errorPropertyData || !category || !subCategory) notFound();
 
     // Fetch traducciones para el locale solicitado
     const ids = (items ?? []).map((i) => i.id);
@@ -159,8 +146,8 @@ export async function fetchSubcategoryPageData(
 
     return {
         propertyData: mergedItems.map(toPublicItem),
-        categoryType: typeRow ?? null,
-        subCategory: subcatRow ?? null,
+        categoryType: { type: category.type },
+        subCategory: { id: subCategory.id, name: subCategory.name },
         hasTranslations: translationMap.size > 0,
     };
 }
@@ -207,6 +194,7 @@ export async function fetchWelcomeHighlightsTabsData(
     const [
         { data: featuredData, error: featuredErr },
         { data: mustVisitData, error: mustVisitErr },
+        catalog,
     ] = await Promise.all([
         supabase
             .from("property_data")
@@ -222,6 +210,7 @@ export async function fetchWelcomeHighlightsTabsData(
             .eq("must_visit", true)
             .order("name", { ascending: true })
             .overrideTypes<PropertyDataRow[], { merge: false }>(),
+        getCatalog(),
     ]);
 
     if (featuredErr || mustVisitErr) notFound();
@@ -279,16 +268,8 @@ export async function fetchWelcomeHighlightsTabsData(
         return { featuredGroups: [], mustVisitGroups: [] };
     }
 
-    const { data: subCategories, error: subErr } = await supabase
-        .from("sub_categories")
-        .select("id, name")
-        .in("id", allSubCategoryIds)
-        .overrideTypes<SubcatMini[], { merge: false }>();
-
-    if (subErr || !subCategories) notFound();
-
     const subCategoryMap: Record<string, string> = Object.fromEntries(
-        subCategories.map((s) => [s.id, s.name]),
+        catalog.subCategories.map((s) => [s.id, s.name]),
     );
 
     return {
@@ -315,14 +296,20 @@ export async function fetchInfoSectionsData(
         sub_category_id: string | null;
     };
 
-    const { data: items, error } = await supabase
-        .from("property_data")
-        .select("id, description, sub_category_id")
-        .eq("property_id", propertyId)
-        .eq("type", "info")
-        .overrideTypes<InfoRow[], { merge: false }>();
+    const [{ data: items, error }, catalog] = await Promise.all([
+        supabase
+            .from("property_data")
+            .select("id, description, sub_category_id")
+            .eq("property_id", propertyId)
+            .eq("type", "info")
+            .overrideTypes<InfoRow[], { merge: false }>(),
+        getCatalog().catch((catalogError) => {
+            console.error("Error loading catalog:", catalogError);
+            return null;
+        }),
+    ]);
 
-    if (error || !items || items.length === 0) return [];
+    if (error || !items || items.length === 0 || !catalog) return [];
 
     // Fetch traducciones para el locale solicitado
     const ids = items.map((i) => i.id);
@@ -363,21 +350,11 @@ export async function fetchInfoSectionsData(
 
     if (validItems.length === 0) return [];
 
-    const subCategoryIds = validItems.map((i) => i.sub_category_id);
-
-    const { data: subCats, error: subError } = await supabase
-        .from("sub_categories")
-        .select("id, name, order_index")
-        .in("id", subCategoryIds)
-        .overrideTypes<SubcatMiniWithOrder[], { merge: false }>();
-
-    if (subError || !subCats) return [];
-
     const nameMap: Record<string, string> = Object.fromEntries(
-        subCats.map((s) => [s.id, s.name]),
+        catalog.subCategories.map((s) => [s.id, s.name]),
     );
     const orderMap: Record<string, number> = Object.fromEntries(
-        subCats.map((s) => [s.id, s.order_index ?? 999]),
+        catalog.subCategories.map((s) => [s.id, s.order_index ?? 999]),
     );
 
     return validItems

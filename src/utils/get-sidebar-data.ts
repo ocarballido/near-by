@@ -1,7 +1,7 @@
 // lib/sidebar/getSidebarData.ts
 'use server';
 
-import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
+import { getCatalog, type Catalog } from '@/utils/get-catalog';
 import { CategoryWithSubCategories } from '@/types/db';
 import type { Tables } from '@/lib/types';
 
@@ -18,40 +18,31 @@ type CatWithSubs = Pick<
 };
 
 export async function getSidebarData(): Promise<CategoryWithSubCategories[]> {
-	const supabase = await createServerAdminClient();
-
-	const { data, error } = await supabase
-		.from('categories')
-		.select(
-			`
-			id,
-			name,
-			icon,
-			type,
-			order_index,
-			sub_categories (
-				id,
-				name,
-				type,
-				order_index
-			)
-		`,
-		)
-		.order('order_index', { ascending: true })
-		.overrideTypes<CatWithSubs[], { merge: false }>();
-
-	if (error || !data) {
-		console.error('Error loading sidebar data:', error.message);
+	let catalog: Catalog;
+	try {
+		catalog = await getCatalog();
+	} catch (error) {
+		console.error('Error loading sidebar data:', error);
 		return [];
 	}
 
-	if (data) {
-		data.forEach((category) => {
-			category.sub_categories.sort(
-				(a, b) => (a.order_index ?? 0) - (b.order_index ?? 0),
-			);
-		});
-	}
+	// El catálogo ya viene con las categorías ordenadas por order_index
+	const data: CatWithSubs[] = catalog.categories.map((category) => ({
+		id: category.id,
+		name: category.name,
+		icon: category.icon,
+		type: category.type,
+		order_index: category.order_index,
+		sub_categories: catalog.subCategories
+			.filter((sub) => sub.category_id === category.id)
+			.map((sub) => ({
+				id: sub.id,
+				name: sub.name,
+				type: sub.type,
+				order_index: sub.order_index,
+			}))
+			.sort((a, b) => (a.order_index ?? 0) - (b.order_index ?? 0)),
+	}));
 
 	return data as unknown as CategoryWithSubCategories[];
 }
