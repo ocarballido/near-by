@@ -43,6 +43,7 @@ import PublicGuideNav, {
     type PublicNavItem,
 } from "@/components/organisms/public-guide-nav";
 import SidebarMenuBar from "@/components/organisms/sidebar/sidebar-menu-bar";
+import HousePublicHero from "@/components/organisms/house-public-hero";
 
 type PageMode = "welcome" | "custom-plans" | "subcategory" | "lodging";
 
@@ -306,15 +307,27 @@ export default async function Property({ params, searchParams }: PageProps) {
                     <div className="hidden lg:block sticky top-0 z-1 shrink-0">
                         <PublicGuideNav items={navItems} placement="top" />
                     </div>
+                    {/* Hero a sangre: bajo el nav en desktop y bajo el widget
+                        horario en mobile/tablet (ahí el nav va al pie) */}
+                    {mode === "welcome" && (
+                        <HousePublicHero
+                            name={property.name}
+                            address={getDisplayZoneFromString(property.address)}
+                            image={property.image_url}
+                            latitude={lat}
+                            longitude={lng}
+                            checkInDate={property.check_in_date ?? undefined}
+                            checkInTime={property.check_in_time ?? undefined}
+                            checkOutDate={property.check_out_date ?? undefined}
+                            checkOutTime={property.check_out_time ?? undefined}
+                            className="shrink-0"
+                            style="white"
+                        />
+                    )}
                     <div className="px-4 py-6 font-roboto flex flex-col grow gap-4 w-full max-w-[1140px] mx-auto">
                         {mode === "welcome" && highlightsData && (
                             <WelcomeSection
                                 propertyId={propertyId}
-                                propertyName={property.name}
-                                address={getDisplayZoneFromString(
-                                    property.address,
-                                )}
-                                image={property.image_url}
                                 categoryId={categoryId}
                                 lat={lat}
                                 lng={lng}
@@ -322,18 +335,6 @@ export default async function Property({ params, searchParams }: PageProps) {
                                 weather={weather}
                                 featuredGroups={highlightsData.featuredGroups}
                                 mustVisitGroups={highlightsData.mustVisitGroups}
-                                checkInDate={
-                                    property.check_in_date ?? undefined
-                                }
-                                checkInTime={
-                                    property.check_in_time ?? undefined
-                                }
-                                checkOutDate={
-                                    property.check_out_date ?? undefined
-                                }
-                                checkOutTime={
-                                    property.check_out_time ?? undefined
-                                }
                             />
                         )}
                         {mode === "custom-plans" && (
