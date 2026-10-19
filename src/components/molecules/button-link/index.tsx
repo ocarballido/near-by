@@ -85,12 +85,16 @@ const ButtonLink = ({
 
     const sharedClassName = `font-medium text-base rounded-full transition-all flex items-center justify-center gap-1 hover:cursor-pointer disabled:opacity-30 disabled:pointer-events-none ${buttonLinkStyles} ${className}`;
 
+    // Evita que la pestaña abierta acceda a window.opener (tabnabbing)
+    const rel = target === "_blank" ? "noopener noreferrer" : undefined;
+
     if (download) {
         return (
             <a
                 className={sharedClassName}
                 href={href}
                 target={target}
+                rel={rel}
                 download={download}
             >
                 {iconLeft}
@@ -101,7 +105,12 @@ const ButtonLink = ({
     }
 
     return (
-        <Link className={sharedClassName} href={href} target={target}>
+        <Link
+            className={sharedClassName}
+            href={href}
+            target={target}
+            rel={rel}
+        >
             {iconLeft}
 
             {label}
