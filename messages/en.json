@@ -1371,5 +1371,8 @@
     "guideNavHome": "Home",
     "guideNavPlaces": "Explore",
     "guideNavPlans": "Itinerary",
-    "guideNavLabel": "Guide navigation"
+    "guideNavLabel": "Guide navigation",
+    "errorPageTitle": "Something went wrong",
+    "errorPageDescription": "We couldn't load this page. Please try again in a few seconds.",
+    "errorPageRetry": "Try again"
 }

@@ -1,24 +1,21 @@
-import { getTranslations, getLocale } from "next-intl/server";
-import { fetchInfoSectionsData, fetchExploreDetailsData } from "./_data";
+import { getTranslations } from "next-intl/server";
+import type { ExploreDetailPublic, InfoGroup } from "./_data";
 import InfoSections from "@/components/templates/info-sections";
 import ExploreDetailsPublicSection from "@/components/organisms/explore-details-public-section";
 
 type Props = {
-    propertyId: string;
+    infoGroups: InfoGroup[];
+    exploreDetails: ExploreDetailPublic[];
     defaultOpenId?: string;
 };
 
+// Los datos llegan resueltos desde el Promise.all de la página
 export default async function LodgingSection({
-    propertyId,
+    infoGroups,
+    exploreDetails,
     defaultOpenId,
 }: Props) {
-    const locale = await getLocale();
     const t = await getTranslations();
-
-    const [infoGroups, exploreDetails] = await Promise.all([
-        fetchInfoSectionsData(propertyId, locale),
-        fetchExploreDetailsData(propertyId, locale),
-    ]);
 
     return (
         <>

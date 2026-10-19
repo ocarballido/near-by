@@ -1,9 +1,9 @@
 // hooks/useEvents.ts
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-const RADIUS_STEPS = [5, 15, 30, 50, 100];
+import { EVENTS_RADIUS_STEPS } from '@/config/config-constants';
 
 type Event = {
 	id: string;
@@ -16,6 +16,12 @@ type Event = {
 	url: string;
 	image?: string;
 	category?: string;
+};
+
+type EventsResponse = {
+	events: Event[];
+	total: number;
+	radiusUsed: number;
 };
 
 export type UseEventsResult = {
@@ -32,65 +38,47 @@ export function useEvents(lat: number, lng: number): UseEventsResult {
 	const [events, setEvents] = useState<Event[]>([]);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(false);
-	const [radiusUsed, setRadiusUsed] = useState(RADIUS_STEPS[0]);
+	const [radiusUsed, setRadiusUsed] = useState(EVENTS_RADIUS_STEPS[0]);
 	const [manualRadius, setManualRadius] = useState<number | null>(null);
 	const [total, setTotal] = useState(0);
 
-	const fetchEvents = useCallback(
-		async (
-			radiusIndex: number,
-			manual: boolean,
-			currentManualRadius: number | null,
-		) => {
+	// Sin radio manual, el servidor amplía el radio hasta encontrar eventos
+	// (radius=auto): una sola petición en vez de una por cada radio
+	useEffect(() => {
+		const controller = new AbortController();
+		const radius = manualRadius ?? 'auto';
+
+		const loadEvents = async () => {
 			setLoading(true);
 			setError(false);
-
-			const radius =
-				manual && currentManualRadius !== null
-					? currentManualRadius
-					: RADIUS_STEPS[radiusIndex];
 
 			try {
 				const res = await fetch(
 					`/api/events?lat=${lat}&lng=${lng}&radius=${radius}`,
+					{ signal: controller.signal },
 				);
 
 				if (!res.ok) throw new Error('fetch failed');
 
-				const data = await res.json();
-
-				// Auto-expansión: sin resultados y no es manual, probamos el siguiente radio
-				if (
-					data.events.length === 0 &&
-					!manual &&
-					radiusIndex < RADIUS_STEPS.length - 1
-				) {
-					return fetchEvents(radiusIndex + 1, false, null);
-				}
+				const data: EventsResponse = await res.json();
+				if (controller.signal.aborted) return;
 
 				setEvents(data.events);
 				setRadiusUsed(data.radiusUsed);
 				setTotal(data.total);
 			} catch {
+				if (controller.signal.aborted) return;
 				setError(true);
 			} finally {
-				setLoading(false);
+				if (!controller.signal.aborted) setLoading(false);
 			}
-		},
-		[lat, lng],
-	);
+		};
 
-	// Fetch inicial
-	useEffect(() => {
-		fetchEvents(0, false, null);
-	}, [lat, lng]); // eslint-disable-line react-hooks/exhaustive-deps
+		loadEvents();
 
-	// Re-fetch cuando el usuario cambia el radio manualmente
-	useEffect(() => {
-		if (manualRadius !== null) {
-			fetchEvents(0, true, manualRadius);
-		}
-	}, [manualRadius]); // eslint-disable-line react-hooks/exhaustive-deps
+		// Una respuesta de un radio anterior (o tras desmontar) no pisa el estado
+		return () => controller.abort();
+	}, [lat, lng, manualRadius]);
 
 	return {
 		events,

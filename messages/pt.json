@@ -1375,5 +1375,8 @@
     "guideNavHome": "Início",
     "guideNavPlaces": "Explorar",
     "guideNavPlans": "Roteiro",
-    "guideNavLabel": "Navegação do guia"
+    "guideNavLabel": "Navegação do guia",
+    "errorPageTitle": "Algo correu mal",
+    "errorPageDescription": "Não conseguimos carregar esta página. Tenta novamente dentro de alguns segundos.",
+    "errorPageRetry": "Tentar novamente"
 }

@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import type { UseEventsResult } from "@/hooks/useEvents";
+import { EVENTS_RADIUS_STEPS } from "@/config/config-constants";
 
 import BadgeCheck from "@/components/atoms/BadgeCheck";
 import { Select } from "@/components/molecules/select";
@@ -13,7 +14,6 @@ import Skeleton from "@/components/atoms/skeleton";
 import Button from "@/components/molecules/button";
 import IconAdd from "@/components/atoms/icon/add";
 
-const RADIUS_OPTIONS = [5, 15, 30, 50, 100];
 const DEFAULT_VISIBLE = 8;
 
 type CategoryChip = "all" | "Music" | "Sports" | "Arts & Theatre";
@@ -72,7 +72,7 @@ export default function EventsTab({ eventsState }: Props) {
             {!loading && !error && events.length > 0 && (
                 <div className="flex flex-col lg:flex-row gap-3">
                     <Select
-                        options={RADIUS_OPTIONS.map((r) => ({
+                        options={EVENTS_RADIUS_STEPS.map((r) => ({
                             value: String(r),
                             label: `${r} km`,
                         }))}

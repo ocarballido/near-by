@@ -5,7 +5,7 @@ import PublicContentTemplate from "@/components/templates/public-content";
 import { getPublicSidebarData } from "@/utils/get-public-sidebar-data";
 import { EditPublicMenuProvider } from "@/lib/context/EditPublicMenuContext";
 import { createServerAdminClient } from "@/lib/supabase/serverAdminClient";
-import ItineraryForm from "@/components/organisms/form/custom-plan";
+import ItineraryFormLazy from "@/components/organisms/form/custom-plan-lazy";
 import { getTranslations } from "next-intl/server";
 
 import { trackEvent } from "@/lib/analytics/mixpanel";
@@ -15,8 +15,11 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import {
     fetchPropertyBase,
     fetchInfoSectionsData,
+    fetchSubcategoryPageData,
+    fetchExploreDetailsData,
     fetchArrivalGuideData,
-    fetchTimeWindowWidgetData,
+    fetchTimeWindowItems,
+    buildTimeWindowWidgetData,
     fetchWelcomeHighlightsTabsData,
     type HighlightGroup,
 } from "./_data";
@@ -171,35 +174,54 @@ export default async function Property({ params, searchParams }: PageProps) {
             ? fetchWelcomeHighlightsTabsData(propertyId, locale)
             : Promise.resolve(null);
 
+    // Mismo criterio para las secciones: sus datos entran en el Promise.all
+    // en vez de pedirse después, al renderizar cada sección
+    const subcategoryPromise =
+        mode === "subcategory"
+            ? fetchSubcategoryPageData(
+                  propertyId,
+                  categoryId,
+                  subCategoryId,
+                  locale,
+              )
+            : Promise.resolve(null);
+
+    const exploreDetailsPromise =
+        mode === "lodging"
+            ? fetchExploreDetailsData(propertyId, locale)
+            : Promise.resolve(null);
+
     const [
         sidebarData,
         { property, lat, lng },
         infoGroups,
         counts,
         weather,
-        timeWindowData,
+        timeWindowItems,
         arrivalGuideData,
         highlightsData,
+        subcategoryData,
+        exploreDetails,
     ] = await Promise.all([
         getPublicSidebarData(propertyId),
         propertyPromise,
         fetchInfoSectionsData(propertyId, locale),
         getPropertySubCategoryCounts(propertyId),
         weatherPromise,
-        weatherPromise.then((weather) =>
-            weather
-                ? fetchTimeWindowWidgetData(
-                      propertyId,
-                      weather.timezone,
-                      locale,
-                  )
-                : null,
-        ),
+        // Las queries del widget no esperan a Open-Meteo: el timezone solo
+        // se necesita para calcular las franjas, ya fuera del Promise.all
+        fetchTimeWindowItems(propertyId, locale),
         propertyPromise.then(({ property }) =>
             fetchArrivalGuideData(propertyId, property, locale),
         ),
         highlightsPromise,
+        subcategoryPromise,
+        exploreDetailsPromise,
     ]);
+
+    const timeWindowData = weather
+        ? buildTimeWindowWidgetData(timeWindowItems, weather.timezone)
+        : null;
 
     const hasInfoContent = infoGroups.length > 0;
 
@@ -315,26 +337,26 @@ export default async function Property({ params, searchParams }: PageProps) {
                             />
                         )}
                         {mode === "custom-plans" && (
-                            <ItineraryForm
+                            <ItineraryFormLazy
                                 locale={locale}
                                 lat={lat}
                                 lng={lng}
                                 anonId={anonId}
                             />
                         )}
-                        {mode === "subcategory" && (
+                        {mode === "subcategory" && subcategoryData && (
                             <SubcategorySection
-                                propertyId={propertyId}
+                                data={subcategoryData}
                                 categoryId={categoryId}
                                 subCategoryId={subCategoryId}
                                 lat={lat}
                                 lng={lng}
-                                locale={locale}
                             />
                         )}
-                        {mode === "lodging" && (
+                        {mode === "lodging" && exploreDetails && (
                             <LodgingSection
-                                propertyId={propertyId}
+                                infoGroups={infoGroups}
+                                exploreDetails={exploreDetails}
                                 defaultOpenId={open}
                             />
                         )}

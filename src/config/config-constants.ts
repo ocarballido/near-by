@@ -1228,6 +1228,10 @@ export const RADIUS_OPTIONS = [
     { value: "5000", label: "5 km" },
 ];
 
+// Radios (km) de búsqueda de eventos: el servidor los recorre en orden con
+// radius=auto y el selector de la guía ofrece los mismos
+export const EVENTS_RADIUS_STEPS: readonly number[] = [5, 15, 30, 50, 100];
+
 export const DAILY_AI_USAGE_LIMMIT = 10;
 
 export const DEMOS = [
