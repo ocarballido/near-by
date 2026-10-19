@@ -24,14 +24,16 @@ export default async function WeatherWidget({ weather }: Props) {
 
     return (
         <div className="flex flex-col gap-3 rounded-xl bg-white p-1 shadow-xs">
-            <div className="flex justify-between gap-1">
+            {/* Si los 7 días no caben (mobile), scroll horizontal con snap;
+                el día cortado al borde indica que hay más */}
+            <div className="flex justify-between gap-1 overflow-x-auto overscroll-x-contain snap-x snap-mandatory">
                 {weather.days.map((day, index) => {
                     const isToday = index === 0;
 
                     return (
                         <div
                             key={day.date}
-                            className={`flex flex-col items-center gap-1 flex-1 py-2 px-1 transition-colors ${
+                            className={`flex flex-col items-center gap-1 flex-1 shrink-0 snap-start p-4 transition-colors ${
                                 isToday ? "bg-primary-50 rounded-lg" : ""
                             }`}
                         >
