@@ -35,8 +35,8 @@ const containerStyles: Record<HousePublicHeroStyle, string> = {
 };
 
 const backgroundImages: Record<HousePublicHeroStyle, string> = {
-    primary: "/static/img/house-public-hero/background-primary.jpg",
-    white: "/static/img/house-public-hero/background-white.jpg",
+    primary: "/static/img/house-public-hero/background-primary.png",
+    white: "/static/img/house-public-hero/background-white.png",
 };
 
 const propertyImageStyles: Record<HousePublicHeroStyle, string> = {
@@ -77,13 +77,16 @@ const HousePublicHero = ({
         <section
             className={`relative isolate flex w-full flex-col items-center gap-6 overflow-hidden border-b border-gray-100 px-6 py-8 ${containerStyles[style]} ${className}`}
         >
-            {/* Fondo decorativo exportado de Figma ya fusionado (elipses + degradado con blend) */}
+            {/* Fondo decorativo exportado de Figma ya fusionado (elipses + degradado con blend).
+                Fuente PNG sin pérdida y calidad 90: a 75 los degradados oscuros
+                muestran bloques de compresión en pantallas grandes */}
             <Image
                 aria-hidden
                 className="pointer-events-none -z-10 object-cover"
                 src={backgroundImages[style]}
                 fill
                 sizes="100vw"
+                quality={90}
                 alt=""
             />
 
