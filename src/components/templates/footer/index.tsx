@@ -3,13 +3,19 @@
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 
 import Typography from "@/components/atoms/typography";
-import { ShareMenu } from "@/components/molecules/button-share";
 
 import logo from "../../../../public/static/img/brand_colored.webp";
+
+// Carga diferida: el Footer está en el layout de [locale] y react-share se
+// descargaba también en /app y /public, donde el Footer no se pinta
+const ShareMenu = dynamic(() =>
+    import("@/components/molecules/button-share").then((mod) => mod.ShareMenu),
+);
 
 const Footer = () => {
     const t = useTranslations();
