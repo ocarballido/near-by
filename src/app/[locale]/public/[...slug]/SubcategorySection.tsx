@@ -1,39 +1,31 @@
 import { PropertyDataPublicBySubCategory } from '@/components/templates/property-data-public';
-import { fetchSubcategoryPageData } from './_data';
+import type { fetchSubcategoryPageData } from './_data';
 
 type Props = {
-	propertyId: string;
+	data: Awaited<ReturnType<typeof fetchSubcategoryPageData>>;
 	categoryId: string;
 	subCategoryId: string;
 	lat: number;
 	lng: number;
-	locale: string;
 };
 
-export default async function SubcategorySection({
-	propertyId,
+// Los datos llegan resueltos desde el Promise.all de la página
+export default function SubcategorySection({
+	data,
 	categoryId,
 	subCategoryId,
 	lat,
 	lng,
-	locale,
 }: Props) {
-	const data = await fetchSubcategoryPageData(
-		propertyId,
-		categoryId,
-		subCategoryId,
-		locale,
-	);
-
 	return (
 		<PropertyDataPublicBySubCategory
 			propertyData={data.propertyData}
-			type={data.categoryType?.type ?? 'location'}
+			type={data.categoryType.type ?? 'location'}
 			lat={lat}
 			categoryId={categoryId}
 			subCategoryId={subCategoryId}
 			lng={lng}
-			sub_category_name={data.subCategory?.name}
+			sub_category_name={data.subCategory.name}
 			hasTranslations={data.hasTranslations}
 		/>
 	);

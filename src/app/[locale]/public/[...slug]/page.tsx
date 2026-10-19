@@ -15,6 +15,8 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import {
     fetchPropertyBase,
     fetchInfoSectionsData,
+    fetchSubcategoryPageData,
+    fetchExploreDetailsData,
     fetchArrivalGuideData,
     fetchTimeWindowItems,
     buildTimeWindowWidgetData,
@@ -172,6 +174,23 @@ export default async function Property({ params, searchParams }: PageProps) {
             ? fetchWelcomeHighlightsTabsData(propertyId, locale)
             : Promise.resolve(null);
 
+    // Mismo criterio para las secciones: sus datos entran en el Promise.all
+    // en vez de pedirse después, al renderizar cada sección
+    const subcategoryPromise =
+        mode === "subcategory"
+            ? fetchSubcategoryPageData(
+                  propertyId,
+                  categoryId,
+                  subCategoryId,
+                  locale,
+              )
+            : Promise.resolve(null);
+
+    const exploreDetailsPromise =
+        mode === "lodging"
+            ? fetchExploreDetailsData(propertyId, locale)
+            : Promise.resolve(null);
+
     const [
         sidebarData,
         { property, lat, lng },
@@ -181,6 +200,8 @@ export default async function Property({ params, searchParams }: PageProps) {
         timeWindowItems,
         arrivalGuideData,
         highlightsData,
+        subcategoryData,
+        exploreDetails,
     ] = await Promise.all([
         getPublicSidebarData(propertyId),
         propertyPromise,
@@ -194,6 +215,8 @@ export default async function Property({ params, searchParams }: PageProps) {
             fetchArrivalGuideData(propertyId, property, locale),
         ),
         highlightsPromise,
+        subcategoryPromise,
+        exploreDetailsPromise,
     ]);
 
     const timeWindowData = weather
@@ -321,19 +344,19 @@ export default async function Property({ params, searchParams }: PageProps) {
                                 anonId={anonId}
                             />
                         )}
-                        {mode === "subcategory" && (
+                        {mode === "subcategory" && subcategoryData && (
                             <SubcategorySection
-                                propertyId={propertyId}
+                                data={subcategoryData}
                                 categoryId={categoryId}
                                 subCategoryId={subCategoryId}
                                 lat={lat}
                                 lng={lng}
-                                locale={locale}
                             />
                         )}
-                        {mode === "lodging" && (
+                        {mode === "lodging" && exploreDetails && (
                             <LodgingSection
-                                propertyId={propertyId}
+                                infoGroups={infoGroups}
+                                exploreDetails={exploreDetails}
                                 defaultOpenId={open}
                             />
                         )}

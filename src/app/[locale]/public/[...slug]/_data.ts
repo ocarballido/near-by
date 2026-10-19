@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { notFound } from "next/navigation";
 
 import { createServerAdminClient } from "@/lib/supabase/serverAdminClient";
@@ -64,7 +65,8 @@ type InfoRow = {
     sub_category_id: string | null;
 };
 
-export async function fetchPropertyBase(propertyId: string) {
+// React.cache: generateMetadata y la página la piden en la misma petición
+export const fetchPropertyBase = cache(async (propertyId: string) => {
     const supabase = await createServerAdminClient();
 
     const { data: property, error: propErr } = await supabase
@@ -82,7 +84,7 @@ export async function fetchPropertyBase(propertyId: string) {
         lat: property.latitude as number,
         lng: property.longitude as number,
     };
-}
+});
 
 export async function fetchSubcategoryPageData(
     propertyId: string,
