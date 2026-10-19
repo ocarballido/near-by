@@ -5,7 +5,7 @@ import PublicContentTemplate from "@/components/templates/public-content";
 import { getPublicSidebarData } from "@/utils/get-public-sidebar-data";
 import { EditPublicMenuProvider } from "@/lib/context/EditPublicMenuContext";
 import { createServerAdminClient } from "@/lib/supabase/serverAdminClient";
-import ItineraryForm from "@/components/organisms/form/custom-plan";
+import ItineraryFormLazy from "@/components/organisms/form/custom-plan-lazy";
 import { getTranslations } from "next-intl/server";
 
 import { trackEvent } from "@/lib/analytics/mixpanel";
@@ -337,7 +337,7 @@ export default async function Property({ params, searchParams }: PageProps) {
                             />
                         )}
                         {mode === "custom-plans" && (
-                            <ItineraryForm
+                            <ItineraryFormLazy
                                 locale={locale}
                                 lat={lat}
                                 lng={lng}
