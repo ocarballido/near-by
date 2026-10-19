@@ -1375,5 +1375,8 @@
     "guideNavHome": "Home",
     "guideNavPlaces": "Esplora",
     "guideNavPlans": "Itinerario",
-    "guideNavLabel": "Navigazione della guida"
+    "guideNavLabel": "Navigazione della guida",
+    "errorPageTitle": "Qualcosa è andato storto",
+    "errorPageDescription": "Non siamo riusciti a caricare questa pagina. Riprova tra qualche secondo.",
+    "errorPageRetry": "Riprova"
 }

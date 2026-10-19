@@ -1375,5 +1375,8 @@
     "guideNavHome": "Inicio",
     "guideNavPlaces": "Explorar",
     "guideNavPlans": "Itinerario",
-    "guideNavLabel": "Navegación de la guía"
+    "guideNavLabel": "Navegación de la guía",
+    "errorPageTitle": "Algo no ha ido bien",
+    "errorPageDescription": "No hemos podido cargar esta página. Inténtalo de nuevo en unos segundos.",
+    "errorPageRetry": "Reintentar"
 }

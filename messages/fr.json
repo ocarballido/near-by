@@ -1375,5 +1375,8 @@
     "guideNavHome": "Accueil",
     "guideNavPlaces": "Explorer",
     "guideNavPlans": "Itinéraire",
-    "guideNavLabel": "Navigation du guide"
+    "guideNavLabel": "Navigation du guide",
+    "errorPageTitle": "Un problème est survenu",
+    "errorPageDescription": "Nous n'avons pas pu charger cette page. Réessayez dans quelques secondes.",
+    "errorPageRetry": "Réessayer"
 }
