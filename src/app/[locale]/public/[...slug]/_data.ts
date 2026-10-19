@@ -641,15 +641,12 @@ export async function fetchExploreDetailsData(
     });
 }
 
-export async function fetchTimeWindowWidgetData(
+// Las queries no dependen del timezone: se lanzan sin esperar a Open-Meteo
+// y el cálculo de franjas se hace después en buildTimeWindowWidgetData
+export async function fetchTimeWindowItems(
     propertyId: string,
-    timezone: string,
     locale: string,
-): Promise<TimeWindowWidgetData | null> {
-    const zone = resolveTimeWindowZone(timezone);
-    const hourDecimal = getLocalHourDecimal(timezone);
-    const activeWindow = resolveActiveWindow(zone, hourDecimal);
-
+): Promise<PropertyDataRow[]> {
     const supabase = await createServerAdminClient();
 
     const allSubCategoryIds = Array.from(
@@ -668,7 +665,7 @@ export async function fetchTimeWindowWidgetData(
         .order("name", { ascending: true })
         .overrideTypes<PropertyDataRow[], { merge: false }>();
 
-    if (error || !items || items.length === 0) return null;
+    if (error || !items || items.length === 0) return [];
 
     const ids = items.map((i) => i.id);
     const { data: translations } = await supabase
@@ -687,7 +684,7 @@ export async function fetchTimeWindowWidgetData(
             t.translated_value;
     }
 
-    const mergedItems = items.map((item) => {
+    return items.map((item) => {
         const tr = translationMap.get(item.id);
         if (!tr) return item;
         return {
@@ -696,13 +693,24 @@ export async function fetchTimeWindowWidgetData(
             description: tr.description ?? item.description,
         };
     });
+}
+
+export function buildTimeWindowWidgetData(
+    items: PropertyDataRow[],
+    timezone: string,
+): TimeWindowWidgetData | null {
+    if (items.length === 0) return null;
+
+    const zone = resolveTimeWindowZone(timezone);
+    const hourDecimal = getLocalHourDecimal(timezone);
+    const activeWindow = resolveActiveWindow(zone, hourDecimal);
 
     const pills: TimeWindowPill[] = TIME_WINDOWS_WIDGET.windows
         .filter((window) => (window.hours[zone]?.length ?? 0) > 0)
         .map((window) => ({
             id: window.id,
             subCategoryIds: window.subCategoryIds,
-            items: mergedItems
+            items: items
                 .filter((item) =>
                     (window.subCategoryIds as readonly string[]).includes(
                         item.sub_category_id ?? "",

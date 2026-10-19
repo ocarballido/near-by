@@ -10,7 +10,7 @@ export interface ActiveTimeWindow {
 
 /**
  * Reutiliza exactamente el mismo cálculo que ya usa el widget de horarios
- * de la página pública (fetchTimeWindowWidgetData) — no reimplementa la
+ * de la página pública (buildTimeWindowWidgetData) — no reimplementa la
  * lógica de zonas ni de franjas, solo la aplica al contexto del chatbot.
  */
 export function resolveActiveTimeWindow(

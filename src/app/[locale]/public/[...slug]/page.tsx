@@ -16,7 +16,8 @@ import {
     fetchPropertyBase,
     fetchInfoSectionsData,
     fetchArrivalGuideData,
-    fetchTimeWindowWidgetData,
+    fetchTimeWindowItems,
+    buildTimeWindowWidgetData,
     fetchWelcomeHighlightsTabsData,
     type HighlightGroup,
 } from "./_data";
@@ -177,7 +178,7 @@ export default async function Property({ params, searchParams }: PageProps) {
         infoGroups,
         counts,
         weather,
-        timeWindowData,
+        timeWindowItems,
         arrivalGuideData,
         highlightsData,
     ] = await Promise.all([
@@ -186,20 +187,18 @@ export default async function Property({ params, searchParams }: PageProps) {
         fetchInfoSectionsData(propertyId, locale),
         getPropertySubCategoryCounts(propertyId),
         weatherPromise,
-        weatherPromise.then((weather) =>
-            weather
-                ? fetchTimeWindowWidgetData(
-                      propertyId,
-                      weather.timezone,
-                      locale,
-                  )
-                : null,
-        ),
+        // Las queries del widget no esperan a Open-Meteo: el timezone solo
+        // se necesita para calcular las franjas, ya fuera del Promise.all
+        fetchTimeWindowItems(propertyId, locale),
         propertyPromise.then(({ property }) =>
             fetchArrivalGuideData(propertyId, property, locale),
         ),
         highlightsPromise,
     ]);
+
+    const timeWindowData = weather
+        ? buildTimeWindowWidgetData(timeWindowItems, weather.timezone)
+        : null;
 
     const hasInfoContent = infoGroups.length > 0;
 
