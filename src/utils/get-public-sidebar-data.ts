@@ -1,4 +1,4 @@
-'use server';
+import 'server-only';
 
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 import { getCatalog } from '@/utils/get-catalog';

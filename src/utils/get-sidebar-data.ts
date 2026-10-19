@@ -1,5 +1,4 @@
-// lib/sidebar/getSidebarData.ts
-'use server';
+import 'server-only';
 
 import { getCatalog, type Catalog } from '@/utils/get-catalog';
 import { CategoryWithSubCategories } from '@/types/db';
