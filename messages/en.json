@@ -1374,5 +1374,10 @@
     "guideNavLabel": "Guide navigation",
     "errorPageTitle": "Something went wrong",
     "errorPageDescription": "We couldn't load this page. Please try again in a few seconds.",
-    "errorPageRetry": "Try again"
+    "errorPageRetry": "Try again",
+    "engagementModalTitle": "Want a welcome guide like this for your guests?",
+    "engagementModalBody": "Create yours in under 2 minutes and save hours answering routine questions. It's 100% free!",
+    "engagementModalCta": "Create my free guide",
+    "engagementModalReassurance": "No credit card required · No app download",
+    "engagementModalCloseAriaLabel": "Close"
 }

@@ -5,8 +5,12 @@ import {
 	DialogBackdrop,
 } from '@headlessui/react';
 import Button from '@/components/molecules/button';
+import ButtonIcon from '@/components/atoms/button-icon';
+import IconClose from '@/components/atoms/icon/close';
 
 type ModalProps = {
+	background?: React.ReactNode;
+	closeButtonAriaLabel?: string;
 	destructiveButtonLabel?: string;
 	destructiveButtonAction?: () => void;
 	destructiveButtonDisabled?: boolean;
@@ -24,6 +28,8 @@ type ModalProps = {
 };
 
 const SimpleModal = ({
+	background,
+	closeButtonAriaLabel,
 	destructiveButtonAction,
 	destructiveButtonLabel,
 	destructiveButtonDisabled,
@@ -39,6 +45,10 @@ const SimpleModal = ({
 	title,
 	children,
 }: ModalProps) => {
+	const hasButtons = Boolean(
+		destructiveButtonLabel || secondaryButtonLabel || primaryButtonLabel,
+	);
+
 	return (
 		<Dialog
 			open={open}
@@ -51,39 +61,65 @@ const SimpleModal = ({
 			<div className="fixed inset-0 w-screen overflow-y-auto p-4">
 				<div className="flex items-center justify-center p-4">
 					<DialogPanel
-						className={`${size} space-y-4 rounded-2xl bg-white shadow-2xl`}
+						className={`${size} space-y-4 rounded-2xl bg-white shadow-2xl ${background ? 'relative isolate overflow-hidden' : ''}`}
 					>
-						<DialogTitle className="font-bold text-xl p-4 border-b border-b-gray-100 m-0">
-							{title}
-						</DialogTitle>
-						{children}
-						<div className="flex flex-col sm:flex-row justify-end gap-2 p-4 border-t border-t-gray-100">
-							{destructiveButtonLabel && (
-								<Button
-									onClick={destructiveButtonAction}
-									label={destructiveButtonLabel}
-									color="error"
-									disabled={destructiveButtonDisabled}
-								/>
-							)}
-							{secondaryButtonLabel && (
-								<Button
-									onClick={secondaryButtonAction}
-									label={secondaryButtonLabel}
+						{/* Fondo decorativo a panel completo: también pasa por detrás del título.
+							m-0: el margen de space-y-4 acortaría la caja absoluta y dejaría una franja abajo */}
+						{background && (
+							<div
+								aria-hidden
+								className="pointer-events-none absolute inset-0 -z-10 m-0"
+							>
+								{background}
+							</div>
+						)}
+						{closeButtonAriaLabel ? (
+							<div className="flex items-center gap-4 px-4 py-2 border-b border-b-gray-100 m-0">
+								<DialogTitle className="flex-1 font-bold text-xl m-0">
+									{title}
+								</DialogTitle>
+								<ButtonIcon
 									color="secondary"
-									disabled={secondaryButtonDisabled}
+									icon={<IconClose />}
+									onClick={onClose}
+									ariaLabel={closeButtonAriaLabel}
 								/>
-							)}
-							{primaryButtonLabel && (
-								<Button
-									onClick={primaryButtonAction}
-									label={primaryButtonLabel}
-									color="primary"
-									disabled={primaryButtonDisabled}
-									className="order-first sm:order-last"
-								/>
-							)}
-						</div>
+							</div>
+						) : (
+							<DialogTitle className="font-bold text-xl p-4 border-b border-b-gray-100 m-0">
+								{title}
+							</DialogTitle>
+						)}
+						{children}
+						{hasButtons && (
+							<div className="flex flex-col sm:flex-row justify-end gap-2 p-4 border-t border-t-gray-100">
+								{destructiveButtonLabel && (
+									<Button
+										onClick={destructiveButtonAction}
+										label={destructiveButtonLabel}
+										color="error"
+										disabled={destructiveButtonDisabled}
+									/>
+								)}
+								{secondaryButtonLabel && (
+									<Button
+										onClick={secondaryButtonAction}
+										label={secondaryButtonLabel}
+										color="secondary"
+										disabled={secondaryButtonDisabled}
+									/>
+								)}
+								{primaryButtonLabel && (
+									<Button
+										onClick={primaryButtonAction}
+										label={primaryButtonLabel}
+										color="primary"
+										disabled={primaryButtonDisabled}
+										className="order-first sm:order-last"
+									/>
+								)}
+							</div>
+						)}
 					</DialogPanel>
 				</div>
 			</div>
