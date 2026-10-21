@@ -1378,5 +1378,10 @@
     "guideNavLabel": "Navegação do guia",
     "errorPageTitle": "Algo correu mal",
     "errorPageDescription": "Não conseguimos carregar esta página. Tenta novamente dentro de alguns segundos.",
-    "errorPageRetry": "Tentar novamente"
+    "errorPageRetry": "Tentar novamente",
+    "engagementModalTitle": "Quer um guia de boas-vindas como este para os seus hóspedes?",
+    "engagementModalBody": "Crie o seu em menos de 2 minutos e poupe horas a responder às mesmas perguntas. É 100% gratuito!",
+    "engagementModalCta": "Criar o meu guia grátis",
+    "engagementModalReassurance": "Sem cartão de crédito · Sem necessidade de download",
+    "engagementModalCloseAriaLabel": "Fechar"
 }

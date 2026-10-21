@@ -1378,5 +1378,10 @@
     "guideNavLabel": "Navegación de la guía",
     "errorPageTitle": "Algo no ha ido bien",
     "errorPageDescription": "No hemos podido cargar esta página. Inténtalo de nuevo en unos segundos.",
-    "errorPageRetry": "Reintentar"
+    "errorPageRetry": "Reintentar",
+    "engagementModalTitle": "¿Quieres una guía así para tus huéspedes?",
+    "engagementModalBody": "Créala en menos de 2 minutos y ahorra horas respondiendo las mismas preguntas. ¡Es 100% gratuita!",
+    "engagementModalCta": "Crear mi guía GRATIS",
+    "engagementModalReassurance": "Sin tarjeta de crédito · Sin descargas",
+    "engagementModalCloseAriaLabel": "Cerrar"
 }

@@ -1378,5 +1378,10 @@
     "guideNavLabel": "Navigazione della guida",
     "errorPageTitle": "Qualcosa è andato storto",
     "errorPageDescription": "Non siamo riusciti a caricare questa pagina. Riprova tra qualche secondo.",
-    "errorPageRetry": "Riprova"
+    "errorPageRetry": "Riprova",
+    "engagementModalTitle": "Vuoi una guida di benvenuto così per i tuoi ospiti?",
+    "engagementModalBody": "Crea la tua in meno di 2 minuti e risparmia ore a rispondere alle solite domande. È 100% gratuita!",
+    "engagementModalCta": "Crea la mia guida gratis",
+    "engagementModalReassurance": "Nessuna carta di credito richiesta · Nessun download necessario",
+    "engagementModalCloseAriaLabel": "Chiudi"
 }
