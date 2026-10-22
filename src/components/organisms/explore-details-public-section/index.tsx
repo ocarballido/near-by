@@ -16,7 +16,7 @@ export default function ExploreDetailsPublicSection({ details }: Props) {
     const t = useTranslations();
 
     return (
-        <div className="flex flex-col gap-3 w-full">
+        <div className="flex flex-col gap-3 w-full max-w-[1140px] mx-auto">
             <Typography component="h2" size="lg">
                 {t("Explora los detalles")}
             </Typography>

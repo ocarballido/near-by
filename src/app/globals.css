@@ -280,6 +280,45 @@
         0 0 0 6px color-mix(in srgb, var(--white) 15%, transparent),
         0 0 32px 4px color-mix(in srgb, var(--primary-400) 35%, transparent),
         0 10px 24px -6px color-mix(in srgb, var(--primary-900) 70%, transparent);
+
+    /* Manchas de color del hero público: solo transform para animar en GPU sin repintar.
+       Las manchas que comparten animación se desfasan con animation-delay */
+    --animate-blob-drift-a: blob-drift-a 4s ease-in-out infinite alternate;
+    --animate-blob-drift-b: blob-drift-b 6s ease-in-out infinite alternate;
+    --animate-blob-orbit: blob-orbit 7s linear infinite;
+
+    @keyframes blob-drift-a {
+        0% {
+            transform: translate(0, 0) scale(1);
+        }
+        50% {
+            transform: translate(40%, -25%) scale(1.3);
+        }
+        100% {
+            transform: translate(-25%, 20%) scale(0.85);
+        }
+    }
+
+    @keyframes blob-drift-b {
+        0% {
+            transform: translate(0, 0) scale(1);
+        }
+        50% {
+            transform: translate(-40%, 20%) scale(0.8);
+        }
+        100% {
+            transform: translate(30%, -30%) scale(1.25);
+        }
+    }
+
+    @keyframes blob-orbit {
+        from {
+            transform: rotate(0deg) translateX(35%) rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg) translateX(35%) rotate(-360deg);
+        }
+    }
 }
 
 body {

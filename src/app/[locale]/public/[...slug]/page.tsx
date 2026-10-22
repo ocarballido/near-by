@@ -321,10 +321,9 @@ export default async function Property({ params, searchParams }: PageProps) {
                             checkOutDate={property.check_out_date ?? undefined}
                             checkOutTime={property.check_out_time ?? undefined}
                             className="shrink-0"
-                            style="white"
                         />
                     )}
-                    <div className="px-4 py-6 font-roboto flex flex-col grow gap-4 w-full max-w-[1140px] mx-auto">
+                    <div className="font-roboto flex flex-col grow w-full mx-auto">
                         {mode === "welcome" && highlightsData && (
                             <WelcomeSection
                                 propertyId={propertyId}

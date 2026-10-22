@@ -42,7 +42,7 @@ const InfoShortcuts = ({ groups, propertyId }: Props) => {
     // auto-fit: el nº de columnas se adapta al ancho y al nº de accesos
     // (0-5), sin huecos vacíos cuando hay menos de los que caben
     return (
-        <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(140px,1fr))] gap-3">
+        <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(140px,1fr))] gap-3 mx-auto max-w-[1140px]">
             {groups.map((group) => {
                 const icon = SUB_CATEGORY_ICONS[group.sub_category_id] ?? (
                     <IconManual color="primary" />
