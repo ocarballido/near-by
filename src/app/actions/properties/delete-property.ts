@@ -5,7 +5,9 @@ import { revalidatePath } from 'next/cache';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 import { createSSRClient } from '@/lib/supabase/server';
 import { trackEvent } from '@/lib/analytics/mixpanel';
-import type { Tables } from '@/lib/types';
+import { checkPropertyOwner } from '@/lib/properties/check-property-owner';
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { Database, Tables } from '@/lib/types';
 
 // type LocationGroupRow = Database['public']['Tables']['location_groups']['Row'];
 
@@ -23,6 +25,15 @@ export async function deleteProperty(propertyId: string) {
 
 	// 1️⃣ Cliente con Service Role para ignorar RLS
 	const supabase = await createServerAdminClient();
+
+	const owner = await checkPropertyOwner(
+		supabase as unknown as SupabaseClient<Database>,
+		propertyId,
+		userId,
+	);
+	if (!owner.ok) {
+		throw new Error('No tienes permisos sobre esta propiedad.');
+	}
 
 	type PropImgOnly = Pick<Tables<'properties'>, 'image_url'>;
 
