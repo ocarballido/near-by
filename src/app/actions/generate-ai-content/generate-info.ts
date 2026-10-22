@@ -3,6 +3,7 @@
 
 import { createSSRClient } from "@/lib/supabase/server";
 import { createServerAdminClient } from "@/lib/supabase/serverAdminClient";
+import { checkPropertyOwner } from "@/lib/properties/check-property-owner";
 import { DAILY_AI_USAGE_LIMMIT } from "@/config/config-constants";
 
 import { openai, LLM_MODEL } from "@/lib/chatbot/llm/client";
@@ -44,6 +45,13 @@ export const generateAIContent = async (prompt: string, propertyId: string) => {
 
         const supabase = await createServerAdminClient();
         const db = supabase as unknown as SupabaseClient<Database>;
+
+        // Antes de tocar contadores: el gasto solo puede cargarse a una
+        // propiedad del propio usuario
+        const owner = await checkPropertyOwner(db, propertyId, user.id);
+        if (!owner.ok) {
+            return { error: "No tienes permisos sobre esta propiedad." };
+        }
 
         // 2) Límite diario por propietario — misma tabla, misma lógica de
         // siempre. No se toca: es un guardarraíl distinto del presupuesto
