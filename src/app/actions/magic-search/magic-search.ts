@@ -11,6 +11,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database, TablesInsert } from '@/lib/types';
 
 import { runPlacesSearch } from '@/lib/places/places-engine';
+import { findCategoryIdBySubCategoryId } from '@/lib/places/place-search-plan';
 
 const Schema = z.object({
 	property_id: z.string().uuid(),
@@ -67,6 +68,14 @@ export async function discoverNearbyPlaces(
 			radius,
 			locale,
 		} = parsed.data;
+
+		// category_id llega del cliente: si conocemos la categoría real de la
+		// subcategoría, deben coincidir. Las subcategorías que solo existen en BD
+		// (fuera de CATEGORIES_SUB_CATEGORIES) siguen como hasta ahora.
+		const expectedCategoryId = findCategoryIdBySubCategoryId(sub_category_id);
+		if (expectedCategoryId && expectedCategoryId !== category_id) {
+			return { errors: { server: ['Datos inválidos.'] } };
+		}
 
 		const apiKey = process.env.GOOGLE_MAPS_BACKEND_KEY;
 		if (!apiKey) {
@@ -143,7 +152,12 @@ export async function discoverNearbyPlaces(
 			const { error: insertError } = await supabase
 				.from('property_data')
 				.upsert(insertables, {
-					onConflict: 'name,latitude,longitude,sub_category_id',
+					// Unicidad por propiedad (índice unique_location_entry_per_property):
+					// nunca reasigna lugares de otra propiedad
+					onConflict: 'property_id,name,latitude,longitude,sub_category_id',
+					// Los lugares que la propiedad ya tiene no se tocan: conservan
+					// destacado, descripción e imagen editados por el anfitrión
+					ignoreDuplicates: true,
 				});
 
 			if (insertError) {
