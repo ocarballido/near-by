@@ -110,9 +110,11 @@ export async function saveDetails(
                 .eq("property_id", propertyId);
         }
 
-        // 7) Actualizar existentes
+        // 7) Actualizar existentes. Guardamos los ids realmente actualizados:
+        // un id de otra propiedad no actualiza nada y no debe traducirse
+        const updatedIds = new Set<string>();
         for (const detail of toUpdate) {
-            await db
+            const { data: updated } = await db
                 .from("property_details")
                 .update({
                     name: detail.name,
@@ -123,7 +125,11 @@ export async function saveDetails(
                     updated_at: new Date().toISOString(),
                 } satisfies TablesUpdate<"property_details">)
                 .eq("id", detail.id as string)
-                .eq("property_id", propertyId);
+                .eq("property_id", propertyId)
+                .select("id")
+                .overrideTypes<{ id: string }[], { merge: false }>();
+
+            updated?.forEach((row) => updatedIds.add(row.id));
         }
 
         // 8) Insertar nuevos
@@ -145,12 +151,14 @@ export async function saveDetails(
 
         // 9) Traducir — fire and forget
         const allSavedDetails = [
-            ...toUpdate.map((d) => ({
-                id: d.id as string,
-                name: d.name,
-                instructions: d.instructions,
-                guidelines: d.guidelines,
-            })),
+            ...toUpdate
+                .filter((d) => updatedIds.has(d.id as string))
+                .map((d) => ({
+                    id: d.id as string,
+                    name: d.name,
+                    instructions: d.instructions,
+                    guidelines: d.guidelines,
+                })),
         ];
 
         // Para los insertados necesitamos sus IDs recién creados

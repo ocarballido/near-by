@@ -35,18 +35,6 @@ export class SassClient {
         });
         if (error) return { data: null, error };
 
-        // 2. Si salió bien, pedimos creación de la subscripción
-        // const userId = data.user?.id;
-        // if (userId) {
-        // 	fetch('/api/subscription/create-subscription', {
-        // 		method: 'POST',
-        // 		headers: { 'Content-Type': 'application/json' },
-        // 		body: JSON.stringify({ userId }),
-        // 	}).catch((e) => {
-        // 		console.error('No se pudo crear la suscripción:', e);
-        // 	});
-        // }
-
         return { data, error: null };
     }
 

@@ -6,6 +6,7 @@ import { createSSRClient } from '@/lib/supabase/server';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 import { MAX_IMAGE_SIZE } from '@/config/config-constants';
 import { touchPropertyUpdatedAt } from '@/lib/properties/touch-property';
+import { checkPropertyOwner } from '@/lib/properties/check-property-owner';
 import { translateAndStore } from '@/lib/translations/translateAndStore';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
@@ -99,6 +100,16 @@ export async function createLocation(
 			};
 		}
 		const loc = result.data;
+
+		// Antes de subir nada a Storage o escribir en BD
+		const owner = await checkPropertyOwner(db, loc.property_id, user.id);
+		if (!owner.ok) {
+			return {
+				errors: {
+					server: ['No tienes permisos sobre esta propiedad.'],
+				},
+			};
+		}
 
 		// 5) Procesar imagen, si hay
 		const imageFile = formData.get('image') as File | null;

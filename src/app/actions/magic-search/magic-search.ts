@@ -5,6 +5,7 @@ import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 import { createSSRClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { touchPropertyUpdatedAt } from '@/lib/properties/touch-property';
+import { checkPropertyOwner } from '@/lib/properties/check-property-owner';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database, TablesInsert } from '@/lib/types';
@@ -89,6 +90,19 @@ export async function discoverNearbyPlaces(
 		if (authError || !user)
 			return { errors: { server: ['Usuario no autenticado'] } };
 
+		const supabase =
+			(await createServerAdminClient()) as unknown as SupabaseClient<Database>;
+
+		// Antes de llamar a Google: un usuario sin permisos no gasta cuota
+		const owner = await checkPropertyOwner(supabase, property_id, user.id);
+		if (!owner.ok) {
+			return {
+				errors: {
+					server: ['No tienes permisos sobre esta propiedad.'],
+				},
+			};
+		}
+
 		const maxResults = parseInt(max, 10);
 		const radiusNum = parseInt(radius, 10);
 
@@ -104,8 +118,6 @@ export async function discoverNearbyPlaces(
 			debugTag: 'magic',
 		});
 
-		const supabase =
-			(await createServerAdminClient()) as unknown as SupabaseClient<Database>;
 		const now = new Date().toISOString();
 
 		const insertables: TablesInsert<'property_data'>[] = found
