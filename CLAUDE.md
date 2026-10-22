@@ -64,7 +64,7 @@ Orden: next-intl → si `MAINTENANCE_MODE` está activo, rewrite a `/[locale]/ma
 
 - `createSSRClient()`: auth / identidad del usuario (getUser) y lecturas sujetas a RLS.
 - `createServerAdminClient()` (service_role): escrituras en Storage y operaciones admin en Server Actions, SIEMPRE después de verificar auth con el cliente SSR. Nunca importarlo en código cliente.
-- `createSSRSassClient()`: hoy se usa en el callback de auth (`src/app/api/auth/callback/route.ts`) y en `src/app/api/properties/route.ts`. No usarlo en código nuevo.
+- `createSSRSassClient()`: hoy solo se usa en el callback de auth (`src/app/api/auth/callback/route.ts`). No usarlo en código nuevo.
 
 ### Cliente (componentes "use client")
 

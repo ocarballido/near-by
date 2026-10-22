@@ -3,6 +3,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/types";
 import { MAX_LOGO_SIZE } from "@/config/config-constants";
+import { imageExtensionFromMimeType } from "@/lib/storage/image-extension";
 
 export type UploadPropertyLogoResult =
     | { ok: true; logoUrl: string | null }
@@ -39,8 +40,11 @@ export async function uploadPropertyLogo(args: {
         };
     }
 
-    // Validar tipo (sin GIF: el logo es un asset estático de marca, no contenido de galería)
+    // Validar tipo (sin GIF: el logo es un asset estático de marca, no contenido de galería).
+    // La extensión sale del tipo validado, no del nombre del fichero.
+    const fileExt = imageExtensionFromMimeType(logoFile.type);
     if (
+        !fileExt ||
         !VALID_LOGO_TYPES.includes(
             logoFile.type as (typeof VALID_LOGO_TYPES)[number],
         )
@@ -55,7 +59,6 @@ export async function uploadPropertyLogo(args: {
         };
     }
 
-    const fileExt = logoFile.name.split(".").pop() ?? "png";
     const fileName = `${userId}/logo_${Date.now()}.${fileExt}`;
 
     const { error: uploadError } = await db.storage

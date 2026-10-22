@@ -7,6 +7,8 @@ import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 import { MAX_IMAGE_SIZE } from '@/config/config-constants';
 import { touchPropertyUpdatedAt } from '@/lib/properties/touch-property';
 import { checkPropertyOwner } from '@/lib/properties/check-property-owner';
+import { findCategoryIdBySubCategoryId } from '@/lib/places/place-search-plan';
+import { imageExtensionFromMimeType } from '@/lib/storage/image-extension';
 import { translateAndStore } from '@/lib/translations/translateAndStore';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
@@ -101,6 +103,16 @@ export async function createLocation(
 		}
 		const loc = result.data;
 
+		// category_id llega del cliente: si conocemos la categoría real de la
+		// subcategoría, deben coincidir. Las subcategorías que solo existen en BD
+		// (fuera de CATEGORIES_SUB_CATEGORIES) siguen como hasta ahora.
+		const expectedCategoryId = findCategoryIdBySubCategoryId(
+			loc.sub_category_id,
+		);
+		if (expectedCategoryId && expectedCategoryId !== loc.category_id) {
+			return { errors: { server: ['Datos inválidos.'] } };
+		}
+
 		// Antes de subir nada a Storage o escribir en BD
 		const owner = await checkPropertyOwner(db, loc.property_id, user.id);
 		if (!owner.ok) {
@@ -114,6 +126,7 @@ export async function createLocation(
 		// 5) Procesar imagen, si hay
 		const imageFile = formData.get('image') as File | null;
 		let image_url: string | null = null;
+		let uploadedPath: string | null = null;
 		if (imageFile && imageFile.size > 0) {
 			if (imageFile.size > MAX_IMAGE_SIZE) {
 				return {
@@ -126,20 +139,14 @@ export async function createLocation(
 					},
 				};
 			}
-			const valid = [
-				'image/jpeg',
-				'image/png',
-				'image/webp',
-				'image/gif',
-			];
-			if (!valid.includes(imageFile.type)) {
+			const ext = imageExtensionFromMimeType(imageFile.type);
+			if (!ext) {
 				return {
 					errors: {
 						image: ['Formato de imagen inválido'],
 					},
 				};
 			}
-			const ext = imageFile.name.split('.').pop();
 			const fileName = `${user.id}/location_${Date.now()}.${ext}`;
 			const { error: upErr } = await supabase.storage
 				.from('location-images')
@@ -164,14 +171,32 @@ export async function createLocation(
 				data: { publicUrl },
 			} = supabase.storage.from('location-images').getPublicUrl(fileName);
 			image_url = publicUrl;
+			uploadedPath = fileName;
 		}
 
-		// Verificar si ya existe por unique key: property_id + name + lat + lng
+		// Si el guardado falla, no dejar huérfana la imagen recién subida
+		const discardUploadedImage = async () => {
+			if (uploadedPath) {
+				const { error: removeErr } = await supabase.storage
+					.from('location-images')
+					.remove([uploadedPath]);
+				if (removeErr) {
+					console.error(
+						'Error borrando imagen huérfana de location-images:',
+						removeErr,
+					);
+				}
+			}
+		};
+
+		// Verificar si ya existe por unique key (unique_location_entry_per_property):
+		// property_id + sub_category_id + name + lat + lng
 		type IdOnly = Pick<Tables<'property_data'>, 'id'>;
 		const { data: existing, error: findErr } = await db
 			.from('property_data')
 			.select('id')
 			.eq('property_id', loc.property_id)
+			.eq('sub_category_id', loc.sub_category_id)
 			.eq('name', loc.name)
 			.eq('latitude', loc.latitude)
 			.eq('longitude', loc.longitude)
@@ -181,6 +206,7 @@ export async function createLocation(
 
 		if (findErr) {
 			console.error('Error comprobando existencia:', findErr);
+			await discardUploadedImage();
 			return {
 				errors: {
 					server: ['Error comprobando datos duplicados.'],
@@ -206,6 +232,7 @@ export async function createLocation(
 
 			if (updateErr) {
 				console.error('Error actualizando location:', updateErr);
+				await discardUploadedImage();
 				return {
 					errors: { server: ['Error actualizando el sitio.'] },
 				};
@@ -255,6 +282,7 @@ export async function createLocation(
 
 			if (insertErr) {
 				console.error('Error insertando location:', insertErr);
+				await discardUploadedImage();
 				return {
 					errors: { server: ['Error creando el sitio.'] },
 				};

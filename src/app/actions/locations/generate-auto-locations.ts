@@ -234,7 +234,12 @@ export async function generateAutoLocations(
         const { error: upsertErr } = await supabase
             .from("property_data")
             .upsert(insertables, {
-                onConflict: "name,latitude,longitude,sub_category_id",
+                // Unicidad por propiedad (índice unique_location_entry_per_property):
+                // nunca reasigna lugares de otra propiedad
+                onConflict: "property_id,name,latitude,longitude,sub_category_id",
+                // Los lugares que la propiedad ya tiene no se tocan: conservan
+                // destacado, descripción e imagen editados por el anfitrión
+                ignoreDuplicates: true,
             });
 
         if (upsertErr) {
