@@ -4,17 +4,11 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database } from '@/lib/types';
 import { MAX_IMAGE_SIZE } from '@/config/config-constants';
+import { imageExtensionFromMimeType } from '@/lib/storage/image-extension';
 
 export type UploadPropertyImageResult =
 	| { ok: true; imageUrl: string | null }
 	| { ok: false; errorState: { errors: { image: string[] } } };
-
-const VALID_IMAGE_TYPES = [
-	'image/jpeg',
-	'image/png',
-	'image/webp',
-	'image/gif',
-] as const;
 
 export async function uploadPropertyImage(args: {
 	db: SupabaseClient<Database>;
@@ -45,12 +39,9 @@ export async function uploadPropertyImage(args: {
 		};
 	}
 
-	// Validar tipo
-	if (
-		!VALID_IMAGE_TYPES.includes(
-			imageFile.type as (typeof VALID_IMAGE_TYPES)[number]
-		)
-	) {
+	// Validar tipo (y de él sale la extensión)
+	const fileExt = imageExtensionFromMimeType(imageFile.type);
+	if (!fileExt) {
 		return {
 			ok: false,
 			errorState: {
@@ -64,7 +55,6 @@ export async function uploadPropertyImage(args: {
 	}
 
 	// Subir imagen
-	const fileExt = imageFile.name.split('.').pop() ?? 'jpg';
 	const fileName = `${userId}/property_${Date.now()}.${fileExt}`;
 
 	const { error: uploadError } = await db.storage
