@@ -25,21 +25,21 @@ const TAB_CONFIG: Record<
     featured: {
         icon: (color) => <IconFavorite color={color} />,
         activeText: "text-primary-500",
-        activeBg: "bg-primary-100",
+        activeBg: "bg-white",
         activeCountBg: "bg-white",
         iconActiveColor: "primary",
     },
     must_visit: {
         icon: (color) => <IconModeHeat color={color} />,
         activeText: "text-red-500",
-        activeBg: "bg-red-100",
+        activeBg: "bg-white",
         activeCountBg: "bg-white",
         iconActiveColor: "error",
     },
     events: {
         icon: (color) => <IconNightLife color={color} />,
         activeText: "text-primary-500",
-        activeBg: "bg-primary-100",
+        activeBg: "bg-white",
         activeCountBg: "bg-white",
         iconActiveColor: "primary",
     },
@@ -69,7 +69,7 @@ export default function WelcomeTabsMenu({
     return (
         <div
             className={clsx(
-                "flex flex-col w-full rounded-3xl bg-white p-1 gap-1 shadow-xs",
+                "flex flex-col w-full rounded-3xl bg-gray-100 p-1 gap-1",
                 className,
             )}
         >

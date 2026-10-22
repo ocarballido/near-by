@@ -11,6 +11,7 @@ import IconManual from "@/components/atoms/icon/manual";
 import IconRecicle from "@/components/atoms/icon/recicle";
 import IconWifi from "@/components/atoms/icon/wifi";
 import { CATEGORIES_SUB_CATEGORIES } from "@/config/config-constants";
+import IconKeyboardArrowDown from "@/components/atoms/icon/keyboard-arrow-down";
 
 const SUB_CATEGORY_ICONS: Record<string, React.ReactNode> = {
     [CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.MANUAL.id]: (
@@ -39,14 +40,15 @@ type Props = {
 const InfoSections = ({ groups, defaultOpenId, title }: Props) => {
     const t = useTranslations();
 
-    const [openId, setOpenId] = useState<string | null>(
-        defaultOpenId ?? groups[0]?.sub_category_id ?? null,
-    );
+    const [openId, setOpenId] = useState<string | null>(null);
+    // const [openId, setOpenId] = useState<string | null>(
+    //     defaultOpenId ?? groups[0]?.sub_category_id ?? null,
+    // );
 
     if (groups.length === 0) return null;
 
     return (
-        <div className="flex flex-col gap-3 w-full">
+        <div className="flex flex-col gap-3 w-full max-w-[1140px] mx-auto">
             {title && (
                 <Typography component="h2" size="lg">
                     {title}
@@ -61,10 +63,10 @@ const InfoSections = ({ groups, defaultOpenId, title }: Props) => {
                 return (
                     <div
                         key={group.sub_category_id}
-                        className="rounded-xl bg-white overflow-hidden shadow-xs"
+                        className="rounded-xl bg-white overflow-hidden border border-gray-100"
                     >
                         <button
-                            className="w-full flex items-center justify-between px-4 py-4 font-medium text-left hover:bg-primary-100 hover:cursor-pointer transition-colors duration-200"
+                            className="w-full flex items-center justify-between px-4 py-4 font-medium text-left hover:bg-gray-50 hover:cursor-pointer transition-colors duration-200"
                             onClick={() =>
                                 setOpenId(isOpen ? null : group.sub_category_id)
                             }
@@ -76,7 +78,7 @@ const InfoSections = ({ groups, defaultOpenId, title }: Props) => {
                             <span
                                 className={`transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
                             >
-                                ▾
+                                <IconKeyboardArrowDown />
                             </span>
                         </button>
 

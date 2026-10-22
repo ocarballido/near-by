@@ -23,7 +23,7 @@ export default async function WeatherWidget({ weather }: Props) {
     if (!weather) return null;
 
     return (
-        <div className="flex flex-col gap-3 rounded-xl bg-white p-1 shadow-xs">
+        <div className="flex flex-col gap-3 rounded-xl bg-white p-1 w-full max-w-[1140px] mx-auto -mt-25 shadow-xl shadow-gray-100">
             {/* Si los 7 días no caben (mobile), scroll horizontal con snap;
                 el día cortado al borde indica que hay más */}
             <div className="flex justify-between gap-1 overflow-x-auto overscroll-x-contain snap-x snap-mandatory">

@@ -124,7 +124,7 @@ export default function WelcomeTabs({
     const mustVisitItems = flattenGroups(mustVisitGroups);
 
     return (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 w-full max-w-[1140px] mx-auto px-4 py-10">
             <WelcomeTabsMenu value={tab} onChange={setTab} tabs={tabs} />
 
             {tab === "events" && hasEvents && (

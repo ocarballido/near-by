@@ -96,7 +96,7 @@ const ItineraryForm = ({
     };
 
     return (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6 p-4 md:p-5">
             <div className="bg-white p-2 rounded-xl max-w-[500px] w-full shadow-xs flex flex-col gap-4 mx-auto">
                 <div className="rounded-lg p-2 pt-0 flex flex-col gap-2 items-center">
                     <FancyIcon

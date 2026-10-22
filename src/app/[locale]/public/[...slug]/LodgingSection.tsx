@@ -18,15 +18,19 @@ export default async function LodgingSection({
     const t = await getTranslations();
 
     return (
-        <>
-            <InfoSections
-                groups={infoGroups}
-                defaultOpenId={defaultOpenId}
-                title={t("El Alojamiento")}
-            />
+        <div>
+            <section className="bg-white px-4 py-10 border-b border-gray-100">
+                <InfoSections
+                    groups={infoGroups}
+                    defaultOpenId={defaultOpenId}
+                    title={t("El Alojamiento")}
+                />
+            </section>
             {exploreDetails.length > 0 && (
-                <ExploreDetailsPublicSection details={exploreDetails} />
+                <section className="px-4 py-10">
+                    <ExploreDetailsPublicSection details={exploreDetails} />
+                </section>
             )}
-        </>
+        </div>
     );
 }

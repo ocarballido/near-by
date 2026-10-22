@@ -75,7 +75,7 @@ const HousePublicHero = ({
 
     return (
         <section
-            className={`relative isolate flex w-full flex-col items-center gap-6 overflow-hidden border-b border-gray-100 px-6 py-8 ${containerStyles[style]} ${className}`}
+            className={`relative isolate flex w-full flex-col items-center gap-6 overflow-hidden px-6 pt-10 pb-25 ${containerStyles[style]} ${className}`}
         >
             {/* Fondo decorativo exportado de Figma ya fusionado (elipses + degradado con blend).
                 Fuente PNG sin pérdida y calidad 90: a 75 los degradados oscuros
