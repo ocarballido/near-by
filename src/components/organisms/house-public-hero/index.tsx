@@ -13,8 +13,6 @@ import { formatDate, formatTime } from "@/utils/format-date-time";
 
 const PROPERTY_IMAGE_PLACEHOLDER = "/static/img/home/why_bnbexplorer.png";
 
-type HousePublicHeroStyle = "primary" | "white";
-
 type HousePublicHeroProps = {
     address: string;
     className?: string;
@@ -26,33 +24,46 @@ type HousePublicHeroProps = {
     checkInTime?: string;
     checkOutDate?: string;
     checkOutTime?: string;
-    style?: HousePublicHeroStyle;
 };
 
-const containerStyles: Record<HousePublicHeroStyle, string> = {
-    primary: "bg-primary-900",
-    white: "bg-primary-50",
+type HeroBlob = {
+    className: string;
+    // Desfase propio para que las manchas con la misma animación no se muevan a la par
+    delay?: string;
 };
 
-const backgroundImages: Record<HousePublicHeroStyle, string> = {
-    primary: "/static/img/house-public-hero/background-primary.png",
-    white: "/static/img/house-public-hero/background-white.png",
-};
-
-const propertyImageStyles: Record<HousePublicHeroStyle, string> = {
-    primary: "border-primary-800",
-    white: "border-white",
-};
-
-const textStyles: Record<HousePublicHeroStyle, string> = {
-    primary: "text-white",
-    white: "text-gray-800",
-};
-
-const buttonColors: Record<HousePublicHeroStyle, "white" | "primary"> = {
-    primary: "white",
-    white: "primary",
-};
+// Manchas de color difuminadas (sustituyen al PNG de Figma). Posición = centro de la mancha
+const blobs: HeroBlob[] = [
+    // Acento lavanda (puente entre el azul y el melocotón). Primera del array para que
+    // el verde de marca quede por encima y siga dominando
+    {
+        className:
+            "left-[82%] top-[15%] animate-blob-drift-a bg-[radial-gradient(closest-side,rgb(200_185_250/0.7),transparent)]",
+        delay: "-5s",
+    },
+    {
+        className:
+            "left-[25%] top-[72%] animate-blob-drift-a bg-[radial-gradient(closest-side,rgb(240_200_150/0.8),transparent)]",
+    },
+    {
+        className:
+            "left-[40%] top-[55%] animate-blob-orbit bg-[radial-gradient(closest-side,rgb(120_235_195/0.7),transparent)]",
+    },
+    {
+        className:
+            "left-[62%] top-[80%] animate-blob-drift-b bg-[radial-gradient(closest-side,rgb(140_220_240/0.7),transparent)]",
+    },
+    {
+        className:
+            "left-[74%] top-[50%] animate-blob-drift-a bg-[radial-gradient(closest-side,rgb(110_240_200/0.7),transparent)]",
+        delay: "-11s",
+    },
+    {
+        className:
+            "left-[35%] top-[5%] animate-blob-drift-b bg-[radial-gradient(closest-side,rgb(190_225_240/0.7),transparent)]",
+        delay: "-9s",
+    },
+];
 
 const HousePublicHero = ({
     address,
@@ -65,7 +76,6 @@ const HousePublicHero = ({
     checkOutDate,
     checkOutTime,
     image,
-    style = "primary",
 }: HousePublicHeroProps) => {
     const t = useTranslations();
     const locale = useLocale();
@@ -75,20 +85,41 @@ const HousePublicHero = ({
 
     return (
         <section
-            className={`relative isolate flex w-full flex-col items-center gap-6 overflow-hidden px-6 pt-10 pb-25 ${containerStyles[style]} ${className}`}
+            className={`relative isolate flex w-full flex-col items-center gap-6 overflow-hidden px-6 pt-10 pb-25 bg-primary-50 ${className}`}
         >
-            {/* Fondo decorativo exportado de Figma ya fusionado (elipses + degradado con blend).
-                Fuente PNG sin pérdida y calidad 90: a 75 los degradados oscuros
-                muestran bloques de compresión en pantallas grandes */}
-            <Image
+            {/* Fondo decorativo animado: manchas de color en movimiento y, encima,
+                las elipses semitransparentes para que el color se vea a través */}
+            <div
                 aria-hidden
-                className="pointer-events-none -z-10 object-cover"
-                src={backgroundImages[style]}
-                fill
-                sizes="100vw"
-                quality={90}
-                alt=""
-            />
+                className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+            >
+                {blobs.map((blob) => (
+                    <div
+                        key={blob.className}
+                        className={`absolute aspect-[3/2] w-[max(80%,600px)] -translate-x-1/2 -translate-y-1/2 motion-reduce:animate-none ${blob.className}`}
+                        style={
+                            blob.delay
+                                ? { animationDelay: blob.delay }
+                                : undefined
+                        }
+                    />
+                ))}
+                {/* Encuadre de las elipses con "slice": equivale al object-cover
+                    del fondo de Figma (viewBox = proporción del diseño original) */}
+                <svg
+                    className="absolute inset-0 size-full opacity-40"
+                    viewBox="0 0 2000 781"
+                    preserveAspectRatio="xMidYMid slice"
+                >
+                    <image
+                        href="/static/img/house-public-hero/radar.svg"
+                        x="-99"
+                        y="133"
+                        width="2198"
+                        height="957"
+                    />
+                </svg>
+            </div>
 
             <div className="flex flex-col items-center">
                 <div className="relative -mb-[60px] aspect-[1248/891] w-[360px] max-w-full">
@@ -102,7 +133,7 @@ const HousePublicHero = ({
                     />
                 </div>
                 <div
-                    className={`relative size-24 shrink-0 overflow-hidden rounded-full border-4 bg-white shadow-[0_1px_2px_0_rgb(0_0_0/0.1)] ${propertyImageStyles[style]}`}
+                    className="relative size-24 shrink-0 overflow-hidden rounded-full border-4 border-white bg-white shadow-[0_1px_2px_0_rgb(0_0_0/0.1)]"
                 >
                     <Image
                         className="object-cover"
@@ -118,7 +149,7 @@ const HousePublicHero = ({
                 <div className="flex w-full max-w-[400px] flex-col items-center gap-3">
                     {/* h2: el h1 de la guía es el nombre en el appbar */}
                     <h2
-                        className={`w-full text-center font-heading font-bold text-2xl leading-tight text-balance break-words md:text-3xl ${textStyles[style]}`}
+                        className="w-full text-center font-heading font-bold text-2xl leading-tight text-balance break-words text-gray-800 md:text-3xl"
                     >
                         {name}
                     </h2>
@@ -130,7 +161,7 @@ const HousePublicHero = ({
                             <IconLocationOn size={18} color="primary" />
                         </span>
                         <p
-                            className={`min-w-0 font-body font-medium text-sm leading-5 break-words ${textStyles[style]}`}
+                            className="min-w-0 font-body font-medium text-sm leading-5 break-words text-gray-800"
                         >
                             {address}
                         </p>
@@ -149,7 +180,7 @@ const HousePublicHero = ({
                                         />
                                     </span>
                                     <p
-                                        className={`font-body font-medium text-sm leading-5 ${textStyles[style]}`}
+                                        className="font-body font-medium text-sm leading-5 text-gray-800"
                                     >
                                         {/* El icono no se anuncia: el lector de pantalla lee esta etiqueta */}
                                         <span className="sr-only">
@@ -186,7 +217,7 @@ const HousePublicHero = ({
                                         />
                                     </span>
                                     <p
-                                        className={`font-body font-medium text-sm leading-5 ${textStyles[style]}`}
+                                        className="font-body font-medium text-sm leading-5 text-gray-800"
                                     >
                                         <span className="sr-only">
                                             {t("propertyForm.checkOut")}
@@ -217,7 +248,7 @@ const HousePublicHero = ({
 
             <ButtonLink
                 className="min-h-10"
-                color={buttonColors[style]}
+                color="primary"
                 iconLeft={<IconDirections />}
                 label={t("Como llegar")}
                 href={`${GOOGLE_MAPS_DIRECTION_URL}${latitude},${longitude}`}
