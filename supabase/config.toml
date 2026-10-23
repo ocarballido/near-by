@@ -37,7 +37,7 @@ additional_redirect_urls = [
 ]
 
 [db]
-major_version = 15
+major_version = 17
 
 [functions.send-broadcast]
 enabled = true

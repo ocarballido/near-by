@@ -11,6 +11,7 @@ import welcome from "../../../public/static/img/home/welcome.png";
 import LandingAppBar from "@/components/organisms/landing-appbar";
 import ButtonLink from "@/components/molecules/button-link";
 import ChimneyEffect from "@/components/atoms/chimney";
+import BlobsBackground from "@/components/atoms/blobs-background";
 
 import Feature from "@/components/molecules/card/feature";
 
@@ -88,7 +89,7 @@ export default async function Home() {
                         className="mx-4!"
                         label={t("home_page.hero.welcome_badge")}
                     />
-                    <div className="flex flex-col gap-4 justify-center w-full max-w-[800px] mx-auto px-4">
+                    <div className="relative z-1 flex flex-col gap-4 justify-center w-full max-w-[800px] mx-auto px-4">
                         <Typography
                             component="h1"
                             className="text-center text-4xl! sm:text-6xl!"
@@ -108,13 +109,12 @@ export default async function Home() {
                         </Typography>
                     </div>
 
-                    <div className="px-4 flex flex-col items-center gap-6 relative w-full pb-12">
-                        <Image
-                            src="/static/img/home/hero/radar.svg"
-                            fill
-                            className="object-cover object-top z-0"
-                            alt="BBNexplorer"
-                        />
+                    <div className="px-4 flex flex-col items-center gap-6 relative isolate w-full pb-12">
+                        {/* Color base y manchas dentro de la máscara: se funden con el
+                            blanco del título sin que se vea la división. El fondo sube
+                            por detrás del subtítulo para que las elipses asomen por
+                            encima del carrusel */}
+                        <BlobsBackground className="-top-60 bg-primary-50 mask-t-from-60%" />
                         <ButtonLink
                             label={t("home_page.section_04.action_label")}
                             href="/app"
