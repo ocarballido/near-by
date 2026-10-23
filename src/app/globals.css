@@ -269,12 +269,14 @@
         0 1px 2px color-mix(in srgb, var(--primary-600) 6%, transparent),
         0 12px 32px -8px color-mix(in srgb, var(--primary-600) 22%, transparent);
     /* Barra fija al pie (nav de la guía): sombra hacia arriba */
-    --shadow-nav-up: 0 -1px 2px color-mix(in srgb, var(--black) 10%, transparent);
+    --shadow-nav-up: 0 -1px 2px
+        color-mix(in srgb, var(--black) 10%, transparent);
     /* Tarjeta de la casa (guía pública): sombra profunda en verde oscuro de marca */
     --shadow-house-card:
         0 1px 2px color-mix(in srgb, var(--primary-900) 12%, transparent),
         0 12px 24px -8px color-mix(in srgb, var(--primary-900) 35%, transparent),
-        0 32px 64px -20px color-mix(in srgb, var(--primary-700) 40%, transparent);
+        0 32px 64px -20px
+            color-mix(in srgb, var(--primary-700) 40%, transparent);
     /* Imagen circular de la propiedad: halo translúcido + resplandor verde + profundidad */
     --shadow-house-image:
         0 0 0 6px color-mix(in srgb, var(--white) 15%, transparent),
@@ -285,7 +287,7 @@
        Las manchas que comparten animación se desfasan con animation-delay */
     --animate-blob-drift-a: blob-drift-a 4s ease-in-out infinite alternate;
     --animate-blob-drift-b: blob-drift-b 6s ease-in-out infinite alternate;
-    --animate-blob-orbit: blob-orbit 7s linear infinite;
+    --animate-blob-orbit: blob-orbit 5s linear infinite;
 
     @keyframes blob-drift-a {
         0% {
