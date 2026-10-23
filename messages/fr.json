@@ -1273,7 +1273,9 @@
             "slide_04_alt": "Assistant virtuel répondant aux questions du voyageur dans le guide",
             "slide_04_label": "Assistant virtuel",
             "slide_05_alt": "Recommandations mises en avant de restaurants et de loisirs près du logement",
-            "slide_05_label": "Favoris et Incontournables"
+            "slide_05_label": "Favoris et Incontournables",
+            "slide_06_alt": "Vos voyageurs décident de ce qu'ils veulent faire, quand et comment",
+            "slide_06_label": "Itinéraire"
         },
         "section_02": {
             "welcome_badge": "Simple et rapide · On s'occupe de tout",

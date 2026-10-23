@@ -45,6 +45,7 @@ export function CarouselPaginationTabs({
 
     return (
         <div
+            ref={containerRef}
             role="tablist"
             aria-label="Navegación de secciones de la guía"
             style={{ scrollbarWidth: "none" }}
