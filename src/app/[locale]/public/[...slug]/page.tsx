@@ -304,7 +304,7 @@ export default async function Property({ params, searchParams }: PageProps) {
                     {/* Desktop: nav bajo el widget, fijo arriba al hacer scroll.
                         z-1 lo pone sobre el contenido sin tapar el overlay del
                         sidebar (z-10). En mobile/tablet va al pie (template) */}
-                    <div className="hidden lg:block sticky top-0 z-1 shrink-0">
+                    <div className="hidden lg:block sticky top-0 z-20 shrink-0">
                         <PublicGuideNav items={navItems} placement="top" />
                     </div>
                     {/* Hero a sangre: bajo el nav en desktop y bajo el widget
