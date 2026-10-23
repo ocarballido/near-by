@@ -1273,7 +1273,9 @@
             "slide_04_alt": "Assistente virtuale che risponde ai dubbi dell'ospite all'interno della guida",
             "slide_04_label": "Assistente virtuale",
             "slide_05_alt": "Raccomandazioni in evidenza di ristoranti e svago vicino all'alloggio",
-            "slide_05_label": "Preferiti e Visita obbligata"
+            "slide_05_label": "Preferiti e Visita obbligata",
+            "slide_06_alt": "I tuoi ospiti decidono cosa vogliono fare, quando e come",
+            "slide_06_label": "Itinerario"
         },
         "section_02": {
             "welcome_badge": "Semplice e veloce · Lo facciamo per te",

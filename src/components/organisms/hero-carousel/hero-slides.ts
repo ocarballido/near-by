@@ -20,6 +20,10 @@ import hero04Mobile from "../../../../public/static/img/home/hero/ui-04_en_mobil
 import hero05Desktop from "../../../../public/static/img/home/hero/ui-05_en.png";
 import hero05Mobile from "../../../../public/static/img/home/hero/ui-05_en_mobile.png";
 
+// hero-06
+import hero06Desktop from "../../../../public/static/img/home/hero/ui-06_en.png";
+import hero06Mobile from "../../../../public/static/img/home/hero/ui-06_en_mobile.png";
+
 type Translator = (key: string) => string;
 
 export function getHeroSlides(t: Translator): HeroSlide[] {
@@ -53,6 +57,12 @@ export function getHeroSlides(t: Translator): HeroSlide[] {
             images: { desktop: hero05Desktop, mobile: hero05Mobile },
             alt: t("home_page.hero.slide_05_alt"),
             label: t("home_page.hero.slide_05_label"),
+        },
+        {
+            id: "hero-06",
+            images: { desktop: hero06Desktop, mobile: hero06Mobile },
+            alt: t("home_page.hero.slide_06_alt"),
+            label: t("home_page.hero.slide_06_label"),
         },
     ];
 }

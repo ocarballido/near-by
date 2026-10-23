@@ -1269,7 +1269,9 @@
             "slide_04_alt": "Virtual assistant answering guest questions within the guide",
             "slide_04_label": "Virtual assistant",
             "slide_05_alt": "Featured restaurant and leisure recommendations near the accommodation",
-            "slide_05_label": "Favorites and Must-see"
+            "slide_05_label": "Favorites and Must-see",
+            "slide_06_alt": "Your guests decide what they want to do, when and how",
+            "slide_06_label": "Itinerary"
         },
         "section_02": {
             "welcome_badge": "Simple and fast · We do it for you",
