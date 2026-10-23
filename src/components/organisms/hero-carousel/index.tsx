@@ -85,9 +85,9 @@ export function HeroCarousel({ slides, className = "" }: HeroCarouselProps) {
             }
         >
             {slides.map((slide, index) => (
-                <CarouselSlide key={slide.id}>
+                <CarouselSlide key={slide.id} className="p-1">
                     <div
-                        className={`relative w-full ${styles.frame}`}
+                        className={`relative w-full rounded-3xl overflow-hidden shadow-xs border border-gray-50 ${styles.frame}`}
                         style={
                             {
                                 "--mobile-ratio": `${slide.images.mobile.width} / ${slide.images.mobile.height}`,
