@@ -1,4 +1,3 @@
-// src/lib/uploadPropertyImage.ts
 import 'server-only';
 
 import type { SupabaseClient } from '@supabase/supabase-js';

@@ -12,8 +12,8 @@ import type { Database, Tables, TablesUpdate } from "@/lib/types";
 
 import { translateAndStoreProperty } from "@/lib/translations/translateAndStoreProperty";
 
-import { uploadPropertyImage } from "@/lib/uploadPropertyImage";
-import { uploadPropertyLogo } from "@/lib/uploadPropertyLogo";
+import { uploadPropertyImage } from "@/lib/storage/upload-property-image";
+import { uploadPropertyLogo } from "@/lib/storage/upload-property-logo";
 import { removePublicImages } from "@/lib/storage/remove-public-images";
 
 // ==============================

@@ -9,7 +9,7 @@ import { touchPropertyUpdatedAt } from '@/lib/properties/touch-property';
 import { checkPropertyOwner } from '@/lib/properties/check-property-owner';
 import { findCategoryIdBySubCategoryId } from '@/lib/places/place-search-plan';
 import { removePublicImages } from '@/lib/storage/remove-public-images';
-import { uploadLocationImage } from '@/lib/uploadLocationImage';
+import { uploadLocationImage } from '@/lib/storage/upload-location-image';
 import { translateAndStore } from '@/lib/translations/translateAndStore';
 import {
 	MAX_LOCATION_DESCRIPTION_LENGTH,

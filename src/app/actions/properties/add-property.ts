@@ -16,8 +16,8 @@ import { trackEvent } from "@/lib/analytics/mixpanel";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database, TablesInsert } from "@/lib/types";
 
-import { uploadPropertyImage } from "@/lib/uploadPropertyImage";
-import { uploadPropertyLogo } from "@/lib/uploadPropertyLogo";
+import { uploadPropertyImage } from "@/lib/storage/upload-property-image";
+import { uploadPropertyLogo } from "@/lib/storage/upload-property-logo";
 import { seedLodgingContent } from "@/lib/seedLodgingContent";
 import { translateAndStoreProperty } from "@/lib/translations/translateAndStoreProperty";
 
