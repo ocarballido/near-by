@@ -9,9 +9,14 @@ import { useState, useEffect } from 'react';
 import { useLoading } from '@/lib/context/LoadingContext';
 
 import { createLocation } from '@/app/actions/locations/add-location';
+import { updateLocation } from '@/app/actions/locations/update-location';
 import { type PlaceRecommendation } from '@/app/actions/locations/get-recommendations';
 
-import { MAX_IMAGE_SIZE } from '@/config/config-constants';
+import {
+	MAX_IMAGE_SIZE,
+	MAX_LOCATION_DESCRIPTION_LENGTH,
+	MAX_LOCATION_NAME_LENGTH,
+} from '@/config/config-constants';
 
 import TextField from '@/components/molecules/text-field';
 import InputFile from '@/components/molecules/input-file';
@@ -51,20 +56,40 @@ type FormValues = {
 	must_visit: boolean;
 };
 
+export type EditLocationInitialValues = {
+	name: string;
+	address: string;
+	description: string;
+	image_url: string | null;
+	featured: boolean;
+	must_visit: boolean;
+};
+
+type Props = {
+	propertyId: string;
+	subCategoryId: string;
+	categoryId: string;
+	initialRecos?: PlaceRecommendation[];
+	// si vienen ambos => modo edición
+	locationId?: string;
+	initialValues?: EditLocationInitialValues;
+};
+
 const AddPlaceForm = ({
 	propertyId,
 	subCategoryId,
 	categoryId,
 	initialRecos = [],
-}: {
-	propertyId: string;
-	subCategoryId: string;
-	categoryId: string;
-	initialRecos?: PlaceRecommendation[];
-}) => {
+	locationId,
+	initialValues,
+}: Props) => {
 	const t = useTranslations();
 	const locale = useLocale();
 	const router = useRouter();
+
+	const isEdit = Boolean(locationId && initialValues);
+
+	const [removeImage, setRemoveImage] = useState(false);
 
 	const [alert, setAlert] = useState<{
 		type: 'error' | 'success';
@@ -87,15 +112,15 @@ const AddPlaceForm = ({
 			property_id: propertyId,
 			sub_category_id: subCategoryId,
 			category_id: categoryId,
-			name: '',
-			address: '',
+			name: initialValues?.name ?? '',
+			address: initialValues?.address ?? '',
 			latitude: '',
 			longitude: '',
-			description: '',
+			description: initialValues?.description ?? '',
 			website: '',
 			phone: '',
-			featured: false,
-			must_visit: false,
+			featured: initialValues?.featured ?? false,
+			must_visit: initialValues?.must_visit ?? false,
 		},
 	});
 
@@ -140,7 +165,7 @@ const AddPlaceForm = ({
 	}, [coords, setValue]);
 
 	const onSubmit: SubmitHandler<FormValues> = async (data) => {
-		if (!coords) {
+		if (!isEdit && !coords) {
 			setError('address', {
 				type: 'manual',
 				message: t('Selecciona una dirección sugerida para continuar'),
@@ -164,53 +189,81 @@ const AddPlaceForm = ({
 		}
 
 		const fd = new FormData();
-		fd.append('property_id', propertyId);
-		fd.append('category_id', categoryId);
-		fd.append('sub_category_id', subCategoryId);
 		fd.append('name', data.name);
-		fd.append('address', data.address);
-		fd.append('latitude', data.latitude);
-		fd.append('longitude', data.longitude);
 		fd.append('featured', String(featuredValue));
 		fd.append('must_visit', String(mustVisitValue));
-		fd.append('type', 'location');
 
-		if (data.description) fd.append('description', data.description);
-		if (data.website) fd.append('website', data.website);
-		if (data.phone) fd.append('phone', data.phone);
-		if (file) fd.append('image', file);
+		if (isEdit) {
+			// La descripción va siempre: vacía significa que se ha borrado.
+			// La dirección no es editable y no se envía.
+			fd.append('description', data.description ?? '');
+			if (file) fd.append('image', file);
+			else if (removeImage) fd.append('image_action', 'remove');
+		} else {
+			fd.append('property_id', propertyId);
+			fd.append('category_id', categoryId);
+			fd.append('sub_category_id', subCategoryId);
+			fd.append('address', data.address);
+			fd.append('latitude', data.latitude);
+			fd.append('longitude', data.longitude);
+			fd.append('type', 'location');
+
+			if (data.description) fd.append('description', data.description);
+			if (data.website) fd.append('website', data.website);
+			if (data.phone) fd.append('phone', data.phone);
+			if (file) fd.append('image', file);
+		}
 
 		openLoading();
-		const result = await createLocation(fd);
+		const result =
+			isEdit && locationId
+				? await updateLocation(locationId, fd)
+				: await createLocation(fd);
 		closeLoading();
 
+		// Los errores del servidor son claves de messages/*.json; los límites
+		// se rellenan aquí con las mismas constantes que valida el servidor
 		if (result.errors) {
 			if (result.errors.name)
 				setError('name', {
 					type: 'manual',
-					message: result.errors.name[0],
+					message: t(result.errors.name[0], {
+						n: MAX_LOCATION_NAME_LENGTH,
+					}),
 				});
 			if (result.errors.address)
 				setError('address', {
 					type: 'manual',
-					message: result.errors.address[0],
+					message: t(result.errors.address[0]),
 				});
 			if (result.errors.sub_category_id)
 				setAlert({
 					type: 'error',
-					message: result.errors.sub_category_id[0],
+					message: t(result.errors.sub_category_id[0]),
 				});
 			if (result.errors.property_id)
 				setAlert({
 					type: 'error',
-					message: result.errors.property_id[0],
+					message: t(result.errors.property_id[0]),
+				});
+			if (result.errors.image)
+				setAlert({
+					type: 'error',
+					message: t(result.errors.image[0], {
+						kb: (MAX_IMAGE_SIZE / 1024).toFixed(0),
+					}),
 				});
 			if (result.errors.server)
-				setAlert({ type: 'error', message: result.errors.server[0] });
+				setAlert({
+					type: 'error',
+					message: t(result.errors.server[0]),
+				});
 			if (result.errors.description)
 				setError('description', {
 					type: 'manual',
-					message: result.errors.description[0],
+					message: t(result.errors.description[0], {
+						n: MAX_LOCATION_DESCRIPTION_LENGTH,
+					}),
 				});
 			return;
 		}
@@ -265,7 +318,7 @@ const AddPlaceForm = ({
 					color="gradient"
 				/>
 				<Typography component="h2" size="lg">
-					{t('Nuevo Sitio')}
+					{isEdit ? t('editLocationTitle') : t('Nuevo Sitio')}
 				</Typography>
 			</div>
 
@@ -297,7 +350,7 @@ const AddPlaceForm = ({
 						}
 					/>
 
-					{RECO_UI_ENABLED && recos.length > 0 && (
+					{!isEdit && RECO_UI_ENABLED && recos.length > 0 && (
 						<>
 							<Modal
 								title={t('recommendations.title')}
@@ -380,35 +433,51 @@ const AddPlaceForm = ({
 						label={t('Nombre del sitio *')}
 						placeholder={t('Sitio nombre ejemplo')}
 						id="name"
+						maxLength={MAX_LOCATION_NAME_LENGTH}
 						{...register('name', {
+							setValueAs: (v) =>
+								typeof v === 'string' ? v.trim() : v,
 							required: t('El nombre es obligatorio'),
 						})}
 						error={Boolean(errors.name)}
 						helperText={errors.name?.message}
 					/>
 
-					<PlaceAutocompleteField
-						label={t('Dirección *')}
-						placeholder={t('Sitio dirección ejemplo')}
-						locale={locale}
-						countryCodes={['es']}
-						error={Boolean(errors.address)}
-						helperTextIdle={t('addressHelperIdle')}
-						helperTextError={t('addressHelperError')}
-						onSelect={handleSelectAddress}
-						onClearSelection={clearSelection}
-						isSelected={!!coords}
-						selectedValue={watch('address')}
-					/>
+					{isEdit ? (
+						// La dirección no es editable: para otra dirección, el
+						// anfitrión elimina el sitio y crea uno nuevo
+						<TextField
+							label={t('Dirección *')}
+							id="address"
+							defaultValue={initialValues?.address}
+							disabled
+						/>
+					) : (
+						<>
+							<PlaceAutocompleteField
+								label={t('Dirección *')}
+								placeholder={t('Sitio dirección ejemplo')}
+								locale={locale}
+								countryCodes={['es']}
+								error={Boolean(errors.address)}
+								helperTextIdle={t('addressHelperIdle')}
+								helperTextError={t('addressHelperError')}
+								onSelect={handleSelectAddress}
+								onClearSelection={clearSelection}
+								isSelected={!!coords}
+								selectedValue={watch('address')}
+							/>
 
-					<input
-						type="hidden"
-						{...register('address', {
-							required: t('La dirección es obligatoria'),
-						})}
-					/>
-					<input type="hidden" {...register('latitude')} />
-					<input type="hidden" {...register('longitude')} />
+							<input
+								type="hidden"
+								{...register('address', {
+									required: t('La dirección es obligatoria'),
+								})}
+							/>
+							<input type="hidden" {...register('latitude')} />
+							<input type="hidden" {...register('longitude')} />
+						</>
+					)}
 
 					<TextArea
 						label={t('Descripción')}
@@ -418,9 +487,9 @@ const AddPlaceForm = ({
 							setValueAs: (v) =>
 								typeof v === 'string' ? v.trim() : v,
 							maxLength: {
-								value: 200,
+								value: MAX_LOCATION_DESCRIPTION_LENGTH,
 								message: t('description-characters', {
-									n: 200,
+									n: MAX_LOCATION_DESCRIPTION_LENGTH,
 								}),
 							},
 						})}
@@ -497,7 +566,7 @@ const AddPlaceForm = ({
 					</fieldset>
 				</div>
 
-				<div className="flex flex-col gap-4 p-4 pt-0 border-b border-gray-200 justify-center">
+				<div className="flex flex-col gap-4 p-4 pt-0 justify-center">
 					<DashboardData
 						label={
 							<Typography
@@ -525,6 +594,8 @@ const AddPlaceForm = ({
 						label={t('Imagen')}
 						error={Boolean(errors.image)}
 						helperText={errors.image?.message as string}
+						initialPreviewUrl={initialValues?.image_url ?? null}
+						onRemove={() => setRemoveImage(true)}
 						{...register('image', {
 							validate: (files) => {
 								const file = files?.[0];
@@ -540,10 +611,13 @@ const AddPlaceForm = ({
 					/>
 				</div>
 
-				<div className="flex flex-col gap-2 p-4 pt-0">
+				{/* sticky: se queda al pie del área de scroll (el <main> del
+				    layout) sin salir de la tarjeta, y vuelve a su sitio al
+				    llegar al final del formulario */}
+				<div className="sticky bottom-0 z-10 flex flex-col gap-2 p-4 bg-white border-t border-gray-200 last:rounded-b-xl">
 					<Button
 						type="submit"
-						label={t('Añadir')}
+						label={isEdit ? t('Guardar cambios') : t('Añadir')}
 						className="w-full"
 						disabled={isSubmitting}
 					/>
@@ -553,14 +627,19 @@ const AddPlaceForm = ({
 						color="secondary"
 						onClick={() => router.back()}
 					/>
-					<ButtonLink
-						label={t('feedback.cta')}
-						href={`/app/feedback/create_location/property/${propertyId}?returnTo=/app/properties/${propertyId}/${categoryId}/${subCategoryId}`}
-						color="white"
-						className="w-full"
-						iconLeft={<IconHelp />}
-					/>
 				</div>
+
+				{!isEdit && (
+					<div className="px-4 pb-4">
+						<ButtonLink
+							label={t('feedback.cta')}
+							href={`/app/feedback/create_location/property/${propertyId}?returnTo=/app/properties/${propertyId}/${categoryId}/${subCategoryId}`}
+							color="white"
+							className="w-full"
+							iconLeft={<IconHelp />}
+						/>
+					</div>
+				)}
 			</form>
 		</div>
 	);
