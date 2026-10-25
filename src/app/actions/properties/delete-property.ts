@@ -6,6 +6,7 @@ import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 import { createSSRClient } from '@/lib/supabase/server';
 import { trackEvent } from '@/lib/analytics/mixpanel';
 import { checkPropertyOwner } from '@/lib/properties/check-property-owner';
+import { removePublicImages } from '@/lib/storage/remove-public-images';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database, Tables } from '@/lib/types';
 
@@ -25,25 +26,22 @@ export async function deleteProperty(propertyId: string) {
 
 	// 1️⃣ Cliente con Service Role para ignorar RLS
 	const supabase = await createServerAdminClient();
+	const db = supabase as unknown as SupabaseClient<Database>;
 
-	const owner = await checkPropertyOwner(
-		supabase as unknown as SupabaseClient<Database>,
-		propertyId,
-		userId,
-	);
+	const owner = await checkPropertyOwner(db, propertyId, userId);
 	if (!owner.ok) {
 		throw new Error('No tienes permisos sobre esta propiedad.');
 	}
 
-	type PropImgOnly = Pick<Tables<'properties'>, 'image_url'>;
+	type PropImages = Pick<Tables<'properties'>, 'image_url' | 'logo_url'>;
 
-	// Recuperar la URL de la imagen para borrarla del bucket
+	// Recuperar las URLs de imagen y logo para borrarlas del bucket
 	const { data: propData, error: propFetchErr } = await supabase
 		.from('properties')
-		.select('image_url')
+		.select('image_url, logo_url')
 		.eq('id', propertyId)
 		.single()
-		.overrideTypes<PropImgOnly, { merge: false }>();
+		.overrideTypes<PropImages, { merge: false }>();
 
 	if (propFetchErr) {
 		console.error(
@@ -54,21 +52,24 @@ export async function deleteProperty(propertyId: string) {
 	}
 
 	const imageUrl = propData?.image_url;
-	if (imageUrl) {
-		// La ruta interna en Storage viene después de ".../property-images/"
-		const parts = imageUrl.split(
-			'/storage/v1/object/public/property-images/',
+
+	type PDImageOnly = Pick<Tables<'property_data'>, 'image_url'>;
+
+	// property_data se borra en cascada con la propiedad: las imágenes de sus
+	// sitios se leen antes, mientras las filas existen
+	const { data: dataImages, error: dataImagesErr } = await supabase
+		.from('property_data')
+		.select('image_url')
+		.eq('property_id', propertyId)
+		.not('image_url', 'is', null)
+		.overrideTypes<PDImageOnly[], { merge: false }>();
+
+	if (dataImagesErr) {
+		console.error(
+			'Error obteniendo imágenes de property_data:',
+			dataImagesErr,
 		);
-		if (parts[1]) {
-			const filePath = parts[1];
-			const { error: removeErr } = await supabase.storage
-				.from('property-images')
-				.remove([filePath]);
-			if (removeErr) {
-				console.error('Error borrando imagen en Storage:', removeErr);
-				// no lanzamos, seguimos con la limpieza de BD
-			}
-		}
+		throw new Error('Error base de datos');
 	}
 
 	const { error: infoDelErr } = await supabase
@@ -126,6 +127,19 @@ export async function deleteProperty(propertyId: string) {
 		console.error('Error deleting property:', propDelErr);
 		throw new Error('Error base de datos');
 	}
+
+	// Storage después de borrar en BD: si algo falla antes, ninguna fila
+	// queda apuntando a un fichero borrado
+	await removePublicImages(db, 'property-images', userId, [imageUrl]);
+	await removePublicImages(db, 'property-logos', userId, [
+		propData?.logo_url,
+	]);
+	await removePublicImages(
+		db,
+		'location-images',
+		userId,
+		dataImages.map((row) => row.image_url),
+	);
 
 	await trackEvent({
 		event: 'property_deleted',

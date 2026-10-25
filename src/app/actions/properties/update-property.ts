@@ -7,12 +7,13 @@ import { createSSRClient } from "@/lib/supabase/server";
 import { z } from "zod";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Database, TablesUpdate } from "@/lib/types";
+import type { Database, Tables, TablesUpdate } from "@/lib/types";
 
 import { translateAndStoreProperty } from "@/lib/translations/translateAndStoreProperty";
 
 import { uploadPropertyImage } from "@/lib/uploadPropertyImage";
 import { uploadPropertyLogo } from "@/lib/uploadPropertyLogo";
+import { removePublicImages } from "@/lib/storage/remove-public-images";
 
 // ==============================
 // Helpers
@@ -164,6 +165,7 @@ export async function updateProperty(
         const imageFile = formData.get("image") as File | null;
 
         let imageUrl = existing.image_url ?? null;
+        let uploadedImageUrl: string | null = null;
 
         if (imageFile) {
             const uploadRes = await uploadPropertyImage({
@@ -175,6 +177,7 @@ export async function updateProperty(
             if (!uploadRes.ok) return uploadRes.errorState;
 
             imageUrl = uploadRes.imageUrl;
+            uploadedImageUrl = uploadRes.imageUrl;
         } else if (validated.image_action === "remove") {
             imageUrl = null;
         }
@@ -183,6 +186,7 @@ export async function updateProperty(
         const logoFile = formData.get("logo") as File | null;
 
         let logoUrl = existing.logo_url ?? null;
+        let uploadedLogoUrl: string | null = null;
 
         if (logoFile) {
             const logoUploadRes = await uploadPropertyLogo({
@@ -191,9 +195,15 @@ export async function updateProperty(
                 logoFile,
             });
 
-            if (!logoUploadRes.ok) return logoUploadRes.errorState;
+            if (!logoUploadRes.ok) {
+                await removePublicImages(db, "property-images", userId, [
+                    uploadedImageUrl,
+                ]);
+                return logoUploadRes.errorState;
+            }
 
             logoUrl = logoUploadRes.logoUrl;
+            uploadedLogoUrl = logoUploadRes.logoUrl;
         } else if (validated.logo_action === "remove") {
             logoUrl = null;
         }
@@ -222,6 +232,13 @@ export async function updateProperty(
 
         if (updateError) {
             console.error("Error al actualizar propiedad:", updateError);
+            // Ninguna fila apunta a lo recién subido: no dejarlo huérfano
+            await removePublicImages(db, "property-images", userId, [
+                uploadedImageUrl,
+            ]);
+            await removePublicImages(db, "property-logos", userId, [
+                uploadedLogoUrl,
+            ]);
             return {
                 errors: {
                     server: [
@@ -231,17 +248,45 @@ export async function updateProperty(
             };
         }
 
-        // 6.1) Si el owner decidió eliminar los lugares recomendados
+        // 6.1) Imagen y logo sustituidos o quitados: el update ya no los
+        //      referencia, se borran del Storage
+        if (imageUrl !== existing.image_url) {
+            await removePublicImages(db, "property-images", userId, [
+                existing.image_url,
+            ]);
+        }
+        if (logoUrl !== existing.logo_url) {
+            await removePublicImages(db, "property-logos", userId, [
+                existing.logo_url,
+            ]);
+        }
+
+        // 6.2) Si el owner decidió eliminar los lugares recomendados
         //      (dirección cambiada + confirmación explícita en el modal),
         //      se borran aquí, tras el update exitoso de la propiedad.
         if (validated.locations_action === "delete") {
-            const { error: deleteLocationsError } = await db
-                .from("property_data")
-                .delete()
-                .eq("property_id", propertyId)
-                .eq("type", "location");
+            // .select() devuelve las filas borradas: sus imágenes salen del
+            // mismo delete, sin una lectura previa que pueda quedar desfasada
+            const { data: deletedLocations, error: deleteLocationsError } =
+                await db
+                    .from("property_data")
+                    .delete()
+                    .eq("property_id", propertyId)
+                    .eq("type", "location")
+                    .select("image_url")
+                    .overrideTypes<
+                        Pick<Tables<"property_data">, "image_url">[],
+                        { merge: false }
+                    >();
 
-            if (deleteLocationsError) {
+            if (!deleteLocationsError) {
+                await removePublicImages(
+                    db,
+                    "location-images",
+                    userId,
+                    deletedLocations.map((loc) => loc.image_url),
+                );
+            } else {
                 // No abortamos el flujo: la propiedad ya se actualizó
                 // correctamente. Registramos el fallo para investigar,
                 // pero no bloqueamos al owner por esto.
