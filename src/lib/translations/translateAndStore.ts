@@ -1,6 +1,9 @@
+import "server-only";
+
 import { createClient } from "@supabase/supabase-js";
 import { checkAndIncrementUsage } from "./usageControl";
 import { LOCALES } from "@/config/config-constants";
+import type { Tables } from "@/lib/types";
 
 const CLAUDE_MODEL = "claude-haiku-4-5-20251001";
 
@@ -57,6 +60,29 @@ export async function translateAndStore(
         }));
 
         if (upsertRows.length === 0) continue;
+
+        // Se traduce en segundo plano: si mientras tanto otra edición cambió
+        // el texto original, esta traducción ya no le corresponde y se
+        // descarta (la edición nueva lanza la suya). Así una traducción
+        // antigua no pisa a la buena ni reaparece tras borrarse.
+        const { data: current, error: currentErr } = await supabase
+            .from("property_data")
+            .select("name, description")
+            .eq("id", propertyDataId)
+            .maybeSingle()
+            .overrideTypes<
+                Pick<Tables<"property_data">, "name" | "description">,
+                { merge: false }
+            >();
+
+        if (currentErr) {
+            console.error(
+                "[translateAndStore] Error leyendo el texto actual:",
+                currentErr,
+            );
+            continue;
+        }
+        if (!current || current[field.fieldKey] !== field.value) continue;
 
         const { error } = await supabase
             .from("property_data_translations")
