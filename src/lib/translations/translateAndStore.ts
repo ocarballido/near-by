@@ -1,11 +1,9 @@
-import "server-only";
-
-import { createClient } from "@supabase/supabase-js";
-import { checkAndIncrementUsage } from "./usageControl";
+// Sin "server-only": también lo importa scripts/migrate-translations.ts
+// (Node vía tsx), donde ese módulo no existe.
 import { LOCALES } from "@/config/config-constants";
-import type { Tables } from "@/lib/types";
+import { translateFields } from "./translate-fields";
 
-const CLAUDE_MODEL = "claude-haiku-4-5-20251001";
+import type { TranslationRequester } from "./translate-fields";
 
 type SupportedLang = (typeof LOCALES)[number];
 
@@ -14,21 +12,13 @@ type FieldToTranslate = {
     value: string;
 };
 
-type ClaudeTranslationResult = {
-    source_lang: SupportedLang;
-    translations: Record<SupportedLang, string>;
-};
-
+// Traducciones de property_data (sitios e información del alojamiento)
 export async function translateAndStore(
     propertyDataId: string,
+    requester: TranslationRequester,
     fields: FieldToTranslate[],
     targetLangs: readonly SupportedLang[] = LOCALES,
 ): Promise<void> {
-    const supabase = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.PRIVATE_SUPABASE_SERVICE_KEY!,
-    );
-
     // Los nombres propios son legítimamente cortos (p. ej. "Pig House",
     // "Bar Sol") — el umbral de longitud de 10 caracteres solo tiene
     // sentido para descripciones triviales o vacías, no para nombres.
@@ -39,117 +29,12 @@ export async function translateAndStore(
     });
     if (validFields.length === 0) return;
 
-    const totalChars = validFields.reduce((acc, f) => acc + f.value.length, 0);
-    const canTranslate = await checkAndIncrementUsage(totalChars);
-    if (!canTranslate) return;
-
-    for (const field of validFields) {
-        const result = await callClaude(field.value);
-        if (!result) continue;
-
-        const { source_lang, translations } = result;
-        const langsToStore = targetLangs.filter((l) => l !== source_lang);
-
-        const upsertRows = langsToStore.map((lang) => ({
-            property_data_id: propertyDataId,
-            lang,
-            field_key: field.fieldKey,
-            translated_value: translations[lang],
-            source_lang,
-            updated_at: new Date().toISOString(),
-        }));
-
-        if (upsertRows.length === 0) continue;
-
-        // Se traduce en segundo plano: si mientras tanto otra edición cambió
-        // el texto original, esta traducción ya no le corresponde y se
-        // descarta (la edición nueva lanza la suya). Así una traducción
-        // antigua no pisa a la buena ni reaparece tras borrarse.
-        const { data: current, error: currentErr } = await supabase
-            .from("property_data")
-            .select("name, description")
-            .eq("id", propertyDataId)
-            .maybeSingle()
-            .overrideTypes<
-                Pick<Tables<"property_data">, "name" | "description">,
-                { merge: false }
-            >();
-
-        if (currentErr) {
-            console.error(
-                "[translateAndStore] Error leyendo el texto actual:",
-                currentErr,
-            );
-            continue;
-        }
-        if (!current || current[field.fieldKey] !== field.value) continue;
-
-        const { error } = await supabase
-            .from("property_data_translations")
-            .upsert(upsertRows, {
-                onConflict: "property_data_id,lang,field_key",
-            });
-
-        if (error) {
-            console.error("[translateAndStore] Error en upsert:", error);
-        }
-    }
-}
-
-async function callClaude(
-    text: string,
-): Promise<ClaudeTranslationResult | null> {
-    const cleanText = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
-    const langsExample = LOCALES.reduce(
-        (acc, lang) => ({ ...acc, [lang]: `texto en ${lang}` }),
-        {} as Record<SupportedLang, string>,
-    );
-
-    const prompt = `Eres un traductor especializado en alojamientos vacacionales.
-Dado el siguiente texto, devuelve ÚNICAMENTE un objeto JSON con esta estructura exacta, sin explicaciones ni markdown:
-{
-  "source_lang": "es",
-  "translations": ${JSON.stringify(langsExample, null, 2)}
-}
-Detecta el idioma del texto original y ponlo en "source_lang".
-En "translations" incluye siempre todos los idiomas. El idioma original va sin cambios.
-Mantén un tono acogedor y natural, apropiado para una guía de alojamiento vacacional.
-
-Texto:
-${cleanText}`;
-
-    try {
-        const response = await fetch("https://api.anthropic.com/v1/messages", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "x-api-key": process.env.ANTHROPIC_API_KEY!,
-                "anthropic-version": "2023-06-01",
-            },
-            body: JSON.stringify({
-                model: CLAUDE_MODEL,
-                max_tokens: 8000,
-                messages: [{ role: "user", content: prompt }],
-            }),
-        });
-
-        if (!response.ok) {
-            console.error(
-                "[translateAndStore] Claude API error:",
-                response.status,
-            );
-            return null;
-        }
-
-        const data = await response.json();
-        const rawText: string = data.content?.[0]?.text ?? "";
-        const clean = rawText.replace(/```json|```/g, "").trim();
-        return JSON.parse(clean) as ClaudeTranslationResult;
-    } catch (err) {
-        console.error(
-            "[translateAndStore] Error parseando respuesta de Claude:",
-            err,
-        );
-        return null;
-    }
+    await translateFields({
+        requester,
+        recordId: propertyDataId,
+        fields: validFields,
+        upsertFn: "upsert_property_data_translations_if_current",
+        logTag: "translateAndStore",
+        targetLangs,
+    });
 }

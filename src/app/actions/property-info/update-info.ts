@@ -2,7 +2,9 @@
 
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
+import { after } from 'next/server';
 import { createSSRClient } from '@/lib/supabase/server';
+import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 import { touchPropertyUpdatedAt } from '@/lib/properties/touch-property';
 import { updatePropertyProgressAndTrack } from '@/lib/updatePropertyProgress';
 import { translateAndStore } from '@/lib/translations/translateAndStore';
@@ -73,18 +75,19 @@ export async function updateInfo(formData: FormData): Promise<CreateInfoState> {
 		const { property_id, category_id, sub_category_id, type, content } =
 			parsed.data;
 
-		type IdOnly = Pick<Tables<'property_data'>, 'id'>;
+		// description: valor previo para retraducir solo si cambia
+		type ExistingInfo = Pick<Tables<'property_data'>, 'id' | 'description'>;
 
 		// ✅ IMPORTANT: do NOT filter by property_data.user_id here.
 		// Ownership is enforced by RLS via properties.user_id.
 		const { data: existing, error: findError } = await db
 			.from('property_data')
-			.select('id')
+			.select('id, description')
 			.eq('property_id', property_id)
 			.eq('sub_category_id', sub_category_id)
 			.eq('type', type)
 			.single()
-			.overrideTypes<IdOnly, { merge: false }>();
+			.overrideTypes<ExistingInfo, { merge: false }>();
 
 		let propertyDataId: string | undefined = existing?.id;
 
@@ -164,12 +167,44 @@ export async function updateInfo(formData: FormData): Promise<CreateInfoState> {
 		if (didMutate) {
 			await touchPropertyUpdatedAt(db, property_id);
 
-			// Fire and forget — no bloqueamos la respuesta al propietario
-			if (content !== null && propertyDataId) {
-				translateAndStore(propertyDataId, [
-					{ fieldKey: 'description', value: content },
-				]).catch((err) =>
-					console.error('[updateInfo] Error en traducción:', err),
+			// Traducir solo si es nuevo o cambió (cada traducción consume cuota
+			// del anfitrión). Al borrar la fila, sus traducciones caen en
+			// cascada.
+			const contentChanged =
+				content !== null &&
+				(!existing || (existing.description ?? '') !== content);
+
+			if (contentChanged && existing) {
+				// La antigua se borra antes: en la guía tiene prioridad sobre el
+				// original, y si la nueva no llega (sin cuota, texto largo,
+				// error) el huésped vería datos desfasados (p. ej. un WiFi
+				// antiguo). property_data_translations solo admite lectura por
+				// RLS: cliente admin, sobre un id que ya ha pasado por RLS.
+				const admin = await createServerAdminClient();
+				const { error: deleteTrErr } = await admin
+					.from('property_data_translations')
+					.delete()
+					.eq('property_data_id', existing.id)
+					.eq('field_key', 'description');
+
+				if (deleteTrErr) {
+					console.error(
+						'[updateInfo] Error borrando traducciones:',
+						deleteTrErr,
+					);
+				}
+			}
+
+			// after(): tras responder, sin bloquear al propietario
+			if (contentChanged && content !== null && propertyDataId) {
+				after(() =>
+					translateAndStore(
+						propertyDataId,
+						{ type: 'user', userId: user.id },
+						[{ fieldKey: 'description', value: content }],
+					).catch((err) =>
+						console.error('[updateInfo] Error en traducción:', err),
+					),
 				);
 			}
 		}

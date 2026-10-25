@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 import { createServerAdminClient } from "@/lib/supabase/serverAdminClient";
 import { CATEGORIES_SUB_CATEGORIES } from "@/config/config-constants";
 import { createSSRClient } from "@/lib/supabase/server";
@@ -106,11 +107,25 @@ export async function updateProperty(
         const db = supabase as unknown as SupabaseClient<Database>;
 
         // 3) Verificar que la propiedad existe y pertenece al usuario
+        // name y access_instructions: valores previos para retraducir solo lo
+        // que cambie
         const { data: existing, error: existingError } = await db
             .from("properties")
-            .select("id, user_id, image_url, logo_url")
+            .select("id, user_id, image_url, logo_url, name, access_instructions")
             .eq("id", propertyId)
-            .single();
+            .single()
+            .overrideTypes<
+                Pick<
+                    Tables<"properties">,
+                    | "id"
+                    | "user_id"
+                    | "image_url"
+                    | "logo_url"
+                    | "name"
+                    | "access_instructions"
+                >,
+                { merge: false }
+            >();
 
         if (existingError || !existing?.id) {
             console.error("Error al leer propiedad:", existingError);
@@ -297,35 +312,53 @@ export async function updateProperty(
             }
         }
 
-        // Si access_instructions se ha borrado, eliminamos sus traducciones
-        if (!validated.access_instructions) {
-            await supabase
+        // Traducciones: solo de los campos que cambian (cada traducción
+        // consume cuota del anfitrión). La antigua se borra antes: en la guía
+        // tiene prioridad sobre el original, y si la nueva no llega (sin
+        // cuota, texto largo, error) el huésped vería datos desfasados (p. ej.
+        // un código de acceso antiguo).
+        const newTexts = {
+            name: validated.name,
+            access_instructions: validated.access_instructions,
+        };
+        const changedFields = (["name", "access_instructions"] as const).filter(
+            (field) => (existing[field] ?? "") !== (newTexts[field] ?? ""),
+        );
+
+        if (changedFields.length > 0) {
+            const { error: deleteTrErr } = await db
                 .from("property_translations")
                 .delete()
                 .eq("property_id", propertyId)
-                .eq("field_key", "access_instructions");
-        } else {
-            const fieldsToTranslate: {
-                fieldKey: "name" | "access_instructions";
-                value: string;
-            }[] = [];
+                .in("field_key", changedFields);
 
-            if (validated.name) {
-                fieldsToTranslate.push({
-                    fieldKey: "name",
-                    value: validated.name,
-                });
+            if (deleteTrErr) {
+                console.error(
+                    "[updateProperty] Error borrando traducciones:",
+                    deleteTrErr,
+                );
             }
 
-            fieldsToTranslate.push({
-                fieldKey: "access_instructions",
-                value: validated.access_instructions,
+            const fieldsToTranslate = changedFields.flatMap((fieldKey) => {
+                const value = newTexts[fieldKey];
+                return value ? [{ fieldKey, value }] : [];
             });
 
-            translateAndStoreProperty(propertyId, fieldsToTranslate).catch(
-                (err) =>
-                    console.error("[updateProperty] Error en traducción:", err),
-            );
+            if (fieldsToTranslate.length > 0) {
+                // after(): tras responder, sin bloquear al anfitrión
+                after(() =>
+                    translateAndStoreProperty(
+                        propertyId,
+                        { type: "user", userId },
+                        fieldsToTranslate,
+                    ).catch((err) =>
+                        console.error(
+                            "[updateProperty] Error en traducción:",
+                            err,
+                        ),
+                    ),
+                );
+            }
         }
 
         revalidatePath("/app");

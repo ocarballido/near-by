@@ -1,6 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { after } from 'next/server';
 import { z } from 'zod';
 import { createSSRClient } from '@/lib/supabase/server';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
@@ -201,15 +202,19 @@ export async function updateLocation(
 				);
 			}
 
-			// Fire and forget, como en createLocation
-			translateAndStore(
-				loc.location_id,
-				changedFields.map((field) => ({
-					fieldKey: field,
-					value: loc[field],
-				})),
-			).catch((err) =>
-				console.error('[updateLocation] Error en traducción:', err),
+			// after(): se ejecuta tras responder sin bloquear al anfitrión, y en
+			// serverless (Vercel) mantiene viva la función hasta que termina
+			after(() =>
+				translateAndStore(
+					loc.location_id,
+					{ type: 'user', userId: user.id },
+					changedFields.map((field) => ({
+						fieldKey: field,
+						value: loc[field],
+					})),
+				).catch((err) =>
+					console.error('[updateLocation] Error en traducción:', err),
+				),
 			);
 		}
 

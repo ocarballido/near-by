@@ -1,6 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { after } from 'next/server';
 import { z } from 'zod';
 import { createSSRClient } from '@/lib/supabase/server';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
@@ -171,10 +172,13 @@ export async function createLocation(
 
 		// Verificar si ya existe por unique key (unique_location_entry_per_property):
 		// property_id + sub_category_id + name + lat + lng
-		type ExistingLoc = Pick<Tables<'property_data'>, 'id' | 'image_url'>;
+		type ExistingLoc = Pick<
+			Tables<'property_data'>,
+			'id' | 'image_url' | 'description'
+		>;
 		const { data: existing, error: findErr } = await db
 			.from('property_data')
-			.select('id, image_url')
+			.select('id, image_url, description')
 			.eq('property_id', loc.property_id)
 			.eq('sub_category_id', loc.sub_category_id)
 			.eq('name', loc.name)
@@ -226,23 +230,41 @@ export async function createLocation(
 				]);
 			}
 
-			// Fire and forget — re-traducimos por si el propietario cambió el texto
-			translateAndStore(existing.id, [
-				{ fieldKey: 'name', value: loc.name },
-				...(loc.description
-					? [
-							{
-								fieldKey: 'description' as const,
-								value: loc.description,
-							},
-						]
-					: []),
-			]).catch((err) =>
-				console.error(
-					'[createLocation] Error en traducción (update):',
-					err,
-				),
-			);
+			// El nombre forma parte de la búsqueda de existing, así que nunca
+			// cambia aquí: solo se retraduce la descripción, y solo si cambió
+			// (cada traducción consume cuota del anfitrión). Como en
+			// updateLocation, la traducción antigua se borra antes: en la guía
+			// tiene prioridad sobre el original.
+			if ((existing.description ?? '') !== loc.description) {
+				const { error: deleteTrErr } = await db
+					.from('property_data_translations')
+					.delete()
+					.eq('property_data_id', existing.id)
+					.eq('field_key', 'description');
+
+				if (deleteTrErr) {
+					console.error(
+						'[createLocation] Error borrando traducciones:',
+						deleteTrErr,
+					);
+				}
+
+				if (loc.description) {
+					// after(): tras responder, sin bloquear al anfitrión
+					after(() =>
+						translateAndStore(
+							existing.id,
+							{ type: 'user', userId: user.id },
+							[{ fieldKey: 'description', value: loc.description }],
+						).catch((err) =>
+							console.error(
+								'[createLocation] Error en traducción (update):',
+								err,
+							),
+						),
+					);
+				}
+			}
 		} else {
 			// 8) Insertar si no existe — mismo shape, sólo tipado y call-site neutralizado
 			type PDInsert = TablesInsert<'property_data'>;
@@ -276,20 +298,23 @@ export async function createLocation(
 				};
 			}
 
-			// Fire and forget — traducimos el nombre de la location
+			// after(): traducimos nombre y descripción tras responder, sin
+			// bloquear al anfitrión
 			if (inserted) {
-				translateAndStore(inserted.id, [
-					{ fieldKey: 'name', value: loc.name },
-					...(loc.description
-						? [
-								{
-									fieldKey: 'description' as const,
-									value: loc.description,
-								},
-							]
-						: []),
-				]).catch((err) =>
-					console.error('[createLocation] Error en traducción:', err),
+				after(() =>
+					translateAndStore(inserted.id, { type: 'user', userId: user.id }, [
+						{ fieldKey: 'name', value: loc.name },
+						...(loc.description
+							? [
+									{
+										fieldKey: 'description' as const,
+										value: loc.description,
+									},
+								]
+							: []),
+					]).catch((err) =>
+						console.error('[createLocation] Error en traducción:', err),
+					),
 				);
 			}
 		}
