@@ -4,29 +4,55 @@ import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { createSSRClient } from '@/lib/supabase/server';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
-import { MAX_IMAGE_SIZE } from '@/config/config-constants';
 import { touchPropertyUpdatedAt } from '@/lib/properties/touch-property';
 import { checkPropertyOwner } from '@/lib/properties/check-property-owner';
 import { findCategoryIdBySubCategoryId } from '@/lib/places/place-search-plan';
-import { imageExtensionFromMimeType } from '@/lib/storage/image-extension';
 import { removePublicImages } from '@/lib/storage/remove-public-images';
+import { uploadLocationImage } from '@/lib/uploadLocationImage';
 import { translateAndStore } from '@/lib/translations/translateAndStore';
+import {
+	MAX_LOCATION_DESCRIPTION_LENGTH,
+	MAX_LOCATION_NAME_LENGTH,
+} from '@/config/config-constants';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database, Tables, TablesInsert, TablesUpdate } from '@/lib/types';
 
 import { updatePropertyProgressAndTrack } from '@/lib/updatePropertyProgress';
 
-// 1) Definimos un esquema Zod para validar el formulario
+// 1) Definimos un esquema Zod para validar el formulario.
+// Los mensajes de error son claves de messages/*.json: los traduce el
+// formulario (los límites {n} los pone él con las mismas constantes).
+// También los de tipo: formData.get devuelve null si falta un campo, y sin
+// invalid_type_error Zod respondería con su mensaje por defecto en inglés.
+const invalidData = { invalid_type_error: 'locationInvalidData' };
+
 const LocationSchema = z.object({
-	property_id: z.string().uuid(),
-	sub_category_id: z.string().uuid(),
-	category_id: z.string().uuid(),
-	name: z.string().nonempty('El nombre es obligatorio'),
-	address: z.string().nonempty('La dirección es obligatoria'),
-	description: z.string().optional().default(''),
-	latitude: z.preprocess((v) => (v ? Number(v) : NaN), z.number().finite()),
-	longitude: z.preprocess((v) => (v ? Number(v) : NaN), z.number().finite()),
+	property_id: z.string(invalidData).uuid('locationInvalidData'),
+	sub_category_id: z.string(invalidData).uuid('locationInvalidData'),
+	category_id: z.string(invalidData).uuid('locationInvalidData'),
+	name: z
+		.string({ invalid_type_error: 'El nombre es obligatorio' })
+		.trim()
+		.nonempty('El nombre es obligatorio')
+		.max(MAX_LOCATION_NAME_LENGTH, 'locationNameTooLong'),
+	address: z
+		.string({ invalid_type_error: 'La dirección es obligatoria' })
+		.nonempty('La dirección es obligatoria'),
+	description: z
+		.string()
+		.trim()
+		.max(MAX_LOCATION_DESCRIPTION_LENGTH, 'description-characters')
+		.optional()
+		.default(''),
+	latitude: z.preprocess(
+		(v) => (v ? Number(v) : NaN),
+		z.number(invalidData).finite('locationInvalidData'),
+	),
+	longitude: z.preprocess(
+		(v) => (v ? Number(v) : NaN),
+		z.number(invalidData).finite('locationInvalidData'),
+	),
 	featured: z
 		.preprocess((v) => v === 'true' || v === true, z.boolean())
 		.optional()
@@ -49,7 +75,6 @@ export type LocationFormState = {
 		server?: string[];
 	};
 	success?: boolean;
-	message?: string;
 	redirectTo?: string;
 };
 
@@ -99,6 +124,12 @@ export async function createLocation(
 					sub_category_id: fe.sub_category_id,
 					name: fe.name,
 					address: fe.address,
+					description: fe.description,
+					// Campos sin control propio en el formulario: aviso general
+					server:
+						fe.category_id || fe.latitude || fe.longitude
+							? ['locationInvalidData']
+							: undefined,
 				},
 			};
 		}
@@ -111,7 +142,7 @@ export async function createLocation(
 			loc.sub_category_id,
 		);
 		if (expectedCategoryId && expectedCategoryId !== loc.category_id) {
-			return { errors: { server: ['Datos inválidos.'] } };
+			return { errors: { server: ['locationInvalidData'] } };
 		}
 
 		// Antes de subir nada a Storage o escribir en BD
@@ -119,59 +150,20 @@ export async function createLocation(
 		if (!owner.ok) {
 			return {
 				errors: {
-					server: ['No tienes permisos sobre esta propiedad.'],
+					server: ['locationNoPermission'],
 				},
 			};
 		}
 
 		// 5) Procesar imagen, si hay
 		const imageFile = formData.get('image') as File | null;
-		let image_url: string | null = null;
-		if (imageFile && imageFile.size > 0) {
-			if (imageFile.size > MAX_IMAGE_SIZE) {
-				return {
-					errors: {
-						image: [
-							`La imagen no debe superar ${(
-								MAX_IMAGE_SIZE / 1024
-							).toFixed(0)} KB`,
-						],
-					},
-				};
-			}
-			const ext = imageExtensionFromMimeType(imageFile.type);
-			if (!ext) {
-				return {
-					errors: {
-						image: ['Formato de imagen inválido'],
-					},
-				};
-			}
-			const fileName = `${user.id}/location_${Date.now()}.${ext}`;
-			const { error: upErr } = await supabase.storage
-				.from('location-images')
-				.upload(fileName, imageFile, {
-					cacheControl: '3600',
-					upsert: false,
-				});
-			if (upErr) {
-				console.error(
-					'Error subiendo imagen a location-images:',
-					upErr,
-				);
-				return {
-					errors: {
-						server: [
-							'Error subiendo la imagen al bucket. Por favor revisa la consola del servidor.',
-						],
-					},
-				};
-			}
-			const {
-				data: { publicUrl },
-			} = supabase.storage.from('location-images').getPublicUrl(fileName);
-			image_url = publicUrl;
-		}
+		const uploadRes = await uploadLocationImage({
+			db,
+			userId: user.id,
+			imageFile,
+		});
+		if (!uploadRes.ok) return uploadRes.errorState;
+		const image_url = uploadRes.imageUrl;
 
 		// Si el guardado falla, no dejar huérfana la imagen recién subida
 		const discardUploadedImage = () =>
@@ -197,7 +189,7 @@ export async function createLocation(
 			await discardUploadedImage();
 			return {
 				errors: {
-					server: ['Error comprobando datos duplicados.'],
+					server: ['locationSaveError'],
 				},
 			};
 		}
@@ -223,7 +215,7 @@ export async function createLocation(
 				console.error('Error actualizando location:', updateErr);
 				await discardUploadedImage();
 				return {
-					errors: { server: ['Error actualizando el sitio.'] },
+					errors: { server: ['locationSaveError'] },
 				};
 			}
 
@@ -280,7 +272,7 @@ export async function createLocation(
 				console.error('Error insertando location:', insertErr);
 				await discardUploadedImage();
 				return {
-					errors: { server: ['Error creando el sitio.'] },
+					errors: { server: ['locationSaveError'] },
 				};
 			}
 
@@ -317,18 +309,14 @@ export async function createLocation(
 
 		return {
 			success: true,
-			message: 'Sitio añadido correctamente',
 			redirectTo: `/app/properties`,
 		};
 	} catch (error: unknown) {
-		const errorMessage =
-			error instanceof Error
-				? error.message
-				: 'Error interno del servidor';
-
+		// El detalle se queda en el log: al cliente no se le expone
+		console.error('Error inesperado al crear el sitio:', error);
 		return {
 			errors: {
-				server: [errorMessage],
+				server: ['locationSaveError'],
 			},
 		};
 	}
