@@ -5,12 +5,13 @@ import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 import { createSSRClient } from '@/lib/supabase/server';
 import { z } from 'zod';
 import { touchPropertyUpdatedAt } from '@/lib/properties/touch-property';
+import { removePublicImages } from '@/lib/storage/remove-public-images';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { updatePropertyProgressAndTrack } from '@/lib/updatePropertyProgress';
 import type { Tables, Database } from '@/lib/types';
 
-type PDThumb = Pick<Tables<'property_data'>, 'id' | 'image_url'>;
+type PDImageOnly = Pick<Tables<'property_data'>, 'image_url'>;
 
 const DeleteAllSchema = z.object({
 	property_id: z.string().uuid(),
@@ -85,44 +86,15 @@ export async function deleteAllLocations(
 			};
 		}
 
-		const { data: itemsRes, error: fetchError } = await supabase
-			.from('property_data')
-			.select('id, image_url')
-			.eq('property_id', property_id)
-			.eq('sub_category_id', sub_category_id)
-			.overrideTypes<PDThumb[], { merge: false }>();
-
-		if (fetchError) {
-			return {
-				errors: {
-					server: [
-						'No se pudieron obtener las localizaciones a eliminar',
-					],
-				},
-			};
-		}
-
-		const items: PDThumb[] = itemsRes ?? [];
-
-		const imagePaths = items
-			.map((item) => {
-				if (!item.image_url) return null;
-				const [, path] = item.image_url.split(
-					'/storage/v1/object/public/location-images/',
-				);
-				return path || null;
-			})
-			.filter(Boolean) as string[];
-
-		if (imagePaths.length > 0) {
-			await supabase.storage.from('location-images').remove(imagePaths);
-		}
-
-		const { error: deleteError } = await db
+		// .select() devuelve las filas borradas: sus imágenes salen del mismo
+		// delete, sin una lectura previa que pueda quedar desfasada
+		const { data: deletedItems, error: deleteError } = await db
 			.from('property_data')
 			.delete()
 			.eq('property_id', property_id)
-			.eq('sub_category_id', sub_category_id);
+			.eq('sub_category_id', sub_category_id)
+			.select('image_url')
+			.overrideTypes<PDImageOnly[], { merge: false }>();
 
 		if (deleteError) {
 			return {
@@ -131,6 +103,15 @@ export async function deleteAllLocations(
 				},
 			};
 		}
+
+		// Imágenes después de borrar las filas: si el delete falla, ninguna
+		// fila queda apuntando a un fichero borrado
+		await removePublicImages(
+			db,
+			'location-images',
+			user.id,
+			deletedItems.map((item) => item.image_url),
+		);
 
 		// Marcar última actividad de la propiedad (dashboard)
 		await touchPropertyUpdatedAt(db, property_id);

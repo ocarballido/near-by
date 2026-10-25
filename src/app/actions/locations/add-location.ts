@@ -9,6 +9,7 @@ import { touchPropertyUpdatedAt } from '@/lib/properties/touch-property';
 import { checkPropertyOwner } from '@/lib/properties/check-property-owner';
 import { findCategoryIdBySubCategoryId } from '@/lib/places/place-search-plan';
 import { imageExtensionFromMimeType } from '@/lib/storage/image-extension';
+import { removePublicImages } from '@/lib/storage/remove-public-images';
 import { translateAndStore } from '@/lib/translations/translateAndStore';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
@@ -126,7 +127,6 @@ export async function createLocation(
 		// 5) Procesar imagen, si hay
 		const imageFile = formData.get('image') as File | null;
 		let image_url: string | null = null;
-		let uploadedPath: string | null = null;
 		if (imageFile && imageFile.size > 0) {
 			if (imageFile.size > MAX_IMAGE_SIZE) {
 				return {
@@ -171,30 +171,18 @@ export async function createLocation(
 				data: { publicUrl },
 			} = supabase.storage.from('location-images').getPublicUrl(fileName);
 			image_url = publicUrl;
-			uploadedPath = fileName;
 		}
 
 		// Si el guardado falla, no dejar huérfana la imagen recién subida
-		const discardUploadedImage = async () => {
-			if (uploadedPath) {
-				const { error: removeErr } = await supabase.storage
-					.from('location-images')
-					.remove([uploadedPath]);
-				if (removeErr) {
-					console.error(
-						'Error borrando imagen huérfana de location-images:',
-						removeErr,
-					);
-				}
-			}
-		};
+		const discardUploadedImage = () =>
+			removePublicImages(db, 'location-images', user.id, [image_url]);
 
 		// Verificar si ya existe por unique key (unique_location_entry_per_property):
 		// property_id + sub_category_id + name + lat + lng
-		type IdOnly = Pick<Tables<'property_data'>, 'id'>;
+		type ExistingLoc = Pick<Tables<'property_data'>, 'id' | 'image_url'>;
 		const { data: existing, error: findErr } = await db
 			.from('property_data')
-			.select('id')
+			.select('id, image_url')
 			.eq('property_id', loc.property_id)
 			.eq('sub_category_id', loc.sub_category_id)
 			.eq('name', loc.name)
@@ -202,7 +190,7 @@ export async function createLocation(
 			.eq('longitude', loc.longitude)
 			.limit(1)
 			.maybeSingle()
-			.overrideTypes<IdOnly, { merge: false }>();
+			.overrideTypes<ExistingLoc, { merge: false }>();
 
 		if (findErr) {
 			console.error('Error comprobando existencia:', findErr);
@@ -219,7 +207,8 @@ export async function createLocation(
 			const updatePayload: PDUpdate = {
 				address: loc.address,
 				description: loc.description,
-				image_url,
+				// Sin imagen nueva se conserva la que ya tenía
+				image_url: image_url ?? existing.image_url,
 				featured: loc.featured,
 				must_visit: loc.must_visit,
 				updated_at: new Date().toISOString(),
@@ -236,6 +225,13 @@ export async function createLocation(
 				return {
 					errors: { server: ['Error actualizando el sitio.'] },
 				};
+			}
+
+			// La imagen anterior ya no la referencia ninguna fila
+			if (image_url) {
+				await removePublicImages(db, 'location-images', user.id, [
+					existing.image_url,
+				]);
 			}
 
 			// Fire and forget — re-traducimos por si el propietario cambió el texto

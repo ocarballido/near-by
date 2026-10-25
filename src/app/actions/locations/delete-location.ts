@@ -5,6 +5,7 @@ import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 import { createSSRClient } from '@/lib/supabase/server';
 import { touchPropertyUpdatedAt } from '@/lib/properties/touch-property';
 import { checkPropertyOwner } from '@/lib/properties/check-property-owner';
+import { removePublicImages } from '@/lib/storage/remove-public-images';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database, Tables } from '@/lib/types';
@@ -53,14 +54,9 @@ export async function deleteLocation(locationId: string) {
 		.eq('property_id', loc.property_id);
 	if (delErr) throw new Error('No se pudo eliminar el sitio');
 
-	if (loc.image_url) {
-		const [, path] = loc.image_url.split(
-			'/storage/v1/object/public/location-images/',
-		);
-		if (path) {
-			await db.storage.from('location-images').remove([path]);
-		}
-	}
+	await removePublicImages(db, 'location-images', user.id, [
+		loc.image_url,
+	]);
 
 	await touchPropertyUpdatedAt(db, loc.property_id);
 
