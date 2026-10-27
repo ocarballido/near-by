@@ -220,19 +220,6 @@ export default function ExploreDetailsEditor({
                     </Typography>
                 </div>
 
-                {alert && (
-                    <Alert
-                        hideTime={3000}
-                        open={alert !== null}
-                        title={
-                            alert.type === "error" ? t("Error") : t("Validado")
-                        }
-                        dismissible
-                        type={alert.type}
-                        message={alert.message}
-                    />
-                )}
-
                 {/* Sección 1 — Chips. sticky: se queda arriba del área de
                     scroll (el <main> del layout) sin salir de la tarjeta */}
                 <div className="sticky top-0 z-10 flex flex-col gap-4 p-4 bg-white border-b border-gray-200">
@@ -336,6 +323,19 @@ export default function ExploreDetailsEditor({
                     />
                 </div>
             </div>
+
+            {/* Después de la tarjeta: con el mismo z-10 que los chips
+                sticky, el orden del DOM decide y así el Alert queda encima */}
+            {alert && (
+                <Alert
+                    hideTime={3000}
+                    open={alert !== null}
+                    title={alert.type === "error" ? t("Error") : t("Validado")}
+                    dismissible
+                    type={alert.type}
+                    message={alert.message}
+                />
+            )}
         </>
     );
 }
