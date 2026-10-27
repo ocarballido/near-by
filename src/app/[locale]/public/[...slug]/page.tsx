@@ -302,8 +302,9 @@ export default async function Property({ params, searchParams }: PageProps) {
                         </div>
                     )}
                     {/* Desktop: nav bajo el widget, fijo arriba al hacer scroll.
-                        z-1 lo pone sobre el contenido sin tapar el overlay del
-                        sidebar (z-10). En mobile/tablet va al pie (template) */}
+                        z-20; el overlay del sidebar solo existe por debajo de
+                        lg, donde este nav está oculto. En mobile/tablet va al
+                        pie (template) */}
                     <div className="hidden lg:block sticky top-0 z-20 shrink-0">
                         <PublicGuideNav items={navItems} placement="top" />
                     </div>
