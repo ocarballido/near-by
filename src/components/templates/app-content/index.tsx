@@ -1,3 +1,5 @@
+import clsx from "clsx";
+
 import { SidebarProvider } from "@/lib/context/SidebarContext";
 
 import Sidebar from "@/components/organisms/sidebar";
@@ -32,7 +34,14 @@ const AppContentTemplate = ({
 }: AppContentTemplateProps) => {
     return (
         <div className="flex flex-col gap-2 items-stretch w-full font-body overflow-hidden grow min-h-0">
-            <div className="flex flex-auto min-h-0 relative w-full pr-4 pb-4 pl-4 md:pl-0">
+            {/* Desde md el sidebar queda pegado al borde: sin él, el padding
+                izquierdo se mantiene igual que el derecho */}
+            <div
+                className={clsx(
+                    "flex flex-auto min-h-0 relative w-full pr-4 pb-4 pl-4",
+                    showSidebar && "md:pl-0",
+                )}
+            >
                 {showSidebar && (
                     <Sidebar
                         sidebar={sidebar}

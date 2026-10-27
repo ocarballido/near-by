@@ -1,18 +1,20 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 import { createServerAdminClient } from "@/lib/supabase/serverAdminClient";
 import { CATEGORIES_SUB_CATEGORIES } from "@/config/config-constants";
 import { createSSRClient } from "@/lib/supabase/server";
 import { z } from "zod";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Database, TablesUpdate } from "@/lib/types";
+import type { Database, Tables, TablesUpdate } from "@/lib/types";
 
 import { translateAndStoreProperty } from "@/lib/translations/translateAndStoreProperty";
 
-import { uploadPropertyImage } from "@/lib/uploadPropertyImage";
-import { uploadPropertyLogo } from "@/lib/uploadPropertyLogo";
+import { uploadPropertyImage } from "@/lib/storage/upload-property-image";
+import { uploadPropertyLogo } from "@/lib/storage/upload-property-logo";
+import { removePublicImages } from "@/lib/storage/remove-public-images";
 
 // ==============================
 // Helpers
@@ -105,11 +107,25 @@ export async function updateProperty(
         const db = supabase as unknown as SupabaseClient<Database>;
 
         // 3) Verificar que la propiedad existe y pertenece al usuario
+        // name y access_instructions: valores previos para retraducir solo lo
+        // que cambie
         const { data: existing, error: existingError } = await db
             .from("properties")
-            .select("id, user_id, image_url, logo_url")
+            .select("id, user_id, image_url, logo_url, name, access_instructions")
             .eq("id", propertyId)
-            .single();
+            .single()
+            .overrideTypes<
+                Pick<
+                    Tables<"properties">,
+                    | "id"
+                    | "user_id"
+                    | "image_url"
+                    | "logo_url"
+                    | "name"
+                    | "access_instructions"
+                >,
+                { merge: false }
+            >();
 
         if (existingError || !existing?.id) {
             console.error("Error al leer propiedad:", existingError);
@@ -164,6 +180,7 @@ export async function updateProperty(
         const imageFile = formData.get("image") as File | null;
 
         let imageUrl = existing.image_url ?? null;
+        let uploadedImageUrl: string | null = null;
 
         if (imageFile) {
             const uploadRes = await uploadPropertyImage({
@@ -175,6 +192,7 @@ export async function updateProperty(
             if (!uploadRes.ok) return uploadRes.errorState;
 
             imageUrl = uploadRes.imageUrl;
+            uploadedImageUrl = uploadRes.imageUrl;
         } else if (validated.image_action === "remove") {
             imageUrl = null;
         }
@@ -183,6 +201,7 @@ export async function updateProperty(
         const logoFile = formData.get("logo") as File | null;
 
         let logoUrl = existing.logo_url ?? null;
+        let uploadedLogoUrl: string | null = null;
 
         if (logoFile) {
             const logoUploadRes = await uploadPropertyLogo({
@@ -191,9 +210,15 @@ export async function updateProperty(
                 logoFile,
             });
 
-            if (!logoUploadRes.ok) return logoUploadRes.errorState;
+            if (!logoUploadRes.ok) {
+                await removePublicImages(db, "property-images", userId, [
+                    uploadedImageUrl,
+                ]);
+                return logoUploadRes.errorState;
+            }
 
             logoUrl = logoUploadRes.logoUrl;
+            uploadedLogoUrl = logoUploadRes.logoUrl;
         } else if (validated.logo_action === "remove") {
             logoUrl = null;
         }
@@ -222,6 +247,13 @@ export async function updateProperty(
 
         if (updateError) {
             console.error("Error al actualizar propiedad:", updateError);
+            // Ninguna fila apunta a lo recién subido: no dejarlo huérfano
+            await removePublicImages(db, "property-images", userId, [
+                uploadedImageUrl,
+            ]);
+            await removePublicImages(db, "property-logos", userId, [
+                uploadedLogoUrl,
+            ]);
             return {
                 errors: {
                     server: [
@@ -231,17 +263,45 @@ export async function updateProperty(
             };
         }
 
-        // 6.1) Si el owner decidió eliminar los lugares recomendados
+        // 6.1) Imagen y logo sustituidos o quitados: el update ya no los
+        //      referencia, se borran del Storage
+        if (imageUrl !== existing.image_url) {
+            await removePublicImages(db, "property-images", userId, [
+                existing.image_url,
+            ]);
+        }
+        if (logoUrl !== existing.logo_url) {
+            await removePublicImages(db, "property-logos", userId, [
+                existing.logo_url,
+            ]);
+        }
+
+        // 6.2) Si el owner decidió eliminar los lugares recomendados
         //      (dirección cambiada + confirmación explícita en el modal),
         //      se borran aquí, tras el update exitoso de la propiedad.
         if (validated.locations_action === "delete") {
-            const { error: deleteLocationsError } = await db
-                .from("property_data")
-                .delete()
-                .eq("property_id", propertyId)
-                .eq("type", "location");
+            // .select() devuelve las filas borradas: sus imágenes salen del
+            // mismo delete, sin una lectura previa que pueda quedar desfasada
+            const { data: deletedLocations, error: deleteLocationsError } =
+                await db
+                    .from("property_data")
+                    .delete()
+                    .eq("property_id", propertyId)
+                    .eq("type", "location")
+                    .select("image_url")
+                    .overrideTypes<
+                        Pick<Tables<"property_data">, "image_url">[],
+                        { merge: false }
+                    >();
 
-            if (deleteLocationsError) {
+            if (!deleteLocationsError) {
+                await removePublicImages(
+                    db,
+                    "location-images",
+                    userId,
+                    deletedLocations.map((loc) => loc.image_url),
+                );
+            } else {
                 // No abortamos el flujo: la propiedad ya se actualizó
                 // correctamente. Registramos el fallo para investigar,
                 // pero no bloqueamos al owner por esto.
@@ -252,35 +312,53 @@ export async function updateProperty(
             }
         }
 
-        // Si access_instructions se ha borrado, eliminamos sus traducciones
-        if (!validated.access_instructions) {
-            await supabase
+        // Traducciones: solo de los campos que cambian (cada traducción
+        // consume cuota del anfitrión). La antigua se borra antes: en la guía
+        // tiene prioridad sobre el original, y si la nueva no llega (sin
+        // cuota, texto largo, error) el huésped vería datos desfasados (p. ej.
+        // un código de acceso antiguo).
+        const newTexts = {
+            name: validated.name,
+            access_instructions: validated.access_instructions,
+        };
+        const changedFields = (["name", "access_instructions"] as const).filter(
+            (field) => (existing[field] ?? "") !== (newTexts[field] ?? ""),
+        );
+
+        if (changedFields.length > 0) {
+            const { error: deleteTrErr } = await db
                 .from("property_translations")
                 .delete()
                 .eq("property_id", propertyId)
-                .eq("field_key", "access_instructions");
-        } else {
-            const fieldsToTranslate: {
-                fieldKey: "name" | "access_instructions";
-                value: string;
-            }[] = [];
+                .in("field_key", changedFields);
 
-            if (validated.name) {
-                fieldsToTranslate.push({
-                    fieldKey: "name",
-                    value: validated.name,
-                });
+            if (deleteTrErr) {
+                console.error(
+                    "[updateProperty] Error borrando traducciones:",
+                    deleteTrErr,
+                );
             }
 
-            fieldsToTranslate.push({
-                fieldKey: "access_instructions",
-                value: validated.access_instructions,
+            const fieldsToTranslate = changedFields.flatMap((fieldKey) => {
+                const value = newTexts[fieldKey];
+                return value ? [{ fieldKey, value }] : [];
             });
 
-            translateAndStoreProperty(propertyId, fieldsToTranslate).catch(
-                (err) =>
-                    console.error("[updateProperty] Error en traducción:", err),
-            );
+            if (fieldsToTranslate.length > 0) {
+                // after(): tras responder, sin bloquear al anfitrión
+                after(() =>
+                    translateAndStoreProperty(
+                        propertyId,
+                        { type: "user", userId },
+                        fieldsToTranslate,
+                    ).catch((err) =>
+                        console.error(
+                            "[updateProperty] Error en traducción:",
+                            err,
+                        ),
+                    ),
+                );
+            }
         }
 
         revalidatePath("/app");

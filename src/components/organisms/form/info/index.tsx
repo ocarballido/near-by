@@ -181,7 +181,15 @@ const UpdateInfoForm = ({
                 onSubmit={handleSubmit(onSubmit)}
                 className="flex flex-col gap-0 w-full"
             >
-                <div className="flex flex-col gap-4 p-4 pt-0 border-b border-gray-200">
+                {/* Sin border-b en la última sección: la barra sticky ya
+                    lleva border-t y se vería doble al final del formulario */}
+                <div
+                    className={
+                        aiGenerationEnabled
+                            ? "flex flex-col gap-4 p-4 pt-0 border-b border-gray-200"
+                            : "flex flex-col gap-4 p-4 pt-0"
+                    }
+                >
                     <DashboardData
                         label={
                             <Typography
@@ -216,7 +224,7 @@ const UpdateInfoForm = ({
                 </div>
 
                 {aiGenerationEnabled ? (
-                    <div className="flex flex-col gap-4 p-4 border-b border-gray-200">
+                    <div className="flex flex-col gap-4 p-4">
                         <DashboardData
                             label={
                                 <Typography
@@ -282,28 +290,32 @@ const UpdateInfoForm = ({
                     </div>
                 ) : null}
 
-                <div className="flex flex-col gap-4 p-4">
-                    <div className="flex flex-col gap-2">
-                        <Button
-                            type="submit"
-                            label={t("Añadir información")}
-                            className="w-full"
-                            disabled={isSubmitting}
-                        />
-                        <Button
-                            label={t("Cancelar")}
-                            className="w-full"
-                            color="secondary"
-                            onClick={() => router.back()}
-                        />
-                        <ButtonLink
-                            label={t("feedback.cta")}
-                            href={`/app/feedback/create_info/property/${propertyId}?returnTo=/app/properties/${propertyId}/${categoryId}/${subCategoryId}`}
-                            color="white"
-                            className="w-full"
-                            iconLeft={<IconHelp />}
-                        />
-                    </div>
+                {/* sticky: se queda al pie del área de scroll (el <main> del
+                    layout) sin salir de la tarjeta, y vuelve a su sitio al
+                    llegar al final del formulario */}
+                <div className="sticky bottom-0 z-10 flex flex-col gap-2 p-4 bg-white border-t border-gray-200 last:rounded-b-xl">
+                    <Button
+                        type="submit"
+                        label={t("Añadir información")}
+                        className="w-full"
+                        disabled={isSubmitting}
+                    />
+                    <Button
+                        label={t("Cancelar")}
+                        className="w-full"
+                        color="secondary"
+                        onClick={() => router.back()}
+                    />
+                </div>
+
+                <div className="px-4 pb-4">
+                    <ButtonLink
+                        label={t("feedback.cta")}
+                        href={`/app/feedback/create_info/property/${propertyId}?returnTo=/app/properties/${propertyId}/${categoryId}/${subCategoryId}`}
+                        color="white"
+                        className="w-full"
+                        iconLeft={<IconHelp />}
+                    />
                 </div>
             </form>
         </div>

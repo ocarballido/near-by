@@ -1,31 +1,59 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { after } from 'next/server';
 import { z } from 'zod';
 import { createSSRClient } from '@/lib/supabase/server';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
-import { MAX_IMAGE_SIZE } from '@/config/config-constants';
 import { touchPropertyUpdatedAt } from '@/lib/properties/touch-property';
 import { checkPropertyOwner } from '@/lib/properties/check-property-owner';
 import { findCategoryIdBySubCategoryId } from '@/lib/places/place-search-plan';
-import { imageExtensionFromMimeType } from '@/lib/storage/image-extension';
+import { removePublicImages } from '@/lib/storage/remove-public-images';
+import { uploadLocationImage } from '@/lib/storage/upload-location-image';
 import { translateAndStore } from '@/lib/translations/translateAndStore';
+import {
+	MAX_LOCATION_DESCRIPTION_LENGTH,
+	MAX_LOCATION_NAME_LENGTH,
+} from '@/config/config-constants';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database, Tables, TablesInsert, TablesUpdate } from '@/lib/types';
 
 import { updatePropertyProgressAndTrack } from '@/lib/updatePropertyProgress';
 
-// 1) Definimos un esquema Zod para validar el formulario
+// 1) Definimos un esquema Zod para validar el formulario.
+// Los mensajes de error son claves de messages/*.json: los traduce el
+// formulario (los límites {n} los pone él con las mismas constantes).
+// También los de tipo: formData.get devuelve null si falta un campo, y sin
+// invalid_type_error Zod respondería con su mensaje por defecto en inglés.
+const invalidData = { invalid_type_error: 'locationInvalidData' };
+
 const LocationSchema = z.object({
-	property_id: z.string().uuid(),
-	sub_category_id: z.string().uuid(),
-	category_id: z.string().uuid(),
-	name: z.string().nonempty('El nombre es obligatorio'),
-	address: z.string().nonempty('La dirección es obligatoria'),
-	description: z.string().optional().default(''),
-	latitude: z.preprocess((v) => (v ? Number(v) : NaN), z.number().finite()),
-	longitude: z.preprocess((v) => (v ? Number(v) : NaN), z.number().finite()),
+	property_id: z.string(invalidData).uuid('locationInvalidData'),
+	sub_category_id: z.string(invalidData).uuid('locationInvalidData'),
+	category_id: z.string(invalidData).uuid('locationInvalidData'),
+	name: z
+		.string({ invalid_type_error: 'El nombre es obligatorio' })
+		.trim()
+		.nonempty('El nombre es obligatorio')
+		.max(MAX_LOCATION_NAME_LENGTH, 'locationNameTooLong'),
+	address: z
+		.string({ invalid_type_error: 'La dirección es obligatoria' })
+		.nonempty('La dirección es obligatoria'),
+	description: z
+		.string()
+		.trim()
+		.max(MAX_LOCATION_DESCRIPTION_LENGTH, 'description-characters')
+		.optional()
+		.default(''),
+	latitude: z.preprocess(
+		(v) => (v ? Number(v) : NaN),
+		z.number(invalidData).finite('locationInvalidData'),
+	),
+	longitude: z.preprocess(
+		(v) => (v ? Number(v) : NaN),
+		z.number(invalidData).finite('locationInvalidData'),
+	),
 	featured: z
 		.preprocess((v) => v === 'true' || v === true, z.boolean())
 		.optional()
@@ -48,7 +76,6 @@ export type LocationFormState = {
 		server?: string[];
 	};
 	success?: boolean;
-	message?: string;
 	redirectTo?: string;
 };
 
@@ -98,6 +125,12 @@ export async function createLocation(
 					sub_category_id: fe.sub_category_id,
 					name: fe.name,
 					address: fe.address,
+					description: fe.description,
+					// Campos sin control propio en el formulario: aviso general
+					server:
+						fe.category_id || fe.latitude || fe.longitude
+							? ['locationInvalidData']
+							: undefined,
 				},
 			};
 		}
@@ -110,7 +143,7 @@ export async function createLocation(
 			loc.sub_category_id,
 		);
 		if (expectedCategoryId && expectedCategoryId !== loc.category_id) {
-			return { errors: { server: ['Datos inválidos.'] } };
+			return { errors: { server: ['locationInvalidData'] } };
 		}
 
 		// Antes de subir nada a Storage o escribir en BD
@@ -118,83 +151,34 @@ export async function createLocation(
 		if (!owner.ok) {
 			return {
 				errors: {
-					server: ['No tienes permisos sobre esta propiedad.'],
+					server: ['locationNoPermission'],
 				},
 			};
 		}
 
 		// 5) Procesar imagen, si hay
 		const imageFile = formData.get('image') as File | null;
-		let image_url: string | null = null;
-		let uploadedPath: string | null = null;
-		if (imageFile && imageFile.size > 0) {
-			if (imageFile.size > MAX_IMAGE_SIZE) {
-				return {
-					errors: {
-						image: [
-							`La imagen no debe superar ${(
-								MAX_IMAGE_SIZE / 1024
-							).toFixed(0)} KB`,
-						],
-					},
-				};
-			}
-			const ext = imageExtensionFromMimeType(imageFile.type);
-			if (!ext) {
-				return {
-					errors: {
-						image: ['Formato de imagen inválido'],
-					},
-				};
-			}
-			const fileName = `${user.id}/location_${Date.now()}.${ext}`;
-			const { error: upErr } = await supabase.storage
-				.from('location-images')
-				.upload(fileName, imageFile, {
-					cacheControl: '3600',
-					upsert: false,
-				});
-			if (upErr) {
-				console.error(
-					'Error subiendo imagen a location-images:',
-					upErr,
-				);
-				return {
-					errors: {
-						server: [
-							'Error subiendo la imagen al bucket. Por favor revisa la consola del servidor.',
-						],
-					},
-				};
-			}
-			const {
-				data: { publicUrl },
-			} = supabase.storage.from('location-images').getPublicUrl(fileName);
-			image_url = publicUrl;
-			uploadedPath = fileName;
-		}
+		const uploadRes = await uploadLocationImage({
+			db,
+			userId: user.id,
+			imageFile,
+		});
+		if (!uploadRes.ok) return uploadRes.errorState;
+		const image_url = uploadRes.imageUrl;
 
 		// Si el guardado falla, no dejar huérfana la imagen recién subida
-		const discardUploadedImage = async () => {
-			if (uploadedPath) {
-				const { error: removeErr } = await supabase.storage
-					.from('location-images')
-					.remove([uploadedPath]);
-				if (removeErr) {
-					console.error(
-						'Error borrando imagen huérfana de location-images:',
-						removeErr,
-					);
-				}
-			}
-		};
+		const discardUploadedImage = () =>
+			removePublicImages(db, 'location-images', user.id, [image_url]);
 
 		// Verificar si ya existe por unique key (unique_location_entry_per_property):
 		// property_id + sub_category_id + name + lat + lng
-		type IdOnly = Pick<Tables<'property_data'>, 'id'>;
+		type ExistingLoc = Pick<
+			Tables<'property_data'>,
+			'id' | 'image_url' | 'description'
+		>;
 		const { data: existing, error: findErr } = await db
 			.from('property_data')
-			.select('id')
+			.select('id, image_url, description')
 			.eq('property_id', loc.property_id)
 			.eq('sub_category_id', loc.sub_category_id)
 			.eq('name', loc.name)
@@ -202,14 +186,14 @@ export async function createLocation(
 			.eq('longitude', loc.longitude)
 			.limit(1)
 			.maybeSingle()
-			.overrideTypes<IdOnly, { merge: false }>();
+			.overrideTypes<ExistingLoc, { merge: false }>();
 
 		if (findErr) {
 			console.error('Error comprobando existencia:', findErr);
 			await discardUploadedImage();
 			return {
 				errors: {
-					server: ['Error comprobando datos duplicados.'],
+					server: ['locationSaveError'],
 				},
 			};
 		}
@@ -219,7 +203,8 @@ export async function createLocation(
 			const updatePayload: PDUpdate = {
 				address: loc.address,
 				description: loc.description,
-				image_url,
+				// Sin imagen nueva se conserva la que ya tenía
+				image_url: image_url ?? existing.image_url,
 				featured: loc.featured,
 				must_visit: loc.must_visit,
 				updated_at: new Date().toISOString(),
@@ -234,27 +219,52 @@ export async function createLocation(
 				console.error('Error actualizando location:', updateErr);
 				await discardUploadedImage();
 				return {
-					errors: { server: ['Error actualizando el sitio.'] },
+					errors: { server: ['locationSaveError'] },
 				};
 			}
 
-			// Fire and forget — re-traducimos por si el propietario cambió el texto
-			translateAndStore(existing.id, [
-				{ fieldKey: 'name', value: loc.name },
-				...(loc.description
-					? [
-							{
-								fieldKey: 'description' as const,
-								value: loc.description,
-							},
-						]
-					: []),
-			]).catch((err) =>
-				console.error(
-					'[createLocation] Error en traducción (update):',
-					err,
-				),
-			);
+			// La imagen anterior ya no la referencia ninguna fila
+			if (image_url) {
+				await removePublicImages(db, 'location-images', user.id, [
+					existing.image_url,
+				]);
+			}
+
+			// El nombre forma parte de la búsqueda de existing, así que nunca
+			// cambia aquí: solo se retraduce la descripción, y solo si cambió
+			// (cada traducción consume cuota del anfitrión). Como en
+			// updateLocation, la traducción antigua se borra antes: en la guía
+			// tiene prioridad sobre el original.
+			if ((existing.description ?? '') !== loc.description) {
+				const { error: deleteTrErr } = await db
+					.from('property_data_translations')
+					.delete()
+					.eq('property_data_id', existing.id)
+					.eq('field_key', 'description');
+
+				if (deleteTrErr) {
+					console.error(
+						'[createLocation] Error borrando traducciones:',
+						deleteTrErr,
+					);
+				}
+
+				if (loc.description) {
+					// after(): tras responder, sin bloquear al anfitrión
+					after(() =>
+						translateAndStore(
+							existing.id,
+							{ type: 'user', userId: user.id },
+							[{ fieldKey: 'description', value: loc.description }],
+						).catch((err) =>
+							console.error(
+								'[createLocation] Error en traducción (update):',
+								err,
+							),
+						),
+					);
+				}
+			}
 		} else {
 			// 8) Insertar si no existe — mismo shape, sólo tipado y call-site neutralizado
 			type PDInsert = TablesInsert<'property_data'>;
@@ -284,24 +294,27 @@ export async function createLocation(
 				console.error('Error insertando location:', insertErr);
 				await discardUploadedImage();
 				return {
-					errors: { server: ['Error creando el sitio.'] },
+					errors: { server: ['locationSaveError'] },
 				};
 			}
 
-			// Fire and forget — traducimos el nombre de la location
+			// after(): traducimos nombre y descripción tras responder, sin
+			// bloquear al anfitrión
 			if (inserted) {
-				translateAndStore(inserted.id, [
-					{ fieldKey: 'name', value: loc.name },
-					...(loc.description
-						? [
-								{
-									fieldKey: 'description' as const,
-									value: loc.description,
-								},
-							]
-						: []),
-				]).catch((err) =>
-					console.error('[createLocation] Error en traducción:', err),
+				after(() =>
+					translateAndStore(inserted.id, { type: 'user', userId: user.id }, [
+						{ fieldKey: 'name', value: loc.name },
+						...(loc.description
+							? [
+									{
+										fieldKey: 'description' as const,
+										value: loc.description,
+									},
+								]
+							: []),
+					]).catch((err) =>
+						console.error('[createLocation] Error en traducción:', err),
+					),
 				);
 			}
 		}
@@ -321,18 +334,14 @@ export async function createLocation(
 
 		return {
 			success: true,
-			message: 'Sitio añadido correctamente',
 			redirectTo: `/app/properties`,
 		};
 	} catch (error: unknown) {
-		const errorMessage =
-			error instanceof Error
-				? error.message
-				: 'Error interno del servidor';
-
+		// El detalle se queda en el log: al cliente no se le expone
+		console.error('Error inesperado al crear el sitio:', error);
 		return {
 			errors: {
-				server: [errorMessage],
+				server: ['locationSaveError'],
 			},
 		};
 	}

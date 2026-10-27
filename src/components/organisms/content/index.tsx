@@ -14,7 +14,7 @@ const Content = ({
 }) => {
     if (!footer) {
         return (
-            <main className="flex flex-col gap-2 w-full grow min-h-0 rounded-xl bg-gray-50 p-0.5 overflow-y-auto overscroll-contain shadow-main">
+            <main className="flex flex-col gap-2 w-full grow min-h-0 rounded-xl bg-gray-50 p-0.5 pb-0 overflow-y-auto overscroll-contain shadow-main">
                 {children}
             </main>
         );

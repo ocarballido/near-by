@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useLoading } from "@/lib/context/LoadingContext";
 import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n/routing";
 
 import { deleteLocation } from "@/app/actions/locations/delete-location";
 import { deleteAllLocations } from "@/app/actions/locations/delete-all-locations";
@@ -56,6 +57,7 @@ export function LocationsContent({
     lng,
 }: LocationsProps) {
     const t = useTranslations();
+    const router = useRouter();
 
     const [isOpen, setIsOpen] = useState(false);
     const [alert, setAlert] = useState<AlertState | null>(null);
@@ -245,6 +247,12 @@ export function LocationsContent({
                         image={location.image_url}
                         featured={location.featured}
                         mustVisit={location.must_visit}
+                        editeable
+                        handleEdit={() =>
+                            router.push(
+                                `/app/location/${propertyId}/${categoryId}/${subCategoryId}?edit=${location.id}`,
+                            )
+                        }
                         handleDelete={() => {
                             setIsOpen(true);
                             setDeleteTarget("LOCATION");

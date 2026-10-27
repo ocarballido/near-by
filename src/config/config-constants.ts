@@ -271,6 +271,12 @@ export const SUBSCRIPTION_FEATURES = {
 
 export const MAX_IMAGE_SIZE = 500 * 1024; // 500 KB
 
+// Límites de texto de un sitio (property_data type 'location'). Se validan en
+// servidor: acotan también el coste de traducción. En prod (2026-10-25) el
+// nombre más largo tiene 120 caracteres y la descripción más larga 200.
+export const MAX_LOCATION_NAME_LENGTH = 150;
+export const MAX_LOCATION_DESCRIPTION_LENGTH = 200;
+
 export const LODGING_ID = "4581a08a-3e78-4800-b16c-575f5da81cba";
 export const FIRST_CATEGORY_ID = "4581a08a-3e78-4800-b16c-575f5da81cba";
 export const FIRST_CATEGORY_SUBCATEGORY_ID =

@@ -4,6 +4,8 @@ import { LOCALES } from "../src/config/config-constants";
 import { createClient } from "@supabase/supabase-js";
 import { translateAndStore } from "../src/lib/translations/translateAndStore";
 
+import type { Tables } from "../src/lib/types";
+
 const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.PRIVATE_SUPABASE_SERVICE_KEY!,
@@ -37,10 +39,14 @@ async function main() {
         // tiene dos campos independientes (name y description), y cada uno
         // puede estar en un estado de cobertura distinto (p. ej. name
         // completo desde el script anterior, description recién añadido).
-        const { data: existing } = await (supabase as any)
+        const { data: existing } = await supabase
             .from("property_data_translations")
             .select("field_key, lang")
-            .eq("property_data_id", item.id);
+            .eq("property_data_id", item.id)
+            .overrideTypes<
+                Pick<Tables<"property_data_translations">, "field_key" | "lang">[],
+                { merge: false }
+            >();
 
         const existingLangsByField = new Map<string, Set<string>>();
         for (const row of existing ?? []) {
@@ -107,6 +113,7 @@ async function main() {
                 );
                 await translateAndStore(
                     item.id,
+                    { type: "system" },
                     [{ fieldKey: field.fieldKey, value: field.value }],
                     field.missingLangs,
                 );

@@ -124,6 +124,14 @@ export default function FeedbackForm({
 		});
 	}, [distinctId, sourceArea, contextType, contextId, returnTo, locale]);
 
+	// back() y no replace(returnTo): replace sustituye /feedback por una
+	// copia de la página de origen y el siguiente "atrás" no hace nada.
+	// Sin historial previo (pestaña nueva, URL pegada) vamos a /app
+	const goBack = () => {
+		if (window.history.length > 1) router.back();
+		else router.replace('/app');
+	};
+
 	const onCancel = () => {
 		if (distinctId) {
 			trackClientEvent({
@@ -139,8 +147,7 @@ export default function FeedbackForm({
 			});
 		}
 
-		if (returnTo) router.replace(returnTo);
-		else router.back();
+		goBack();
 	};
 
 	const onSubmit: SubmitHandler<FormValues> = async (data) => {
@@ -216,12 +223,7 @@ export default function FeedbackForm({
 		setDidSucceed(true);
 		reset();
 
-		const dest =
-			returnTo && returnTo.startsWith('/app') ? returnTo : '/app';
-
-		redirectTimeoutRef.current = window.setTimeout(() => {
-			router.replace(dest);
-		}, 1200);
+		redirectTimeoutRef.current = window.setTimeout(goBack, 1200);
 	};
 
 	return (

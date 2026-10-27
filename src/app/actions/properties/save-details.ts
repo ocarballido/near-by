@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 import { createSSRClient } from "@/lib/supabase/server";
 import { createServerAdminClient } from "@/lib/supabase/serverAdminClient";
 import { trackEvent } from "@/lib/analytics/mixpanel";
@@ -110,6 +111,31 @@ export async function saveDetails(
                 .eq("property_id", propertyId);
         }
 
+        // Valores guardados antes de actualizar: solo se retraducen los campos
+        // que cambian (cada traducción consume cuota del anfitrión)
+        type DetailText = {
+            id: string;
+            name: string;
+            instructions: string | null;
+            guidelines: string | null;
+        };
+        const { data: previous, error: previousErr } = await db
+            .from("property_details")
+            .select("id, name, instructions, guidelines")
+            .eq("property_id", propertyId)
+            .overrideTypes<DetailText[], { merge: false }>();
+
+        // Sin valores previos todo cuenta como cambiado: se retraduce todo
+        if (previousErr) {
+            console.error(
+                "[saveDetails] Error leyendo detalles previos:",
+                previousErr,
+            );
+        }
+        const previousById = new Map(
+            (previous ?? []).map((detail) => [detail.id, detail]),
+        );
+
         // 7) Actualizar existentes. Guardamos los ids realmente actualizados:
         // un id de otra propiedad no actualiza nada y no debe traducirse
         const updatedIds = new Set<string>();
@@ -132,73 +158,120 @@ export async function saveDetails(
             updated?.forEach((row) => updatedIds.add(row.id));
         }
 
-        // 8) Insertar nuevos
+        // 8) Insertar nuevos. El select devuelve exactamente las filas
+        // insertadas (buscarlas después por nombre arrastraba detalles
+        // existentes con el mismo nombre)
+        let inserted: DetailText[] = [];
+        let insertFailed = false;
         if (toInsert.length > 0) {
-            await db.from("property_details").insert(
-                toInsert.map(
-                    (detail) =>
-                        ({
-                            property_id: propertyId,
-                            name: detail.name,
-                            instructions: detail.instructions,
-                            guidelines: detail.guidelines,
-                            predefined_key: detail.predefined_key,
-                            order_index: detail.order_index,
-                        }) satisfies TablesInsert<"property_details">,
-                ),
-            );
-        }
-
-        // 9) Traducir — fire and forget
-        const allSavedDetails = [
-            ...toUpdate
-                .filter((d) => updatedIds.has(d.id as string))
-                .map((d) => ({
-                    id: d.id as string,
-                    name: d.name,
-                    instructions: d.instructions,
-                    guidelines: d.guidelines,
-                })),
-        ];
-
-        // Para los insertados necesitamos sus IDs recién creados
-        if (toInsert.length > 0) {
-            const insertedNames = toInsert.map((d) => d.name);
-            const { data: inserted } = await db
+            const { data, error: insertErr } = await db
                 .from("property_details")
+                .insert(
+                    toInsert.map(
+                        (detail) =>
+                            ({
+                                property_id: propertyId,
+                                name: detail.name,
+                                instructions: detail.instructions,
+                                guidelines: detail.guidelines,
+                                predefined_key: detail.predefined_key,
+                                order_index: detail.order_index,
+                            }) satisfies TablesInsert<"property_details">,
+                    ),
+                )
                 .select("id, name, instructions, guidelines")
-                .eq("property_id", propertyId)
-                .in("name", insertedNames);
+                .overrideTypes<DetailText[], { merge: false }>();
 
-            if (inserted) {
-                allSavedDetails.push(...inserted);
+            if (insertErr) {
+                console.error(
+                    "[saveDetails] Error insertando detalles:",
+                    insertErr,
+                );
+                insertFailed = true;
             }
+            inserted = data ?? [];
         }
 
-        for (const detail of allSavedDetails) {
-            const fields: {
-                fieldKey: "name" | "instructions" | "guidelines";
-                value: string;
-            }[] = [];
+        // 9) Traducir con after(): tras responder, sin bloquear al anfitrión.
+        // Nuevos: todos sus campos.
+        // Actualizados: solo los que cambiaron; su traducción antigua se borra
+        // antes, porque en la guía tiene prioridad sobre el original.
+        const translatableFields = [
+            "name",
+            "instructions",
+            "guidelines",
+        ] as const;
 
-            if (detail.name)
-                fields.push({ fieldKey: "name", value: detail.name });
-            if (detail.instructions)
-                fields.push({
-                    fieldKey: "instructions",
-                    value: detail.instructions,
-                });
-            if (detail.guidelines)
-                fields.push({
-                    fieldKey: "guidelines",
-                    value: detail.guidelines,
-                });
+        const detailsToTranslate: {
+            detail: DetailText;
+            changed: readonly (typeof translatableFields)[number][];
+        }[] = inserted.map((detail) => ({
+            detail,
+            changed: translatableFields,
+        }));
 
-            if (fields.length > 0) {
-                translateAndStoreDetails(detail.id, fields).catch((err) =>
-                    console.error("[saveDetails] Error en traducción:", err),
+        for (const detail of toUpdate) {
+            const id = detail.id as string;
+            if (!updatedIds.has(id)) continue;
+
+            const before = previousById.get(id);
+            const changed = translatableFields.filter(
+                (field) => (before?.[field] ?? "") !== (detail[field] ?? ""),
+            );
+            if (changed.length === 0) continue;
+
+            const { error: deleteTrErr } = await db
+                .from("property_details_translations")
+                .delete()
+                .eq("property_detail_id", id)
+                .in("field_key", changed);
+
+            if (deleteTrErr) {
+                console.error(
+                    "[saveDetails] Error borrando traducciones:",
+                    deleteTrErr,
                 );
             }
+
+            detailsToTranslate.push({
+                detail: {
+                    id,
+                    name: detail.name,
+                    instructions: detail.instructions,
+                    guidelines: detail.guidelines,
+                },
+                changed,
+            });
+        }
+
+        for (const { detail, changed } of detailsToTranslate) {
+            const fields = changed.flatMap((fieldKey) => {
+                const value = detail[fieldKey];
+                return value ? [{ fieldKey, value }] : [];
+            });
+
+            if (fields.length > 0) {
+                after(() =>
+                    translateAndStoreDetails(
+                        detail.id,
+                        { type: "user", userId: user.id },
+                        fields,
+                    ).catch((err) =>
+                        console.error("[saveDetails] Error en traducción:", err),
+                    ),
+                );
+            }
+        }
+
+        // Los existentes ya se actualizaron (y se traducen arriba): se refresca
+        // la vista, pero el guardado no está completo
+        if (insertFailed) {
+            revalidatePath("/app");
+            return {
+                errors: {
+                    server: ["No se han podido guardar los detalles nuevos"],
+                },
+            };
         }
 
         // 10) Track

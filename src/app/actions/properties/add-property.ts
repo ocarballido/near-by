@@ -4,6 +4,7 @@
 // import { getTranslations } from 'next-intl/server';
 
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 import { createServerAdminClient } from "@/lib/supabase/serverAdminClient";
 import { createSSRClient } from "@/lib/supabase/server";
 // import { MAX_IMAGE_SIZE } from '@/config/config-constants';
@@ -15,8 +16,8 @@ import { trackEvent } from "@/lib/analytics/mixpanel";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database, TablesInsert } from "@/lib/types";
 
-import { uploadPropertyImage } from "@/lib/uploadPropertyImage";
-import { uploadPropertyLogo } from "@/lib/uploadPropertyLogo";
+import { uploadPropertyImage } from "@/lib/storage/upload-property-image";
+import { uploadPropertyLogo } from "@/lib/storage/upload-property-logo";
 import { seedLodgingContent } from "@/lib/seedLodgingContent";
 import { translateAndStoreProperty } from "@/lib/translations/translateAndStoreProperty";
 
@@ -233,15 +234,19 @@ export async function createProperty(formData: FormData): Promise<FormState> {
             selectedSubCategoryIds: selectedSeedSubCategoryIds,
         });
 
-        // Fire and forget — traducimos access_instructions si existe
-        if (validated.access_instructions) {
-            translateAndStoreProperty(property.id, [
-                {
-                    fieldKey: "access_instructions",
-                    value: validated.access_instructions,
-                },
-            ]).catch((err) =>
-                console.error("[createProperty] Error en traducción:", err),
+        // after(): traducimos access_instructions si existe, tras responder
+        // y sin bloquear al anfitrión
+        const accessInstructions = validated.access_instructions;
+        if (accessInstructions) {
+            after(() =>
+                translateAndStoreProperty(property.id, { type: "user", userId }, [
+                    {
+                        fieldKey: "access_instructions",
+                        value: accessInstructions,
+                    },
+                ]).catch((err) =>
+                    console.error("[createProperty] Error en traducción:", err),
+                ),
             );
         }
 

@@ -1,13 +1,22 @@
 import { notFound, redirect } from "next/navigation";
 import { getLocale } from "next-intl/server";
 
-import AddPlaceForm from "@/components/organisms/form/place";
+import AddPlaceForm, {
+    type EditLocationInitialValues,
+} from "@/components/organisms/form/place";
 import { getPlaceRecommendations } from "@/app/actions/locations/get-recommendations";
 import { createSSRClient } from "@/lib/supabase/server";
 import AppContentTemplate from "@/components/templates/app-content";
 
-export default async function LocationPage({ params }: PageProps) {
+import type { Tables } from "@/lib/types";
+
+export default async function LocationPage({
+    params,
+    searchParams,
+}: PageProps) {
     const { locationSlug } = await params;
+    const { edit } = await searchParams;
+    const locationId = typeof edit === "string" ? edit : undefined;
     const [propertyId, categoryId, subCategoryId] = locationSlug;
 
     if (!propertyId || !categoryId || !subCategoryId || !locationSlug) {
@@ -37,6 +46,55 @@ export default async function LocationPage({ params }: PageProps) {
 
     if (propErr || !property?.id) return notFound();
 
+    // Modo edición (?edit=<locationId>): el sitio tiene que pertenecer a
+    // esta propiedad y subcategoría (RLS ya limita a las propias)
+    if (locationId) {
+        type LocationRow = Pick<
+            Tables<"property_data">,
+            | "name"
+            | "address"
+            | "description"
+            | "image_url"
+            | "featured"
+            | "must_visit"
+        >;
+
+        const { data: location, error: locErr } = await supabase
+            .from("property_data")
+            .select("name,address,description,image_url,featured,must_visit")
+            .eq("id", locationId)
+            .eq("property_id", propertyId)
+            .eq("sub_category_id", subCategoryId)
+            .eq("type", "location")
+            .maybeSingle()
+            .overrideTypes<LocationRow, { merge: false }>();
+
+        if (locErr || !location) return notFound();
+
+        const initialValues: EditLocationInitialValues = {
+            name: location.name ?? "",
+            address: location.address ?? "",
+            description: location.description ?? "",
+            image_url: location.image_url ?? null,
+            featured: location.featured ?? false,
+            must_visit: location.must_visit ?? false,
+        };
+
+        return (
+            <AppContentTemplate showSidebar={false}>
+                <div className="font-roboto flex flex-col grow items-center gap-3 sm:py-6">
+                    <AddPlaceForm
+                        propertyId={propertyId}
+                        categoryId={categoryId}
+                        subCategoryId={subCategoryId}
+                        locationId={locationId}
+                        initialValues={initialValues}
+                    />
+                </div>
+            </AppContentTemplate>
+        );
+    }
+
     const locale = await getLocale();
 
     const recoRes = await getPlaceRecommendations(
@@ -48,7 +106,7 @@ export default async function LocationPage({ params }: PageProps) {
 
     return (
         <AppContentTemplate showSidebar={false}>
-            <div className="p-1.5 font-roboto flex flex-col grow items-center gap-3 py-6">
+            <div className="font-roboto flex flex-col grow items-center gap-3 sm:py-6">
                 <AddPlaceForm
                     propertyId={propertyId}
                     categoryId={categoryId}
@@ -62,4 +120,5 @@ export default async function LocationPage({ params }: PageProps) {
 
 type PageProps = {
     params: Promise<{ locationSlug: string[] }>;
+    searchParams: Promise<{ edit?: string | string[] }>;
 };

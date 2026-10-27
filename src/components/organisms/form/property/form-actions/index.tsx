@@ -1,32 +1,20 @@
 'use client';
 
 import Button from '@/components/molecules/button';
-import ButtonLink from '@/components/molecules/button-link';
-import IconHelp from '@/components/atoms/icon/help';
 
 type Props = {
-	isEdit: boolean;
 	isSubmitting: boolean;
 	onCancel: () => void;
 	submitLabel: string;
 	cancelLabel: string;
 	className?: string;
-
-	// Feedback (solo create)
-	showFeedback: boolean;
-	feedbackLabel: string;
-	feedbackHref: string;
 };
 
 export default function FormActions({
-	isEdit,
 	isSubmitting,
 	onCancel,
 	submitLabel,
 	cancelLabel,
-	showFeedback,
-	feedbackLabel,
-	feedbackHref,
 	className,
 }: Props) {
 	return (
@@ -45,17 +33,6 @@ export default function FormActions({
 				color="secondary"
 				onClick={onCancel}
 			/>
-
-			{/* feedback link: solo create (o cuando decidas) */}
-			{showFeedback && !isEdit && (
-				<ButtonLink
-					label={feedbackLabel}
-					href={feedbackHref}
-					color="white"
-					className="w-full"
-					iconLeft={<IconHelp />}
-				/>
-			)}
 		</div>
 	);
 }

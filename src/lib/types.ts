@@ -884,7 +884,9 @@ export type Database = {
           chars_used: number | null
           created_at: string | null
           id: string
+          input_tokens: number
           month: string
+          output_tokens: number
           paused: boolean | null
           updated_at: string | null
         }
@@ -893,7 +895,9 @@ export type Database = {
           chars_used?: number | null
           created_at?: string | null
           id?: string
+          input_tokens?: number
           month: string
+          output_tokens?: number
           paused?: boolean | null
           updated_at?: string | null
         }
@@ -902,9 +906,38 @@ export type Database = {
           chars_used?: number | null
           created_at?: string | null
           id?: string
+          input_tokens?: number
           month?: string
+          output_tokens?: number
           paused?: boolean | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      translation_user_daily_usage: {
+        Row: {
+          calls_used: number
+          chars_used: number
+          input_tokens: number
+          output_tokens: number
+          usage_date: string
+          user_id: string
+        }
+        Insert: {
+          calls_used?: number
+          chars_used?: number
+          input_tokens?: number
+          output_tokens?: number
+          usage_date?: string
+          user_id: string
+        }
+        Update: {
+          calls_used?: number
+          chars_used?: number
+          input_tokens?: number
+          output_tokens?: number
+          usage_date?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -975,6 +1008,57 @@ export type Database = {
       increment_chatbot_daily_usage: {
         Args: { p_anon_id: string; p_property_id: string }
         Returns: number
+      }
+      record_system_translation_tokens: {
+        Args: { p_input_tokens: number; p_output_tokens: number }
+        Returns: undefined
+      }
+      record_translation_tokens: {
+        Args: {
+          p_input_tokens: number
+          p_output_tokens: number
+          p_user_id: string
+        }
+        Returns: undefined
+      }
+      reserve_translation_quota: {
+        Args: {
+          p_chars: number
+          p_daily_limit: number
+          p_monthly_limit: number
+          p_user_id: string
+        }
+        Returns: boolean
+      }
+      upsert_property_data_translations_if_current: {
+        Args: {
+          p_field_key: string
+          p_id: string
+          p_source_lang: string
+          p_source_value: string
+          p_translations: Json
+        }
+        Returns: boolean
+      }
+      upsert_property_details_translations_if_current: {
+        Args: {
+          p_field_key: string
+          p_id: string
+          p_source_lang: string
+          p_source_value: string
+          p_translations: Json
+        }
+        Returns: boolean
+      }
+      upsert_property_translations_if_current: {
+        Args: {
+          p_field_key: string
+          p_id: string
+          p_source_lang: string
+          p_source_value: string
+          p_translations: Json
+        }
+        Returns: boolean
       }
     }
     Enums: {

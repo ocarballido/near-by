@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useLoading } from "@/lib/context/LoadingContext";
@@ -49,8 +49,6 @@ export default function ExploreDetailsEditor({
 
     const [fieldsets, setFieldsets] =
         useState<DetailFieldsetState[]>(initialFieldsets);
-    const [chipsFloating, setChipsFloating] = useState(false);
-    const chipsRef = useRef<HTMLDivElement>(null);
 
     // Justo después del estado de fieldsets:
     const [openLocalId, setOpenLocalId] = useState<string | null>(
@@ -60,9 +58,6 @@ export default function ExploreDetailsEditor({
     const handleToggle = useCallback((localId: string) => {
         setOpenLocalId((prev) => (prev === localId ? null : localId));
     }, []);
-
-    const [buttonsFloating, setButtonsFloating] = useState(false);
-    const buttonsRef = useRef<HTMLDivElement>(null);
 
     const lastFieldsetRef = useRef<HTMLDivElement>(null);
 
@@ -108,32 +103,6 @@ export default function ExploreDetailsEditor({
             `/app/properties/${propertyId}/${categoryId}/${subCategoryId}`,
         );
     };
-
-    useEffect(() => {
-        const el = chipsRef.current;
-        if (!el) return;
-
-        const observer = new IntersectionObserver(
-            ([entry]) => setChipsFloating(!entry.isIntersecting),
-            { threshold: 0 },
-        );
-
-        observer.observe(el);
-        return () => observer.disconnect();
-    }, []);
-
-    useEffect(() => {
-        const el = buttonsRef.current;
-        if (!el) return;
-
-        const observer = new IntersectionObserver(
-            ([entry]) => setButtonsFloating(!entry.isIntersecting),
-            { threshold: 0 },
-        );
-
-        observer.observe(el);
-        return () => observer.disconnect();
-    }, []);
 
     const activeKeys = new Set(
         fieldsets
@@ -231,57 +200,8 @@ export default function ExploreDetailsEditor({
 
     const canSave = fieldsets.some((f) => f.name.trim().length > 0);
 
-    const ChipsRow = () => (
-        <div className="flex flex-wrap gap-2">
-            {PREDEFINED_KEYS.map((key) => (
-                <BadgeCheck
-                    key={key}
-                    label={t(`exploreDetails.predefined.${key}.name`)}
-                    checked={activeKeys.has(key)}
-                    onToggle={() => handleChipToggle(key)}
-                />
-            ))}
-        </div>
-    );
-
     return (
         <>
-            {/* Chips flotantes — aparecen cuando el original sale del viewport */}
-            {chipsFloating && (
-                <div className="fixed top-22 left-0 md:-left-2 right-2 z-50 flex justify-center pointer-events-none">
-                    <div className="bg-white border-b border-gray-100 p-4 max-w-[600px] w-full pointer-events-auto">
-                        <Typography weight="medium" size="sm" className="mb-3">
-                            {t("Elementos frecuentes")}
-                        </Typography>
-                        <ChipsRow />
-                    </div>
-                </div>
-            )}
-
-            {buttonsFloating && (
-                <div className="fixed -bottom-4 left-0 md:-left-2 right-2 z-50 flex justify-center pointer-events-none pb-4">
-                    <div className="bg-white border-t border-gray-100 p-4 max-w-[600px] w-full pointer-events-auto flex flex-col gap-2">
-                        <Button
-                            label={
-                                saving ? t("Guardando") : t("Guardar detalles")
-                            }
-                            disabled={!canSave || saving}
-                            onClick={handleSave}
-                        />
-                        <Button
-                            label={t("Añadir detalle personalizado")}
-                            color="secondary"
-                            onClick={handleAddCustom}
-                        />
-                        <Button
-                            label={t("Cancelar")}
-                            color="secondary"
-                            onClick={() => router.back()}
-                        />
-                    </div>
-                </div>
-            )}
-
             <div className="bg-white rounded-xl max-w-[600px] w-full shadow-xs relative">
                 <div className="rounded-lg flex flex-col gap-2 items-center mb-3 pt-4">
                     <FancyIcon
@@ -300,21 +220,9 @@ export default function ExploreDetailsEditor({
                     </Typography>
                 </div>
 
-                {alert && (
-                    <Alert
-                        hideTime={3000}
-                        open={alert !== null}
-                        title={
-                            alert.type === "error" ? t("Error") : t("Validado")
-                        }
-                        dismissible
-                        type={alert.type}
-                        message={alert.message}
-                    />
-                )}
-
-                {/* Sección 1 — Chips (original, actúa como sentinel) */}
-                <div className="flex flex-col gap-4 p-4 border-b border-gray-200">
+                {/* Sección 1 — Chips. sticky: se queda arriba del área de
+                    scroll (el <main> del layout) sin salir de la tarjeta */}
+                <div className="sticky top-0 z-10 flex flex-col gap-4 p-4 bg-white border-b border-gray-200">
                     <DashboardData
                         label={
                             <Typography
@@ -337,8 +245,15 @@ export default function ExploreDetailsEditor({
                             </Typography>
                         }
                     />
-                    <div ref={chipsRef}>
-                        <ChipsRow />
+                    <div className="flex flex-wrap gap-2">
+                        {PREDEFINED_KEYS.map((key) => (
+                            <BadgeCheck
+                                key={key}
+                                label={t(`exploreDetails.predefined.${key}.name`)}
+                                checked={activeKeys.has(key)}
+                                onToggle={() => handleChipToggle(key)}
+                            />
+                        ))}
                     </div>
                 </div>
 
@@ -393,7 +308,9 @@ export default function ExploreDetailsEditor({
                     />
                 </div>
 
-                <div ref={buttonsRef} className="flex flex-col gap-2 p-4">
+                {/* sticky: se queda al pie del área de scroll y vuelve a su
+                    sitio al llegar al final, como en el formulario de sitios */}
+                <div className="sticky bottom-0 z-10 flex flex-col gap-2 p-4 bg-white border-t border-gray-200 last:rounded-b-xl">
                     <Button
                         label={saving ? t("Guardando") : t("Guardar detalles")}
                         disabled={!canSave || saving}
@@ -406,6 +323,19 @@ export default function ExploreDetailsEditor({
                     />
                 </div>
             </div>
+
+            {/* Después de la tarjeta: con el mismo z-10 que los chips
+                sticky, el orden del DOM decide y así el Alert queda encima */}
+            {alert && (
+                <Alert
+                    hideTime={3000}
+                    open={alert !== null}
+                    title={alert.type === "error" ? t("Error") : t("Validado")}
+                    dismissible
+                    type={alert.type}
+                    message={alert.message}
+                />
+            )}
         </>
     );
 }

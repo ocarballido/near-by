@@ -151,11 +151,12 @@ const Place = ({
                         className="hidden sm:flex h-fit"
                     />
                     {editeable && (
-                        <ButtonIcon
+                        <Button
+                            className="hidden sm:flex h-fit"
+                            iconLeft={<IconEdit />}
+                            label={t("Editar")}
                             onClick={handleEdit}
-                            icon={<IconEdit />}
                             color="secondary"
-                            className="hidden sm:flex"
                         />
                     )}
                 </div>
@@ -179,19 +180,13 @@ const Place = ({
                     color="error"
                     className="w-full"
                 />
-                {/* <Button
-					className="w-full button__delete"
-					color="secondary"
-					iconLeft={<IconDelete />}
-					label={t('Eliminar')}
-					onClick={handleDelete}
-				/> */}
                 {editeable && (
                     <Button
                         className="w-full"
                         iconLeft={<IconEdit />}
                         label={t("Editar")}
                         onClick={handleEdit}
+                        color="secondary"
                     />
                 )}
             </div>

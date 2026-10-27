@@ -3,6 +3,8 @@ import { LOCALES } from "../src/config/config-constants";
 import { createClient } from "@supabase/supabase-js";
 import { translateAndStoreProperty } from "../src/lib/translations/translateAndStoreProperty";
 
+import type { Tables } from "../src/lib/types";
+
 const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.PRIVATE_SUPABASE_SERVICE_KEY!,
@@ -37,16 +39,55 @@ async function main() {
     let errores = 0;
 
     for (const [i, property] of properties.entries()) {
-        const { data: existing } = await (supabase as any)
+        // Cobertura por CAMPO, no por propiedad entera: las traducciones de
+        // name (las genera updateProperty) no cuentan para
+        // access_instructions. Mismo patrón que migrate-translations.ts.
+        const { data: existing } = await supabase
             .from("property_translations")
-            .select("lang")
-            .eq("property_id", property.id);
+            .select("field_key, lang")
+            .eq("property_id", property.id)
+            .overrideTypes<
+                Pick<Tables<"property_translations">, "field_key" | "lang">[],
+                { merge: false }
+            >();
 
-        const existingLangs = new Set(
-            (existing ?? []).map((r: { lang: string }) => r.lang),
-        );
+        const existingLangsByField = new Map<string, Set<string>>();
+        for (const row of existing ?? []) {
+            const set =
+                existingLangsByField.get(row.field_key) ?? new Set<string>();
+            set.add(row.lang);
+            existingLangsByField.set(row.field_key, set);
+        }
 
-        if (existingLangs.size >= targetLangsCount) {
+        const fields: { fieldKey: "access_instructions"; value: string }[] =
+            [];
+
+        if (property.access_instructions) {
+            fields.push({
+                fieldKey: "access_instructions",
+                value: property.access_instructions,
+            });
+        }
+
+        // Idiomas que le faltan a cada campo. No sabemos aún cuál es su
+        // idioma origen (lo decide Claude, no nosotros), así que se pasan
+        // todos los locales que no están ya en BD — translateAndStoreProperty
+        // descarta el que resulte ser el origen.
+        const fieldsNeedingWork: {
+            fieldKey: "access_instructions";
+            value: string;
+            missingLangs: (typeof LOCALES)[number][];
+        }[] = [];
+
+        for (const field of fields) {
+            const covered =
+                existingLangsByField.get(field.fieldKey) ?? new Set();
+            if (covered.size >= targetLangsCount) continue;
+            const missingLangs = LOCALES.filter((l) => !covered.has(l));
+            fieldsNeedingWork.push({ ...field, missingLangs });
+        }
+
+        if (fieldsNeedingWork.length === 0) {
             console.log(
                 `[${i + 1}/${properties.length}] Ya traducido a todos los idiomas — ${property.id}`,
             );
@@ -54,31 +95,18 @@ async function main() {
             continue;
         }
 
-        const fields = [];
-
-        if (property.access_instructions) {
-            fields.push({
-                fieldKey: "access_instructions" as const,
-                value: property.access_instructions,
-            });
-        }
-
-        if (fields.length === 0) {
-            saltados++;
-            continue;
-        }
-
-        // Idiomas que le faltan a ESTA propiedad en concreto. No sabemos
-        // aún cuál es su idioma origen (lo decide Claude, no nosotros),
-        // así que se pasan todos los locales que no están ya en BD —
-        // translateAndStoreProperty descarta el que resulte ser el origen.
-        const missingLangs = LOCALES.filter((l) => !existingLangs.has(l));
-
         try {
-            console.log(
-                `[${i + 1}/${properties.length}] Traduciendo (faltan: ${missingLangs.join(", ")}) — ${property.id}`,
-            );
-            await translateAndStoreProperty(property.id, fields, missingLangs);
+            for (const field of fieldsNeedingWork) {
+                console.log(
+                    `[${i + 1}/${properties.length}] Traduciendo ${field.fieldKey} (faltan: ${field.missingLangs.join(", ")}) — ${property.id}`,
+                );
+                await translateAndStoreProperty(
+                    property.id,
+                    { type: "system" },
+                    [{ fieldKey: field.fieldKey, value: field.value }],
+                    field.missingLangs,
+                );
+            }
             traducidos++;
         } catch (err) {
             console.error(`Error traduciendo ${property.id}:`, err);
