@@ -27,6 +27,8 @@ import PropertyFormHeader from "./form-header";
 import ImageSection from "./image-section";
 import LogoSection from "./logo-section";
 import FormActions from "./form-actions";
+import ButtonLink from "@/components/molecules/button-link";
+import IconHelp from "@/components/atoms/icon/help";
 import AddressSection from "./address-section";
 import { SelectedPlace } from "@/components/molecules/place-autocomplete";
 
@@ -778,7 +780,7 @@ const AddPropertyForm = ({
                     />
                 </div>
 
-                <div className="flex flex-col gap-4 p-4 border-b border-gray-100">
+                <div className="flex flex-col gap-4 p-4">
                     <DashboardData
                         label={
                             <Typography
@@ -823,25 +825,32 @@ const AddPropertyForm = ({
                     />
                 </div>
 
-                <div className="flex flex-col gap-4 px-4 py-4">
-                    <FormActions
-                        isEdit={isEdit}
-                        isSubmitting={isSubmitting}
-                        onCancel={() =>
-                            cancelHref ? router.push(cancelHref) : router.back()
-                        }
-                        submitLabel={
-                            isEdit
-                                ? t("Guardar cambios")
-                                : t("Añadir propiedad")
-                        }
-                        cancelLabel={t("Cancelar")}
-                        showFeedback={!isEdit}
-                        feedbackLabel={t("feedback.cta")}
-                        feedbackHref="/app/feedback/create_property?returnTo=/app/properties/new"
-                        className="mt-4"
-                    />
-                </div>
+                {/* sticky: se queda al pie del área de scroll (el <main> del
+                    layout) sin salir de la tarjeta, y vuelve a su sitio al
+                    llegar al final del formulario */}
+                <FormActions
+                    isSubmitting={isSubmitting}
+                    onCancel={() =>
+                        cancelHref ? router.push(cancelHref) : router.back()
+                    }
+                    submitLabel={
+                        isEdit ? t("Guardar cambios") : t("Añadir propiedad")
+                    }
+                    cancelLabel={t("Cancelar")}
+                    className="sticky bottom-0 z-10 p-4 bg-white border-t border-gray-200 last:rounded-b-xl"
+                />
+
+                {!isEdit && (
+                    <div className="px-4 pb-4">
+                        <ButtonLink
+                            label={t("feedback.cta")}
+                            href="/app/feedback/create_property?returnTo=/app/properties/new"
+                            color="white"
+                            className="w-full"
+                            iconLeft={<IconHelp />}
+                        />
+                    </div>
+                )}
             </form>
 
             <AddressChangeWarningModal
