@@ -139,8 +139,9 @@ export default function FeedbackForm({
 			});
 		}
 
-		if (returnTo) router.replace(returnTo);
-		else router.back();
+		// back() y no replace(returnTo): replace sustituye /feedback por una
+		// copia de la página de origen y el siguiente "atrás" no hace nada
+		router.back();
 	};
 
 	const onSubmit: SubmitHandler<FormValues> = async (data) => {
@@ -216,11 +217,8 @@ export default function FeedbackForm({
 		setDidSucceed(true);
 		reset();
 
-		const dest =
-			returnTo && returnTo.startsWith('/app') ? returnTo : '/app';
-
 		redirectTimeoutRef.current = window.setTimeout(() => {
-			router.replace(dest);
+			router.back();
 		}, 1200);
 	};
 
