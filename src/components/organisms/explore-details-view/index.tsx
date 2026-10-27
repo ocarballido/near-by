@@ -96,7 +96,7 @@ export default function ExploreDetailsView({
                 <ButtonLink
                     label={t("Editar")}
                     iconLeft={<IconEdit />}
-                    color="primary"
+                    color="secondary"
                     className="w-full sm:w-fit"
                     href={`/app/details/${propertyId}/${categoryId}/${subCategoryId}`}
                 />
