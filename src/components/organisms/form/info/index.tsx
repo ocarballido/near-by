@@ -181,7 +181,15 @@ const UpdateInfoForm = ({
                 onSubmit={handleSubmit(onSubmit)}
                 className="flex flex-col gap-0 w-full"
             >
-                <div className="flex flex-col gap-4 p-4 pt-0 border-b border-gray-200">
+                {/* Sin border-b en la última sección: la barra sticky ya
+                    lleva border-t y se vería doble al final del formulario */}
+                <div
+                    className={
+                        aiGenerationEnabled
+                            ? "flex flex-col gap-4 p-4 pt-0 border-b border-gray-200"
+                            : "flex flex-col gap-4 p-4 pt-0"
+                    }
+                >
                     <DashboardData
                         label={
                             <Typography
@@ -216,7 +224,7 @@ const UpdateInfoForm = ({
                 </div>
 
                 {aiGenerationEnabled ? (
-                    <div className="flex flex-col gap-4 p-4 border-b border-gray-200">
+                    <div className="flex flex-col gap-4 p-4">
                         <DashboardData
                             label={
                                 <Typography
