@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
 import { getOwnedProperty } from '@/lib/properties/get-owned-property';
 import PropertyOnboardingModal from '@/components/organisms/property-onboarding-modal/PropertyOnboardingModal';
+import PropertyMenuBootstrap from '@/components/providers/PropertyMenuBootstrap';
 
 import type { Tables } from '@/lib/types';
 
@@ -59,6 +60,17 @@ export default async function PropertyEditorLayout({
 				propertyName={property.name}
 				previewLocations={previewLocations}
 				totalInfo={totalInfo}
+			/>
+			<PropertyMenuBootstrap
+				property={{
+					id: property.id,
+					name: property.name,
+					logo_url: property.logo_url,
+					check_in_date: property.check_in_date,
+					check_in_time: property.check_in_time,
+					check_out_date: property.check_out_date,
+					check_out_time: property.check_out_time,
+				}}
 			/>
 			{children}
 		</>
