@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 
 import clsx from 'clsx';
 
@@ -10,14 +10,16 @@ type DropdownItemProps = {
 	icon?: React.ReactNode;
 	label: string;
 	href: string;
+	onClick?: React.MouseEventHandler<HTMLAnchorElement>;
 };
 
 const DropdownItem = ({
 	active = false,
-	className,
+	className = '',
 	icon,
 	label,
 	href,
+	onClick,
 }: DropdownItemProps) => {
 	const buttonStyles = clsx(
 		{
@@ -31,8 +33,9 @@ const DropdownItem = ({
 
 	return (
 		<Link
-			className={`rounded-sm min-w-max transition-all flex items-center gap-2 hover:bg-primary-50 hover:text-primary-500 hover:cursor-pointer font-medium font-sm py-2 px-3 ${buttonStyles} ${className}`}
+			className={`rounded-lg min-w-max transition-all flex items-center gap-2 hover:bg-primary-50 hover:text-primary-500 hover:cursor-pointer font-medium text-sm py-2 px-3 ${buttonStyles} ${className}`}
 			href={href}
+			onClick={onClick}
 		>
 			{icon}
 			{label}
