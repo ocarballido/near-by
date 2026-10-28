@@ -1,51 +1,48 @@
+import { notFound } from 'next/navigation';
+
 import { createServerAdminClient } from '@/lib/supabase/serverAdminClient';
+import { getOwnedProperty } from '@/lib/properties/get-owned-property';
 import PropertyOnboardingModal from '@/components/organisms/property-onboarding-modal/PropertyOnboardingModal';
 
 import type { Tables } from '@/lib/types';
 
 type PropertyDataRow = Pick<Tables<'property_data'>, 'id' | 'name' | 'type'>;
 
-type PageProps = {
-	params: Promise<{ slug: string[] }>;
+type LayoutProps = {
+	params: Promise<{ propertyId: string }>;
 	children: React.ReactNode;
 };
 
 export default async function PropertyEditorLayout({
 	children,
 	params,
-}: PageProps) {
-	const { slug } = await params;
-	const [propertyId] = slug;
+}: LayoutProps) {
+	const { propertyId } = await params;
+
+	// Antes de cualquier otra lectura: sin propiedad propia no se carga nada
+	const property = await getOwnedProperty(propertyId);
+	if (!property) notFound();
 
 	let hasLocations = false;
 	let previewLocations: PropertyDataRow[] = [];
 	let totalInfo = 0;
-	let propertyName = '';
 
 	try {
 		const supabase = await createServerAdminClient();
 
-		const [{ data: allData }, { data: property }] = await Promise.all([
-			supabase
-				.from('property_data')
-				.select('id, name, type')
-				.eq('property_id', propertyId)
-				.order('created_at', { ascending: true }),
-			supabase
-				.from('properties')
-				.select('name')
-				.eq('id', propertyId)
-				.single()
-				.overrideTypes<{ name: string }, { merge: false }>(),
-		]);
+		const { data: allData } = await supabase
+			.from('property_data')
+			.select('id, name, type')
+			.eq('property_id', propertyId)
+			.order('created_at', { ascending: true })
+			.overrideTypes<PropertyDataRow[], { merge: false }>();
 
-		const rows = (allData ?? []) as PropertyDataRow[];
+		const rows = allData ?? [];
 		const locations = rows.filter((r) => r.type === 'location');
 
 		hasLocations = locations.length > 0;
 		previewLocations = locations.slice(0, 4);
 		totalInfo = rows.filter((r) => r.type === 'info').length;
-		propertyName = property?.name ?? '';
 	} catch (error) {
 		console.error(
 			'PropertyEditorLayout: failed to fetch onboarding data',
@@ -59,7 +56,7 @@ export default async function PropertyEditorLayout({
 			<PropertyOnboardingModal
 				initialHasLocations={hasLocations}
 				propertyId={propertyId}
-				propertyName={propertyName}
+				propertyName={property.name}
 				previewLocations={previewLocations}
 				totalInfo={totalInfo}
 			/>

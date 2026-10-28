@@ -1,6 +1,6 @@
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { createServerAdminClient } from "@/lib/supabase/serverAdminClient";
-import { createSSRClient } from "@/lib/supabase/server";
+import { getOwnedProperty } from "@/lib/properties/get-owned-property";
 
 import AppContentTemplate from "@/components/templates/app-content";
 import PropertyNameTitle from "@/components/atoms/property-name-title";
@@ -15,46 +15,31 @@ import type { PropertyDetailRow } from "@/types/property-details";
 
 import type { Tables } from "@/lib/types";
 
-type FullProperty = Tables<"properties">;
 type SubCategoryForPage = Pick<
     Tables<"sub_categories">,
     "name" | "type" | "category_id"
 >;
 
 type PageProps = {
-    params: Promise<{ slug: string[] }>;
+    params: Promise<{
+        propertyId: string;
+        categoryId: string;
+        subCategoryId: string;
+    }>;
 };
 
 export default async function Property({ params }: PageProps) {
-    const { slug } = await params;
-    const [propertyId, categoryId, subCategoryId] = slug;
+    const { propertyId, categoryId, subCategoryId } = await params;
 
     const isExploreDetails =
         subCategoryId ===
         CATEGORIES_SUB_CATEGORIES.LODGING.SUB_CATEGORIES.EXPLORE_DETAILS.id;
 
-    const ssrClient = await createSSRClient();
-    const {
-        data: { user },
-        error: authError,
-    } = await ssrClient.auth.getUser();
-
-    if (authError || !user) redirect("/auth/login");
+    // Misma llamada (memoizada) que el layout: sesión y propiedad verificadas
+    const property = await getOwnedProperty(propertyId);
+    if (!property) notFound();
 
     const supabase = await createServerAdminClient();
-
-    const { data: property, error: propErr } = await supabase
-        .from("properties")
-        .select(
-            "id,name,slug,image_url,address,latitude,longitude,check_in_date,check_in_time,check_out_date,check_out_time,user_id",
-        )
-        .eq("id", propertyId)
-        .single()
-        .overrideTypes<FullProperty & { user_id: string }, { merge: false }>();
-
-    if (propErr || !property?.id) notFound();
-
-    if (property.user_id !== user.id) notFound();
 
     const [
         { data: propertyData, error: propertyDataErr },
