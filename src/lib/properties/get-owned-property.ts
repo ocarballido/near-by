@@ -11,12 +11,9 @@ export type OwnedProperty = Pick<
 	Tables<'properties'>,
 	| 'id'
 	| 'name'
-	| 'address'
 	| 'latitude'
 	| 'longitude'
-	| 'check_in_date'
 	| 'check_in_time'
-	| 'check_out_date'
 	| 'check_out_time'
 >;
 
@@ -41,7 +38,7 @@ export const getOwnedProperty = cache(
 		const { data: property, error } = await supabase
 			.from('properties')
 			.select(
-				'id,name,address,latitude,longitude,check_in_date,check_in_time,check_out_date,check_out_time',
+				'id,name,latitude,longitude,check_in_time,check_out_time',
 			)
 			.eq('id', propertyId)
 			.eq('user_id', user.id)
