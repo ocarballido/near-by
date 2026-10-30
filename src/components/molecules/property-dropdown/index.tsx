@@ -59,7 +59,7 @@ const PropertyDropdown = ({ property }: PropertyDropdownProps) => {
                 ariaExpanded={open}
                 ariaHasPopup
                 className="min-w-0 max-w-full"
-                color="secondary"
+                color="primary"
                 iconRight={
                     <span className="shrink-0 flex">
                         {open ? (
@@ -76,7 +76,7 @@ const PropertyDropdown = ({ property }: PropertyDropdownProps) => {
 
             <DropdownMenu
                 open={open}
-                className="absolute z-50 left-0 top-11 w-64 max-w-[calc(100vw-2rem)] p-2! rounded-2xl! shadow-[0_4px_16px_rgba(0,0,0,0.2)]!"
+                className="absolute z-50 left-0 top-11 w-64 max-w-[calc(100vw-2rem)] p-2! gap-1! rounded-2xl! shadow-[0_4px_16px_rgba(0,0,0,0.2)]!"
             >
                 {schedule.length > 0 && (
                     <>
@@ -98,20 +98,20 @@ const PropertyDropdown = ({ property }: PropertyDropdownProps) => {
                                 </div>
                             ))}
                         </div>
-                        <hr className="border-gray-200" />
+                        <hr className="my-1 border-gray-200" />
                     </>
                 )}
 
                 <DropdownItem
-                    className="min-h-10 px-4! text-base!"
-                    icon={<IconEdit />}
+                    className="min-h-10 px-4!"
+                    icon={<IconEdit size={20} />}
                     label={t("Editar")}
                     href={`/app/properties/edit/${property.id}?from=manage`}
                     onClick={closeDropdown}
                 />
                 <DropdownItemButton
-                    className="min-h-10 px-4! text-base!"
-                    icon={<IconQrCode />}
+                    className="min-h-10 px-4!"
+                    icon={<IconQrCode size={20} />}
                     label={t("propertyMenuQrCode")}
                     onClick={() => {
                         printQr();
@@ -119,8 +119,8 @@ const PropertyDropdown = ({ property }: PropertyDropdownProps) => {
                     }}
                 />
                 <DropdownItem
-                    className="min-h-10 px-4! text-base!"
-                    icon={<IconApartment />}
+                    className="min-h-10 px-4!"
+                    icon={<IconApartment size={20} />}
                     label={t("Mis propiedades")}
                     href="/app/properties"
                     onClick={closeDropdown}
@@ -131,7 +131,7 @@ const PropertyDropdown = ({ property }: PropertyDropdownProps) => {
                         className="w-full"
                         color="primary"
                         iconRight={<IconOpenInNew />}
-                        label={t("Sitio público")}
+                        label={t("propertyMenuPublicGuide")}
                         href={publicPath}
                         target="_blank"
                     />
