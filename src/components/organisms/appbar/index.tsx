@@ -27,7 +27,7 @@ const AppBar = ({ className = "", isLogged = false }: AppBarProps) => {
 
     return (
         <div
-            className={`w-full flex items-center gap-4 rounded-lg p-4 relative transition-all ${className}`}
+            className={`w-full flex items-center gap-1 md:gap-4 rounded-lg p-4 relative transition-all ${className}`}
         >
             <MenuIconButton />
             <AppbarTitle />
