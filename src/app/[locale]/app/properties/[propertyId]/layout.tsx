@@ -65,10 +65,7 @@ export default async function PropertyEditorLayout({
 				property={{
 					id: property.id,
 					name: property.name,
-					logo_url: property.logo_url,
-					check_in_date: property.check_in_date,
 					check_in_time: property.check_in_time,
-					check_out_date: property.check_out_date,
 					check_out_time: property.check_out_time,
 				}}
 			/>
