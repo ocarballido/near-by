@@ -24,7 +24,7 @@ import IconEdit from "@/components/atoms/icon/edit";
 import CategoryAccordion from "@/components/molecules/category-accordion";
 import GroupItem from "@/components/molecules/group-item";
 import SidebarLinkItem from "@/components/molecules/sidebar-link-item";
-import ButtonIcon from "@/components/atoms/button-icon";
+import Button from "@/components/molecules/button";
 import IconClose from "@/components/atoms/icon/close";
 import SidebarRail, {
     type SidebarRailItem,
@@ -104,12 +104,12 @@ const PropertySidebar = ({
             }
         >
             <div className="flex justify-end lg:hidden">
-                <ButtonIcon
-                    color="secondary"
-                    icon={<IconClose />}
+                <Button
+                    color="text"
+                    label={t("Cerrar")}
+                    iconLeft={<IconClose />}
                     onClick={closeSidebar}
-                    ariaLabel={t("closeMenu")}
-                    className="shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"
+                    className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"
                 />
             </div>
             <div className="flex flex-col gap-1">
