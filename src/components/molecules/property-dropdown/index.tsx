@@ -1,11 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 
 import { useDropdown } from "@/hooks/useDropdown";
 import { usePrintQr } from "@/hooks/usePrintQr";
-import { formatDate, formatTime } from "@/utils/format-date-time";
+import { formatTime } from "@/utils/format-date-time";
 import type { PropertyMenuData } from "@/lib/context/PropertyMenuContext";
 
 import DropdownMenu from "@/components/atoms/dropdown-menu";
@@ -17,6 +16,7 @@ import IconKeyboardArrowDown from "@/components/atoms/icon/keyboard-arrow-down";
 import IconKeyboardArrowUp from "@/components/atoms/icon/keyboard-arrow-up";
 import IconOpenInNew from "@/components/atoms/icon/open-in-new";
 import IconQrCode from "@/components/atoms/icon/qr-code";
+import Button from "@/components/molecules/button";
 import ButtonLink from "@/components/molecules/button-link";
 import DropdownItem from "@/components/molecules/dropdown-item";
 import DropdownItemButton from "@/components/molecules/dropdown-item-button";
@@ -26,8 +26,6 @@ type PropertyDropdownProps = {
     property: PropertyMenuData;
 };
 
-const DEFAULT_LOGO = "/static/img/symbol_colored@2x.webp";
-
 const PropertyDropdown = ({ property }: PropertyDropdownProps) => {
     const t = useTranslations();
     const locale = useLocale();
@@ -35,65 +33,50 @@ const PropertyDropdown = ({ property }: PropertyDropdownProps) => {
     const { open, toggleDropdown, closeDropdown, dropdownRef } = useDropdown();
     const { qrRef, printQr } = usePrintQr();
 
-    // Solo los horarios con algún dato; fecha y hora van en líneas separadas
-    // porque cada columna no da para las dos en una sola
+    // Solo las horas que existan: las fechas no se muestran en el menú
     const schedule = [
         {
             key: "checkIn",
             icon: <IconCheckIn color="primary" />,
             label: t("propertyMenuCheckIn"),
-            date: formatDate(property.check_in_date, locale),
             time: formatTime(property.check_in_time, locale),
         },
         {
             key: "checkOut",
             icon: <IconCheckOut color="primary" />,
             label: t("propertyMenuCheckOut"),
-            date: formatDate(property.check_out_date, locale),
             time: formatTime(property.check_out_time, locale),
         },
-    ].filter((item) => item.date || item.time);
+    ].filter((item) => item.time);
 
     const publicPath = `/public/${property.id}/welcome/highlights`;
 
-    // isolate mantiene el trigger sobre el panel; z-50 solo abierto para no
-    // quedar por encima del overlay del sidebar (z-10) con el menú cerrado
     return (
-        <div
-            ref={dropdownRef}
-            className={`relative isolate min-w-0 ${open ? "z-50" : ""}`}
-        >
-            {/* El trigger queda por encima del panel, que se abre detrás de él.
-                max-w-full: un <button> toma el ancho de su contenido y, sin
+        <div ref={dropdownRef} className="relative min-w-0">
+            {/* max-w-full: un <button> toma el ancho de su contenido y, sin
                 tope, el nombre largo no llega a truncarse */}
-            <button
-                type="button"
-                aria-expanded={open}
-                aria-haspopup="true"
+            <Button
+                ariaExpanded={open}
+                ariaHasPopup
+                className="min-w-0 max-w-full"
+                color="secondary"
+                iconRight={
+                    <span className="shrink-0 flex">
+                        {open ? (
+                            <IconKeyboardArrowUp />
+                        ) : (
+                            <IconKeyboardArrowDown />
+                        )}
+                    </span>
+                }
+                label={property.name}
                 onClick={toggleDropdown}
-                className="relative z-20 flex items-center gap-2 min-w-0 max-w-full h-10 hover:cursor-pointer"
-            >
-                {/* En móvil el AppBar va justo de sitio: se prioriza el nombre */}
-                <span className="relative shrink-0 w-10 h-10 rounded-lg overflow-hidden max-md:hidden">
-                    <Image
-                        src={property.logo_url || DEFAULT_LOGO}
-                        fill
-                        alt=""
-                        sizes="40px"
-                        style={{ objectFit: "cover" }}
-                    />
-                </span>
-                <span className="truncate text-base font-medium">
-                    {property.name}
-                </span>
-                <span className="shrink-0 flex">
-                    {open ? <IconKeyboardArrowUp /> : <IconKeyboardArrowDown />}
-                </span>
-            </button>
+                truncate
+            />
 
             <DropdownMenu
                 open={open}
-                className="absolute -top-2 -left-2 w-64 max-w-[calc(100vw-2rem)] px-2! pb-2! pt-16! rounded-2xl! shadow-[0_4px_16px_rgba(0,0,0,0.2)]!"
+                className="absolute z-50 left-0 top-11 w-64 max-w-[calc(100vw-2rem)] p-2! rounded-2xl! shadow-[0_4px_16px_rgba(0,0,0,0.2)]!"
             >
                 {schedule.length > 0 && (
                     <>
@@ -106,12 +89,11 @@ const PropertyDropdown = ({ property }: PropertyDropdownProps) => {
                                     <span className="shrink-0 flex justify-center items-center w-10 h-10">
                                         {item.icon}
                                     </span>
-                                    <p className="flex flex-col min-w-0 text-sm text-secondary-600">
+                                    <p className="min-w-0 text-sm font-medium text-secondary-600">
                                         <span className="sr-only">
-                                            {item.label}
+                                            {`${item.label} `}
                                         </span>
-                                        {item.date && <span>{item.date}</span>}
-                                        {item.time && <span>{item.time}</span>}
+                                        {item.time}
                                     </p>
                                 </div>
                             ))}
