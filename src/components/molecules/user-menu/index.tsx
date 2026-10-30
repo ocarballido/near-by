@@ -25,7 +25,7 @@ interface MenuOption {
     icon: string;
 }
 
-const ICON_COMPONENTS: Record<string, React.ComponentType> = {
+const ICON_COMPONENTS: Record<string, React.ComponentType<{ size?: number }>> = {
     IconAccountCircle,
     IconApartment,
     IconPersonAdd,
@@ -67,14 +67,16 @@ const UserMenu = () => {
                                 router.push(option.url);
                             }}
                             label={t(option.label)}
-                            icon={IconComponent ? <IconComponent /> : null}
+                            icon={
+                                IconComponent ? <IconComponent size={20} /> : null
+                            }
                         />
                     );
                 })}
                 <DropdownItemButton
                     onClick={handleLogout}
                     label={t("Cerrar Sesión")}
-                    icon={<IconLogout />}
+                    icon={<IconLogout size={20} />}
                 />
             </DropdownMenu>
         </div>

@@ -28,6 +28,7 @@ const DropdownItem = ({
 		},
 		{
 			'bg-primary-50 text-primary-500': active,
+			'text-gray-600': !active,
 		}
 	);
 

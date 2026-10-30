@@ -1,3 +1,7 @@
+/* Gris 600 en reposo (token del proyecto). Va antes de .link--primary: misma especificidad */
+.link svg {
+	fill: var(--font--color-secondary);
+}
 .link:hover svg {
 	fill: var(--font--color-primary);
 	transition: all 0.25s;
