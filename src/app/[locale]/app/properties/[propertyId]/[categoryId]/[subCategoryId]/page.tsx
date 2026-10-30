@@ -4,7 +4,6 @@ import { getOwnedProperty } from "@/lib/properties/get-owned-property";
 
 import AppContentTemplate from "@/components/templates/app-content";
 import PropertyNameTitle from "@/components/atoms/property-name-title";
-import PropertyDataBoard from "@/components/molecules/property-data-board";
 import { PropertyDataBySubCategory } from "@/components/templates/property-data";
 
 import { getPropertySubCategoryCounts } from "@/utils/get-property-subcategory-counts";
@@ -91,19 +90,8 @@ export default async function Property({ params }: PageProps) {
             propertyId={propertyId}
         >
             <PropertyCountsBootstrap counts={counts} />
-            <PropertyDataBoard
-                propertyName={property.name}
-                propertyAddress={property.address}
-                propertyCheckInDate={property.check_in_date ?? ""}
-                propertyCheckInTime={property.check_in_time ?? ""}
-                propertyCheckOutDate={property.check_out_date ?? ""}
-                propertyCheckOutTime={property.check_out_time ?? ""}
-                propertyId={propertyId}
-                categoryId={categoryId}
-                subCategoryId={subCategoryId}
-            />
 
-            <div className="p-4 pt-0 font-roboto flex flex-col grow gap-4 rounded-lg">
+            <div className="p-4 font-roboto flex flex-col grow gap-4 rounded-lg">
                 <PropertyNameTitle subCategoryName={subCategory.name} />
                 <PropertyDataBySubCategory
                     propertyId={propertyId}
