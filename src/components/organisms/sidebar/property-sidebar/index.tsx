@@ -24,8 +24,6 @@ import IconEdit from "@/components/atoms/icon/edit";
 import CategoryAccordion from "@/components/molecules/category-accordion";
 import GroupItem from "@/components/molecules/group-item";
 import SidebarLinkItem from "@/components/molecules/sidebar-link-item";
-import ButtonLink from "@/components/molecules/button-link";
-import IconOpenInNew from "@/components/atoms/icon/open-in-new";
 import ButtonIcon from "@/components/atoms/button-icon";
 import IconClose from "@/components/atoms/icon/close";
 import SidebarRail, {
@@ -93,8 +91,6 @@ const PropertySidebar = ({
         };
     });
 
-    const publicUrl = `${process.env.NEXT_PUBLIC_APP_URL}/public/${propertyId}/welcome/highlights`;
-
     return (
         <SidebarShell
             rail={
@@ -107,15 +103,7 @@ const PropertySidebar = ({
                 />
             }
         >
-            <div className="flex gap-1 items-start justify-between lg:hidden">
-                <ButtonLink
-                    className="gap-1"
-                    color="primary"
-                    iconRight={<IconOpenInNew />}
-                    label={t("Sitio público")}
-                    href={publicUrl}
-                    target="_blank"
-                />
+            <div className="flex justify-end lg:hidden">
                 <ButtonIcon
                     color="secondary"
                     icon={<IconClose />}
