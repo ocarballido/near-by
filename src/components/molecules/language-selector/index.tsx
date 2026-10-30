@@ -39,6 +39,7 @@ const LanguageSelector = ({
                 {LOCALES.map((language: string) => {
                     const languageStyles = clsx({
                         "bg-primary-50 text-primary-500": locale === language,
+                        "text-gray-600": locale !== language,
                     });
 
                     return (

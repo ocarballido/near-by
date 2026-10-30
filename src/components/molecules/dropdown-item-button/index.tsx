@@ -34,6 +34,7 @@ const DropdownItemButton = ({
         },
         {
             "bg-primary-50 text-primary-500": active,
+            "text-gray-600": !active,
         },
     );
 

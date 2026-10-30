@@ -6,6 +6,8 @@ import styles from './styles.module.css';
 
 type ButtonProps = {
 	active?: boolean;
+	ariaExpanded?: boolean;
+	ariaHasPopup?: boolean;
 	className?: string;
 	color?: 'primary' | 'secondary' | 'error' | 'white' | 'text';
 	disabled?: boolean;
@@ -15,11 +17,14 @@ type ButtonProps = {
 	iconRight?: React.ReactNode;
 	label: string;
 	onClick?: React.MouseEventHandler<HTMLButtonElement>;
+	truncate?: boolean;
 	type?: 'submit' | 'reset' | 'button';
 };
 
 const Button = ({
 	active = false,
+	ariaExpanded,
+	ariaHasPopup,
 	className = '',
 	color = 'primary',
 	disabled = false,
@@ -29,6 +34,7 @@ const Button = ({
 	iconRight,
 	label,
 	onClick,
+	truncate = false,
 	type = 'button',
 }: ButtonProps) => {
 	const buttonStyles = clsx(
@@ -87,10 +93,14 @@ const Button = ({
 			form={form}
 			formAction={formAction}
 			disabled={disabled}
+			aria-expanded={ariaExpanded}
+			aria-haspopup={ariaHasPopup}
 		>
 			{iconLeft}
 
-			{label}
+			{/* El texto suelto de un flex no encoge: para truncarlo hace falta
+				envolverlo */}
+			{truncate ? <span className="truncate">{label}</span> : label}
 
 			{iconRight}
 		</button>

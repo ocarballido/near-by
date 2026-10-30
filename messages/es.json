@@ -1395,5 +1395,9 @@
     "engagementModalBody": "Créala en menos de 2 minutos y ahorra horas respondiendo las mismas preguntas. ¡Es 100% gratuita!",
     "engagementModalCta": "Crear mi guía GRATIS",
     "engagementModalReassurance": "Sin tarjeta de crédito · Sin descargas",
-    "engagementModalCloseAriaLabel": "Cerrar"
+    "engagementModalCloseAriaLabel": "Cerrar",
+    "propertyMenuQrCode": "Código QR",
+    "propertyMenuCheckIn": "Check-in",
+    "propertyMenuCheckOut": "Check-out",
+    "propertyMenuPublicGuide": "Ver guía pública"
 }

@@ -1391,5 +1391,9 @@
     "engagementModalBody": "Create yours in under 2 minutes and save hours answering routine questions. It's 100% free!",
     "engagementModalCta": "Create my free guide",
     "engagementModalReassurance": "No credit card required · No app download",
-    "engagementModalCloseAriaLabel": "Close"
+    "engagementModalCloseAriaLabel": "Close",
+    "propertyMenuQrCode": "QR code",
+    "propertyMenuCheckIn": "Check-in",
+    "propertyMenuCheckOut": "Check-out",
+    "propertyMenuPublicGuide": "View public guide"
 }
