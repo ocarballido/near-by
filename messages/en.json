@@ -1394,5 +1394,6 @@
     "engagementModalCloseAriaLabel": "Close",
     "propertyMenuQrCode": "QR code",
     "propertyMenuCheckIn": "Check-in",
-    "propertyMenuCheckOut": "Check-out"
+    "propertyMenuCheckOut": "Check-out",
+    "propertyMenuPublicGuide": "View public guide"
 }

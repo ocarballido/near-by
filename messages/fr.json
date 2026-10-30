@@ -1398,5 +1398,6 @@
     "engagementModalCloseAriaLabel": "Fermer",
     "propertyMenuQrCode": "Code QR",
     "propertyMenuCheckIn": "Arrivée",
-    "propertyMenuCheckOut": "Départ"
+    "propertyMenuCheckOut": "Départ",
+    "propertyMenuPublicGuide": "Voir le guide public"
 }
