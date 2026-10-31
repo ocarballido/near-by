@@ -13,7 +13,7 @@ const NewPropertyCard = () => {
             href="/app/properties/new"
             link={
                 <Link
-                    className="flex flex-col gap-2 bg-primary-100 rounded-xl justify-center items-center hover:bg-primary-400 transition-all pb-6 min-h-[300px]"
+                    className="flex flex-col gap-2 bg-primary-100 rounded-2xl justify-center items-center hover:bg-primary-400 transition-all pb-6 min-h-[300px]"
                     href="/app/properties/new"
                 >
                     <FancyIcon
@@ -26,7 +26,7 @@ const NewPropertyCard = () => {
                 </Link>
             }
             action={
-                <div className="flex flex-col gap-2 h-full min-h-[300px] bg-primary-100 rounded-xl justify-center items-center hover:bg-primary-400 transition-all pb-6 hover:cursor-pointer">
+                <div className="flex flex-col gap-2 h-full min-h-[300px] bg-primary-100 rounded-2xl justify-center items-center hover:bg-primary-400 transition-all pb-6 hover:cursor-pointer">
                     <FancyIcon
                         icon={<IconAdd color="white" />}
                         color="gradient"
