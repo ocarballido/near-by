@@ -498,7 +498,6 @@
     "Contenido El Alojamiento": "Conteúdo A Acomodação",
     "Localizaciones": "Lugares recomendados",
     "Propiedades": "Propriedades",
-    "Propiedad": "Propriedade",
     "section_ready_to_go": {
         "title": "A tua acomodação pronta para hóspedes em 2 cliques",
         "subtitle": "Cria um site profissional para melhorar a experiência dos teus hóspedes em menos de um minuto.",
@@ -716,15 +715,16 @@
             "close": "Fechar"
         }
     },
+    "propertiesOverviewTotal": "Total",
+    "propertyStatusReady": "Pronta",
+    "propertyStatusPending": "Pendente",
     "propertiesStatus": {
         "completed": "Prontas",
-        "inProgress": "Pendentes",
-        "properties": "Propriedades"
+        "inProgress": "Pendentes"
     },
     "lastActivity": {
         "title": "Última atividade",
-        "edited": "Editaste \"{property}\" {time}",
-        "seeProperty": "Ver propriedade"
+        "edited": "Editaste \"{property}\" {time}"
     },
     "recommendations": {
         "title": "Recomendações da app",
@@ -984,7 +984,6 @@
     "visitsThisWeek": "Esta semana",
     "visitsLastWeek": "Semana passada",
     "visitsTwoWeeksAgo": "Há duas semanas",
-    "propertiesStatusTitle": "Estado das tuas propriedades",
     "address_hint": "📍 A tua morada exata não é mostrada na tua página pública. Só a usamos para o botão 'Como chegar' e para te sugerir lugares próximos.",
     "Property": {
         "meta_description": "Guia digital de {name}. Toda a informação para a tua estadia.",

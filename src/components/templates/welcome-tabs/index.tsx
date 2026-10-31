@@ -92,7 +92,9 @@ export default function WelcomeTabs({
     // Sin destacados no hay pestañas: solo eventos (con su carga) o nada
     if (!hasHighlights) {
         return loading || hasEvents ? (
-            <EventsTab eventsState={eventsState} />
+            <div className="flex flex-col gap-4 w-full max-w-[1140px] mx-auto px-4 py-10">
+                <EventsTab eventsState={eventsState} />
+            </div>
         ) : null;
     }
 
