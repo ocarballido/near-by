@@ -1,51 +1,26 @@
 import { getTranslations, getLocale } from "next-intl/server";
-import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Database } from "@/lib/types";
 
-import { createServerAdminClient } from "@/lib/supabase/serverAdminClient";
 import { getSeasonalTip } from "@/lib/get-seasonal-tip";
 
 import WeeklyVisits from "@/components/atoms/weekly-visits";
 import TipCard from "@/components/molecules/tip-card";
 
-type WeekRow = {
+export type VisitsWeek = {
     week_label: string;
     week_start: string;
     week_end: string;
-    visit_count: string | number;
+    visit_count: number;
 };
 
 type VisitsStatsProps = {
-    // Ya verificado con getUser() en la página
-    userId: string;
+    rows: VisitsWeek[];
 };
 
-const VisitsStats = async ({ userId }: VisitsStatsProps) => {
+const VisitsStats = async ({ rows }: VisitsStatsProps) => {
     const t = await getTranslations();
     const locale = await getLocale();
 
-    // La RPC solo es ejecutable con service_role
-    const supabase = await createServerAdminClient();
-    const db = supabase as unknown as SupabaseClient<Database>;
-
-    const { data, error } = await db
-        .rpc("get_property_visits_by_user", { p_user_id: userId })
-        .overrideTypes<WeekRow[], { merge: false }>();
-
-    if (error || !data) {
-        console.error(
-            "[VisitsStats] get_property_visits_by_user failed:",
-            error,
-        );
-        return null;
-    }
-
-    const rows = data.map((row) => ({
-        ...row,
-        visit_count: Number(row.visit_count),
-    }));
-
-    const totalVisits = rows.reduce((acc, r) => acc + (r.visit_count ?? 0), 0);
+    const totalVisits = rows.reduce((acc, r) => acc + r.visit_count, 0);
 
     // seasonal-tips.json solo tiene es, en y fr
     const tipLocale = locale === "en" || locale === "fr" ? locale : "es";
