@@ -3,17 +3,20 @@ import { createSSRClient } from "@/lib/supabase/server";
 import { createServerAdminClient } from "@/lib/supabase/serverAdminClient";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/types";
+import type { PropertyStatus } from "@/components/molecules/property-info";
 
 import AppContentTemplate from "@/components/templates/app-content";
-import PropertyVisitsStats from "@/components/molecules/property-visits-stats";
-import PropertiesCount from "@/components/molecules/properties-count";
-import PropertiesStatus from "@/components/molecules/properties-status";
-import LastActivity from "@/components/molecules/last-activity";
+import PropertiesOverview from "@/components/organisms/properties-overview";
+import MyProperties from "@/components/organisms/my-properties";
+import MyLastActivity from "@/components/organisms/my-last-activity";
+import VisitsStats from "@/components/organisms/visits-stats";
+import NewPropertyCard from "@/components/molecules/new-property-card";
 import ShareSection from "@/components/molecules/share-section";
 
 type PropertyRow = {
     id: string;
     name: string;
+    image_url: string | null;
     updated_at: string | null;
     property_data: { type: string | null }[] | null;
 };
@@ -32,53 +35,67 @@ export default async function DashboardContent() {
 
     const { data, error } = await db
         .from("properties")
-        .select("id, name, updated_at, property_data ( type )")
+        .select("id, name, image_url, updated_at, property_data ( type )")
         .eq("user_id", user.id)
         .overrideTypes<PropertyRow[], { merge: false }>();
 
     if (error) throw new Error("Error cargando propiedades: " + error.message);
 
-    const rows = data ?? [];
+    const properties = (data ?? [])
+        .map((p) => {
+            const types = (p.property_data ?? []).map((x) =>
+                (x?.type ?? "").toString().trim().toLowerCase(),
+            );
+            const isReady =
+                types.includes("location") && types.includes("info");
+            const status: PropertyStatus = isReady ? "ready" : "pending";
 
-    let completedCount = 0;
-    let lastEdited: { id: string; name: string; updated_at: string } | null =
-        null;
-    let lastEditedTs = -1;
+            return {
+                id: p.id,
+                name: p.name,
+                image: p.image_url || null,
+                status,
+                updatedAt: p.updated_at,
+                updatedTs: p.updated_at ? new Date(p.updated_at).getTime() : -1,
+            };
+        })
+        // Editadas más recientemente primero: MyProperties muestra las
+        // primeras y la última actividad es la primera con fecha
+        .sort((a, b) => b.updatedTs - a.updatedTs);
 
-    for (const p of rows) {
-        const types = (p.property_data ?? []).map((x) =>
-            (x?.type ?? "").toString().trim().toLowerCase(),
-        );
-        const hasLocation = types.includes("location");
-        const hasInfo = types.includes("info");
-        if (hasLocation && hasInfo) completedCount++;
-
-        if (p.updated_at) {
-            const ts = new Date(p.updated_at).getTime();
-            if (ts > lastEditedTs) {
-                lastEditedTs = ts;
-                lastEdited = {
-                    id: p.id,
-                    name: p.name,
-                    updated_at: p.updated_at,
-                };
-            }
-        }
-    }
-
-    const totalCount = rows.length;
+    const totalCount = properties.length;
+    const completedCount = properties.filter(
+        (p) => p.status === "ready",
+    ).length;
     const incompleteCount = totalCount - completedCount;
+
+    const latest = properties[0];
+    const lastEdited = latest?.updatedAt
+        ? { id: latest.id, name: latest.name, updated_at: latest.updatedAt }
+        : null;
 
     return (
         <AppContentTemplate>
-            <div className="p-1.5 font-roboto flex flex-col grow items-center gap-3 pb-6">
-                <PropertiesCount totalCount={totalCount} />
-                <PropertiesStatus
-                    completedCount={completedCount}
-                    incompleteCount={incompleteCount}
-                />
-                <LastActivity lastEdited={lastEdited} />
-                <PropertyVisitsStats />
+            <div className="flex flex-col gap-4 px-4 py-6 -mt-2">
+                <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-4">
+                    <PropertiesOverview
+                        totalCount={totalCount}
+                        completedCount={completedCount}
+                        incompleteCount={incompleteCount}
+                    />
+                    {totalCount > 0 ? (
+                        <MyProperties properties={properties} />
+                    ) : (
+                        <NewPropertyCard />
+                    )}
+                </div>
+                {/* Sin propiedades no hay actividad ni visitas que mostrar */}
+                {totalCount > 0 && (
+                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+                        <MyLastActivity lastEdited={lastEdited} />
+                        <VisitsStats userId={user.id} />
+                    </div>
+                )}
                 <ShareSection userId={user.id} />
             </div>
         </AppContentTemplate>

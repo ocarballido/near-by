@@ -498,7 +498,6 @@
     "Contenido El Alojamiento": "Contenu - L’Hébergement",
     "Localizaciones": "Lieux recommandés",
     "Propiedades": "Propriétés",
-    "Propiedad": "Propriété",
     "section_ready_to_go": {
         "title": "Votre hébergement prêt pour les voyageurs en 2 clics",
         "subtitle": "Créez un site professionnel pour améliorer l’expérience de vos voyageurs en moins d’une minute.",
@@ -716,15 +715,16 @@
             "close": "Fermer"
         }
     },
+    "propertiesOverviewTotal": "Total",
+    "propertyStatusReady": "Prête",
+    "propertyStatusPending": "En cours",
     "propertiesStatus": {
         "completed": "Prêtes",
-        "inProgress": "En cours",
-        "properties": "Propriétés"
+        "inProgress": "En cours"
     },
     "lastActivity": {
         "title": "Dernière activité",
-        "edited": "Vous avez modifié \"{property}\" {time}",
-        "seeProperty": "Voir la propriété"
+        "edited": "Vous avez modifié \"{property}\" {time}"
     },
     "recommendations": {
         "title": "Recommandations de l’application",
@@ -984,7 +984,6 @@
     "visitsThisWeek": "Cette semaine",
     "visitsLastWeek": "Semaine dernière",
     "visitsTwoWeeksAgo": "Il y a deux semaines",
-    "propertiesStatusTitle": "État de vos propriétés",
     "address_hint": "📍 Votre adresse exacte n'est jamais affichée sur votre page publique. Nous l'utilisons uniquement pour le bouton 'Comment y aller' et pour suggérer des lieux à proximité.",
     "Property": {
         "meta_description": "Guide numérique de {name}}. Tout ce qu'il faut savoir pour votre séjour.",

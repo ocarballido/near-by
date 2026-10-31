@@ -494,7 +494,6 @@
     "Contenido El Alojamiento": "Contents The Accommodation",
     "Localizaciones": "Recommended places",
     "Propiedades": "Properties",
-    "Propiedad": "Property",
     "section_ready_to_go": {
         "title": "Your accommodation ready for guests in 2 clicks",
         "subtitle": "Create a professional website to improve your guests' experience in less than a minute.",
@@ -711,15 +710,16 @@
             "close": "Close"
         }
     },
+    "propertiesOverviewTotal": "Total",
+    "propertyStatusReady": "Ready",
+    "propertyStatusPending": "In progress",
     "propertiesStatus": {
         "completed": "Ready",
-        "inProgress": "In progress",
-        "properties": "Properties"
+        "inProgress": "In progress"
     },
     "lastActivity": {
         "title": "Last activity",
-        "edited": "You edited \"{property}\" {time}",
-        "seeProperty": "View property"
+        "edited": "You edited \"{property}\" {time}"
     },
     "recommendations": {
         "title": "App recommendations",
@@ -980,7 +980,6 @@
     "visitsThisWeek": "This week",
     "visitsLastWeek": "Last week",
     "visitsTwoWeeksAgo": "Two weeks ago",
-    "propertiesStatusTitle": "Your properties status",
     "address_hint": "📍 Your exact address is never shown on your public page. We only use it for the 'How to get there' button and to suggest nearby places.",
     "Property": {
         "meta_description": "Digital guide for {name}. Everything you need for your stay.",
