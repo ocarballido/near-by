@@ -1387,6 +1387,7 @@
     "guideNavPlaces": "Explorer",
     "guideNavPlans": "Itinéraire",
     "guideNavLabel": "Navigation du guide",
+    "propertyNavLabel": "Navigation de la propriété",
     "errorPageTitle": "Un problème est survenu",
     "errorPageDescription": "Nous n'avons pas pu charger cette page. Réessayez dans quelques secondes.",
     "errorPageRetry": "Réessayer",
