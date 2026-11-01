@@ -42,6 +42,7 @@ const PublicContentTemplate = ({
                 )}
                 {/* Desde lg el nav va arriba, bajo el widget horario (page.tsx) */}
                 <Content
+                    fullBleed
                     footer={
                         <div className="lg:hidden">
                             <PublicGuideNav items={navItems} />

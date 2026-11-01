@@ -4,6 +4,7 @@ import { SidebarProvider } from "@/lib/context/SidebarContext";
 
 import Sidebar from "@/components/organisms/sidebar";
 import Content from "@/components/organisms/content";
+import PropertyBottomNav from "@/components/organisms/property-bottom-nav";
 
 type Category = {
     id: string;
@@ -50,10 +51,18 @@ const AppContentTemplate = ({
                         subCategoryId={subCategoryId}
                     />
                 )}
+                {/* Desde md las categorías se abren desde el rail */}
                 <Content
                     propertyId={propertyId}
                     categoryId={categoryId}
                     subCategoryId={subCategoryId}
+                    footer={
+                        showSidebar && sidebar === "PROPERTY" ? (
+                            <div className="md:hidden">
+                                <PropertyBottomNav />
+                            </div>
+                        ) : undefined
+                    }
                 >
                     {children}
                 </Content>

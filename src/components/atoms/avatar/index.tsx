@@ -23,11 +23,11 @@ const Avatar = ({ className, onClick }: AvatarProps) => {
     return (
         <div
             onClick={onClick}
-            className={`h-10 ps-3 pe-2 rounded-full bg-primary-500 hover:bg-primary-600 hover:cursor-pointer flex justify-center items-center font-bold text-white text-xl transition-all duration-200 focus:border-4 focus:border-primary-200 ${className}`}
+            className={`h-10 ps-3 pe-2 rounded-full bg-secondary-200 hover:bg-secondary-300 hover:cursor-pointer flex justify-center items-center font-bold text-secondary-600 text-xl transition-all duration-200 focus:border-4 focus:border-primary-200 ${className}`}
         >
             {/* {user ? getInitials(user.email) : "?"}{" "} */}
-            <IconAccountCircle color="white" />
-            <IconKeyboardArrowDown color="white" />
+            <IconAccountCircle color="body" />
+            <IconKeyboardArrowDown color="body" />
         </div>
     );
 };

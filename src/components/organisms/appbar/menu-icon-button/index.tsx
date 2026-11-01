@@ -25,9 +25,12 @@ const MenuIconButton = () => {
     const pathName = usePathname();
     const router = useRouter();
 
-    const doShow = useMemo(() => {
-        const segments = pathName.split("/").filter(Boolean);
+    const segments = useMemo(
+        () => pathName.split("/").filter(Boolean),
+        [pathName],
+    );
 
+    const doShow = useMemo(() => {
         // En /app/details siempre se muestra "Cancelar"
         if (segments.includes("app") && segments.includes("details"))
             return false;
@@ -36,7 +39,16 @@ const MenuIconButton = () => {
             HIDDEN_SEGMENTS.includes(segment),
         );
         return !hasHiddenSegment;
-    }, [pathName]);
+    }, [segments]);
+
+    // Gestión de una propiedad (properties/[id]/[cat]/[sub]): en mobile las
+    // categorías se abren desde el BottomNav
+    const isPropertyManagement = useMemo(() => {
+        const index = segments.indexOf("properties");
+        return index !== -1 && segments.length - index === 4;
+    }, [segments]);
+
+    if (isPropertyManagement) return null;
 
     return doShow ? (
         <Button
