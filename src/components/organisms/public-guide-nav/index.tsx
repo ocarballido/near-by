@@ -1,11 +1,10 @@
-import clsx from "clsx";
 import { useTranslations } from "next-intl";
 
-import { Link } from "@/i18n/routing";
 import IconHome from "@/components/atoms/icon/home";
 import IconApartment from "@/components/atoms/icon/apartment";
 import IconLocationOn from "@/components/atoms/icon/location-on";
 import IconMap from "@/components/atoms/icon/map";
+import BottomNavItem from "@/components/molecules/bottom-nav-item";
 
 export type PublicNavItemId = "welcome" | "lodging" | "places" | "plans";
 
@@ -66,32 +65,12 @@ const PublicGuideNav = ({
             <ul className="flex gap-1 w-full max-w-[1140px] lg:px-4">
                 {items.map((item) => (
                     <li key={item.id} className="flex-1 min-w-0">
-                        <Link
+                        <BottomNavItem
                             href={item.href}
-                            aria-current={item.active ? "page" : undefined}
-                            className="group flex flex-col gap-1 items-center justify-center min-h-10 px-1 py-2 rounded-xl cursor-pointer font-body font-medium text-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500 md:px-4"
-                        >
-                            <span
-                                className={clsx(
-                                    "flex items-center px-3 py-1 rounded-full transition-colors",
-                                    item.active
-                                        ? "bg-primary-100"
-                                        : "group-hover:bg-gray-100",
-                                )}
-                            >
-                                {renderIcon(item.id, item.active)}
-                            </span>
-                            <span
-                                className={clsx(
-                                    "text-xs whitespace-nowrap md:text-sm md:leading-4",
-                                    item.active
-                                        ? "text-primary-600"
-                                        : "text-gray-600",
-                                )}
-                            >
-                                {labels[item.id]}
-                            </span>
-                        </Link>
+                            active={item.active}
+                            label={labels[item.id]}
+                            icon={renderIcon(item.id, item.active)}
+                        />
                     </li>
                 ))}
             </ul>
