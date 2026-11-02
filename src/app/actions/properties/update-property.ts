@@ -31,9 +31,10 @@ const emptyToNull = (v: unknown) => {
 //   porque el campo estaba siempre disabled en el form)
 // - locations_action: instrucción opcional del owner sobre qué hacer con
 //   los lugares recomendados existentes cuando la dirección cambia
+// - Los errores son claves de messages/*.json: los traduce el formulario
 // ==============================
 const UpdatePropertySchema = z.object({
-    name: z.string().nonempty("El nombre de la propiedad es obligatorio"),
+    name: z.string().nonempty("El nombre es obligatorio"),
     description: z.preprocess(
         (v) => (typeof v === "string" ? v : ""),
         z.string(),
@@ -129,19 +130,11 @@ export async function updateProperty(
 
         if (existingError || !existing?.id) {
             console.error("Error al leer propiedad:", existingError);
-            return {
-                errors: {
-                    server: ["No se ha encontrado la propiedad"],
-                },
-            };
+            return { errors: { server: ["propertyNotFound"] } };
         }
 
         if (existing.user_id !== userId) {
-            return {
-                errors: {
-                    server: ["No tienes permisos para editar esta propiedad"],
-                },
-            };
+            return { errors: { server: ["propertyNoPermission"] } };
         }
 
         // 4) Extraer + validar datos editables
@@ -254,13 +247,7 @@ export async function updateProperty(
             await removePublicImages(db, "property-logos", userId, [
                 uploadedLogoUrl,
             ]);
-            return {
-                errors: {
-                    server: [
-                        "Error al actualizar el alojamiento. Por favor, inténtalo de nuevo.",
-                    ],
-                },
-            };
+            return { errors: { server: ["propertyUpdateError"] } };
         }
 
         // 6.1) Imagen y logo sustituidos o quitados: el update ya no los
@@ -373,17 +360,8 @@ export async function updateProperty(
             redirectTo,
         };
     } catch (error: unknown) {
+        // El detalle queda en el log; al anfitrión le llega un error genérico
         console.error("Error inesperado al actualizar propiedad:", error);
-
-        const errorMessage =
-            error instanceof Error
-                ? error.message
-                : "Error interno del servidor";
-
-        return {
-            errors: {
-                server: [errorMessage],
-            },
-        };
+        return { errors: { server: ["propertyUpdateError"] } };
     }
 }

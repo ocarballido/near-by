@@ -15,6 +15,7 @@ import { updateProperty } from "@/app/actions/properties/update-property";
 
 import {
     MAX_IMAGE_SIZE,
+    MAX_IMAGE_SIZE_KB,
     MAX_LOGO_SIZE,
     CATEGORIES_SUB_CATEGORIES,
     TIPS,
@@ -321,7 +322,7 @@ const AddPropertyForm = ({
 
             setError("address", {
                 type: "manual",
-                message: t("Selecciona una dirección sugerida para continuar"),
+                message: t("addressSelectSuggestion"),
             });
             return;
         }
@@ -344,32 +345,30 @@ const AddPropertyForm = ({
             }
         }
 
+        // Parámetros de los mensajes de tamaño, también para los errores que
+        // devuelve el servidor (claves propertyImage* / propertyLogo*)
         const file = data.image?.[0];
+        const imageParams = {
+            kb: MAX_IMAGE_SIZE_KB,
+            got: ((file?.size ?? 0) / 1024).toFixed(0),
+        };
         if (file && file.size > MAX_IMAGE_SIZE) {
             setAlert({
                 type: "error",
-                message: t(
-                    "La imagen no debe superar {kb} KB (tienes {got} KB)",
-                    {
-                        kb: (MAX_IMAGE_SIZE / 1024).toFixed(0),
-                        got: (file.size / 1024).toFixed(0),
-                    },
-                ),
+                message: t("propertyImageTooLarge", imageParams),
             });
             return;
         }
 
         const logoFile = data.logo?.[0];
+        const logoParams = {
+            kb: (MAX_LOGO_SIZE / 1024).toFixed(0),
+            got: ((logoFile?.size ?? 0) / 1024).toFixed(0),
+        };
         if (logoFile && logoFile.size > MAX_LOGO_SIZE) {
             setAlert({
                 type: "error",
-                message: t(
-                    "La imagen no debe superar {kb} KB (tienes {got} KB)",
-                    {
-                        kb: (MAX_LOGO_SIZE / 1024).toFixed(0),
-                        got: (logoFile.size / 1024).toFixed(0),
-                    },
-                ),
+                message: t("propertyLogoTooLarge", logoParams),
             });
             return;
         }
@@ -405,24 +404,33 @@ const AddPropertyForm = ({
 
             closeLoading();
 
+            // Los errores del servidor son claves de messages/*.json
             if (result.errors.name)
                 setError("name", {
                     type: "manual",
-                    message: result.errors.name[0],
+                    message: t(result.errors.name[0]),
                 });
             if (result.errors.address)
                 setError("address", {
                     type: "manual",
-                    message: result.errors.address[0],
+                    message: t(result.errors.address[0]),
                 });
             if (result.errors.image)
-                setAlert({ type: "error", message: result.errors.image[0] });
+                setAlert({
+                    type: "error",
+                    message: t(result.errors.image[0], imageParams),
+                });
             if (result.errors.logo)
-                setAlert({ type: "error", message: result.errors.logo[0] });
+                setAlert({
+                    type: "error",
+                    message: t(result.errors.logo[0], logoParams),
+                });
             if (result.errors.server)
                 setAlert({
                     type: "error",
-                    message: result.errors.server.join(", "),
+                    message: result.errors.server
+                        .map((key) => t(key))
+                        .join(", "),
                 });
             return;
         }
@@ -770,11 +778,10 @@ const AddPropertyForm = ({
                                 const file = files?.[0];
                                 if (!file) return true;
                                 if (file.size <= MAX_IMAGE_SIZE) return true;
-                                return `La imagen no debe superar ${(
-                                    MAX_IMAGE_SIZE / 1024
-                                ).toFixed(
-                                    0,
-                                )} KB (tienes ${(file.size / 1024).toFixed(0)} KB)`;
+                                return t("propertyImageTooLarge", {
+                                    kb: MAX_IMAGE_SIZE_KB,
+                                    got: (file.size / 1024).toFixed(0),
+                                });
                             },
                         })}
                     />
@@ -815,11 +822,10 @@ const AddPropertyForm = ({
                                 const file = files?.[0];
                                 if (!file) return true;
                                 if (file.size <= MAX_LOGO_SIZE) return true;
-                                return `El logo no debe superar ${(
-                                    MAX_LOGO_SIZE / 1024
-                                ).toFixed(
-                                    0,
-                                )} KB (tienes ${(file.size / 1024).toFixed(0)} KB)`;
+                                return t("propertyLogoTooLarge", {
+                                    kb: (MAX_LOGO_SIZE / 1024).toFixed(0),
+                                    got: (file.size / 1024).toFixed(0),
+                                });
                             },
                         })}
                     />

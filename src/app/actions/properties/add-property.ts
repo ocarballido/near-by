@@ -27,9 +27,10 @@ const emptyToNull = (v: unknown) => {
     return s.length ? s : null;
 };
 
-// Esquema de validación con Zod
+// Esquema de validación con Zod. Los errores son claves de messages/*.json:
+// los traduce el formulario
 const PropertySchema = z.object({
-    name: z.string().nonempty("El nombre de la propiedad es obligatorio"),
+    name: z.string().nonempty("El nombre es obligatorio"),
     description: z.preprocess(
         (v) => (typeof v === "string" ? v : ""),
         z.string(),
@@ -175,13 +176,7 @@ export async function createProperty(formData: FormData): Promise<FormState> {
 
         if (insertError || !property?.id) {
             console.error("Error al crear propiedad:", insertError);
-            return {
-                errors: {
-                    server: [
-                        "Error al crear el alojamiento. Por favor, inténtalo de nuevo.",
-                    ],
-                },
-            };
+            return { errors: { server: ["propertyCreateError"] } };
         }
 
         // 5) Seed de contenidos automáticos (texto) para "El Alojamiento"
@@ -269,17 +264,8 @@ export async function createProperty(formData: FormData): Promise<FormState> {
             redirectTo,
         };
     } catch (error: unknown) {
+        // El detalle queda en el log; al anfitrión le llega un error genérico
         console.error("Error inesperado al crear propiedad:", error);
-
-        const errorMessage =
-            error instanceof Error
-                ? error.message
-                : "Error interno del servidor";
-
-        return {
-            errors: {
-                server: [errorMessage],
-            },
-        };
+        return { errors: { server: ["propertyCreateError"] } };
     }
 }
