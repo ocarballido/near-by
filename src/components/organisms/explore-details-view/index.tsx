@@ -54,8 +54,9 @@ export default function ExploreDetailsView({
 
         closeLoading();
 
+        // Los errores de deleteDetail son claves de messages/*.json
         if (result.error) {
-            setAlert({ type: "error", message: result.error });
+            setAlert({ type: "error", message: t(result.error) });
             return;
         }
 

@@ -1,8 +1,10 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { MAX_IMAGE_SIZE, MAX_IMAGE_SIZE_KB } from "@/config/config-constants";
 import TextField from "../text-field";
 import TextArea from "@/components/molecules/text-area";
+import InputFile from "@/components/molecules/input-file";
 import Typography from "@/components/atoms/typography";
 import ButtonIcon from "@/components/atoms/button-icon";
 import IconDelete from "@/components/atoms/icon/delete";
@@ -17,6 +19,10 @@ export type DetailFieldsetState = {
     predefinedKey: string | null;
     orderIndex: number;
     isDirty: boolean;
+    // URL guardada en BD; imageFile es la imagen elegida pendiente de subir
+    imageUrl: string | null;
+    imageFile: File | null;
+    removeImage: boolean;
 };
 
 type ExploreDetailFieldsetProps = {
@@ -31,6 +37,8 @@ type ExploreDetailFieldsetProps = {
         >,
         value: string,
     ) => void;
+    // file null: el anfitrión ha quitado la imagen
+    onImageChange: (localId: string, file: File | null) => void;
     onRemove: (localId: string, wasOpen: boolean) => void;
 };
 
@@ -39,9 +47,13 @@ export default function ExploreDetailFieldset({
     isOpen,
     onToggle,
     onChange,
+    onImageChange,
     onRemove,
 }: ExploreDetailFieldsetProps) {
     const t = useTranslations();
+
+    const isImageTooLarge =
+        fieldset.imageFile !== null && fieldset.imageFile.size > MAX_IMAGE_SIZE;
 
     return (
         <fieldset
@@ -143,6 +155,38 @@ export default function ExploreDetailFieldset({
                             }
                             rows={3}
                         />
+                        {/* id: el editor lo lleva a la vista si la imagen
+                            supera el tamaño al intentar guardar */}
+                        <div id={`detail-image-${fieldset.localId}`}>
+                            <InputFile
+                                id={`image-${fieldset.localId}`}
+                                label={t("Imagen")}
+                                className="w-full mx-auto"
+                                initialPreviewUrl={fieldset.imageUrl}
+                                error={isImageTooLarge}
+                                helperText={
+                                    isImageTooLarge
+                                        ? t("detailImageTooLarge", {
+                                              kb: MAX_IMAGE_SIZE_KB,
+                                          })
+                                        : ""
+                                }
+                                // Los tipos que admite el servidor
+                                // (image-extension.ts): un HEIC o SVG se
+                                // rechaza aquí y no tras guardar el texto
+                                accept="image/jpeg,image/png,image/webp,image/gif"
+                                // Quitar va solo por el botón "Eliminar": un
+                                // change sin fichero no significa quitarla
+                                onChange={(e) => {
+                                    const file = e.target.files?.[0];
+                                    if (file)
+                                        onImageChange(fieldset.localId, file);
+                                }}
+                                onRemove={() =>
+                                    onImageChange(fieldset.localId, null)
+                                }
+                            />
+                        </div>
                     </div>
                 </div>
             </div>

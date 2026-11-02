@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { useLoading } from "@/lib/context/LoadingContext";
 
 import { saveDetails } from "@/app/actions/properties/save-details";
+import { saveDetailImage } from "@/app/actions/properties/save-detail-image";
+import { MAX_IMAGE_SIZE, MAX_IMAGE_SIZE_KB } from "@/config/config-constants";
 
 import Alert from "@/components/molecules/alert";
 import BadgeCheck from "@/components/atoms/BadgeCheck";
@@ -69,6 +71,23 @@ export default function ExploreDetailsEditor({
     const [saving, setSaving] = useState(false);
 
     const handleSave = async () => {
+        // El aviso de tamaño solo se ve con el fieldset abierto: si está
+        // plegado, se abre y se lleva su campo de imagen a la vista en lugar
+        // de guardar. 350 ms: tras la animación de apertura (300 ms), para
+        // que el scroll no calcule posiciones a medio desplegar
+        const tooLarge = fieldsets.find(
+            (f) => f.imageFile !== null && f.imageFile.size > MAX_IMAGE_SIZE,
+        );
+        if (tooLarge) {
+            setOpenLocalId(tooLarge.localId);
+            setTimeout(() => {
+                document
+                    .getElementById(`detail-image-${tooLarge.localId}`)
+                    ?.scrollIntoView({ behavior: "smooth", block: "center" });
+            }, 350);
+            return;
+        }
+
         setSaving(true);
         setAlert(null);
         openLoading();
@@ -85,19 +104,75 @@ export default function ExploreDetailsEditor({
             })),
         );
 
-        closeLoading();
-        setSaving(false);
-
         if (result.errors) {
+            closeLoading();
+            setSaving(false);
+            // Los errores de saveDetails son claves de messages/*.json
             setAlert({
                 type: "error",
-                message: result.errors.server?.[0] ?? "Error",
+                message: t(result.errors.server?.[0] ?? "detailsSaveError"),
             });
             return;
         }
 
-        setAlert({ type: "success", message: result.message! });
-        setFieldsets((prev) => prev.map((f) => ({ ...f, isDirty: false })));
+        // Los detalles nuevos ya tienen id en BD: si una imagen falla y el
+        // anfitrión vuelve a guardar, se actualizan en vez de duplicarse
+        const detailIds = result.detailIds ?? [];
+        const saved = fieldsets.map((f, index) => ({
+            ...f,
+            dbId: detailIds[index] ?? f.dbId,
+            isDirty: false,
+        }));
+
+        // Una llamada por imagen: cada petición lleva una sola imagen y no
+        // se acerca al límite de tamaño de las Server Actions
+        let imageError: string | null = null;
+        for (const [index, f] of saved.entries()) {
+            if (!f.dbId || (!f.imageFile && !f.removeImage)) continue;
+
+            const fd = new FormData();
+            if (f.imageFile) {
+                fd.append("image", f.imageFile);
+            } else {
+                fd.append("image_action", "remove");
+            }
+
+            // Un fallo de red lanza en vez de devolver error: sin el catch,
+            // el loading quedaría abierto
+            const imageResult = await saveDetailImage(f.dbId, fd).catch(
+                () => ({ error: "detailImageUploadError", imageUrl: null }),
+            );
+            if (imageResult.error) {
+                imageError = imageResult.error;
+                continue;
+            }
+
+            saved[index] = {
+                ...f,
+                imageUrl: imageResult.imageUrl ?? null,
+                imageFile: null,
+                removeImage: false,
+            };
+        }
+
+        closeLoading();
+        setSaving(false);
+        setFieldsets(saved);
+
+        // El texto ya está guardado: se queda en el editor para reintentar
+        // solo las imágenes pendientes
+        if (imageError) {
+            setAlert({
+                type: "error",
+                message: t(imageError, { kb: MAX_IMAGE_SIZE_KB }),
+            });
+            return;
+        }
+
+        setAlert({
+            type: "success",
+            message: t(result.message ?? "detailsSaved"),
+        });
 
         router.push(
             `/app/properties/${propertyId}/${categoryId}/${subCategoryId}`,
@@ -130,6 +205,9 @@ export default function ExploreDetailsEditor({
                     predefinedKey: key,
                     orderIndex: fieldsets.length,
                     isDirty: true,
+                    imageUrl: null,
+                    imageFile: null,
+                    removeImage: false,
                 };
                 setFieldsets((prev) => [...prev, newFieldset]);
                 setOpenLocalId(newFieldset.localId);
@@ -154,6 +232,9 @@ export default function ExploreDetailsEditor({
             predefinedKey: null,
             orderIndex: fieldsets.length,
             isDirty: true,
+            imageUrl: null,
+            imageFile: null,
+            removeImage: false,
         };
         setFieldsets((prev) => [...prev, newFieldset]);
         setOpenLocalId(newFieldset.localId);
@@ -178,6 +259,26 @@ export default function ExploreDetailsEditor({
                 prev.map((f) =>
                     f.localId === localId
                         ? { ...f, [field]: value, isDirty: true }
+                        : f,
+                ),
+            );
+        },
+        [],
+    );
+
+    // Quitar la imagen solo se envía al servidor si había una guardada;
+    // una imagen nueva siempre tiene prioridad sobre quitarla
+    const handleImageChange = useCallback(
+        (localId: string, file: File | null) => {
+            setFieldsets((prev) =>
+                prev.map((f) =>
+                    f.localId === localId
+                        ? {
+                              ...f,
+                              imageFile: file,
+                              removeImage: file === null && f.imageUrl !== null,
+                              isDirty: true,
+                          }
                         : f,
                 ),
             );
@@ -296,6 +397,7 @@ export default function ExploreDetailsEditor({
                                     isOpen={openLocalId === fieldset.localId}
                                     onToggle={handleToggle}
                                     onChange={handleChange}
+                                    onImageChange={handleImageChange}
                                     onRemove={handleRemove}
                                 />
                             </div>

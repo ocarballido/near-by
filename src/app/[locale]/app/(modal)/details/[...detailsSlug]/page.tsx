@@ -20,6 +20,9 @@ function rowToFieldset(row: PropertyDetailRow): DetailFieldsetState {
         predefinedKey: row.predefined_key,
         orderIndex: row.order_index,
         isDirty: false,
+        imageUrl: row.image_url,
+        imageFile: null,
+        removeImage: false,
     };
 }
 

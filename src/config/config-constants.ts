@@ -270,6 +270,7 @@ export const SUBSCRIPTION_FEATURES = {
 } as const;
 
 export const MAX_IMAGE_SIZE = 500 * 1024; // 500 KB
+export const MAX_IMAGE_SIZE_KB = MAX_IMAGE_SIZE / 1024; // para los mensajes {kb}
 
 // Límites de texto de un sitio (property_data type 'location'). Se validan en
 // servidor: acotan también el coste de traducción. En prod (2026-10-25) el
