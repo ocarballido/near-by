@@ -57,10 +57,10 @@ export default function ExploreDetailFieldset({
 
     return (
         <fieldset
-            className={`flex flex-col rounded-xl border-1 transition-colors ${
+            className={`flex flex-col rounded-xl transition-colors ${
                 isOpen
-                    ? "border-primary-100 bg-primary-50"
-                    : "border-gray-100 hover:border-primary-200 bg-white"
+                    ? "bg-primary-50 "
+                    : "border-gray-100 hover:bg-primary-50 bg-white"
             }`}
         >
             {/* Header — siempre visible */}

@@ -53,9 +53,7 @@ export default function ExploreDetailsEditor({
         useState<DetailFieldsetState[]>(initialFieldsets);
 
     // Justo después del estado de fieldsets:
-    const [openLocalId, setOpenLocalId] = useState<string | null>(
-        initialFieldsets[0]?.localId ?? null,
-    );
+    const [openLocalId, setOpenLocalId] = useState<string | null>(null);
 
     const handleToggle = useCallback((localId: string) => {
         setOpenLocalId((prev) => (prev === localId ? null : localId));
@@ -139,9 +137,10 @@ export default function ExploreDetailsEditor({
 
             // Un fallo de red lanza en vez de devolver error: sin el catch,
             // el loading quedaría abierto
-            const imageResult = await saveDetailImage(f.dbId, fd).catch(
-                () => ({ error: "detailImageUploadError", imageUrl: null }),
-            );
+            const imageResult = await saveDetailImage(f.dbId, fd).catch(() => ({
+                error: "detailImageUploadError",
+                imageUrl: null,
+            }));
             if (imageResult.error) {
                 imageError = imageResult.error;
                 continue;
@@ -303,7 +302,7 @@ export default function ExploreDetailsEditor({
 
     return (
         <>
-            <div className="bg-white rounded-xl max-w-[600px] w-full shadow-xs relative">
+            <div className="bg-white rounded-xl max-w-[460px] w-full shadow-xs relative">
                 <div className="rounded-lg flex flex-col gap-2 items-center mb-3 pt-4">
                     <FancyIcon
                         icon={<IconFamiltHome color="white" />}
@@ -350,7 +349,9 @@ export default function ExploreDetailsEditor({
                         {PREDEFINED_KEYS.map((key) => (
                             <BadgeCheck
                                 key={key}
-                                label={t(`exploreDetails.predefined.${key}.name`)}
+                                label={t(
+                                    `exploreDetails.predefined.${key}.name`,
+                                )}
                                 checked={activeKeys.has(key)}
                                 onToggle={() => handleChipToggle(key)}
                             />
