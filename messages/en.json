@@ -545,6 +545,11 @@
     "mustSeeMarkError": "Error updating Must See",
     "favorites": "Favorites",
     "mustSees": "Must see, essential visit",
+    "tenantFavoriteSave": "Save",
+    "tenantFavoriteSaved": "Saved",
+    "savedPlaces": "Saved",
+    "savedPlacesShareTitle": "Share your list with your travel companions",
+    "savedPlacesShareWhatsapp": "Check out the places I've saved:",
     "page_home": {
         "mainAction": "Create my free guide",
         "pilotHouseAction": "See how my guests see it",

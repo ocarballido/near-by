@@ -550,6 +550,11 @@
     "mustSeeMarkError": "Error al actualizar imprescindible",
     "favorites": "Favoritos",
     "mustSees": "Visita obligatoria",
+    "tenantFavoriteSave": "Guardar",
+    "tenantFavoriteSaved": "Guardado",
+    "savedPlaces": "Guardados",
+    "savedPlacesShareTitle": "Comparte tu lista con quien viaja contigo",
+    "savedPlacesShareWhatsapp": "Mira los sitios que he guardado:",
     "page_home": {
         "mainAction": "Crear mi guía gratis",
         "pilotHouseAction": "Ver cómo lo ven mis huéspedes",

@@ -550,6 +550,11 @@
     "mustSeeMarkError": "Erreur de mise à jour essentielle",
     "favorites": "Favoris",
     "mustSees": "Visite essentielle",
+    "tenantFavoriteSave": "Enregistrer",
+    "tenantFavoriteSaved": "Enregistré",
+    "savedPlaces": "Enregistrés",
+    "savedPlacesShareTitle": "Partagez votre liste avec vos compagnons de voyage",
+    "savedPlacesShareWhatsapp": "Regarde les lieux que j'ai enregistrés :",
     "page_home": {
         "mainAction": "Créer mon guide gratuit",
         "pilotHouseAction": "Voir ce que voient mes voyageurs",

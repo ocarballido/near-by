@@ -550,6 +550,11 @@
     "mustSeeMarkError": "Errore nell'aggiornamento di imperdibile",
     "favorites": "Preferiti",
     "mustSees": "Visita obbligata",
+    "tenantFavoriteSave": "Salva",
+    "tenantFavoriteSaved": "Salvato",
+    "savedPlaces": "Salvati",
+    "savedPlacesShareTitle": "Condividi la tua lista con chi viaggia con te",
+    "savedPlacesShareWhatsapp": "Guarda i posti che ho salvato:",
     "page_home": {
         "mainAction": "Crea la mia guida gratis",
         "pilotHouseAction": "Vedi come la vedono i miei ospiti",

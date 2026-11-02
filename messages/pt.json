@@ -550,6 +550,11 @@
     "mustSeeMarkError": "Erro ao atualizar imperdível",
     "favorites": "Favoritos",
     "mustSees": "Visita obrigatória",
+    "tenantFavoriteSave": "Guardar",
+    "tenantFavoriteSaved": "Guardado",
+    "savedPlaces": "Guardados",
+    "savedPlacesShareTitle": "Partilha a tua lista com quem viaja contigo",
+    "savedPlacesShareWhatsapp": "Vê os sítios que guardei:",
     "page_home": {
         "mainAction": "Criar o meu guia grátis",
         "pilotHouseAction": "Ver como o veem os meus hóspedes",
