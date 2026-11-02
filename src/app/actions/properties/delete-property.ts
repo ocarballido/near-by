@@ -118,6 +118,31 @@ export async function deleteProperty(propertyId: string) {
 		throw new Error('Error base de datos');
 	}
 
+	type DetailImageOnly = Pick<Tables<'property_details'>, 'image_url'>;
+
+	// property_details se borraría en cascada con la propiedad, pero se borra
+	// aquí con .select(): las imágenes salen del mismo delete y no quedan
+	// desfasadas si otra pestaña cambia una entretanto
+	const { data: deletedDetails, error: detailsDelErr } = await supabase
+		.from('property_details')
+		.delete()
+		.eq('property_id', propertyId)
+		.select('image_url')
+		.overrideTypes<DetailImageOnly[], { merge: false }>();
+	if (detailsDelErr) {
+		console.error('Error deleting property_details:', detailsDelErr);
+		throw new Error('Error base de datos');
+	}
+
+	// Sus filas ya no existen: se borran ya, aunque luego falle el borrado
+	// de la propiedad, para no dejarlas huérfanas
+	await removePublicImages(
+		db,
+		'property-images',
+		userId,
+		(deletedDetails ?? []).map((row) => row.image_url),
+	);
+
 	// Finalmente eliminar la propiedad
 	const { error: propDelErr } = await supabase
 		.from('properties')
