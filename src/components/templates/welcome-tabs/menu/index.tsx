@@ -6,9 +6,10 @@ import clsx from "clsx";
 import IconFavorite from "@/components/atoms/icon/favorite";
 import IconModeHeat from "@/components/atoms/icon/mode-heat";
 import IconNightLife from "@/components/atoms/icon/nightlife";
+import IconNewRelease from "@/components/atoms/icon/new-releases";
 import Typography from "@/components/atoms/typography";
 
-export type TabKey = "featured" | "must_visit" | "events";
+export type TabKey = "featured" | "must_visit" | "saved" | "events";
 
 type IconColor = "primary" | "error" | "warning" | "body";
 
@@ -35,6 +36,13 @@ const TAB_CONFIG: Record<
         activeBg: "bg-white",
         activeCountBg: "bg-white",
         iconActiveColor: "error",
+    },
+    saved: {
+        icon: (color) => <IconNewRelease color={color} />,
+        activeText: "text-warning-500",
+        activeBg: "bg-white",
+        activeCountBg: "bg-white",
+        iconActiveColor: "warning",
     },
     events: {
         icon: (color) => <IconNightLife color={color} />,
@@ -86,7 +94,7 @@ export default function WelcomeTabsMenu({
                             aria-pressed={isActive}
                             className={clsx(
                                 "flex-1 rounded-full px-1.5 py-1.5 ps-2.5 text-md font-medium min-w-0",
-                                "flex items-center justify-center lg:justify-between gap-2 transition-colors hover:cursor-pointer",
+                                "flex items-center justify-center gap-2 transition-colors hover:cursor-pointer",
                                 isActive
                                     ? config.activeBg
                                     : "bg-transparent hover:bg-gray-50",

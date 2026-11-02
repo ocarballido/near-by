@@ -44,12 +44,19 @@ import PublicGuideNav, {
 } from "@/components/organisms/public-guide-nav";
 import SidebarMenuBar from "@/components/organisms/sidebar/sidebar-menu-bar";
 import HousePublicHero from "@/components/organisms/house-public-hero";
+import { SavedPlacesProvider } from "@/lib/context/SavedPlacesContext";
+import {
+    getSavedPlacesCookieName,
+    mergeSavedPlaceIds,
+    parseSavedPlaceIds,
+} from "@/utils/saved-places";
 
 type PageMode = "welcome" | "custom-plans" | "subcategory" | "lodging";
 
 type HighlightsData = {
     featuredGroups: HighlightGroup[];
     mustVisitGroups: HighlightGroup[];
+    savedGroups: HighlightGroup[];
 };
 
 interface GenerateMetadataProps {
@@ -65,7 +72,8 @@ const getMode = (categoryId?: string): PageMode => {
 
 interface PageProps {
     params: Promise<{ locale: string; slug: string[] }>;
-    searchParams?: Promise<{ open?: string }>;
+    // Un param repetido en la URL (?saved=a&saved=b) llega como array
+    searchParams?: Promise<{ open?: string; saved?: string | string[] }>;
 }
 
 export async function generateMetadata({
@@ -126,8 +134,20 @@ export default async function Property({ params, searchParams }: PageProps) {
     const anonId = cookieStore.get("be_anon_id")?.value ?? "anon-missing";
 
     const { slug, locale } = await params;
-    const { open } = (await searchParams) ?? {};
+    const { open, saved } = (await searchParams) ?? {};
     const [propertyId, categoryId, subCategoryId] = slug;
+
+    // Lo que llega por un enlace compartido se suma a lo que ya tenía el
+    // huésped; SavedPlacesProvider lo persiste en la cookie y limpia la URL
+    const sharedPlaceIds = parseSavedPlaceIds(
+        Array.isArray(saved) ? saved[0] : saved,
+    );
+    const savedPlaceIds = mergeSavedPlaceIds(
+        parseSavedPlaceIds(
+            cookieStore.get(getSavedPlacesCookieName(propertyId))?.value,
+        ),
+        sharedPlaceIds,
+    );
 
     // Se calcula aquí (antes del Promise.all) porque decide qué fetches
     // extra hacen falta — mode nunca depende de ningún dato remoto.
@@ -172,7 +192,7 @@ export default async function Property({ params, searchParams }: PageProps) {
     // no reintroducir un escalón secuencial cuando sí aplica.
     const highlightsPromise: Promise<HighlightsData | null> =
         mode === "welcome"
-            ? fetchWelcomeHighlightsTabsData(propertyId, locale)
+            ? fetchWelcomeHighlightsTabsData(propertyId, locale, savedPlaceIds)
             : Promise.resolve(null);
 
     // Mismo criterio para las secciones: sus datos entran en el Promise.all
@@ -278,91 +298,109 @@ export default async function Property({ params, searchParams }: PageProps) {
                     propertyLogoUrl={property.logo_url}
                 />
                 <PublicCountsBootstrap counts={counts} />
-                <PublicContentTemplate
+                {/* Guardados del huésped: la cookie se lee aquí para que las
+                    cards se pinten ya en su estado */}
+                <SavedPlacesProvider
                     propertyId={propertyId}
-                    categoryId={categoryId}
-                    subCategoryId={subCategoryId}
-                    navItems={navItems}
+                    initialIds={savedPlaceIds}
                 >
-                    {/* Cabecera a sangre: el contenedor redondeado la recorta */}
-                    {(timeWindowData || activePlacesCategory) && (
-                        <div className="shrink-0">
-                            {timeWindowData && (
-                                <TimeWindowSection
-                                    data={timeWindowData}
+                    <PublicContentTemplate
+                        propertyId={propertyId}
+                        categoryId={categoryId}
+                        subCategoryId={subCategoryId}
+                        navItems={navItems}
+                    >
+                        {/* Cabecera a sangre: el contenedor redondeado la recorta */}
+                        {(timeWindowData || activePlacesCategory) && (
+                            <div className="shrink-0">
+                                {timeWindowData && (
+                                    <TimeWindowSection
+                                        data={timeWindowData}
+                                        propertyId={propertyId}
+                                        anonId={anonId}
+                                    />
+                                )}
+                                {activePlacesCategory && (
+                                    <SidebarMenuBar
+                                        label={t(activePlacesCategory.name)}
+                                    />
+                                )}
+                            </div>
+                        )}
+                        {/* Desktop: nav bajo el widget, fijo arriba al hacer scroll.
+                            z-20; el overlay del sidebar solo existe por debajo de
+                            lg, donde este nav está oculto. En mobile/tablet va al
+                            pie (template) */}
+                        <div className="hidden lg:block sticky top-0 z-20 shrink-0">
+                            <PublicGuideNav items={navItems} placement="top" />
+                        </div>
+                        {/* Hero a sangre: bajo el nav en desktop y bajo el widget
+                            horario en mobile/tablet (ahí el nav va al pie) */}
+                        {mode === "welcome" && (
+                            <HousePublicHero
+                                name={property.name}
+                                address={getDisplayZoneFromString(
+                                    property.address,
+                                )}
+                                image={property.image_url}
+                                latitude={lat}
+                                longitude={lng}
+                                checkInDate={property.check_in_date ?? undefined}
+                                checkInTime={property.check_in_time ?? undefined}
+                                checkOutDate={
+                                    property.check_out_date ?? undefined
+                                }
+                                checkOutTime={
+                                    property.check_out_time ?? undefined
+                                }
+                                className="shrink-0"
+                            />
+                        )}
+                        <div className="font-roboto flex flex-col grow w-full mx-auto">
+                            {mode === "welcome" && highlightsData && (
+                                <WelcomeSection
                                     propertyId={propertyId}
+                                    anonId={anonId}
+                                    categoryId={categoryId}
+                                    lat={lat}
+                                    lng={lng}
+                                    infoGroups={infoGroups}
+                                    weather={weather}
+                                    featuredGroups={highlightsData.featuredGroups}
+                                    mustVisitGroups={
+                                        highlightsData.mustVisitGroups
+                                    }
+                                    savedGroups={highlightsData.savedGroups}
+                                    openSaved={sharedPlaceIds.length > 0}
+                                />
+                            )}
+                            {mode === "custom-plans" && (
+                                <ItineraryFormLazy
+                                    locale={locale}
+                                    lat={lat}
+                                    lng={lng}
                                     anonId={anonId}
                                 />
                             )}
-                            {activePlacesCategory && (
-                                <SidebarMenuBar
-                                    label={t(activePlacesCategory.name)}
+                            {mode === "subcategory" && subcategoryData && (
+                                <SubcategorySection
+                                    data={subcategoryData}
+                                    categoryId={categoryId}
+                                    subCategoryId={subCategoryId}
+                                    lat={lat}
+                                    lng={lng}
+                                />
+                            )}
+                            {mode === "lodging" && exploreDetails && (
+                                <LodgingSection
+                                    infoGroups={infoGroups}
+                                    exploreDetails={exploreDetails}
+                                    defaultOpenId={open}
                                 />
                             )}
                         </div>
-                    )}
-                    {/* Desktop: nav bajo el widget, fijo arriba al hacer scroll.
-                        z-20; el overlay del sidebar solo existe por debajo de
-                        lg, donde este nav está oculto. En mobile/tablet va al
-                        pie (template) */}
-                    <div className="hidden lg:block sticky top-0 z-20 shrink-0">
-                        <PublicGuideNav items={navItems} placement="top" />
-                    </div>
-                    {/* Hero a sangre: bajo el nav en desktop y bajo el widget
-                        horario en mobile/tablet (ahí el nav va al pie) */}
-                    {mode === "welcome" && (
-                        <HousePublicHero
-                            name={property.name}
-                            address={getDisplayZoneFromString(property.address)}
-                            image={property.image_url}
-                            latitude={lat}
-                            longitude={lng}
-                            checkInDate={property.check_in_date ?? undefined}
-                            checkInTime={property.check_in_time ?? undefined}
-                            checkOutDate={property.check_out_date ?? undefined}
-                            checkOutTime={property.check_out_time ?? undefined}
-                            className="shrink-0"
-                        />
-                    )}
-                    <div className="font-roboto flex flex-col grow w-full mx-auto">
-                        {mode === "welcome" && highlightsData && (
-                            <WelcomeSection
-                                propertyId={propertyId}
-                                categoryId={categoryId}
-                                lat={lat}
-                                lng={lng}
-                                infoGroups={infoGroups}
-                                weather={weather}
-                                featuredGroups={highlightsData.featuredGroups}
-                                mustVisitGroups={highlightsData.mustVisitGroups}
-                            />
-                        )}
-                        {mode === "custom-plans" && (
-                            <ItineraryFormLazy
-                                locale={locale}
-                                lat={lat}
-                                lng={lng}
-                                anonId={anonId}
-                            />
-                        )}
-                        {mode === "subcategory" && subcategoryData && (
-                            <SubcategorySection
-                                data={subcategoryData}
-                                categoryId={categoryId}
-                                subCategoryId={subCategoryId}
-                                lat={lat}
-                                lng={lng}
-                            />
-                        )}
-                        {mode === "lodging" && exploreDetails && (
-                            <LodgingSection
-                                infoGroups={infoGroups}
-                                exploreDetails={exploreDetails}
-                                defaultOpenId={open}
-                            />
-                        )}
-                    </div>
-                </PublicContentTemplate>
+                    </PublicContentTemplate>
+                </SavedPlacesProvider>
                 <ArrivalGuide
                     data={arrivalGuideData}
                     propertyId={propertyId}
