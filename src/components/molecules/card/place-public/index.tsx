@@ -11,6 +11,7 @@ import IconModeHeat from "@/components/atoms/icon/mode-heat";
 import IconFavorite from "@/components/atoms/icon/favorite";
 import IconInfo from "@/components/atoms/icon/info";
 import TenantFavorite from "@/components/molecules/tenant-favorite";
+import Tooltip from "@/components/atoms/tooltip";
 
 import IconApartment from "@/components/atoms/icon/apartment";
 import IconHealing from "@/components/atoms/icon/healing";
@@ -192,14 +193,26 @@ const PlacePublic = ({
                 )}
                 <div className="flex items-center gap-1">
                     {mustSee && (
-                        <div className="p-1.5 flex gap-1 items-center rounded-full w-fit h-fit bg-error-500 shadow-xs">
-                            <IconModeHeat color="white" size={20} />
-                        </div>
+                        <Tooltip label={t("mustSeeTooltip")}>
+                            <button
+                                type="button"
+                                aria-label={t("mustSeeTooltip")}
+                                className="p-1.5 flex gap-1 items-center rounded-full w-fit h-fit bg-error-500 shadow-xs cursor-help"
+                            >
+                                <IconModeHeat color="white" size={20} />
+                            </button>
+                        </Tooltip>
                     )}
                     {featured && (
-                        <div className="p-1.5 flex gap-1 items-center rounded-full w-fit h-fit bg-primary-500 shadow-xs">
-                            <IconFavorite color="white" size={20} />
-                        </div>
+                        <Tooltip label={t("featuredTooltip")}>
+                            <button
+                                type="button"
+                                aria-label={t("featuredTooltip")}
+                                className="p-1.5 flex gap-1 items-center rounded-full w-fit h-fit bg-primary-500 shadow-xs cursor-help"
+                            >
+                                <IconFavorite color="white" size={20} />
+                            </button>
+                        </Tooltip>
                     )}
                 </div>
             </div>

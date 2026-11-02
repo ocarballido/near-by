@@ -547,6 +547,8 @@
     "mustSees": "Must see, essential visit",
     "tenantFavoriteSave": "Save",
     "tenantFavoriteSaved": "Saved",
+    "featuredTooltip": "Host's favorite",
+    "mustSeeTooltip": "Must-see",
     "savedPlaces": "Saved",
     "savedPlacesShareTitle": "Share your list with your travel companions",
     "savedPlacesShareWhatsapp": "Check out the places I've saved:",
