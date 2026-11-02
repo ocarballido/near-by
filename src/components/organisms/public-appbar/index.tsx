@@ -18,7 +18,7 @@ const PublicAppBar = ({
 }: PublicAppBarProps) => {
     const publicUrl = `${process.env.NEXT_PUBLIC_APP_URL}/public/${propertyId}/welcome/highlights`;
 
-    const logoSrc = propertyLogoUrl || "/static/img/symbol_colored@2x.webp";
+    const logoSrc = propertyLogoUrl || "/static/img/rooftop-2.png";
     const logoAlt = propertyLogoUrl
         ? `${propertyName || "Property"} logo`
         : "Icon Logo";
