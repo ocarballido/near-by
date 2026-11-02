@@ -3,7 +3,7 @@ import 'server-only';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database } from '@/lib/types';
 import { MAX_IMAGE_SIZE } from '@/config/config-constants';
-import { imageExtensionFromMimeType } from '@/lib/storage/image-extension';
+import { uploadPublicImage } from '@/lib/storage/upload-public-image';
 
 export type UploadLocationImageResult =
 	| { ok: true; imageUrl: string | null }
@@ -23,43 +23,33 @@ export async function uploadLocationImage(args: {
 		return { ok: true, imageUrl: null };
 	}
 
+	const res = await uploadPublicImage({
+		db,
+		bucket: 'location-images',
+		userId,
+		prefix: 'location',
+		file: imageFile,
+		maxSize: MAX_IMAGE_SIZE,
+	});
+
+	if (res.ok) return { ok: true, imageUrl: res.publicUrl };
+
 	// Los errores son claves de messages/*.json: los traduce el formulario
-	if (imageFile.size > MAX_IMAGE_SIZE) {
-		return {
-			ok: false,
-			errorState: { errors: { image: ['locationImageTooLarge'] } },
-		};
+	switch (res.reason) {
+		case 'too_large':
+			return {
+				ok: false,
+				errorState: { errors: { image: ['locationImageTooLarge'] } },
+			};
+		case 'invalid_format':
+			return {
+				ok: false,
+				errorState: { errors: { image: ['locationImageInvalidFormat'] } },
+			};
+		case 'upload_failed':
+			return {
+				ok: false,
+				errorState: { errors: { server: ['locationImageUploadError'] } },
+			};
 	}
-
-	// La extensión sale del tipo MIME validado, no del nombre del fichero
-	const ext = imageExtensionFromMimeType(imageFile.type);
-	if (!ext) {
-		return {
-			ok: false,
-			errorState: { errors: { image: ['locationImageInvalidFormat'] } },
-		};
-	}
-
-	const fileName = `${userId}/location_${Date.now()}.${ext}`;
-
-	const { error: upErr } = await db.storage
-		.from('location-images')
-		.upload(fileName, imageFile, {
-			cacheControl: '3600',
-			upsert: false,
-		});
-
-	if (upErr) {
-		console.error('Error subiendo imagen a location-images:', upErr);
-		return {
-			ok: false,
-			errorState: { errors: { server: ['locationImageUploadError'] } },
-		};
-	}
-
-	const {
-		data: { publicUrl },
-	} = db.storage.from('location-images').getPublicUrl(fileName);
-
-	return { ok: true, imageUrl: publicUrl };
 }
