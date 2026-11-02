@@ -3,12 +3,13 @@ import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/types";
 import { MAX_LOGO_SIZE } from "@/config/config-constants";
-import { imageExtensionFromMimeType } from "@/lib/storage/image-extension";
+import { uploadPublicImage } from "@/lib/storage/upload-public-image";
 
 export type UploadPropertyLogoResult =
     | { ok: true; logoUrl: string | null }
     | { ok: false; errorState: { errors: { logo: string[] } } };
 
+// Sin GIF: el logo es un asset estático de marca, no contenido de galería
 const VALID_LOGO_TYPES = ["image/jpeg", "image/png", "image/webp"] as const;
 
 export async function uploadPropertyLogo(args: {
@@ -22,69 +23,29 @@ export async function uploadPropertyLogo(args: {
         return { ok: true, logoUrl: null };
     }
 
-    // Validar tamaño (debe coincidir con file_size_limit del bucket property-logos)
-    if (logoFile.size > MAX_LOGO_SIZE) {
-        return {
-            ok: false,
-            errorState: {
-                errors: {
-                    logo: [
-                        `El logo no debe superar los ${(
-                            MAX_LOGO_SIZE / 1024
-                        ).toFixed(0)} KB. Tamaño actual: ${(
-                            logoFile.size / 1024
-                        ).toFixed(2)} KB`,
-                    ],
-                },
-            },
-        };
-    }
+    // MAX_LOGO_SIZE debe coincidir con file_size_limit del bucket property-logos
+    const res = await uploadPublicImage({
+        db,
+        bucket: "property-logos",
+        userId,
+        prefix: "logo",
+        file: logoFile,
+        maxSize: MAX_LOGO_SIZE,
+        allowedMimeTypes: VALID_LOGO_TYPES,
+    });
 
-    // Validar tipo (sin GIF: el logo es un asset estático de marca, no contenido de galería).
-    // La extensión sale del tipo validado, no del nombre del fichero.
-    const fileExt = imageExtensionFromMimeType(logoFile.type);
-    if (
-        !fileExt ||
-        !VALID_LOGO_TYPES.includes(
-            logoFile.type as (typeof VALID_LOGO_TYPES)[number],
-        )
-    ) {
-        return {
-            ok: false,
-            errorState: {
-                errors: {
-                    logo: ["El archivo debe ser una imagen (JPEG, PNG o WebP)"],
-                },
-            },
-        };
-    }
+    if (res.ok) return { ok: true, logoUrl: res.publicUrl };
 
-    const fileName = `${userId}/logo_${Date.now()}.${fileExt}`;
+    // Claves de messages/*.json: las traduce el formulario ({kb} y {got} los
+    // pone él con MAX_LOGO_SIZE y el tamaño del fichero)
+    const errorKeys = {
+        too_large: "propertyLogoTooLarge",
+        invalid_format: "propertyLogoInvalidFormat",
+        upload_failed: "propertyLogoUploadError",
+    };
 
-    const { error: uploadError } = await db.storage
-        .from("property-logos")
-        .upload(fileName, logoFile, {
-            cacheControl: "3600",
-            upsert: false,
-        });
-
-    if (uploadError) {
-        console.error("Error al subir logo:", uploadError);
-        return {
-            ok: false,
-            errorState: {
-                errors: {
-                    logo: [
-                        "Error al subir el logo. Por favor, inténtalo de nuevo.",
-                    ],
-                },
-            },
-        };
-    }
-
-    const {
-        data: { publicUrl },
-    } = db.storage.from("property-logos").getPublicUrl(fileName);
-
-    return { ok: true, logoUrl: publicUrl };
+    return {
+        ok: false,
+        errorState: { errors: { logo: [errorKeys[res.reason]] } },
+    };
 }

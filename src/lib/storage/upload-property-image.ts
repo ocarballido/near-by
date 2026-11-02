@@ -3,7 +3,7 @@ import 'server-only';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database } from '@/lib/types';
 import { MAX_IMAGE_SIZE } from '@/config/config-constants';
-import { imageExtensionFromMimeType } from '@/lib/storage/image-extension';
+import { uploadPublicImage } from '@/lib/storage/upload-public-image';
 
 export type UploadPropertyImageResult =
 	| { ok: true; imageUrl: string | null }
@@ -16,72 +16,31 @@ export async function uploadPropertyImage(args: {
 }): Promise<UploadPropertyImageResult> {
 	const { db, userId, imageFile } = args;
 
-	let imageUrl: string | null = null;
-
 	if (!imageFile || imageFile.size <= 0) {
 		return { ok: true, imageUrl: null };
 	}
 
-	// Validar tamaño
-	if (imageFile.size > MAX_IMAGE_SIZE) {
-		return {
-			ok: false,
-			errorState: {
-				errors: {
-					image: [
-						`La imagen no debe superar los 500 KB. Tamaño actual: ${(
-							imageFile.size / 1024
-						).toFixed(2)} KB`,
-					],
-				},
-			},
-		};
-	}
+	const res = await uploadPublicImage({
+		db,
+		bucket: 'property-images',
+		userId,
+		prefix: 'property',
+		file: imageFile,
+		maxSize: MAX_IMAGE_SIZE,
+	});
 
-	// Validar tipo (y de él sale la extensión)
-	const fileExt = imageExtensionFromMimeType(imageFile.type);
-	if (!fileExt) {
-		return {
-			ok: false,
-			errorState: {
-				errors: {
-					image: [
-						'El archivo debe ser una imagen (JPEG, PNG, WebP o GIF)',
-					],
-				},
-			},
-		};
-	}
+	if (res.ok) return { ok: true, imageUrl: res.publicUrl };
 
-	// Subir imagen
-	const fileName = `${userId}/property_${Date.now()}.${fileExt}`;
+	// Claves de messages/*.json: las traduce el formulario ({kb} y {got} los
+	// pone él con MAX_IMAGE_SIZE y el tamaño del fichero)
+	const errorKeys = {
+		too_large: 'propertyImageTooLarge',
+		invalid_format: 'propertyImageInvalidFormat',
+		upload_failed: 'propertyImageUploadError',
+	};
 
-	const { error: uploadError } = await db.storage
-		.from('property-images')
-		.upload(fileName, imageFile, {
-			cacheControl: '3600',
-			upsert: false,
-		});
-
-	if (uploadError) {
-		console.error('Error al subir imagen:', uploadError);
-		return {
-			ok: false,
-			errorState: {
-				errors: {
-					image: [
-						'Error al subir la imagen. Por favor, inténtalo de nuevo.',
-					],
-				},
-			},
-		};
-	}
-
-	const {
-		data: { publicUrl },
-	} = db.storage.from('property-images').getPublicUrl(fileName);
-
-	imageUrl = publicUrl;
-
-	return { ok: true, imageUrl };
+	return {
+		ok: false,
+		errorState: { errors: { image: [errorKeys[res.reason]] } },
+	};
 }

@@ -5,6 +5,7 @@ import { after } from "next/server";
 import { createSSRClient } from "@/lib/supabase/server";
 import { createServerAdminClient } from "@/lib/supabase/serverAdminClient";
 import { trackEvent } from "@/lib/analytics/mixpanel";
+import { removePublicImages } from "@/lib/storage/remove-public-images";
 import { z } from "zod";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
@@ -29,12 +30,16 @@ const SaveDetailsSchema = z.object({
     details: z.array(DetailItemSchema),
 });
 
+// Los errores y el mensaje de éxito son claves de messages/*.json: los
+// traduce el editor
 export type SaveDetailsState = {
     errors?: {
         server?: string[];
     };
     success?: boolean;
     message?: string;
+    // Id en BD de cada detalle, en el mismo orden en que se enviaron
+    detailIds?: string[];
 };
 
 // ==============================
@@ -66,7 +71,7 @@ export async function saveDetails(
             details,
         });
         if (!parsed.success) {
-            return { errors: { server: ["Datos inválidos."] } };
+            return { errors: { server: ["detailsInvalidData"] } };
         }
 
         const supabase = await createServerAdminClient();
@@ -83,7 +88,7 @@ export async function saveDetails(
         if (!property || property.user_id !== user.id) {
             return {
                 errors: {
-                    server: ["No tienes permisos para editar esta propiedad"],
+                    server: ["detailsNoPermission"],
                 },
             };
         }
@@ -97,19 +102,40 @@ export async function saveDetails(
         // 5) IDs que el propietario quiere conservar
         const keepIds = toUpdate.map((d) => d.id as string);
 
-        // 6) Eliminar los que ya no están en el listado
-        if (keepIds.length > 0) {
-            await db
-                .from("property_details")
-                .delete()
-                .eq("property_id", propertyId)
-                .not("id", "in", `(${keepIds.join(",")})`);
-        } else {
-            await db
-                .from("property_details")
-                .delete()
-                .eq("property_id", propertyId);
+        // 6) Eliminar los que ya no están en el listado. .select() devuelve
+        // las filas borradas: sus imágenes salen del mismo delete, sin una
+        // lectura previa que pueda quedar desfasada
+        const deleteQuery = db
+            .from("property_details")
+            .delete()
+            .eq("property_id", propertyId);
+
+        const { data: deletedDetails, error: deleteErr } = await (
+            keepIds.length > 0
+                ? deleteQuery.not("id", "in", `(${keepIds.join(",")})`)
+                : deleteQuery
+        )
+            .select("image_url")
+            .overrideTypes<{ image_url: string | null }[], { merge: false }>();
+
+        // Sin el borrado, el editor daría por quitados detalles que siguen en
+        // BD: se para antes de actualizar o insertar nada
+        if (deleteErr) {
+            console.error("[saveDetails] Error borrando detalles:", deleteErr);
+            return {
+                errors: {
+                    server: ["detailsSaveError"],
+                },
+            };
         }
+
+        // Storage después de la BD: ninguna fila apunta ya a estas imágenes
+        await removePublicImages(
+            db,
+            "property-images",
+            user.id,
+            (deletedDetails ?? []).map((detail) => detail.image_url),
+        );
 
         // Valores guardados antes de actualizar: solo se retraducen los campos
         // que cambian (cada traducción consume cuota del anfitrión)
@@ -160,7 +186,12 @@ export async function saveDetails(
 
         // 8) Insertar nuevos. El select devuelve exactamente las filas
         // insertadas (buscarlas después por nombre arrastraba detalles
-        // existentes con el mismo nombre)
+        // existentes con el mismo nombre). Los ids se generan aquí para
+        // devolverlos en el orden de entrada sin depender del orden del
+        // RETURNING: el editor los necesita para subir las imágenes
+        const newIds = new Map(
+            toInsert.map((detail) => [detail, crypto.randomUUID()]),
+        );
         let inserted: DetailText[] = [];
         let insertFailed = false;
         if (toInsert.length > 0) {
@@ -170,6 +201,7 @@ export async function saveDetails(
                     toInsert.map(
                         (detail) =>
                             ({
+                                id: newIds.get(detail),
                                 property_id: propertyId,
                                 name: detail.name,
                                 instructions: detail.instructions,
@@ -269,7 +301,7 @@ export async function saveDetails(
             revalidatePath("/app");
             return {
                 errors: {
-                    server: ["No se han podido guardar los detalles nuevos"],
+                    server: ["detailsInsertError"],
                 },
             };
         }
@@ -296,18 +328,14 @@ export async function saveDetails(
 
         return {
             success: true,
-            message: "Detalles guardados correctamente",
+            message: "detailsSaved",
+            detailIds: validatedDetails.map(
+                (detail) => detail.id ?? (newIds.get(detail) as string),
+            ),
         };
     } catch (error: unknown) {
+        // El detalle queda en el log; al anfitrión le llega un error genérico
         console.error("Error inesperado en saveDetails:", error);
-        return {
-            errors: {
-                server: [
-                    error instanceof Error
-                        ? error.message
-                        : "Error interno del servidor",
-                ],
-            },
-        };
+        return { errors: { server: ["detailsSaveError"] } };
     }
 }

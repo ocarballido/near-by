@@ -45,6 +45,7 @@ const InputFile = forwardRef<HTMLInputElement, InputFileProps>(
     ) => {
         const t = useTranslations();
         const internalRef = useRef<HTMLInputElement>(null);
+        const lastFileRef = useRef<File | null>(null);
         const [previewUrl, setPreviewUrl] = useState<string | null>(
             initialPreviewUrl,
         );
@@ -67,9 +68,27 @@ const InputFile = forwardRef<HTMLInputElement, InputFileProps>(
 
         const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
             const file = e.target.files?.[0];
-            if (file) {
-                setPreviewUrl(URL.createObjectURL(file));
+
+            // Cancelar el selector vacía el input en algunos navegadores
+            // (Chrome) y dispara change sin fichero. No es quitar la imagen
+            // (eso lo hace handleRemove): se restaura el último fichero
+            // elegido para que el valor siga coincidiendo con la vista previa.
+            // Se notifica con el input restaurado: react-hook-form guarda una
+            // referencia al FileList, que el navegador puede haber vaciado
+            if (!file) {
+                if (lastFileRef.current && internalRef.current) {
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(lastFileRef.current);
+                    internalRef.current.files = dataTransfer.files;
+                    onChange?.({
+                        target: internalRef.current,
+                    } as ChangeEvent<HTMLInputElement>);
+                }
+                return;
             }
+
+            lastFileRef.current = file;
+            setPreviewUrl(URL.createObjectURL(file));
 
             onChange?.(e);
         };
@@ -79,6 +98,7 @@ const InputFile = forwardRef<HTMLInputElement, InputFileProps>(
             e.stopPropagation();
 
             if (internalRef.current) internalRef.current.value = "";
+            lastFileRef.current = null;
             setPreviewUrl(null);
 
             // Notificamos a react-hook-form que el campo queda vacío,

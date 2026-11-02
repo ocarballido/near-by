@@ -14,6 +14,7 @@ import { type PlaceRecommendation } from '@/app/actions/locations/get-recommenda
 
 import {
 	MAX_IMAGE_SIZE,
+	MAX_IMAGE_SIZE_KB,
 	MAX_LOCATION_DESCRIPTION_LENGTH,
 	MAX_LOCATION_NAME_LENGTH,
 } from '@/config/config-constants';
@@ -168,7 +169,7 @@ const AddPlaceForm = ({
 		if (!isEdit && !coords) {
 			setError('address', {
 				type: 'manual',
-				message: t('Selecciona una dirección sugerida para continuar'),
+				message: t('addressSelectSuggestion'),
 			});
 			return;
 		}
@@ -177,13 +178,7 @@ const AddPlaceForm = ({
 		if (file && file.size > MAX_IMAGE_SIZE) {
 			setAlert({
 				type: 'error',
-				message: t(
-					'La imagen no debe superar {kb} KB (tienes {got} KB)',
-					{
-						kb: (MAX_IMAGE_SIZE / 1024).toFixed(0),
-						got: (file.size / 1024).toFixed(0),
-					},
-				),
+				message: t('locationImageTooLarge', { kb: MAX_IMAGE_SIZE_KB }),
 			});
 			return;
 		}
@@ -601,11 +596,9 @@ const AddPlaceForm = ({
 								const file = files?.[0];
 								if (!file) return true;
 								if (file.size <= MAX_IMAGE_SIZE) return true;
-								return `La imagen no debe superar ${(
-									MAX_IMAGE_SIZE / 1024
-								).toFixed(0)} KB (tienes ${(
-									file.size / 1024
-								).toFixed(0)} KB)`;
+								return t('locationImageTooLarge', {
+									kb: MAX_IMAGE_SIZE_KB,
+								});
 							},
 						})}
 					/>
