@@ -9,6 +9,7 @@ import type { InfoGroup, HighlightGroup } from "./_data";
 
 type Props = {
     propertyId: string;
+    anonId: string;
     categoryId: string;
     lat: number;
     lng: number;
@@ -16,10 +17,13 @@ type Props = {
     weather: WeatherData | null;
     featuredGroups: HighlightGroup[];
     mustVisitGroups: HighlightGroup[];
+    savedGroups: HighlightGroup[];
+    openSaved: boolean;
 };
 
 export default async function WelcomeSection({
     propertyId,
+    anonId,
     lat,
     lng,
     categoryId,
@@ -27,6 +31,8 @@ export default async function WelcomeSection({
     weather,
     featuredGroups,
     mustVisitGroups,
+    savedGroups,
+    openSaved,
 }: Props) {
     const t = await getTranslations();
 
@@ -39,14 +45,21 @@ export default async function WelcomeSection({
             </section>
 
             <WelcomeTabs
+                propertyId={propertyId}
+                anonId={anonId}
                 lat={lat}
                 lng={lng}
                 featuredGroups={featuredGroups}
                 categoryId={categoryId}
                 mustVisitGroups={mustVisitGroups}
+                savedGroups={savedGroups}
+                openSaved={openSaved}
                 labels={{
                     featuredTab: t("favorites"),
                     mustVisitTab: t("mustSees"),
+                    savedTab: t("savedPlaces"),
+                    savedShareTitle: t("savedPlacesShareTitle"),
+                    savedShareWhatsapp: t("savedPlacesShareWhatsapp"),
                     eventsTab: t("events"),
                     featuredHeading: t("favoriteExplained"),
                     mustVisitHeading: t("mustSeeExplained"),

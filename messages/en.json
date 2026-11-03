@@ -545,6 +545,15 @@
     "mustSeeMarkError": "Error updating Must See",
     "favorites": "Favorites",
     "mustSees": "Must see, essential visit",
+    "tenantFavoriteSave": "Save",
+    "tenantFavoriteSaved": "Saved",
+    "tenantFavoriteSaving": "Saving...",
+    "tenantFavoriteRemoving": "Removing...",
+    "featuredTooltip": "Host's favorite",
+    "mustSeeTooltip": "Must-see",
+    "savedPlaces": "Saved",
+    "savedPlacesShareTitle": "Share your list with your travel companions",
+    "savedPlacesShareWhatsapp": "Check out the places I've saved:",
     "page_home": {
         "mainAction": "Create my free guide",
         "pilotHouseAction": "See how my guests see it",
@@ -813,7 +822,7 @@
     },
     "privacyPolicy": {
         "title": "BNB EXPLORER PRIVACY POLICY",
-        "lastUpdate": "Last updated: 7-3-2026",
+        "lastUpdate": "Last updated: 3-11-2026",
         "intro": "This Privacy Policy describes how personal data of users (\"Hosts\") and visitors (\"Guests\") of the website <link>www.bnbexplorer.com</link> (\"the App\" or \"the Site\") is collected, used, and protected.",
         "sections": {
             "controller": {
@@ -833,7 +842,9 @@
                 },
                 "guests": {
                     "title": "B. Guest Data (Guide visitors):",
-                    "data": "Data collected: Guests access the guides anonymously through a link shared by the Host. Registration is not required. However, technical browsing data (IP address, browser type) may be collected for statistical and security purposes."
+                    "data": "Data collected: Guests access the guides anonymously through a link shared by the Host. Registration is not required. However, technical browsing data (IP address, browser type) may be collected for statistical and security purposes.",
+                    "savedPlaces": "Saved places: if the Guest uses the “Save” option, the list of saved places is stored in a cookie in their own browser. The App reads it to display the guide, but does not store it in its database or link it to their name, email address or any other data that identifies them. To display the guide, the identifiers of those places (including those of a shared link, which are part of the web address) pass through the hosting and database providers, whose technical logs may keep them for a limited time. Purpose: remembering the list between visits and allowing it to be shared through a link. Whoever opens a shared link receives those places in their own list.",
+                    "assistant": "Assistant and itinerary planner: the messages the Guest writes to the guide's assistant and the data they enter in the planner are sent to an artificial intelligence provider to generate the response. We recommend not including personal data in them."
                 },
                 "content": {
                     "title": "C. Guide Content:",
@@ -844,19 +855,25 @@
                 "title": "3. LEGAL BASIS FOR PROCESSING",
                 "intro": "The legal basis for processing your data is:",
                 "consent": "Consent: By creating an account, the Host expressly consents to the processing of their data.",
-                "service": "Service execution: Processing is necessary to provide the requested service (guide creation)."
+                "service": "Service execution: Processing is necessary to provide the requested service (guide creation).",
+                "guests": "Guests: providing the features the Guest chooses to use (saved places, assistant and planner)."
             },
             "recipients": {
                 "title": "4. RECIPIENTS AND THIRD-PARTY TOOLS",
                 "intro": "To ensure the proper functioning of the App, the following tools may process data:",
-                "ga": "Google Analytics: Web analytics tool used to understand how the site is used. <link>Google Privacy Policy</link>",
+                "ga": "Google Analytics: web analytics tool, loaded through Google Tag Manager, used to understand how the site is used. <link>Google Privacy Policy</link>.",
+                "database": "Database and authentication: the App's data is stored in Supabase. <link>Supabase Privacy Policy</link>.",
                 "mixpanel": "Mixpanel: User behavior analytics tool used to improve the experience in the App. <link>Mixpanel Privacy Policy</link>.",
-                "hosting": "Hosting: Data and content are stored on secure servers contracted by the Owner (<link>Vercel</link>).",
+                "hosting": "Hosting: the App is served from servers contracted by the Owner (<link>Vercel</link>).",
+                "ai": "Artificial intelligence: OpenAI processes the guide assistant's messages, the itinerary planner's requests and content generation from the Host's dashboard; Anthropic, the automatic translation of guide content. <openai>OpenAI Privacy Policy</openai> · <anthropic>Anthropic Privacy Policy</anthropic>.",
+                "email": "Email delivery: communications to Hosts are sent through Resend. <link>Resend Privacy Policy</link>.",
+                "maps": "Maps: address and place search in the Host's dashboard uses Google Maps Platform. <link>Google Privacy Policy</link>.",
                 "authorities": "Authorities: Data may be disclosed when legally required."
             },
             "retention": {
                 "title": "5. DATA RETENTION",
-                "text": "Personal data will be retained as long as the user remains registered or until deletion is requested. In case of account cancellation, data may be retained in a blocked state for the legally required period."
+                "text": "Personal data will be retained as long as the user remains registered or until deletion is requested. In case of account cancellation, data may be retained in a blocked state for the legally required period.",
+                "guests": "Guest data: the cookie with the list of saved places expires 60 days after it was last used (saving or removing a place, or opening a shared link with places not yet on the list). Records of guide visits are deleted after 90 days."
             },
             "rights": {
                 "title": "6. USER RIGHTS",

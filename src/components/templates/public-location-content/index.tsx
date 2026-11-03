@@ -39,6 +39,7 @@ const PublicLocationContent = ({
                 {locations.map((loc) => (
                     <PlacePublic
                         key={loc.id}
+                        id={loc.id}
                         name={loc.name}
                         categoryId={loc.category_id ?? categoryId ?? undefined}
                         icon={loc.icon ?? undefined}

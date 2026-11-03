@@ -550,6 +550,15 @@
     "mustSeeMarkError": "Erreur de mise à jour essentielle",
     "favorites": "Favoris",
     "mustSees": "Visite essentielle",
+    "tenantFavoriteSave": "Enregistrer",
+    "tenantFavoriteSaved": "Enregistré",
+    "tenantFavoriteSaving": "Enregistrement...",
+    "tenantFavoriteRemoving": "Suppression...",
+    "featuredTooltip": "Coup de cœur de l'hôte",
+    "mustSeeTooltip": "Incontournable",
+    "savedPlaces": "Enregistrés",
+    "savedPlacesShareTitle": "Partagez votre liste avec vos compagnons de voyage",
+    "savedPlacesShareWhatsapp": "Regarde les lieux que j'ai enregistrés :",
     "page_home": {
         "mainAction": "Créer mon guide gratuit",
         "pilotHouseAction": "Voir ce que voient mes voyageurs",
@@ -817,7 +826,7 @@
     },
     "privacyPolicy": {
         "title": "POLITIQUE DE CONFIDENTIALITÉ DE BNB EXPLORER",
-        "lastUpdate": "Dernière mise à jour : 7-3-2026",
+        "lastUpdate": "Dernière mise à jour : 3-11-2026",
         "intro": "La présente Politique de Confidentialité décrit comment les données personnelles des utilisateurs (« Hôtes ») et des visiteurs (« Invités ») du site <link>www.bnbexplorer.com</link> (« l’App » ou « le Site ») sont collectées, utilisées et protégées.",
         "sections": {
             "controller": {
@@ -837,7 +846,9 @@
                 },
                 "guests": {
                     "title": "B. Données des Invités (visiteurs des guides) :",
-                    "data": "Données collectées : les invités accèdent aux guides de manière anonyme via un lien partagé par l’Hôte. Aucun enregistrement n’est requis. Cependant, des données techniques de navigation (adresse IP, type de navigateur) peuvent être collectées à des fins statistiques et de sécurité."
+                    "data": "Données collectées : les invités accèdent aux guides de manière anonyme via un lien partagé par l’Hôte. Aucun enregistrement n’est requis. Cependant, des données techniques de navigation (adresse IP, type de navigateur) peuvent être collectées à des fins statistiques et de sécurité.",
+                    "savedPlaces": "Lieux enregistrés : si l’Invité utilise l’option « Enregistrer », la liste des lieux enregistrés est stockée dans un cookie de son propre navigateur. L’App la lit pour afficher le guide, mais ne la conserve pas dans sa base de données et ne la lie ni à son nom, ni à son adresse email, ni à aucune autre donnée permettant de l’identifier. Pour afficher le guide, les identifiants de ces lieux (y compris ceux d’un lien partagé, qui figurent dans l’adresse web) transitent par les fournisseurs d’hébergement et de base de données, dont les journaux techniques peuvent les conserver pendant une durée limitée. Finalité : conserver la liste d’une visite à l’autre et permettre de la partager via un lien. La personne qui ouvre un lien partagé reçoit ces lieux dans sa propre liste.",
+                    "assistant": "Assistant et planificateur d’itinéraires : les messages que l’Invité écrit à l’assistant du guide et les données qu’il saisit dans le planificateur sont envoyés à un fournisseur d’intelligence artificielle pour générer la réponse. Il est recommandé de ne pas y inclure de données personnelles."
                 },
                 "content": {
                     "title": "C. Contenu des guides :",
@@ -848,19 +859,25 @@
                 "title": "3. BASE LÉGALE DU TRAITEMENT",
                 "intro": "La base légale du traitement de vos données est :",
                 "consent": "Consentement : en créant un compte, l’Hôte consent expressément au traitement de ses données.",
-                "service": "Exécution du service : le traitement est nécessaire pour fournir le service demandé (création de guides)."
+                "service": "Exécution du service : le traitement est nécessaire pour fournir le service demandé (création de guides).",
+                "guests": "Invités : la fourniture des fonctionnalités que l’Invité choisit d’utiliser (lieux enregistrés, assistant et planificateur)."
             },
             "recipients": {
                 "title": "4. DESTINATAIRES ET OUTILS TIERS",
                 "intro": "Pour le bon fonctionnement de l’App, les outils suivants peuvent traiter des données :",
-                "ga": "Google Analytics : outil d’analyse web pour comprendre l’utilisation du site. <link>Google Privacy Policy</link>",
+                "ga": "Google Analytics : outil d’analyse web, chargé via Google Tag Manager, pour comprendre l’utilisation du site. <link>Politique de confidentialité de Google</link>.",
+                "database": "Base de données et authentification : les données de l’App sont stockées chez Supabase. <link>Politique de confidentialité de Supabase</link>.",
                 "mixpanel": "Mixpanel : outil d’analyse du comportement des utilisateurs afin d’améliorer l’expérience dans l’App. <link>Politique de confidentialité de Mixpanel</link>.",
-                "hosting": "Hébergement : les données et contenus sont stockés sur des serveurs sécurisés contractés par le Titulaire (<link>Vercel</link>).",
+                "hosting": "Hébergement : l’App est servie depuis des serveurs contractés par le Titulaire (<link>Vercel</link>).",
+                "ai": "Intelligence artificielle : OpenAI traite les messages de l’assistant du guide, les demandes du planificateur d’itinéraires et la génération de contenu depuis le tableau de bord de l’Hôte ; Anthropic, la traduction automatique des contenus des guides. <openai>Politique de confidentialité d’OpenAI</openai> · <anthropic>Politique de confidentialité d’Anthropic</anthropic>.",
+                "email": "Envoi d’emails : les communications aux Hôtes sont envoyées via Resend. <link>Politique de confidentialité de Resend</link>.",
+                "maps": "Cartes : la recherche d’adresses et de lieux dans le tableau de bord de l’Hôte utilise Google Maps Platform. <link>Politique de confidentialité de Google</link>.",
                 "authorities": "Autorités : les données peuvent être communiquées en cas d’obligation légale."
             },
             "retention": {
                 "title": "5. CONSERVATION DES DONNÉES",
-                "text": "Les données personnelles seront conservées tant que l’utilisateur restera inscrit ou jusqu’à ce qu’il demande leur suppression. En cas de résiliation du compte, les données peuvent être conservées sous forme bloquée pendant les délais légaux."
+                "text": "Les données personnelles seront conservées tant que l’utilisateur restera inscrit ou jusqu’à ce qu’il demande leur suppression. En cas de résiliation du compte, les données peuvent être conservées sous forme bloquée pendant les délais légaux.",
+                "guests": "Données des Invités : le cookie contenant la liste des lieux enregistrés expire 60 jours après sa dernière utilisation (enregistrer ou supprimer un lieu, ou ouvrir un lien partagé contenant des lieux qui n’étaient pas encore dans la liste). Les enregistrements des visites des guides sont supprimés après 90 jours."
             },
             "rights": {
                 "title": "6. DROITS DE L’UTILISATEUR",

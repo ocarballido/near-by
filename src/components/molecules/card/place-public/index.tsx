@@ -10,6 +10,8 @@ import IconLocationOn from "@/components/atoms/icon/location-on";
 import IconModeHeat from "@/components/atoms/icon/mode-heat";
 import IconFavorite from "@/components/atoms/icon/favorite";
 import IconInfo from "@/components/atoms/icon/info";
+import TenantFavorite from "@/components/molecules/tenant-favorite";
+import Tooltip from "@/components/atoms/tooltip";
 
 import IconApartment from "@/components/atoms/icon/apartment";
 import IconHealing from "@/components/atoms/icon/healing";
@@ -109,6 +111,7 @@ const isIconName = (value: string): value is IconName => {
 };
 
 type PlacePublicProps = {
+    id: string;
     address: string;
     categoryId?: string;
     icon?: string;
@@ -124,6 +127,7 @@ type PlacePublicProps = {
 };
 
 const PlacePublic = ({
+    id,
     address,
     categoryId,
     icon,
@@ -163,38 +167,55 @@ const PlacePublic = ({
                     blurDataURL={grayDataUrl}
                     alt={name}
                 />
+                {/* Con la pill de subcategoría arriba, el guardado baja a la
+                    esquina inferior izquierda de la imagen */}
+                {showBadge && (
+                    <div className="absolute z-5 left-2 bottom-2">
+                        <TenantFavorite placeId={id} />
+                    </div>
+                )}
             </div>
 
-            {(mustSee || featured) && (
-                <div className="flex p-1 items-center absolute z-5 rounded-full right-2 left-2 top-2 justify-between gap-1">
-                    {showBadge ? (
-                        <div className="px-0.5 pe-2 py-0.5 flex gap-1.5 items-center rounded-full w-fit h-fit bg-white shadow-xs">
-                            <div className="flex justify-center items-center p-1.5 rounded-full bg-primary-400">
-                                {CategoryIcon && (
-                                    <CategoryIcon color="white" size={18} />
-                                )}
-                            </div>
-                            <span className="text-xs font-medium truncate">
-                                {sub_category_name && t(sub_category_name)}
-                            </span>
+            <div className="flex p-1 items-center absolute z-5 rounded-full right-2 left-2 top-2 justify-between gap-1">
+                {showBadge ? (
+                    <div className="px-0.5 pe-2 py-0.5 flex gap-1.5 items-center rounded-full w-fit h-fit bg-white shadow-xs">
+                        <div className="flex justify-center items-center p-1.5 rounded-full bg-primary-400">
+                            {CategoryIcon && (
+                                <CategoryIcon color="white" size={18} />
+                            )}
                         </div>
-                    ) : (
-                        <div />
-                    )}
-                    <div className="flex items-center gap-1">
-                        {mustSee && (
-                            <div className="p-1.5 flex gap-1 items-center rounded-full w-fit h-fit bg-white shadow-xs">
-                                <IconModeHeat color="error" size={20} />
-                            </div>
-                        )}
-                        {featured && (
-                            <div className="p-1.5 flex gap-1 items-center rounded-full w-fit h-fit bg-white shadow-xs">
-                                <IconFavorite color="primary" size={20} />
-                            </div>
-                        )}
+                        <span className="text-xs font-medium truncate">
+                            {sub_category_name && t(sub_category_name)}
+                        </span>
                     </div>
+                ) : (
+                    <TenantFavorite placeId={id} />
+                )}
+                <div className="flex items-center gap-1">
+                    {mustSee && (
+                        <Tooltip label={t("mustSeeTooltip")}>
+                            <button
+                                type="button"
+                                aria-label={t("mustSeeTooltip")}
+                                className="p-1.5 flex gap-1 items-center rounded-full w-fit h-fit bg-error-500 shadow-xs cursor-help"
+                            >
+                                <IconModeHeat color="white" size={20} />
+                            </button>
+                        </Tooltip>
+                    )}
+                    {featured && (
+                        <Tooltip label={t("featuredTooltip")}>
+                            <button
+                                type="button"
+                                aria-label={t("featuredTooltip")}
+                                className="p-1.5 flex gap-1 items-center rounded-full w-fit h-fit bg-primary-500 shadow-xs cursor-help"
+                            >
+                                <IconFavorite color="white" size={20} />
+                            </button>
+                        </Tooltip>
+                    )}
                 </div>
-            )}
+            </div>
 
             <div className="relative w-full px-5 pb-6 pt-4 flex flex-col gap-3">
                 <div className="flex gap-2">

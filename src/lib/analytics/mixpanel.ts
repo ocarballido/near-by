@@ -1,5 +1,7 @@
 import { headers } from "next/headers";
 
+import { SAVED_PLACES_SEARCH_PARAM } from "@/utils/saved-places";
+
 export type EventName =
     | "onboarding_start"
     | "new_user"
@@ -32,6 +34,22 @@ type TrackInput = {
     distinctId: string; // propietario: supabase user.id | inquilino: anon id
     props?: Record<string, unknown>;
 };
+
+// El enlace compartido de guardados lleva en ?saved= los ids del huésped:
+// mientras está en la URL, cualquier evento los enviaría en el referer. Solo
+// se quita ese parámetro; el resto del referer no cambia
+function stripSavedPlacesParam(referer: string): string {
+    if (!referer) return referer;
+
+    try {
+        const url = new URL(referer);
+        if (!url.searchParams.has(SAVED_PLACES_SEARCH_PARAM)) return referer;
+        url.searchParams.delete(SAVED_PLACES_SEARCH_PARAM);
+        return url.toString();
+    } catch {
+        return referer;
+    }
+}
 
 function extractClientIpFromForwardedHeader(
     forwardedForHeader: string,
@@ -99,7 +117,9 @@ export async function trackEvent({
 
         // ── Basic request context
         const userAgent = requestHeaders.get("user-agent") ?? "";
-        const referer = requestHeaders.get("referer") ?? "";
+        const referer = stripSavedPlacesParam(
+            requestHeaders.get("referer") ?? "",
+        );
 
         // ── Country (edge/CDN provided)
         const userCountry =
