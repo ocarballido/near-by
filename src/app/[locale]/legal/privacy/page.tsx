@@ -78,6 +78,16 @@ export default function PrivacidadPage() {
 					<li>
 						{t('privacyPolicy.sections.dataCollection.guests.data')}
 					</li>
+					<li>
+						{t(
+							'privacyPolicy.sections.dataCollection.guests.savedPlaces',
+						)}
+					</li>
+					<li>
+						{t(
+							'privacyPolicy.sections.dataCollection.guests.assistant',
+						)}
+					</li>
 				</ul>
 
 				<Typography className="mt-4 mb-3" component="h3" size="base">
@@ -103,6 +113,7 @@ export default function PrivacidadPage() {
 				<ul className="list-disc pl-6 mb-3">
 					<li>{t('privacyPolicy.sections.legalBasis.consent')}</li>
 					<li>{t('privacyPolicy.sections.legalBasis.service')}</li>
+					<li>{t('privacyPolicy.sections.legalBasis.guests')}</li>
 				</ul>
 
 				<Typography className="mt-4 mb-3" component="h2" size="lg">
@@ -119,6 +130,20 @@ export default function PrivacidadPage() {
 							link: (chunks) => (
 								<Link
 									href="https://policies.google.com/privacy"
+									target="_blank"
+									rel="noopener noreferrer"
+									className="underline text-primary-500 font-medium"
+								>
+									{chunks}
+								</Link>
+							),
+						})}
+					</li>
+					<li>
+						{t.rich('privacyPolicy.sections.recipients.database', {
+							link: (chunks) => (
+								<Link
+									href="https://supabase.com/privacy"
 									target="_blank"
 									rel="noopener noreferrer"
 									className="underline text-primary-500 font-medium"
@@ -157,6 +182,58 @@ export default function PrivacidadPage() {
 						})}
 					</li>
 					<li>
+						{t.rich('privacyPolicy.sections.recipients.ai', {
+							openai: (chunks) => (
+								<Link
+									href="https://openai.com/policies/privacy-policy"
+									target="_blank"
+									rel="noopener noreferrer"
+									className="underline text-primary-500 font-medium"
+								>
+									{chunks}
+								</Link>
+							),
+							anthropic: (chunks) => (
+								<Link
+									href="https://www.anthropic.com/legal/privacy"
+									target="_blank"
+									rel="noopener noreferrer"
+									className="underline text-primary-500 font-medium"
+								>
+									{chunks}
+								</Link>
+							),
+						})}
+					</li>
+					<li>
+						{t.rich('privacyPolicy.sections.recipients.email', {
+							link: (chunks) => (
+								<Link
+									href="https://resend.com/legal/privacy-policy"
+									target="_blank"
+									rel="noopener noreferrer"
+									className="underline text-primary-500 font-medium"
+								>
+									{chunks}
+								</Link>
+							),
+						})}
+					</li>
+					<li>
+						{t.rich('privacyPolicy.sections.recipients.maps', {
+							link: (chunks) => (
+								<Link
+									href="https://policies.google.com/privacy"
+									target="_blank"
+									rel="noopener noreferrer"
+									className="underline text-primary-500 font-medium"
+								>
+									{chunks}
+								</Link>
+							),
+						})}
+					</li>
+					<li>
 						{t('privacyPolicy.sections.recipients.authorities')}
 					</li>
 				</ul>
@@ -167,6 +244,10 @@ export default function PrivacidadPage() {
 
 				<Typography className="mb-3">
 					{t('privacyPolicy.sections.retention.text')}
+				</Typography>
+
+				<Typography className="mb-3">
+					{t('privacyPolicy.sections.retention.guests')}
 				</Typography>
 
 				<Typography className="mt-4 mb-3" component="h2" size="lg">

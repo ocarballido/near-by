@@ -552,6 +552,8 @@
     "mustSees": "Visita obbligata",
     "tenantFavoriteSave": "Salva",
     "tenantFavoriteSaved": "Salvato",
+    "tenantFavoriteSaving": "Salvataggio...",
+    "tenantFavoriteRemoving": "Rimozione...",
     "featuredTooltip": "Preferito dell'host",
     "mustSeeTooltip": "Da non perdere",
     "savedPlaces": "Salvati",
@@ -824,7 +826,7 @@
     },
     "privacyPolicy": {
         "title": "INFORMATIVA SULLA PRIVACY DI BNB EXPLORER",
-        "lastUpdate": "Ultimo aggiornamento: 7-3-2026",
+        "lastUpdate": "Ultimo aggiornamento: 3-11-2026",
         "intro": "La presente Informativa sulla Privacy descrive come vengono raccolti, utilizzati e protetti i dati personali degli utenti (di seguito, \"Host\") e visitatori (di seguito, \"Ospiti\") del sito web <link>www.bnbexplorer.com</link> (di seguito, \"l'App\" o \"il Sito\").",
         "sections": {
             "controller": {
@@ -844,7 +846,9 @@
                 },
                 "guests": {
                     "title": "B. Dati degli Ospiti (Visitatori delle guide):",
-                    "data": "Dati raccolti: Gli ospiti accedono alle guide in modo anonimo tramite un link condiviso dall'Host. Non è richiesta la registrazione. Tuttavia, vengono raccolti dati tecnici di navigazione (IP, tipo di browser) a fini statistici e di sicurezza."
+                    "data": "Dati raccolti: Gli ospiti accedono alle guide in modo anonimo tramite un link condiviso dall'Host. Non è richiesta la registrazione. Tuttavia, vengono raccolti dati tecnici di navigazione (IP, tipo di browser) a fini statistici e di sicurezza.",
+                    "savedPlaces": "Luoghi salvati: se l'Ospite usa l'opzione «Salva», l'elenco dei luoghi salvati viene memorizzato in un cookie del suo browser. L'App lo legge per mostrare la guida, ma non lo conserva nel proprio database né lo collega al suo nome, al suo indirizzo email o ad altri dati che lo identifichino. Per mostrare la guida, gli identificativi di quei luoghi (anche quelli di un link condiviso, che fanno parte dell'indirizzo web) passano per i fornitori di hosting e di database, i cui registri tecnici possono conservarli per un periodo limitato. Finalità: ricordare l'elenco tra una visita e l'altra e permettere di condividerlo tramite un link. Chi apre un link condiviso riceve quei luoghi nel proprio elenco.",
+                    "assistant": "Assistente e pianificatore di itinerari: i messaggi che l'Ospite scrive all'assistente della guida e i dati che inserisce nel pianificatore vengono inviati a un fornitore di intelligenza artificiale per generare la risposta. Si consiglia di non includervi dati personali."
                 },
                 "content": {
                     "title": "C. Contenuto delle Guide:",
@@ -855,19 +859,25 @@
                 "title": "3. BASE GIURIDICA DEL TRATTAMENTO",
                 "intro": "La base legale per il trattamento dei tuoi dati è:",
                 "consent": "Consenso: Creando un account, l'Host acconsente espressamente al trattamento dei suoi dati.",
-                "service": "Esecuzione del servizio: Il trattamento è necessario per la prestazione del servizio richiesto (creazione di guide)."
+                "service": "Esecuzione del servizio: Il trattamento è necessario per la prestazione del servizio richiesto (creazione di guide).",
+                "guests": "Ospiti: la prestazione delle funzioni che l'Ospite stesso utilizza (luoghi salvati, assistente e pianificatore)."
             },
             "recipients": {
                 "title": "4. DESTINATARI E STRUMENTI DI TERZI",
                 "intro": "Per il corretto funzionamento dell'App, si utilizzano i seguenti strumenti che possono elaborare dati:",
-                "ga": "Google Analytics: Strumento di analisi web per capire come viene utilizzato il sito. <link>Google Privacy Policy</link>",
+                "ga": "Google Analytics: strumento di analisi web, caricato tramite Google Tag Manager, per capire come viene utilizzato il sito. <link>Informativa sulla privacy di Google</link>.",
+                "database": "Database e autenticazione: i dati dell'App sono archiviati su Supabase. <link>Informativa sulla privacy di Supabase</link>.",
                 "mixpanel": "Mixpanel: Strumento di analisi del comportamento utente per migliorare l'esperienza nell'App. <link>Informativa sulla privacy di Mixpanel</link>.",
-                "hosting": "Hosting: I dati e i contenuti sono archiviati in server sicuri contrattati dal Titolare (<link>Vercel</link>).",
+                "hosting": "Hosting: l'App è servita da server contrattati dal Titolare (<link>Vercel</link>).",
+                "ai": "Intelligenza artificiale: OpenAI elabora i messaggi dell'assistente della guida, le richieste del pianificatore di itinerari e la generazione di contenuti dal pannello dell'Host; Anthropic, la traduzione automatica dei contenuti delle guide. <openai>Informativa sulla privacy di OpenAI</openai> · <anthropic>Informativa sulla privacy di Anthropic</anthropic>.",
+                "email": "Invio di email: le comunicazioni agli Host vengono inviate tramite Resend. <link>Informativa sulla privacy di Resend</link>.",
+                "maps": "Mappe: la ricerca di indirizzi e luoghi nel pannello dell'Host utilizza Google Maps Platform. <link>Informativa sulla privacy di Google</link>.",
                 "authorities": "Autorità: I dati potranno essere ceduti se esiste un obbligo legale."
             },
             "retention": {
                 "title": "5. CONSERVAZIONE DEI DATI",
-                "text": "I dati personali saranno conservati finché si mantiene la condizione di utente registrato o fino a quando l'interessato non richieda la loro cancellazione. In caso di cancellazione, i dati potranno essere mantenuti bloccati durante i termini legali per rispondere a possibili responsabilità."
+                "text": "I dati personali saranno conservati finché si mantiene la condizione di utente registrato o fino a quando l'interessato non richieda la loro cancellazione. In caso di cancellazione, i dati potranno essere mantenuti bloccati durante i termini legali per rispondere a possibili responsabilità.",
+                "guests": "Dati degli Ospiti: il cookie con l'elenco dei luoghi salvati scade 60 giorni dopo l'ultimo utilizzo (salvare o rimuovere un luogo, o aprire un link condiviso con luoghi non ancora presenti nell'elenco). I registri delle visite alle guide vengono eliminati dopo 90 giorni."
             },
             "rights": {
                 "title": "6. DIRITTI DELL'UTENTE",

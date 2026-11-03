@@ -552,6 +552,8 @@
     "mustSees": "Visita obrigatória",
     "tenantFavoriteSave": "Guardar",
     "tenantFavoriteSaved": "Guardado",
+    "tenantFavoriteSaving": "A guardar...",
+    "tenantFavoriteRemoving": "A remover...",
     "featuredTooltip": "Favorito do anfitrião",
     "mustSeeTooltip": "Visita obrigatória",
     "savedPlaces": "Guardados",
@@ -824,7 +826,7 @@
     },
     "privacyPolicy": {
         "title": "POLÍTICA DE PRIVACIDADE DO BNB EXPLORER",
-        "lastUpdate": "Última atualização: 7-3-2026",
+        "lastUpdate": "Última atualização: 3-11-2026",
         "intro": "A presente Política de Privacidade descreve como são recolhidos, utilizados e protegidos os dados pessoais dos utilizadores (doravante, \"Anfitriões\") e visitantes (doravante, \"Hóspedes\") do site <link>www.bnbexplorer.com</link> (doravante, \"a App\" ou \"o Site\").",
         "sections": {
             "controller": {
@@ -844,7 +846,9 @@
                 },
                 "guests": {
                     "title": "B. Dados dos Hóspedes (Visitantes dos guias):",
-                    "data": "Dados recolhidos: Os hóspedes acedem aos guias de forma anónima através de um link partilhado pelo Anfitrião. Não é necessário registo. No entanto, são recolhidos dados técnicos de navegação (IP, tipo de navegador) para efeitos estatísticos e de segurança."
+                    "data": "Dados recolhidos: Os hóspedes acedem aos guias de forma anónima através de um link partilhado pelo Anfitrião. Não é necessário registo. No entanto, são recolhidos dados técnicos de navegação (IP, tipo de navegador) para efeitos estatísticos e de segurança.",
+                    "savedPlaces": "Locais guardados: se o Hóspede usar a opção «Guardar», a lista de locais guardados é armazenada num cookie do seu próprio navegador. A App lê-a para mostrar o guia, mas não a guarda na sua base de dados nem a associa ao seu nome, email ou a qualquer outro dado que o identifique. Para mostrar o guia, os identificadores desses locais (incluindo os de um link partilhado, que fazem parte do endereço web) passam pelos fornecedores de alojamento e de base de dados, cujos registos técnicos podem conservá-los durante um período limitado. Finalidade: lembrar a lista entre visitas e permitir partilhá-la através de um link. Quem abre um link partilhado recebe esses locais na sua própria lista.",
+                    "assistant": "Assistente e planeador de itinerários: as mensagens que o Hóspede escreve ao assistente do guia e os dados que introduz no planeador são enviados a um fornecedor de inteligência artificial para gerar a resposta. Recomenda-se não incluir neles dados pessoais."
                 },
                 "content": {
                     "title": "C. Conteúdo dos Guias:",
@@ -855,19 +859,25 @@
                 "title": "3. LEGITIMAÇÃO DO TRATAMENTO",
                 "intro": "A base legal para o tratamento dos teus dados é:",
                 "consent": "Consentimento: Ao criar uma conta, o Anfitrião consente expressamente o tratamento dos seus dados.",
-                "service": "Execução do serviço: O tratamento é necessário para a prestação do serviço solicitado (criação de guias)."
+                "service": "Execução do serviço: O tratamento é necessário para a prestação do serviço solicitado (criação de guias).",
+                "guests": "Hóspedes: a prestação das funcionalidades que o próprio Hóspede utiliza (locais guardados, assistente e planeador)."
             },
             "recipients": {
                 "title": "4. DESTINATÁRIOS E FERRAMENTAS DE TERCEIROS",
                 "intro": "Para o correto funcionamento da App, são utilizadas as seguintes ferramentas que podem processar dados:",
-                "ga": "Google Analytics: Ferramenta de análise web para entender como o site é utilizado. <link>Google Privacy Policy</link>",
+                "ga": "Google Analytics: ferramenta de análise web, carregada através do Google Tag Manager, para entender como o site é utilizado. <link>Política de privacidade da Google</link>.",
+                "database": "Base de dados e autenticação: os dados da App são armazenados no Supabase. <link>Política de privacidade do Supabase</link>.",
                 "mixpanel": "Mixpanel: Ferramenta de análise de comportamento do utilizador para melhorar a experiência na App. <link>Política de privacidade do Mixpanel</link>.",
-                "hosting": "Alojamento: Os dados e conteúdos são armazenados em servidores seguros contratados pelo Titular (<link>Vercel</link>).",
+                "hosting": "Alojamento: a App é servida a partir de servidores contratados pelo Titular (<link>Vercel</link>).",
+                "ai": "Inteligência artificial: a OpenAI processa as mensagens do assistente do guia, os pedidos do planeador de itinerários e a geração de conteúdos a partir do painel do Anfitrião; a Anthropic, a tradução automática dos conteúdos dos guias. <openai>Política de privacidade da OpenAI</openai> · <anthropic>Política de privacidade da Anthropic</anthropic>.",
+                "email": "Envio de emails: as comunicações aos Anfitriões são enviadas através da Resend. <link>Política de privacidade da Resend</link>.",
+                "maps": "Mapas: a pesquisa de moradas e locais no painel do Anfitrião utiliza a Google Maps Platform. <link>Política de privacidade da Google</link>.",
                 "authorities": "Autoridades: Os dados poderão ser cedidos se existir uma obrigação legal."
             },
             "retention": {
                 "title": "5. CONSERVAÇÃO DOS DADOS",
-                "text": "Os dados pessoais serão conservados enquanto se mantiver a condição de utilizador registado ou até que o interessado solicite a sua supressão. Em caso de cancelamento, os dados poderão manter-se bloqueados durante os prazos legais para atender a possíveis responsabilidades."
+                "text": "Os dados pessoais serão conservados enquanto se mantiver a condição de utilizador registado ou até que o interessado solicite a sua supressão. Em caso de cancelamento, os dados poderão manter-se bloqueados durante os prazos legais para atender a possíveis responsabilidades.",
+                "guests": "Dados dos Hóspedes: o cookie com a lista de locais guardados expira 60 dias após a sua última utilização (guardar ou remover um local, ou abrir um link partilhado com locais que ainda não estavam na lista). Os registos de visitas aos guias são eliminados ao fim de 90 dias."
             },
             "rights": {
                 "title": "6. DIREITOS DO UTILIZADOR",
