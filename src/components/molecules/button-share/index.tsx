@@ -52,6 +52,10 @@ export function ShareMenu({
 	const t = useTranslations();
 
 	const shareUrl = useMemo(() => url.trim(), [url]);
+	// A la analítica la URL va sin query string: el enlace de guardados lleva
+	// en ella los ids del huésped (basta con su saved_count). Los demás usos
+	// no llevan query, así que para ellos no cambia nada
+	const trackedUrl = useMemo(() => shareUrl.split(/[?#]/)[0], [shareUrl]);
 	const [copyState, setCopyState] = useState<'idle' | 'copied'>('idle');
 
 	const trackShare = async (
@@ -65,7 +69,7 @@ export function ShareMenu({
 			props: {
 				channel,
 				surface,
-				url: shareUrl,
+				url: trackedUrl,
 				...props,
 				...extra,
 			},
