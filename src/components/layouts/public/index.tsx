@@ -23,13 +23,17 @@ export default function PublicLayout({
                     <Spinner position="fixed" />
                 </SpinnerPortal>
             )}
-            <PublicPageBanner
-                authHref="/auth/magic-link"
-                isLoggedIn={isLoggedIn}
-            />
             <EngagementModal isLoggedIn={isLoggedIn} />
-            <div className="flex flex-col items-stretch w-full h-dvh font-body overflow-hidden">
-                {children}
+            {/* El banner va dentro de la columna h-dvh: si se sumara a ella,
+                empujaría el nav del pie fuera de la pantalla en mobile */}
+            <div className="flex flex-col w-full h-dvh overflow-hidden">
+                <PublicPageBanner
+                    authHref="/auth/magic-link"
+                    isLoggedIn={isLoggedIn}
+                />
+                <div className="flex flex-col items-stretch w-full grow min-h-0 font-body overflow-hidden">
+                    {children}
+                </div>
             </div>
         </>
     );
