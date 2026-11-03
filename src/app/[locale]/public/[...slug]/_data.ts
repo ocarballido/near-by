@@ -187,15 +187,22 @@ function groupBySubcategory(
 export async function fetchWelcomeHighlightsTabsData(
     propertyId: string,
     locale: string,
-    // Ya validados como UUID (parseSavedPlaceIds); el filtro por propiedad
-    // descarta los de otras guías y los que el anfitrión haya borrado
+    // Ids de la cookie del huésped y del enlace compartido, ya validados como
+    // UUID: el filtro por propiedad y tipo descarta los de otras guías y los
+    // que el anfitrión haya borrado
     savedIds: string[],
+    sharedIds: string[],
 ): Promise<{
     featuredGroups: HighlightGroup[];
     mustVisitGroups: HighlightGroup[];
     savedGroups: HighlightGroup[];
+    // Los del enlace que son válidos, en su orden; null si la consulta falla
+    sharedIds: string[] | null;
 }> {
     const supabase = await createServerAdminClient();
+
+    // Guardados y enlace en una sola consulta: el tab muestra los dos
+    const savedAndSharedIds = Array.from(new Set([...savedIds, ...sharedIds]));
 
     const [
         { data: featuredData, error: featuredErr },
@@ -217,13 +224,13 @@ export async function fetchWelcomeHighlightsTabsData(
             .eq("must_visit", true)
             .order("name", { ascending: true })
             .overrideTypes<PropertyDataRow[], { merge: false }>(),
-        savedIds.length > 0
+        savedAndSharedIds.length > 0
             ? supabase
                   .from("property_data")
                   .select(PROPERTY_DATA_SELECT)
                   .eq("property_id", propertyId)
                   .eq("type", "location")
-                  .in("id", savedIds)
+                  .in("id", savedAndSharedIds)
                   .order("name", { ascending: true })
                   .overrideTypes<PropertyDataRow[], { merge: false }>()
             : Promise.resolve({ data: [], error: null }),
@@ -244,6 +251,11 @@ export async function fetchWelcomeHighlightsTabsData(
     const featuredItems = featuredData ?? [];
     const mustVisitItems = mustVisitData ?? [];
     const savedItems = savedErr ? [] : (savedData ?? []);
+
+    const validIds = new Set(savedItems.map((item) => item.id));
+    const resolvedSharedIds = savedErr
+        ? null
+        : sharedIds.filter((id) => validIds.has(id));
 
     const allItems = [...featuredItems, ...mustVisitItems, ...savedItems];
     const allIds = allItems.map((i) => i.id);
@@ -292,7 +304,12 @@ export async function fetchWelcomeHighlightsTabsData(
     );
 
     if (allSubCategoryIds.length === 0) {
-        return { featuredGroups: [], mustVisitGroups: [], savedGroups: [] };
+        return {
+            featuredGroups: [],
+            mustVisitGroups: [],
+            savedGroups: [],
+            sharedIds: resolvedSharedIds,
+        };
     }
 
     const subCategoryMap: Record<string, string> = Object.fromEntries(
@@ -312,6 +329,7 @@ export async function fetchWelcomeHighlightsTabsData(
             applyTranslations(savedItems),
             subCategoryMap,
         ),
+        sharedIds: resolvedSharedIds,
     };
 }
 

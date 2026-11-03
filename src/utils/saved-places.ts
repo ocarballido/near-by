@@ -1,29 +1,27 @@
-// Localizaciones guardadas por el huésped (sin login): viven en una cookie por
-// propiedad para que el servidor pinte las cards ya en su estado y cargue el
-// tab "Guardados" sin un endpoint público. El mismo formato sirve para el
-// query param `?saved=` del enlace compartido.
+// Localizaciones guardadas por el huésped (sin login). La lista vive en una
+// cookie httpOnly que solo escribe el servidor (ver
+// src/lib/saved-places/cookie.ts). Aquí solo lo que comparten cliente y
+// servidor, incluido el formato del query param `?saved=` del enlace
+// compartido (el mismo que usa la pestaña para el enlace pendiente).
 
-// 50 UUIDs (36 caracteres + separador) quedan muy por debajo de los 4 KB
-// que admite una cookie
+// Tope por guía. Lo aplican la cookie y la API, y limita también el enlace
+// compartido: lo que se lee y se escribe en ?saved= y lo que el cliente
+// envía en un merge
 export const SAVED_PLACES_MAX = 50;
-
-// 90 días: cubre de sobra una estancia aunque se prepare con antelación
-export const SAVED_PLACES_MAX_AGE = 60 * 60 * 24 * 90;
 
 export const SAVED_PLACES_SEARCH_PARAM = "saved";
 
-// Punto y no coma: RFC 6265 no admite comas en el valor de una cookie, y en
-// la URL tampoco hay que codificarlo
+// Punto y no coma: en la URL no hay que codificarlo
 const SEPARATOR = ".";
 
 const UUID_REGEX =
     /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-export const getSavedPlacesCookieName = (propertyId: string): string =>
-    `be_saved_${propertyId}`;
+export const isUuid = (value: unknown): value is string =>
+    typeof value === "string" && UUID_REGEX.test(value);
 
-// Descarta lo que no sea un UUID (la cookie y el query param los controla el
-// usuario), quita duplicados y aplica el tope
+// Descarta lo que no sea un UUID (el query param lo controla cualquiera),
+// quita duplicados y aplica el tope
 export const parseSavedPlaceIds = (raw?: string | null): string[] => {
     if (!raw) return [];
 
@@ -37,12 +35,3 @@ export const parseSavedPlaceIds = (raw?: string | null): string[] => {
 
 export const serializeSavedPlaceIds = (ids: string[]): string =>
     ids.slice(0, SAVED_PLACES_MAX).join(SEPARATOR);
-
-// Suma lo que llega por un enlace compartido a lo que ya tenía el huésped.
-// Si se pasa del tope se descarta lo del enlace, nunca lo suyo: un enlace
-// manipulado no puede vaciarle la lista
-export const mergeSavedPlaceIds = (
-    current: string[],
-    incoming: string[],
-): string[] =>
-    Array.from(new Set([...current, ...incoming])).slice(0, SAVED_PLACES_MAX);

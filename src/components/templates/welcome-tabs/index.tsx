@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 
 import WelcomeTabsMenu, { TabKey } from "./menu";
 import Typography from "@/components/atoms/typography";
 import { PropertyDataPublicBySubCategory } from "@/components/templates/property-data-public";
 import { useEvents } from "@/hooks/useEvents";
+import { useRouter } from "@/i18n/routing";
 import { useSavedPlaces } from "@/lib/context/SavedPlacesContext";
 import {
     SAVED_PLACES_SEARCH_PARAM,
@@ -93,26 +94,25 @@ export default function WelcomeTabs({
     openSaved,
     labels,
 }: Props) {
-    const { isSaved } = useSavedPlaces();
+    const { getStatus, unrenderedSavedIds } = useSavedPlaces();
+    const router = useRouter();
 
     const featuredItems = flattenGroups(featuredGroups);
     const mustVisitItems = flattenGroups(mustVisitGroups);
 
     // Los del servidor más los destacados, para que lo que se guarda o se
-    // quita aquí mismo se refleje al momento; sin duplicados
+    // quita aquí mismo se refleje; sin duplicados. Entra también lo que se
+    // está guardando (p. ej. lo de un enlace compartido) o quitando, y lo de
+    // un enlace en un navegador sin cookies (solo lectura: "shared")
     const savedItems = [
         ...flattenGroups(savedGroups),
         ...featuredItems,
         ...mustVisitItems,
     ].filter(
         (item, index, all) =>
-            isSaved(item.id) &&
+            getStatus(item.id) !== "unsaved" &&
             all.findIndex((other) => other.id === item.id) === index,
     );
-
-    // Sin locale: el middleware abre la guía en el idioma de quien lo recibe.
-    // Solo los ids que se ven en el tab, no los que no resuelven
-    const savedShareUrl = `${process.env.NEXT_PUBLIC_APP_URL}/public/${propertyId}/welcome/highlights?${SAVED_PLACES_SEARCH_PARAM}=${serializeSavedPlaceIds(savedItems.map((item) => item.id))}`;
 
     const hasFeatured = (featuredGroups?.length ?? 0) > 0;
     const hasMustVisit = (mustVisitGroups?.length ?? 0) > 0;
@@ -137,6 +137,26 @@ export default function WelcomeTabs({
     };
 
     const [tab, setTab] = useState<TabKey>(defaultTab);
+
+    // Guardados después de pintarse esta página (p. ej. en una subcategoría,
+    // y al volver atrás Next reutiliza la bienvenida de su caché) de los que
+    // no tiene los datos: se pide la página otra vez, una sola vez por lista.
+    // Lo guardado aquí mismo ya está en la página y no lo dispara
+    const pageItemIds = new Set(
+        [...flattenGroups(savedGroups), ...featuredItems, ...mustVisitItems].map(
+            (item) => item.id,
+        ),
+    );
+    const missingKey = unrenderedSavedIds
+        .filter((id) => !pageItemIds.has(id))
+        .join(".");
+    const refreshedFor = useRef("");
+
+    useEffect(() => {
+        if (!missingKey || refreshedFor.current === missingKey) return;
+        refreshedFor.current = missingKey;
+        router.refresh();
+    }, [missingKey, router]);
 
     // Sin destacados no hay pestañas: solo eventos (con su carga) o nada
     if (!hasHighlights) {
@@ -184,6 +204,18 @@ export default function WelcomeTabs({
         ? tab
         : tabs[0].key;
 
+    // Solo con el tab abierto y solo lo guardado: ni lo que se está guardando
+    // o quitando, ni lo de solo lectura, ni lo que no resuelve
+    const savedShareIds =
+        activeTab === "saved"
+            ? savedItems
+                  .filter((item) => getStatus(item.id) === "saved")
+                  .map((item) => item.id)
+            : [];
+
+    // Sin locale: el middleware abre la guía en el idioma de quien lo recibe
+    const savedShareUrl = `${process.env.NEXT_PUBLIC_APP_URL}/public/${propertyId}/welcome/highlights?${SAVED_PLACES_SEARCH_PARAM}=${serializeSavedPlaceIds(savedShareIds)}`;
+
     return (
         <div className="flex flex-col gap-4 w-full max-w-[1140px] mx-auto px-4 py-10">
             <WelcomeTabsMenu value={activeTab} onChange={setTab} tabs={tabs} />
@@ -221,26 +253,30 @@ export default function WelcomeTabs({
                         type="location"
                         showBadge
                     />
-                    <div className="flex flex-col items-center gap-2 text-center">
-                        <Typography
-                            size="sm"
-                            weight="medium"
-                            color="text-gray-600"
-                        >
-                            {labels.savedShareTitle}
-                        </Typography>
-                        <ShareMenu
-                            url={savedShareUrl}
-                            surface="public_saved_places"
-                            distinctId={anonId}
-                            whatsappText={labels.savedShareWhatsapp}
-                            props={{
-                                property_id: propertyId,
-                                saved_count: savedItems.length,
-                            }}
-                            className="w-fit"
-                        />
-                    </div>
+                    {/* Sin nada confirmado todavía (p. ej. mientras se guarda
+                        un enlace compartido) no hay lista que compartir */}
+                    {savedShareIds.length > 0 && (
+                        <div className="flex flex-col items-center gap-2 text-center">
+                            <Typography
+                                size="sm"
+                                weight="medium"
+                                color="text-gray-600"
+                            >
+                                {labels.savedShareTitle}
+                            </Typography>
+                            <ShareMenu
+                                url={savedShareUrl}
+                                surface="public_saved_places"
+                                distinctId={anonId}
+                                whatsappText={labels.savedShareWhatsapp}
+                                props={{
+                                    property_id: propertyId,
+                                    saved_count: savedShareIds.length,
+                                }}
+                                className="w-fit"
+                            />
+                        </div>
+                    )}
                 </div>
             )}
         </div>
