@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useSidebarData } from "@/lib/context/EditMenuContext";
@@ -29,6 +29,10 @@ import IconClose from "@/components/atoms/icon/close";
 import SidebarRail, {
     type SidebarRailItem,
 } from "@/components/molecules/sidebar-rail";
+import SearchFilter, {
+    type SearchFilterGroup,
+    type SearchFilterItem,
+} from "@/components/organisms/search-filter";
 import SidebarShell, { SIDEBAR_PANEL_ID } from "../sidebar-shell";
 
 const ICON_COMPONENTS = {
@@ -49,6 +53,16 @@ const ICON_COMPONENTS = {
 } as const;
 
 type IconName = keyof typeof ICON_COMPONENTS;
+
+// Mismas rutas para el acordeón y el buscador
+const getSubCategoryHref = (
+    propertyId: string | undefined,
+    categoryId: string,
+    subCategoryId: string,
+) => `/app/properties/${propertyId}/${categoryId}/${subCategoryId}`;
+
+const getPropertyEditHref = (propertyId: string) =>
+    `/app/properties/edit/${propertyId}?from=manage`;
 
 type PropertySidebarProps = {
     propertyId?: string;
@@ -91,6 +105,47 @@ const PropertySidebar = ({
         };
     });
 
+    // Mismos datos y orden que el acordeón, incluido "Datos del alojamiento"
+    // en la primera categoría
+    const searchGroups = useMemo<SearchFilterGroup[]>(
+        () =>
+            (sidebarData ?? []).map((category, index) => {
+                const IconComponent =
+                    ICON_COMPONENTS[category.icon as IconName];
+
+                const subCategoryItems: SearchFilterItem[] =
+                    category.sub_categories.map((subcategory) => ({
+                        id: subcategory.id,
+                        label: t(subcategory.name),
+                        href: getSubCategoryHref(
+                            propertyId,
+                            category.id,
+                            subcategory.id,
+                        ),
+                    }));
+
+                const items: SearchFilterItem[] =
+                    index === 0 && propertyId
+                        ? [
+                              {
+                                  id: "property-edit-link",
+                                  label: t("Datos del alojamiento"),
+                                  href: getPropertyEditHref(propertyId),
+                              },
+                              ...subCategoryItems,
+                          ]
+                        : subCategoryItems;
+
+                return {
+                    id: category.id,
+                    label: t(category.name),
+                    icon: <IconComponent className="fill-secondary-600" />,
+                    items,
+                };
+            }),
+        [sidebarData, propertyId, t],
+    );
+
     return (
         <SidebarShell
             rail={
@@ -112,6 +167,13 @@ const PropertySidebar = ({
                     className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"
                 />
             </div>
+            <SearchFilter
+                groups={searchGroups}
+                label={t("categorySearchLabel")}
+                placeholder={t("categorySearchPlaceholder")}
+                noResultsText={t("categorySearchNoResults")}
+                onItemSelect={closeSidebar}
+            />
             <div className="flex flex-col gap-1">
                 {sidebarData &&
                     sidebarData.map((category, index) => {
@@ -140,7 +202,7 @@ const PropertySidebar = ({
                                 {isFirstCategory && propertyId && (
                                     <SidebarLinkItem
                                         key="property-edit-link"
-                                        href={`/app/properties/edit/${propertyId}?from=manage`}
+                                        href={getPropertyEditHref(propertyId)}
                                         label={t("Datos del alojamiento")}
                                         icon={<IconEdit size={24} />}
                                         onClick={closeSidebar}
@@ -160,7 +222,11 @@ const PropertySidebar = ({
                                             onClick={() => {
                                                 closeSidebar();
                                                 router.push(
-                                                    `/app/properties/${propertyId}/${category.id}/${subcategory.id}`,
+                                                    getSubCategoryHref(
+                                                        propertyId,
+                                                        category.id,
+                                                        subcategory.id,
+                                                    ),
                                                 );
                                             }}
                                         />

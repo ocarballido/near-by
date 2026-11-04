@@ -614,6 +614,12 @@ export const CATEGORIES_SUB_CATEGORIES = {
                 type: "location",
                 name: "Mercadillos",
             },
+            VEGAN_STORES: {
+                id: "6c2f2c8b-3f5d-4a3e-9a0b-6c3a6e8e9f42",
+                order_index: 7,
+                type: "location",
+                name: "Tiendas veganas",
+            },
         },
     },
 
@@ -665,6 +671,12 @@ export const CATEGORIES_SUB_CATEGORIES = {
                 order_index: 7,
                 type: "location",
                 name: "Aparcamientos",
+            },
+            LOCKERS: {
+                id: "2d77f5a2-83e8-4d1e-a4f8-1f4c9f2bd7a1",
+                order_index: 8,
+                type: "location",
+                name: "Taquillas",
             },
         },
     },

@@ -12,22 +12,45 @@ import type { Database, TablesInsert } from '@/lib/types';
 
 import { runPlacesSearch } from '@/lib/places/places-engine';
 import { findCategoryIdBySubCategoryId } from '@/lib/places/place-search-plan';
+import {
+	LOCALES,
+	MAX_MAGIC_FINDER_LOCATIONS,
+	RADIUS_OPTIONS,
+} from '@/config/config-constants';
+
+// Lo que una petición puede meter en la URL de Google está acotado: con
+// valores libres (radio, coordenadas, idioma), cada llamada esquivaría la
+// caché del fetch. Radio y cantidad, solo los del formulario; idioma, uno de
+// LOCALES; coordenadas, las de la propiedad en BD. No limita cuántas
+// búsquedas hace un usuario al día: eso necesita una cuota aparte
+const RADIUS_VALUES: readonly string[] = RADIUS_OPTIONS.map(
+	(option) => option.value,
+);
 
 const Schema = z.object({
 	property_id: z.string().uuid(),
 	sub_category_id: z.string().uuid(),
 	category_id: z.string().uuid(),
-	lat: z.string(),
-	lng: z.string(),
-	max: z.string().regex(/^\d+$/),
-	radius: z.string().regex(/^\d+$/),
-	locale: z.string().optional(),
+	// Un solo refine: con regex + refine, "abc" daría dos errores y el
+	// formulario mostraría el primero, el de la regex en inglés
+	max: z.string().refine(
+		(value) => {
+			if (!/^\d+$/.test(value)) return false;
+			const count = Number(value);
+			return count >= 1 && count <= MAX_MAGIC_FINDER_LOCATIONS;
+		},
+		{ message: 'Cantidad no válida.' },
+	),
+	radius: z
+		.string()
+		.refine((value) => RADIUS_VALUES.includes(value), {
+			message: 'Radio no válido.',
+		}),
+	locale: z.enum(LOCALES).optional(),
 });
 
 export type DiscoverNearbyState = {
 	errors?: {
-		lat?: string[];
-		lng?: string[];
 		max?: string[];
 		sub_category_id?: string[];
 		property_id?: string[];
@@ -47,8 +70,6 @@ export async function discoverNearbyPlaces(
 			property_id: formData.get('property_id'),
 			sub_category_id: formData.get('sub_category_id'),
 			category_id: formData.get('category_id'),
-			lat: formData.get('lat'),
-			lng: formData.get('lng'),
 			max: formData.get('max'),
 			radius: formData.get('radius'),
 			locale: formData.get('locale') ?? undefined,
@@ -58,16 +79,8 @@ export async function discoverNearbyPlaces(
 		if (!parsed.success)
 			return { errors: parsed.error.flatten().fieldErrors };
 
-		const {
-			property_id,
-			category_id,
-			sub_category_id,
-			lat,
-			lng,
-			max,
-			radius,
-			locale,
-		} = parsed.data;
+		const { property_id, category_id, sub_category_id, max, radius, locale } =
+			parsed.data;
 
 		// category_id llega del cliente: si conocemos la categoría real de la
 		// subcategoría, deben coincidir. Las subcategorías que solo existen en BD
@@ -87,9 +100,6 @@ export async function discoverNearbyPlaces(
 				},
 			};
 		}
-
-		const language =
-			typeof locale === 'string' ? locale.split('-')[0] : undefined;
 
 		const ssrClient = await createSSRClient();
 		const {
@@ -112,18 +122,39 @@ export async function discoverNearbyPlaces(
 			};
 		}
 
+		// Se busca alrededor de la propiedad, con sus coordenadas de BD
+		type PropertyCoords = Pick<
+			Database['public']['Tables']['properties']['Row'],
+			'latitude' | 'longitude'
+		>;
+
+		const { data: coords, error: coordsError } = await supabase
+			.from('properties')
+			.select('latitude, longitude')
+			.eq('id', property_id)
+			.single()
+			.overrideTypes<PropertyCoords, { merge: false }>();
+
+		if (coordsError || coords?.latitude == null || coords?.longitude == null) {
+			return {
+				errors: {
+					server: ['La propiedad no tiene coordenadas válidas.'],
+				},
+			};
+		}
+
 		const maxResults = parseInt(max, 10);
 		const radiusNum = parseInt(radius, 10);
 
 		// ✅ motor único: modo magic (usa radius del select)
 		const found = await runPlacesSearch({
 			apiKey,
-			lat: parseFloat(lat),
-			lng: parseFloat(lng),
+			lat: coords.latitude,
+			lng: coords.longitude,
 			subCategoryId: sub_category_id,
 			mode: 'magic',
 			radius: radiusNum,
-			language,
+			language: locale,
 			debugTag: 'magic',
 		});
 

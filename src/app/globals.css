@@ -271,6 +271,9 @@
     /* Barra fija al pie (nav de la guía): sombra hacia arriba */
     --shadow-nav-up: 0 -1px 2px
         color-mix(in srgb, var(--black) 10%, transparent);
+    /* Menús desplegables (estilo "Dropdown" de Figma): PropertyDropdown y SearchFilter */
+    --shadow-dropdown: 0 4px 16px
+        color-mix(in srgb, var(--black) 20%, transparent);
     /* Tarjeta de la casa (guía pública): sombra profunda en verde oscuro de marca */
     --shadow-house-card:
         0 1px 2px color-mix(in srgb, var(--primary-900) 12%, transparent),

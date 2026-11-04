@@ -1,20 +1,13 @@
+import { stripDiacritics } from '@/utils/strip-diacritics';
+
 import { INTENTS, type IntentType } from './intents';
 
 function normalize(text: string): string {
-	return text
-		.toLowerCase()
-		.normalize('NFD')
-		.replace(/[\u0300-\u036f]/g, '')
-		.replace(/[^a-z0-9 ]/g, ' ');
+	return stripDiacritics(text.toLowerCase()).replace(/[^a-z0-9 ]/g, ' ');
 }
 
 function matchesKeyword(normalized: string, keyword: string): boolean {
-	const normalizedKw = keyword
-		.toLowerCase()
-		.normalize('NFD')
-		.replace(/[\u0300-\u036f]/g, '')
-		.replace(/[^a-z0-9 ]/g, ' ')
-		.trim();
+	const normalizedKw = normalize(keyword).trim();
 
 	// Para keywords de múltiples palabras usamos includes directo
 	// Para keywords de una sola palabra exigimos word boundary
