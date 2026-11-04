@@ -1438,5 +1438,8 @@
     "propertyMenuQrCode": "Codice QR",
     "propertyMenuCheckIn": "Check-in",
     "propertyMenuCheckOut": "Check-out",
-    "propertyMenuPublicGuide": "Vedi la guida pubblica"
+    "propertyMenuPublicGuide": "Vedi la guida pubblica",
+    "categorySearchLabel": "Cerca categorie",
+    "categorySearchPlaceholder": "Es: Ristoranti",
+    "categorySearchNoResults": "Nessun risultato"
 }

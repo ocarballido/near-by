@@ -1434,5 +1434,8 @@
     "propertyMenuQrCode": "QR code",
     "propertyMenuCheckIn": "Check-in",
     "propertyMenuCheckOut": "Check-out",
-    "propertyMenuPublicGuide": "View public guide"
+    "propertyMenuPublicGuide": "View public guide",
+    "categorySearchLabel": "Search categories",
+    "categorySearchPlaceholder": "Eg: Restaurants",
+    "categorySearchNoResults": "No results"
 }
