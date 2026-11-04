@@ -338,20 +338,25 @@ export default async function Property({ params, searchParams }: PageProps) {
                         navItems={navItems}
                     >
                         {/* Cabecera a sangre: el contenedor redondeado la recorta */}
-                        {(timeWindowData || activePlacesCategory) && (
+                        {timeWindowData && (
                             <div className="shrink-0">
-                                {timeWindowData && (
-                                    <TimeWindowSection
-                                        data={timeWindowData}
-                                        propertyId={propertyId}
-                                        anonId={anonId}
-                                    />
-                                )}
-                                {activePlacesCategory && (
-                                    <SidebarMenuBar
-                                        label={t(activePlacesCategory.name)}
-                                    />
-                                )}
+                                <TimeWindowSection
+                                    data={timeWindowData}
+                                    propertyId={propertyId}
+                                    anonId={anonId}
+                                />
+                            </div>
+                        )}
+                        {/* Mobile: barra del sidebar fija arriba al hacer scroll.
+                            Hija directa del main (el que hace scroll): dentro de
+                            la cabecera, sticky no tendría recorrido. z-9: por
+                            encima de las pills de las cards (z-5) y por debajo
+                            del overlay del sidebar (z-10) */}
+                        {activePlacesCategory && (
+                            <div className="md:hidden sticky top-0 z-9 shrink-0">
+                                <SidebarMenuBar
+                                    label={t(activePlacesCategory.name)}
+                                />
                             </div>
                         )}
                         {/* Desktop: nav bajo el widget, fijo arriba al hacer scroll.
