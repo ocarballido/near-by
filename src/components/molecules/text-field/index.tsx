@@ -57,8 +57,8 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
 		const labelStyles = clsx({ 'text-error-500': error });
 		const helperTextStyles = clsx({ 'text-error-500': error });
 		const inputStyles = clsx(
-			{ 'pl-9': iconLeft },
-			{ 'pr-9': iconRight },
+			{ 'pl-12': iconLeft },
+			{ 'pr-12': iconRight },
 			{ 'border-transparent': !error },
 			{ 'border-error-500': error },
 			{ 'opacity-30': disabled },
@@ -79,7 +79,7 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
 				)}
 				<div className="flex items-center relative">
 					{iconLeft && (
-						<span className="absolute left-2">{iconLeft}</span>
+						<span className="absolute left-4">{iconLeft}</span>
 					)}
 					<input
 						ref={combinedRef}
@@ -93,7 +93,7 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
 						{...rest}
 					/>
 					{iconRight && (
-						<span className="absolute right-2">{iconRight}</span>
+						<span className="absolute right-4">{iconRight}</span>
 					)}
 				</div>
 				{helperText && (
