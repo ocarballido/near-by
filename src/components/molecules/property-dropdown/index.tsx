@@ -76,7 +76,7 @@ const PropertyDropdown = ({ property }: PropertyDropdownProps) => {
 
             <DropdownMenu
                 open={open}
-                className="absolute z-50 left-0 top-11 w-64 max-w-[calc(100vw-2rem)] p-2! gap-1! rounded-2xl! shadow-[0_4px_16px_rgba(0,0,0,0.2)]!"
+                className="absolute z-50 left-0 top-11 w-64 max-w-[calc(100vw-2rem)] p-2! gap-1! rounded-2xl! shadow-dropdown!"
             >
                 {schedule.length > 0 && (
                     <>
