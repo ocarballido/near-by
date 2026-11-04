@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useSidebar } from "@/lib/context/SidebarContext";
 import { usePublicSidebarData } from "@/lib/context/EditPublicMenuContext";
@@ -27,6 +27,9 @@ import GroupItem from "@/components/molecules/group-item";
 import SidebarRail, {
     type SidebarRailItem,
 } from "@/components/molecules/sidebar-rail";
+import SearchFilter, {
+    type SearchFilterGroup,
+} from "@/components/organisms/search-filter";
 import SidebarShell, { SIDEBAR_PANEL_ID } from "../sidebar-shell";
 
 const ICON_COMPONENTS = {
@@ -48,6 +51,13 @@ const ICON_COMPONENTS = {
 
 type IconName = keyof typeof ICON_COMPONENTS;
 
+// Misma ruta para el acordeón y el buscador
+const getSubCategoryHref = (
+    propertyId: string | undefined,
+    categoryId: string,
+    subCategoryId: string,
+) => `/public/${propertyId}/${categoryId}/${subCategoryId}`;
+
 type PublicSidebarProps = {
     propertyId?: string;
     categoryId?: string;
@@ -66,8 +76,7 @@ const PublicSidebar = ({
     const t = useTranslations();
     const router = useRouter();
     const { isOpen: isSidebarOpen, openSidebar, closeSidebar } = useSidebar();
-    const { sidebarData, setActiveSubCategoryType, subCategoryCounts } =
-        usePublicSidebarData();
+    const { sidebarData, subCategoryCounts } = usePublicSidebarData();
 
     const [openCategoryId, setOpenCategoryId] = useState<string | null>(
         categoryId ?? null,
@@ -100,6 +109,32 @@ const PublicSidebar = ({
         },
     );
 
+    // Mismos datos y orden que el acordeón: solo lo que tiene contenido
+    // en esta guía
+    const searchGroups = useMemo<SearchFilterGroup[]>(
+        () =>
+            (sidebarData ?? []).map((category) => {
+                const IconComponent =
+                    ICON_COMPONENTS[category.icon as IconName];
+
+                return {
+                    id: category.id,
+                    label: t(category.name),
+                    icon: <IconComponent className="fill-secondary-600" />,
+                    items: category.sub_categories.map((subcategory) => ({
+                        id: subcategory.id,
+                        label: t(subcategory.name),
+                        href: getSubCategoryHref(
+                            propertyId,
+                            category.id,
+                            subcategory.id,
+                        ),
+                    })),
+                };
+            }),
+        [sidebarData, propertyId, t],
+    );
+
     return (
         <SidebarShell
             rail={
@@ -124,6 +159,14 @@ const PublicSidebar = ({
                     className="lg:hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"
                 />
             </div>
+
+            <SearchFilter
+                groups={searchGroups}
+                label={t("categorySearchLabel")}
+                placeholder={t("categorySearchPlaceholder")}
+                noResultsText={t("categorySearchNoResults")}
+                onItemSelect={closeSidebar}
+            />
 
             <div className="flex flex-col gap-1">
                 {sidebarData &&
@@ -154,12 +197,13 @@ const PublicSidebar = ({
                                                 subcategory.id === subCategoryId
                                             }
                                             onClick={() => {
-                                                setActiveSubCategoryType(
-                                                    subcategory.type,
-                                                );
                                                 closeSidebar();
                                                 router.push(
-                                                    `/public/${propertyId}/${category.id}/${subcategory.id}`,
+                                                    getSubCategoryHref(
+                                                        propertyId,
+                                                        category.id,
+                                                        subcategory.id,
+                                                    ),
                                                 );
                                             }}
                                         />
