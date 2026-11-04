@@ -16,11 +16,22 @@ import { runPlacesSearch } from "@/lib/places/places-engine";
 import { findCategoryIdBySubCategoryId } from "@/lib/places/place-search-plan";
 import {
     AUTO_LOCATION_COUNT_RANGE,
+    AUTO_LOCATIONS_ONBOARDING_OPTIONS,
     type AutoLocationSelection,
 } from "@/config/config-constants";
 
+// Cada selección es una búsqueda en Google: solo se aceptan las
+// subcategorías que ofrece el modal de onboarding, sin repetir, así que
+// una petición nunca pasa de una búsqueda por opción
+const ONBOARDING_SUB_CATEGORY_IDS: ReadonlySet<string> = new Set(
+    AUTO_LOCATIONS_ONBOARDING_OPTIONS.map((option) => option.subCategoryId),
+);
+
 const SelectionSchema = z.object({
-    subCategoryId: z.string().uuid(),
+    subCategoryId: z
+        .string()
+        .uuid()
+        .refine((id) => ONBOARDING_SUB_CATEGORY_IDS.has(id)),
     count: z
         .number()
         .int()
@@ -30,7 +41,15 @@ const SelectionSchema = z.object({
 
 const Schema = z.object({
     propertyId: z.string().uuid(),
-    selections: z.array(SelectionSchema).min(1),
+    selections: z
+        .array(SelectionSchema)
+        .min(1)
+        .max(ONBOARDING_SUB_CATEGORY_IDS.size)
+        .refine(
+            (list) =>
+                new Set(list.map((selection) => selection.subCategoryId))
+                    .size === list.length,
+        ),
 });
 
 export type GenerateAutoLocationsState = {
@@ -133,6 +152,26 @@ export async function generateAutoLocations(
             return {
                 errors: {
                     server: ["La propiedad no tiene coordenadas válidas."],
+                },
+            };
+        }
+
+        // Solo para propiedades sin sitios: es la misma condición con la que
+        // el layout de la propiedad abre el modal de onboarding. Sin esto, cada
+        // cambio de coordenadas permitiría otra tanda de búsquedas en Google
+        const { count: locationCount, error: countErr } = await supabase
+            .from("property_data")
+            .select("id", { count: "exact", head: true })
+            .eq("property_id", propertyId)
+            .eq("type", "location");
+
+        if (countErr) {
+            return { errors: { server: ["Error al comprobar la propiedad."] } };
+        }
+        if ((locationCount ?? 0) > 0) {
+            return {
+                errors: {
+                    server: ["La propiedad ya tiene sitios."],
                 },
             };
         }
