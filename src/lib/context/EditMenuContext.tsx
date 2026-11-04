@@ -8,8 +8,6 @@ type EditMenuContextType = {
 	setSidebarData: (data: CategoryWithSubCategories[]) => void;
 	activeSubCategoryId: string | null;
 	setActiveSubCategoryId: (id: string | null) => void;
-	activeSubCategoryType: string | null;
-	setActiveSubCategoryType: (type: string | null) => void;
 	activeCategoryId: string | null;
 	setActiveCategoryId: (type: string | null) => void;
 	activeSubCategoryName: string | null;
@@ -38,9 +36,6 @@ export const EditMenuProvider = ({
 	const [activeCategoryId, setActiveCategoryId] = useState<string | null>(
 		null,
 	);
-	const [activeSubCategoryType, setActiveSubCategoryType] = useState<
-		string | null
-	>(null);
 	const [activeSubCategoryId, setActiveSubCategoryId] = useState<
 		string | null
 	>(null);
@@ -53,7 +48,6 @@ export const EditMenuProvider = ({
 	const resetSidebarState = () => {
 		setActiveCategoryId(null);
 		setActiveSubCategoryId(null);
-		setActiveSubCategoryType(null);
 		setActiveSubCategoryName(null);
 	};
 
@@ -80,8 +74,6 @@ export const EditMenuProvider = ({
 				setActiveSubCategoryId,
 				activeCategoryId,
 				setActiveCategoryId,
-				activeSubCategoryType,
-				setActiveSubCategoryType,
 				activeSubCategoryName,
 				setActiveSubCategoryName,
 				resetSidebarState,

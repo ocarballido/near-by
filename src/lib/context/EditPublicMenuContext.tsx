@@ -9,8 +9,6 @@ type EditPublicMenuContextType = {
 	setSidebarData: (data: CategoryWithSubCategories[]) => void;
 	activeSubCategoryId: string | null;
 	setActiveSubCategoryId: (id: string | null) => void;
-	activeSubCategoryType: string | null;
-	setActiveSubCategoryType: (type: string | null) => void;
 	activeCategoryId: string | null;
 	setActiveCategoryId: (type: string | null) => void;
 	activeSubCategoryName: string | null;
@@ -35,9 +33,6 @@ export const EditPublicMenuProvider = ({
 	const [activeCategoryId, setActiveCategoryId] = useState<string | null>(
 		null,
 	);
-	const [activeSubCategoryType, setActiveSubCategoryType] = useState<
-		string | null
-	>(null);
 	const [activeSubCategoryId, setActiveSubCategoryId] = useState<
 		string | null
 	>(null);
@@ -51,7 +46,6 @@ export const EditPublicMenuProvider = ({
 	const resetSidebarState = () => {
 		setActiveCategoryId(null);
 		setActiveSubCategoryId(null);
-		setActiveSubCategoryType(null);
 		setActiveSubCategoryName(null);
 	};
 
@@ -64,8 +58,6 @@ export const EditPublicMenuProvider = ({
 				setActiveSubCategoryId,
 				activeCategoryId,
 				setActiveCategoryId,
-				activeSubCategoryType,
-				setActiveSubCategoryType,
 				activeSubCategoryName,
 				setActiveSubCategoryName,
 				resetSidebarState,
